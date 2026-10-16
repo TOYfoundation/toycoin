@@ -1,0 +1,67 @@
+# ToyChain workspace (Phase 1: core node and wallet, local testnet prototype).
+# See docs/03-bauplan-phase1.md for the crate layout and milestones.
+
+[workspace]
+resolver = "3"
+members = [
+    "crates/toy-types",
+    "crates/toy-crypto",
+    "crates/toy-emission",
+    "crates/toy-state",
+    "crates/toy-tx",
+    "crates/toy-consensus",
+    "crates/toy-node",
+    "crates/toy-rpc",
+    "crates/toy-wallet",
+    "crates/toy-cli",
+    "tests",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+publish = false
+# License intentionally not set yet (open question, see docs/STATUS.md).
+
+[workspace.dependencies]
+# Internal crates. External dependencies are added per milestone,
+# always with pinned versions (CLAUDE.md, rule 7).
+toy-types = { path = "crates/toy-types" }
+toy-crypto = { path = "crates/toy-crypto" }
+toy-emission = { path = "crates/toy-emission" }
+toy-state = { path = "crates/toy-state" }
+toy-tx = { path = "crates/toy-tx" }
+toy-consensus = { path = "crates/toy-consensus" }
+toy-node = { path = "crates/toy-node" }
+toy-rpc = { path = "crates/toy-rpc" }
+toy-wallet = { path = "crates/toy-wallet" }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+# Amounts are integers in smallest units; floating point is not allowed
+# in consensus-relevant code (CLAUDE.md, fixed rules).
+float_arithmetic = "warn"
+# Force explicit checked_* / saturating_* arithmetic; overflow is an error.
+arithmetic_side_effects = "warn"
+# No panics in production code paths.
+unwrap_used = "warn"
+expect_used = "warn"
+panic = "warn"
+indexing_slicing = "warn"
+# Never print secrets by accident; use proper logging later.
+print_stdout = "warn"
+print_stderr = "warn"
+dbg_macro = "warn"
+todo = "warn"
+unimplemented = "warn"
+
+[profile.release]
+# Reproducible, small binaries for Raspberry Pi and Android.
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+strip = "symbols"

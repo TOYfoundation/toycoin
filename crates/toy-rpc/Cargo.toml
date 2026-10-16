@@ -1,0 +1,15 @@
+[package]
+name = "toy-rpc"
+description = "ToyChain: Ethereum-compatible JSON-RPC subset (eth_chainId, eth_getBalance, eth_getTransactionCount, eth_sendRawTransaction, eth_blockNumber, net_version)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+toy-types.workspace = true
+toy-tx.workspace = true
+toy-node.workspace = true

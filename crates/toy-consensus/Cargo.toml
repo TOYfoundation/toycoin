@@ -1,0 +1,17 @@
+[package]
+name = "toy-consensus"
+description = "ToyChain: Committee selection via VRF, BFT voting rounds, BLS aggregate signatures, single-block finality, slashing"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+toy-types.workspace = true
+toy-crypto.workspace = true
+toy-state.workspace = true
+toy-tx.workspace = true
+toy-emission.workspace = true

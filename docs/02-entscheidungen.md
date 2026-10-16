@@ -1,0 +1,48 @@
+# Entscheidungsprotokoll ToyChain
+
+Stand: 16.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit „Vorschlag“ markierte Punkte sind Vorschläge von Claude, die noch bestätigt werden müssen.
+
+## Ursprüngliche Vorgaben
+
+- Eigenständige Blockchain mit nativer Währung ToyCoin, Ticker **TOY**, 18 Dezimalstellen.
+- Ressourcensparend wie das Mina-Protokoll, sicher wie Bitcoin, Adressen und Wiederherstellungsphrase wie Ethereum.
+- Kompatibel mit EVM-basierten dApps, damit später eine Bridge zu EVM-Token möglich ist.
+- Läuft auf alten Android-Geräten, Raspberry Pi, Linux-PC und Windows (als App oder dApp).
+- Jeder Nutzer kann an Signaturen und am Mint-Prozess teilhaben.
+- Möglichst Monero-Logik (z. B. Ringsignaturen).
+- Offline-Transaktionen zwischen Wallets künftig möglich.
+- Vorerst keine Layer-2-Token, keine NFTs, keine eigenen Smart Contracts.
+- Gesamtmenge 100.000.000 TOY, in ca. 25 Jahren durch Programm und Netzwerk gemintet.
+- Je Wallet 10 bis 100 kostenlose Transaktionen je nach Auslastung (Gebühr wird erstattet). Bei Wallets mit hohem Volumen geringe Gebühr, die zufällig anderen Teilnehmern zugutekommt, neben dem Mint-Prozess.
+- Transaktionen dauern höchstens ca. 1 Minute oder bis der Pool voll ist.
+- Blockchain nicht größer als 256 MB.
+- Halving des Mint-Prozesses dynamisch je nach Auslastung, belohnt hohe Leistung, macht Spam teuer.
+- Wer viel transferiert, muss das Netzwerk mit CPU und/oder GPU unterstützen.
+- Moderne, sichere Konzepte anderer Blockchains, eigene sicherere Verschlüsselung.
+
+## Entscheidungen vom 16.10.2026
+
+| Nr. | Thema | Entscheidung |
+|---|---|---|
+| 1 | Zustandsablauf | Ja, nach 1001 Tagen (ca. 3 Jahre), Wiederbelebung unkompliziert |
+| 2 | Privater Pool | Die sicherere und kompatiblere Variante: abgeschirmter zk-Pool statt Ringsignaturen (Wahl dem Assistenten überlassen) |
+| 3 | Startverteilung | Fair Launch mit 1 % offengelegter Reserve (1 Mio. TOY, höchstens 100 Wallets, für Team, Entwickler, Bug-Bounty), Reserve entsteht im Genesis-Block. Zeitsperre 4 Jahre ist ein **Vorschlag** |
+| 4 | Bridge | 1:1 zu Polygon, Ethereum und weiteren Ketten. Nie mehr als 100.000.000 und nie mehr im Umlauf als auf ToyChain gemintet. ToyScan zeigt die Daten |
+| 5 | Bridge-Typ | Das Sicherste: zk-Light-Client, Komitee als zweite Sicherung |
+| 6 | Hybrid-Signaturen | Antwort „Alles“, umgesetzt als: ab Phase 1 optional verfügbar |
+| 7 | Fremdbestand | Token außerhalb der Contract-Wallet, die schon zirkulieren, dürfen zum Start nicht gebridgt werden. ToyScan prüft und dokumentiert das |
+| 8 | Altbestand-Verträge | Ersteller-Adresse auf Polygon wird als Admin bezeichnet. Laut Verträgen kein Nachprägen möglich, nie mehr als 100.000.000 je Chain. Verstoß löst große rote Lampe und Warnung auf ToyScan aus |
+
+## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
+
+- Ethereum (Chain-ID 1): 0xA5B04ce6eDD139C0e58ccdBc0B75E8C67CDA678A
+- Polygon (Chain-ID 137): 0x1854b69cd1495c9753c5F1590A35e5DdB556A5BF
+- Beide: Standard-ERC-20 mit Permit (14 Funktionen), kein Mint, kein Burn, kein Owner/Admin, kein Pausieren, keine Sperrliste, kein Upgrade, kein Proxy. Details in `04-toyscan-und-altbestand.md`.
+
+## Noch offen
+
+- Gesamtmenge je Kette am Vertrag ablesen (soll 10^26 kleinste Einheiten sein) und Quellcode auf Etherscan und Polygonscan verifizieren.
+- Wer hält den Altbestand? (Anteil in der Contract-Wallet gegenüber Fremdbestand, ablesbar auf dem Holders-Tab.)
+- Regel für den Fremdbestand später (Vorschlag: erzeugt nie neues TOY, Rücktausch nur im Rahmen zuvor ausgegebener Tresor-Token, Halter offen informieren).
+- Rechtliche Prüfung vor dem Mainnet (MiCA, Steuer, Börsenlistings, 1 % Reserve, Fremdbestand).
+- Technisch: Beweisprüfung auf Ethereum (Kosten, Trusted-Setup-Frage), in Phase 2 klären.

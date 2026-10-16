@@ -1,0 +1,18 @@
+[package]
+name = "toy-node"
+description = "ToyChain: Node runtime"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+toy-types.workspace = true
+toy-crypto.workspace = true
+toy-emission.workspace = true
+toy-state.workspace = true
+toy-tx.workspace = true
+toy-consensus.workspace = true

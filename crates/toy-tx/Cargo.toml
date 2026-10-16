@@ -1,0 +1,15 @@
+[package]
+name = "toy-tx"
+description = "ToyChain: Transaction format, signature verification (EIP-155 chain id), free quota, progressive fees, refund pool and ToyWork shares (Argon2id)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+toy-types.workspace = true
+toy-crypto.workspace = true
+toy-state.workspace = true
