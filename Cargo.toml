@@ -22,7 +22,7 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.85"
 publish = false
-# License intentionally not set yet (open question, see docs/STATUS.md).
+license = "MIT"
 
 [workspace.dependencies]
 # Internal crates. External dependencies are added per milestone,

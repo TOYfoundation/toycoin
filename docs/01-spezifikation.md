@@ -1,6 +1,6 @@
 # ToyChain – Technische Spezifikation v0.2
 
-Entwurf vom 16.10.2026 · Kryptowährung ToyCoin (TOY) · Status: Entscheidungen vom 16.10.2026 eingearbeitet, zur Prüfung
+Entwurf vom 16.10.2026, ergänzt am 17.10.2026 · Kryptowährung ToyCoin (TOY) · Status: Entscheidungen vom 16. und 17.10.2026 eingearbeitet, zur Prüfung
 
 ## 1. Zusammenfassung
 
@@ -154,11 +154,12 @@ Optionaler **privater Pool** neben den öffentlichen Ethereum-kompatiblen Konten
 
 **Ziel:** 100.000.000 TOY insgesamt: 1 Mio. Reserve beim Start plus 99 Mio. Emission, davon rund 99 % in etwa 25 Jahren, die Obergrenze darf nie überschritten werden.
 
-**Startverteilung (entschieden am 16.10.2026):** 99 % der 100 Mio. TOY entstehen ausschließlich durch den Emissionsmechanismus. 1 % (1 Mio. TOY) ist eine offengelegte Reserve für Team, Entwickler und Bug-Bounty, verteilt auf höchstens 100 Wallets. Die Reserve entsteht im Genesis-Block, die Wallets stehen dort öffentlich. Vorschlag: Die Reserve ist durch eine Zeitsperre gebunden (linear über 4 Jahre, auf der Kette erzwungen). Es gibt keinen Presale und keinen weiteren Vorab-Anteil. Das ist kein reiner Fair Launch mehr, sondern ein Fair Launch mit kleiner, transparenter Reserve. Ob das rechtlich als ausreichend dezentral gilt, muss vorab juristisch geprüft werden.
+**Startverteilung (entschieden am 16.10.2026):** 99 % der 100 Mio. TOY entstehen ausschließlich durch den Emissionsmechanismus. 1 % (1 Mio. TOY) ist eine offengelegte Reserve für Team, Entwickler und Bug-Bounty, verteilt auf höchstens 100 Wallets. Die Reserve entsteht im Genesis-Block, die Wallets stehen dort öffentlich. Entschieden am 17.10.2026: Die Reserve ist durch eine Zeitsperre gebunden (linear über 4 Jahre, auf der Kette erzwungen). Es gibt keinen Presale und keinen weiteren Vorab-Anteil. Das ist kein reiner Fair Launch mehr, sondern ein Fair Launch mit kleiner, transparenter Reserve. Ob das rechtlich als ausreichend dezentral gilt, muss vorab juristisch geprüft werden.
 
 **Basiskurve:** Pro Epoche (ca. 24 Stunden) werden k × Restmenge ausgeschüttet.
 
-- k₀ ≈ 0,0505 % pro Epoche. Daraus folgt eine Halbwertszeit von ca. 3,76 Jahren und ca. 49.950 TOY in der ersten Epoche (Restmenge 99 Mio.).
+- k₀ ≈ 0,0505 % pro Epoche. Daraus folgt eine Halbwertszeit von ca. 3,76 Jahren und ca. 49.995 TOY in der ersten Epoche (99 Mio. × 0,0505 %, korrigiert am 17.10.2026, vorher irrtümlich 49.950).
+- **Epoche nach Blöcken (entschieden am 17.10.2026):** Eine Epoche endet nach 1.440 Blöcken, nicht nach 24 Stunden. Kommen Blöcke bei vollem Pool schneller, ist die Epoche kürzer. Der Zeitplan-Regler gleicht das über m aus. Für den 25-Jahres-Plan gilt ein Jahr = 365 Epochen.
 - Im ersten Jahr werden bei Faktor 1 rund 16,6 Mio. TOY ausgeschüttet, nach 25 Jahren bleiben ca. 1 % (1 Mio.) übrig, die danach asymptotisch auslaufen.
 - Weil die Ausschüttung immer nur ein Bruchteil des Rests ist, wird die Obergrenze von 100 Mio. **mathematisch nie überschritten**.
 
@@ -248,6 +249,13 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst.
 4. **Bridge:** 1:1 zu Polygon, Ethereum und weiteren Ketten. Die vorhandenen 2 × 100 Mio. Altbestand-Token werden zu gesperrten Reserven im Tresor-Modell. Anzeige und Ampel in ToyScan. Bereits zirkulierende Token außerhalb der Contract-Wallet (Fremdbestand) sind zum Start nicht bridgebar, was ToyScan prüft und dokumentiert.
 5. **Bridge-Typ:** zk-Light-Client mit Komitee als zweiter Sicherung.
 6. **Hybrid-Signaturen:** Ab Phase 1 optional verfügbar.
+
+**Entschieden am 17.10.2026:**
+
+7. **Erste Epoche:** k₀ = 0,0505 % gilt, die erste Epoche bringt damit ca. 49.995 TOY (Zahl korrigiert).
+8. **Zeitsperre der Reserve:** 4 Jahre linear, auf der Kette erzwungen (Vorschlag bestätigt).
+9. **Epochenlänge:** Nach Blöcken (1.440), der Zeitplan-Regler gleicht schnellere Epochen aus.
+10. **Lizenz:** Der Code steht unter der MIT-Lizenz.
 
 **Noch offen:**
 

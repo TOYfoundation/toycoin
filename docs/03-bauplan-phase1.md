@@ -35,7 +35,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 ### M1: Grundtypen und Emission
 - Typen, Konstanten (10^26 kleinste Einheiten Obergrenze), sichere Rechenfunktionen.
 - Emissionskurve mit k₀, Faktor m ∈ [0,5; 2,0], Zeitplan-Regler. Reserve 1 Mio. im Genesis-Block mit 4-Jahres-Zeitsperre.
-- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen die Obergrenze **nie** überschreitet (auch bei m = 2,0 über 100 Jahre simuliert). Test für Halbwertszeit ≈ 3,76 Jahre und erste Epoche ≈ 49.950 TOY bei m = 1. Spam darf m nicht erhöhen (Test mit unbezahlten Transaktionen).
+- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen die Obergrenze **nie** überschreitet (auch bei m = 2,0 über 100 Jahre simuliert). Test für Halbwertszeit ≈ 3,76 Jahre und erste Epoche ≈ 49.995 TOY bei m = 1. Spam darf m nicht erhöhen (Test mit unbezahlten Transaktionen).
 
 ### M2: Kryptografie und Adressen
 - Schlüssel aus BIP-39-Phrase, Pfad m/44'/60'/0'/0/n, Adresse wie Ethereum, Signieren und Prüfen mit Chain-ID (EIP-155).

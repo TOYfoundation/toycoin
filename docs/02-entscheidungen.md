@@ -1,6 +1,6 @@
 # Entscheidungsprotokoll ToyChain
 
-Stand: 16.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit „Vorschlag“ markierte Punkte sind Vorschläge von Claude, die noch bestätigt werden müssen.
+Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit „Vorschlag“ markierte Punkte sind Vorschläge von Claude, die noch bestätigt werden müssen.
 
 ## Ursprüngliche Vorgaben
 
@@ -26,12 +26,21 @@ Stand: 16.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 |---|---|---|
 | 1 | Zustandsablauf | Ja, nach 1001 Tagen (ca. 3 Jahre), Wiederbelebung unkompliziert |
 | 2 | Privater Pool | Die sicherere und kompatiblere Variante: abgeschirmter zk-Pool statt Ringsignaturen (Wahl dem Assistenten überlassen) |
-| 3 | Startverteilung | Fair Launch mit 1 % offengelegter Reserve (1 Mio. TOY, höchstens 100 Wallets, für Team, Entwickler, Bug-Bounty), Reserve entsteht im Genesis-Block. Zeitsperre 4 Jahre ist ein **Vorschlag** |
+| 3 | Startverteilung | Fair Launch mit 1 % offengelegter Reserve (1 Mio. TOY, höchstens 100 Wallets, für Team, Entwickler, Bug-Bounty), Reserve entsteht im Genesis-Block. Zeitsperre 4 Jahre linear (am 17.10.2026 bestätigt, siehe Nr. 10) |
 | 4 | Bridge | 1:1 zu Polygon, Ethereum und weiteren Ketten. Nie mehr als 100.000.000 und nie mehr im Umlauf als auf ToyChain gemintet. ToyScan zeigt die Daten |
 | 5 | Bridge-Typ | Das Sicherste: zk-Light-Client, Komitee als zweite Sicherung |
 | 6 | Hybrid-Signaturen | Antwort „Alles“, umgesetzt als: ab Phase 1 optional verfügbar |
 | 7 | Fremdbestand | Token außerhalb der Contract-Wallet, die schon zirkulieren, dürfen zum Start nicht gebridgt werden. ToyScan prüft und dokumentiert das |
 | 8 | Altbestand-Verträge | Ersteller-Adresse auf Polygon wird als Admin bezeichnet. Laut Verträgen kein Nachprägen möglich, nie mehr als 100.000.000 je Chain. Verstoß löst große rote Lampe und Warnung auf ToyScan aus |
+
+## Entscheidungen vom 17.10.2026
+
+| Nr. | Thema | Entscheidung |
+|---|---|---|
+| 9 | Erste Epoche | k₀ = 0,0505 % gilt. Die erste Epoche bringt ca. **49.995 TOY** (in Spezifikation und Bauplan korrigiert, vorher irrtümlich 49.950) |
+| 10 | Zeitsperre der Reserve | 4 Jahre linear, auf der Kette erzwungen (Vorschlag bestätigt) |
+| 11 | Epochenlänge | Eine Epoche endet nach 1.440 Blöcken, nicht nach Zeit. Schnellere Epochen gleicht der Zeitplan-Regler über m aus. Für den 25-Jahres-Plan: 1 Jahr = 365 Epochen |
+| 12 | Lizenz | MIT-Lizenz für den gesamten Code |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 

@@ -1,6 +1,6 @@
 # Projektstatus ToyChain
 
-Stand: 17.10.2026 · Phase 1 · Aktueller Schritt: **Start (Gerüst) abgeschlossen**, als Nächstes **M1**
+Stand: 17.10.2026 · Phase 1 · Aktueller Schritt: **Start (Gerüst) abgeschlossen, offene Fragen geklärt**, als Nächstes **M1**
 
 ## Überblick Meilensteine
 
@@ -67,10 +67,16 @@ Die Skripte führen genau das aus, was `CLAUDE.md` verlangt:
 
 Hinweis zur Bauumgebung: In der Cloud-Sandbox, in der das Gerüst erstellt wurde, konnte `rustup` die Toolchain nicht herunterladen. Die Prüfungen liefen deshalb mit `RUSTUP_TOOLCHAIN=stable`, das dort genau 1.97.0 war. Auf deinem Rechner lädt `rustup` 1.97.0 beim ersten `cargo`-Aufruf automatisch.
 
-## Offene Fragen (vor oder in M1 zu klären)
+## Entscheidungen vom 17.10.2026 (eingearbeitet)
 
-1. **Rechenfehler bei der ersten Epoche:** Mit k₀ = 0,0505 % und 99 Mio. Restmenge ergibt die erste Epoche **49.995 TOY**, nicht 49.950 TOY wie in Spezifikation und Bauplan. 49.950 TOY würde k₀ ≈ 0,050455 % entsprechen. Die übrigen Werte passen zu 0,0505 %: Halbwertszeit 3,76 Jahre, Jahr 1 ≈ 16,67 Mio. TOY, Rest nach 25 Jahren ≈ 0,99 Mio. TOY. **Frage:** Gilt k₀ = 0,0505 % (dann wird die Zahl in der Spezifikation auf 49.995 korrigiert) oder die 49.950 TOY?
-2. **Zeitsperre der Reserve:** Die 4 Jahre (linear) sind im Entscheidungsprotokoll nur ein *Vorschlag*, im Bauplan aber für M1 gesetzt. Bitte bestätigen.
-3. **Epoche nach Blöcken oder nach Zeit:** Eine Epoche hat 1.440 Blöcke. Bei vollem Pool kommen Blöcke schneller (frühestens nach 10 s), eine Epoche kann dann kürzer als 24 Stunden sein. Vorschlag für M1: Emission pro Epoche nach Blöcken, und der Zeitplan-Regler gleicht schnellere Epochen über m aus. Die 25-Jahres-Rechnung nutzt 365 Tage pro Jahr.
-4. **Lizenz** des Codes ist noch nicht festgelegt (z. B. MIT/Apache-2.0 oder GPL). Bis dahin steht in `Cargo.toml` keine Lizenz.
-5. Später (M2 ff.): Dependency-Prüfung mit `cargo-deny` oder `cargo-audit` in die CI aufnehmen, sobald die ersten externen Crates dazukommen.
+1. **Erste Epoche:** k₀ = 0,0505 % gilt, die erste Epoche bringt ca. **49.995 TOY**. Spezifikation und Bauplan sind korrigiert (vorher 49.950). Nachgerechnet: Halbwertszeit 3,76 Jahre, Jahr 1 ≈ 16,67 Mio. TOY, Rest nach 25 Jahren ≈ 0,99 Mio. TOY.
+2. **Zeitsperre der Reserve:** 4 Jahre linear, bestätigt.
+3. **Epochenlänge:** nach Blöcken (1.440). Schnellere Epochen gleicht der Zeitplan-Regler über m aus. 1 Jahr = 365 Epochen.
+4. **Lizenz:** MIT. Datei `LICENSE` liegt im Hauptordner, alle Crates tragen `license = "MIT"`.
+
+Alle Entscheidungen stehen auch in `docs/02-entscheidungen.md` (Nr. 9 bis 12) und in Abschnitt 16 der Spezifikation.
+
+## Noch offen
+
+- Ab M2: Lizenzen und Sicherheitsmeldungen der fremden Bibliotheken automatisch prüfen (`cargo-deny`), sobald die ersten externen Crates dazukommen. Erlaubt sind nur Lizenzen, die zu MIT passen (MIT, Apache-2.0, BSD, ISC, CC0, Zlib, Unicode).
+- Offene Punkte aus `docs/02-entscheidungen.md` (Fremdbestand, Altbestand-Verträge, rechtliche Prüfung) betreffen spätere Phasen.
