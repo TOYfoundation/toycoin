@@ -70,7 +70,7 @@ Hinweis zur Bauumgebung: In der Cloud-Sandbox, in der das Gerüst erstellt wurde
 ## Entscheidungen vom 17.10.2026 (eingearbeitet)
 
 1. **Erste Epoche:** k₀ = 0,0505 % gilt, die erste Epoche bringt ca. **49.995 TOY**. Spezifikation und Bauplan sind korrigiert (vorher 49.950). Nachgerechnet: Halbwertszeit 3,76 Jahre, Jahr 1 ≈ 16,67 Mio. TOY, Rest nach 25 Jahren ≈ 0,99 Mio. TOY.
-2. **Zeitsperre der Reserve:** 4 Jahre linear, bestätigt.
+2. **Zeitsperre der Reserve:** 4 Jahre linear, bestätigt (später geändert durch Entscheidung 41: 3 Jahre Sperre, dann schrittweise).
 3. **Epochenlänge:** nach Blöcken (1.440). Schnellere Epochen gleicht der Zeitplan-Regler über m aus. 1 Jahr = 365 Epochen.
 4. **Lizenz:** MIT. Datei `LICENSE` liegt im Hauptordner, alle Crates tragen `license = "MIT"`.
 

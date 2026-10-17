@@ -38,7 +38,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | Nr. | Thema | Entscheidung |
 |---|---|---|
 | 9 | Erste Epoche | k₀ = 0,0505 % gilt. Die erste Epoche bringt ca. **49.995 TOY** (in Spezifikation und Bauplan korrigiert, vorher irrtümlich 49.950) |
-| 10 | Zeitsperre der Reserve | 4 Jahre linear, auf der Kette erzwungen (Vorschlag bestätigt) |
+| 10 | Zeitsperre der Reserve | ~~4 Jahre linear~~ ersetzt durch Nr. 41 |
 | 11 | Epochenlänge | Eine Epoche endet nach 1.440 Blöcken, nicht nach Zeit. Schnellere Epochen gleicht der Zeitplan-Regler über m aus. Für den 25-Jahres-Plan: 1 Jahr = 365 Epochen |
 | 12 | Lizenz | MIT-Lizenz für den gesamten Code |
 | 13 | Fremdbestand | Vor dem Start werden die Token außerhalb der Contract-Wallet bis auf höchstens 10.000 TOY je Kette zurückübertragen. Ersetzt Nr. 7 |
@@ -65,6 +65,11 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 34 | Gold | Gold gehört zur erspielten Sorte: 10 Gold = 1 Königsdukat |
 | 35 | Königsdukaten verschenken | Königsdukaten und Gold dürfen zwischen Spielern verschenkt und im Spiel gehandelt werden. Sultansdukaten bleiben an das Konto gebunden |
 | 36 | Nur nativer Coin | Auf ToyChain gibt es **nur TOY**: keine Token, keine NFTs, keine Smart Contracts, keine EVM-Ausführung, **auch nicht später**. Alle Funktionen sind fest eingebaute Transaktionsarten (Spezifikation Abschnitt 6a). Verträge gibt es nur auf anderen Ketten (Tresore, NFT-Vertrag auf Polygon und Ethereum) |
+| 37 | Start-Validatoren | Offengelegtes **Start-Komitee** aus 7 bis 21 Betreibern. Es validiert mit delegiertem, weiter gesperrtem Reserve-Stake. Reserve-Stake bekommt **keine Emission** (Anteil geht in den Erstattungs-Pool). Ab Epoche 1 verdienen alle über ToyWork und Attestierung. Übergabe, sobald unabhängiger Stake z. B. das Dreifache erreicht |
+| 38 | Mainnet-Zeitpunkt | Mainnet **nach Phase 1 und Audit**. Bis zur Beweis-Schicht starten Knoten von veröffentlichten Checkpoints. Phase 2 muss innerhalb von etwa 12 Monaten folgen |
+| 39 | Bridge vorziehen | Neue Reihenfolge: Phase 2 Beweise, **Phase 3 Bridge**, Phase 4 Privatsphäre, Phase 5 Offline-Schecks |
+| 40 | Chain-ID | Vor dem Testnet wird eine freie Chain-ID gewählt und gegen die öffentlichen Listen geprüft. Testnet und Mainnet bekommen verschiedene IDs |
+| 41 | Reserve-Empfänger und Sperre | Die 990.000 TOY Reserve gehen an **eine** Adresse: die Ersteller-Adresse des Ethereum-Tokens `0x18da0be974424d54519c63f62e4b26c0318c00c2`. In den ersten **3 Jahren** nach dem Mainnet-Start wird nichts freigegeben, danach **schrittweise**. Annahme zur Bestätigung: linear über 1 Jahr, voll frei nach 4 Jahren. Ersetzt Nr. 10 und die Verteilung auf bis zu 100 Wallets aus Nr. 3 |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 
@@ -74,7 +79,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 
 ## Noch offen
 
-- **Gesamtsystem (`05-gesamtsystem.md`, Abschnitt 10):** E1 Start-Validatoren, E2 Mainnet vor oder nach Phase 2, E3 Bridge vorziehen, E4 Chain-ID, E5 Verteilung der Reserve-Wallets, E6 Auflage Rubinglut.
+- **Gesamtsystem (`05-gesamtsystem.md`, Abschnitt 10):** E6 Auflage Rubinglut. Zu Nr. 41: Freigabe-Dauer nach den 3 Jahren bestätigen; Finanzierung des Bug-Bounty in den ersten 3 Jahren.
 
 - Quellcode auf Etherscan und Polygonscan verifizieren (am 17.10.2026 auf beiden Ketten noch **nicht verifiziert**). Prägung von je 10^26 Einheiten ist bestätigt.
 - Schlüssel der Contract-Wallet `0x18da…00c2`: Wer hält ihn, wie ist er gesichert? Liegt der ursprüngliche Quellcode der Verträge vor?

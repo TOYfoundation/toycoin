@@ -51,7 +51,7 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
 ## 5. Zahlungen
 
 - **Unter Personen:** Adresse oder QR-Code, Endgültigkeit nach höchstens ca. 1 Minute. Der QR-Code folgt dem Ethereum-Format (EIP-681: `ethereum:<adresse>@<chain-id>?value=…`), dadurch können ihn auch andere Wallets lesen.
-- **Im Laden:** Eine Minute an der Kasse ist spürbar lang. Möglichkeiten: Anzeige „unterwegs, wird bestätigt“ bei kleinen Beträgen, oder die Offline-Schecks (Spezifikation Abschnitt 11) von Phase 4 vorziehen. **Entscheidung offen.**
+- **Im Laden:** Eine Minute an der Kasse ist spürbar lang. Möglichkeiten: Anzeige „unterwegs, wird bestätigt“ bei kleinen Beträgen, oder die Offline-Schecks (Spezifikation Abschnitt 11) von Phase 5 vorziehen. **Entscheidung offen.**
 - **Kontingent:** Die App zeigt die verbleibenden kostenlosen Transaktionen der Epoche an und warnt vor der Gebühr.
 
 ## 5a. Mehrere Ketten und Spiel-NFTs
@@ -207,8 +207,8 @@ Folgen:
 | Ethereum-kompatible Schnittstelle für den Umstieg | M7 (`toy-rpc`) |
 | Wallet-Kern, Keystore | M8 (`toy-wallet`) |
 | Android-Bibliothek mit Kotlin-Anbindung | M9 (Plattformen) |
-| Offline-Zahlung im Laden | Phase 4 (oder vorgezogen, siehe Abschnitt 5) |
-| Bridge ToyChain ↔ Polygon/Ethereum in der App | Phase 5 (Bridge), Konzept in `06-bridge.md` |
+| Offline-Zahlung im Laden | Phase 5 (oder vorgezogen, siehe Abschnitt 5) |
+| Bridge ToyChain ↔ Polygon/Ethereum in der App | Phase 3 (Bridge, vorgezogen), Konzept in `06-bridge.md` |
 | NFT-Vertrag auf Polygon mit Gutschein-Prägung | eigener Baustein außerhalb von ToyChain, eigenes Audit |
 
 ## 9. Fragen an den Projektinhaber

@@ -21,7 +21,7 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 - **Kontenmodell** mit Ethereum-kompatiblen Adressen (secp256k1, Adresse = letzte 20 Byte von Keccak-256 des Public Keys, BIP-39, Pfad m/44'/60'/0'/0/n, EIP-155-Chain-ID in Signaturen).
 - Blockzeit 60 s (früher bei vollem Pool, frühestens nach 10 s), Epoche 1.440 Blöcke, Finalität nach 1 Block.
 - **Datenbudget 256 MB** pro Standard-Knoten (siehe Spezifikation Abschnitt 4). Jede Speicherstruktur braucht einen Größentest.
-- Emission: Pro Epoche `k × Restmenge`, k₀ ≈ 0,0505 %, dynamischer Faktor m ∈ [0,5; 2,0], Restmenge der Emission 99 Mio. (1 Mio. Reserve im Genesis-Block, Zeitsperre 4 Jahre linear). Eine Epoche endet nach 1.440 Blöcken, nicht nach Zeit. Die Obergrenze 100 Mio. darf **nie** überschritten werden.
+- Emission: Pro Epoche `k × Restmenge`, k₀ ≈ 0,0505 %, dynamischer Faktor m ∈ [0,5; 2,0], Restmenge der Emission 99 Mio. (1 Mio. Reserve im Genesis-Block: 990.000 TOY an die Ersteller-Adresse, 3 Jahre gesperrt, danach schrittweise Freigabe; 10.000 TOY Deckungsposten). Eine Epoche endet nach 1.440 Blöcken, nicht nach Zeit. Die Obergrenze 100 Mio. darf **nie** überschritten werden.
 - Kostenloses Kontingent 10 bis 100 Transaktionen pro Wallet und Epoche, darüber progressive Gebühr oder ToyWork-Share (Argon2id, 16 MiB).
 - Lizenz: **MIT** (nur Bibliotheken mit dazu verträglicher Lizenz verwenden, z. B. MIT, Apache-2.0, BSD, CC0).
 - **Nur der native Coin TOY auf ToyChain, für immer:** keine Token, keine NFTs, keine Smart Contracts, keine EVM-Ausführung (Entscheidung 36). Jede Funktion ist eine fest eingebaute Transaktionsart (Spezifikation Abschnitt 6a). Keine Vertrags-Engine einbauen, auch nicht "für später".

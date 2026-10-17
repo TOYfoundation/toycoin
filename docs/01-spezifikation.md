@@ -53,7 +53,7 @@ Die Grenze gilt für die Daten eines Standard-Knotens (Voll-Rolle). Aufteilung:
 - **Zustandsbaum (aktive Konten):** 128 MB
 - **Block-Fenster (ca. letzte 24 Stunden, nach Bytes begrenzt):** 48 MB
 - **Rekursiver Beweis plus Header-Commitments:** 8 MB
-- **Privatsphäre-Pool (ab Phase 3, pro Epoche):** 32 MB
+- **Privatsphäre-Pool (ab Phase 4, pro Epoche):** 32 MB
 - **Indizes, Mempool-Puffer, Reserve:** 40 MB
 
 **Wie die Historie klein bleibt:**
@@ -62,7 +62,7 @@ Die Grenze gilt für die Daten eines Standard-Knotens (Voll-Rolle). Aufteilung:
 - Ein Block-Header mit Sammelsignatur ist ca. 300 Byte. Ohne Falten wären das über 150 MB pro Jahr. Deshalb müssen auch Header gefaltet werden.
 - Wallets speichern ihre eigene Historie lokal und können jede Transaktion mit einem Merkle-Beweis belegen. Explorer und Auswertungen laufen auf Archiv-Knoten.
 
-**Kapazität:** Bei ca. 100 Byte pro Konto (Adresse 20, Guthaben 16, Nonce 8, Arbeitskredit 8, Ablauf-Marker, Baum-Overhead) passen rund 1,3 Mio. aktive Konten in 128 MB. Das ist eine Schätzung und wird im Testnet gemessen. Bis Phase 3 kann der Platz des Privatsphäre-Pools dem Zustand zugeschlagen werden.
+**Kapazität:** Bei ca. 100 Byte pro Konto (Adresse 20, Guthaben 16, Nonce 8, Arbeitskredit 8, Ablauf-Marker, Baum-Overhead) passen rund 1,3 Mio. aktive Konten in 128 MB. Das ist eine Schätzung und wird im Testnet gemessen. Bis Phase 4 kann der Platz des Privatsphäre-Pools dem Zustand zugeschlagen werden.
 
 **Schutz des Zustands vor Aufblähung:**
 
@@ -124,14 +124,15 @@ Weil es keine Smart Contracts gibt, kennt das Protokoll nur diese Transaktionsar
 |---|---|---|
 | **Überweisung** | TOY von Konto zu Konto, optional mit Hybrid-Signatur | 1 |
 | **Stake / Unstake** | TOY für Konsens und Attestierung binden oder lösen | 1 |
+| **Stake delegieren** | gebundenes TOY einem Validator zuordnen, ohne ihm das TOY zu geben (z. B. Reserve an das Start-Komitee, Entscheidung 37) | 1 |
 | **Validator anmelden / abmelden** | BLS-Schlüssel registrieren | 1 |
 | **Attestierung** | Mitsignieren in Komitee oder Attestierungs-Gruppe | 1 |
 | **Belohnung und Lotterie** | vom Protokoll selbst ausgelöst, keine Nutzer-Transaktion | 1 |
-| **Reserve-Freigabe** | lineare Zeitsperre der Reserve, vom Protokoll erzwungen | 1 |
+| **Reserve-Freigabe** | 3 Jahre Sperre, danach schrittweise Freigabe an die Ersteller-Adresse, vom Protokoll erzwungen (Entscheidung 41) | 1 |
 | **Konto wiederbeleben** | abgelaufenes Konto mit Merkle-Beweis zurückholen | 1 |
-| **Bridge-Ausgang / Bridge-Eingang** | TOY im protokolleigenen Bridge-Konto sperren oder daraus freigeben | 5 |
-| **Abgeschirmter Pool** | Ein- und Auszahlung, private Überweisung | 3 |
-| **Offline-Escrow / Scheck einlösen** | Betrag für Offline-Schecks sperren, Schecks einlösen | 4 |
+| **Bridge-Ausgang / Bridge-Eingang** | TOY im protokolleigenen Bridge-Konto sperren oder daraus freigeben | 3 |
+| **Abgeschirmter Pool** | Ein- und Auszahlung, private Überweisung | 4 |
+| **Offline-Escrow / Scheck einlösen** | Betrag für Offline-Schecks sperren, Schecks einlösen | 5 |
 
 Protokolleigene Konten wie Reserve, Deckungsposten und Bridge-Konto haben **keinen privaten Schlüssel**. Nur die Regeln des Protokolls können sie bewegen.
 
@@ -160,7 +161,7 @@ Grundsatz: **keine selbst erfundenen Algorithmen.** Stattdessen eine eigene, kla
 - **Session-Keys:** Zeitlich und betragsmäßig begrenzte Unterschlüssel, etwa für Apps und Spiele, ohne die Haupt-Phrase zu benutzen.
 - **Netzwerk:** Noise-Protokoll über QUIC, Peer-Reputation und Ratenbegrenzung.
 
-## 9. Privatsphäre (Phase 3)
+## 9. Privatsphäre (Phase 4)
 
 Optionaler **privater Pool** neben den öffentlichen Ethereum-kompatiblen Konten:
 
@@ -175,7 +176,7 @@ Optionaler **privater Pool** neben den öffentlichen Ethereum-kompatiblen Konten
 
 **Ziel:** 100.000.000 TOY insgesamt: 1 Mio. Reserve beim Start plus 99 Mio. Emission, davon rund 99 % in etwa 25 Jahren, die Obergrenze darf nie überschritten werden.
 
-**Startverteilung (entschieden am 16.10.2026):** 99 % der 100 Mio. TOY entstehen ausschließlich durch den Emissionsmechanismus. 1 % (1 Mio. TOY) ist eine offengelegte Reserve für Team, Entwickler und Bug-Bounty, verteilt auf höchstens 100 Wallets. Die Reserve entsteht im Genesis-Block, die Wallets stehen dort öffentlich. Entschieden am 17.10.2026: Die Reserve ist durch eine Zeitsperre gebunden (linear über 4 Jahre, auf der Kette erzwungen). Es gibt keinen Presale und keinen weiteren Vorab-Anteil. Das ist kein reiner Fair Launch mehr, sondern ein Fair Launch mit kleiner, transparenter Reserve. Ob das rechtlich als ausreichend dezentral gilt, muss vorab juristisch geprüft werden.
+**Startverteilung (entschieden am 16.10.2026):** 99 % der 100 Mio. TOY entstehen ausschließlich durch den Emissionsmechanismus. 1 % (1 Mio. TOY) ist eine offengelegte Reserve. Davon decken 10.000 TOY den Polygon-Fremdbestand (Entscheidung 14). **Die übrigen 990.000 TOY liegen im Genesis-Block auf einem einzigen Konto: der Adresse, die den ToyCoin-Token auf Ethereum erstellt hat** (`0x18da0be974424d54519c63f62e4b26c0318c00c2`, Entscheidung 41). Dank Ethereum-kompatibler Adressen ist das auf ToyChain dieselbe Adresse mit demselben Schlüssel. **Sperre:** In den ersten 3 Jahren nach dem Mainnet-Start (1.095 Epochen) wird nichts freigegeben, danach schrittweise. Angenommen ist eine lineare Freigabe über 1 weiteres Jahr (365 Epochen), sodass nach 4 Jahren alles frei ist (zur Bestätigung). Die Sperre erzwingt das Protokoll. Es gibt keinen Presale und keinen weiteren Vorab-Anteil. Das ist kein reiner Fair Launch mehr, sondern ein Fair Launch mit kleiner, transparenter Reserve. Ob das rechtlich als ausreichend dezentral gilt, muss vorab juristisch geprüft werden.
 
 **Basiskurve:** Pro Epoche (ca. 24 Stunden) werden k × Restmenge ausgeschüttet.
 
@@ -198,7 +199,7 @@ Optionaler **privater Pool** neben den öffentlichen Ethereum-kompatiblen Konten
 
 **Leistungsbelohnung:** Starke und zuverlässige Teilnehmer erhalten einen Bonus bis zu 1,5 ×, begrenzt durch den Wurzel-Deckel aus Abschnitt 5, damit Großteilnehmer nicht dominieren.
 
-## 11. Offline-Transaktionen (Phase 4)
+## 11. Offline-Transaktionen (Phase 5)
 
 Das Doppelausgabe-Problem wird durch ein **vorab hinterlegtes Offline-Budget** gelöst:
 
@@ -209,7 +210,7 @@ Das Doppelausgabe-Problem wird durch ein **vorab hinterlegtes Offline-Budget** g
 
 Sicherheitsregeln: Ablaufzeit je Scheck, Höchstbetrag je Scheck, Gerätebindung über Secure Element oder Keystore. Auf Geräten ohne Hardware-Schutz gelten niedrigere Limits.
 
-## 12. Ethereum-Kompatibilität und Bridge (Phase 5)
+## 12. Ethereum-Kompatibilität und Bridge (Phase 3)
 
 **Auf ToyChain:** Ethereum-Adressen, Signaturformat und JSON-RPC-Teilmenge. MetaMask und ähnliche Wallets können ToyChain als eigenes Netzwerk einbinden und TOY senden. Smart Contracts gibt es nicht (Entscheidung 36).
 
@@ -224,7 +225,7 @@ Sicherheitsregeln: Ablaufzeit je Scheck, Höchstbetrag je Scheck, Gerätebindung
 - **Tresor-Regeln:** Kein Admin-Schlüssel, keine Mint-Funktion, verifizierter Quellcode, keine manuelle Entsperrung. Bei den Altbestand-Token-Verträgen hat die Adresse, die ToyCoin auf Polygon erstellt hat, im Code keine Sonderrechte (siehe Abschnitt 16). Laut den Verträgen lässt sich ToyCoin auf keiner Kette nachprägen, und es gibt je Kette nie mehr als 100.000.000. ToyScan prüft das fortlaufend am Vertrag selbst (Gesamtmenge, Mint-Funktion, Upgrade-Mechanismus, Admin-Rechte).
 - **Prüfung durch Beweis:** Der Tresor auf der Zielkette prüft den rekursiven ToyChain-Beweis selbst (zk-Light-Client). Zusätzlich muss das Komitee per Schwellensignatur zustimmen (zwei Sicherungen), bis der Verifizierer lange genug bewährt ist.
 - **Schutzschichten:** Limits pro Zeitraum und Kette, Zeitverzögerung bei großen Transfers, Notschalter, der nur pausieren kann und nie freigibt.
-- **ToyScan-Ampel:** Grün, wenn live alle Kriterien erfüllt sind: (1) Umlauf ≤ gemintet + Reserve ≤ 100 Mio., (2) Tresore halten mindestens den nicht freigegebenen Rest, (3) Reserve höchstens 1 Mio. in höchstens 100 Wallets mit intakter Zeitsperre, (4) Emission nicht vor dem Zeitplan, (5) Altbestand-Verträge ohne Mint-Funktion und ohne Upgrade-Mechanismus, Gesamtmenge je Kette ≤ 100 Mio., Tresor ohne Admin-Schlüssel, (6) Notschalter nicht ausgelöst und Beweis-Verifizierer aktuell, (7) Fremdbestand je Kette ausgewiesen und nicht größer als der Deckungsposten dieser Kette (Polygon 10.000 TOY, Ethereum 0). Gelb bei Abweichung, rot bei Verletzung. Wird auf irgendeiner Kette mehr als 100.000.000 ToyCoin festgestellt oder ließe sich nachprägen, zeigt ToyScan eine große rote Lampe mit Warnung, und der Notschalter der Bridge kann Freigaben pausieren. Die Regeln sind offen, damit jeder nachrechnen kann. Die Ampel ersetzt keine eigene Prüfung.
+- **ToyScan-Ampel:** Grün, wenn live alle Kriterien erfüllt sind: (1) Umlauf ≤ gemintet + Reserve ≤ 100 Mio., (2) Tresore halten mindestens den nicht freigegebenen Rest, (3) Reserve von 990.000 TOY auf der Ersteller-Adresse mit intakter Sperre (Entscheidung 41), (4) Emission nicht vor dem Zeitplan, (5) Altbestand-Verträge ohne Mint-Funktion und ohne Upgrade-Mechanismus, Gesamtmenge je Kette ≤ 100 Mio., Tresor ohne Admin-Schlüssel, (6) Notschalter nicht ausgelöst und Beweis-Verifizierer aktuell, (7) Fremdbestand je Kette ausgewiesen und nicht größer als der Deckungsposten dieser Kette (Polygon 10.000 TOY, Ethereum 0). Gelb bei Abweichung, rot bei Verletzung. Wird auf irgendeiner Kette mehr als 100.000.000 ToyCoin festgestellt oder ließe sich nachprägen, zeigt ToyScan eine große rote Lampe mit Warnung, und der Notschalter der Bridge kann Freigaben pausieren. Die Regeln sind offen, damit jeder nachrechnen kann. Die Ampel ersetzt keine eigene Prüfung.
 - **Technisch offen:** Die Beweisprüfung auf Ethereum ist teuer. Der Beweis wird dafür in eine EVM-freundliche Form umhüllt. Die Wahl des Verfahrens (Trusted-Setup-Frage) wird in Phase 2 geklärt.
 
 ## 13. Bedrohungsmodell
@@ -255,9 +256,11 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst.
 1. **Phase 0, Spezifikation:** Dieses Dokument, Parameter festlegen, Entscheidungen aus Abschnitt 16 treffen.
 2. **Phase 1, Kern:** Rust-Knoten mit Konten, Konsens, 60-Sekunden-Blöcken, Emission, Kontingent und Gebühren. Wallet für Android, Linux, Windows und Raspberry Pi. Ethereum-kompatible Adressen und JSON-RPC. Öffentliches Testnet.
 3. **Phase 2, Beweise:** Rekursives Falten der Historie, Prover-Rolle, Einhaltung des 256-MB-Budgets, Light-Clients.
-4. **Phase 3, Privatsphäre:** Stealth-Adressen, privater Pool.
-5. **Phase 4, Offline-Schecks.**
-6. **Phase 5, Bridge** (ohne EVM-Ausführung, Entscheidung 36).
+4. **Phase 3, Bridge** (vorgezogen, Entscheidung 39; ohne EVM-Ausführung, Entscheidung 36). Danach startet die NFT-Prägung mit TOY.
+5. **Phase 4, Privatsphäre:** Stealth-Adressen, privater Pool.
+6. **Phase 5, Offline-Schecks.**
+
+**Mainnet-Zeitpunkt (Entscheidung 38):** Mainnet nach Phase 1 und externem Audit. Neue Knoten starten bis zur Beweis-Schicht von veröffentlichten Checkpoints. Phase 2 muss innerhalb von etwa 12 Monaten nach dem Mainnet folgen, weil die Block-Header sonst das 256-MB-Budget sprengen (ca. 158 MB pro Jahr).
 
 **Pflicht-Freigaben:** Kein Mainnet ohne externes Audit der Kryptografie und des Konsenses, ohne Testnet-Phase mit Lasttests und ohne rechtliche Prüfung.
 
@@ -267,7 +270,7 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst.
 
 1. **Zustandsablauf:** Ja, nach 1001 Tagen (ca. 3 Jahre), mit unkomplizierter Wiederbelebung.
 2. **Privater Pool:** Abgeschirmter zk-Pool (sicherer und kompatibler), siehe Abschnitt 9.
-3. **Startverteilung:** Fair Launch mit 1 % offengelegter Reserve (1 Mio. TOY für Team, Entwickler und Bug-Bounty, höchstens 100 Wallets), sonst keine Vorab-Menge. Die Reserve entsteht im Genesis-Block mit Zeitsperre, der gesamte Altbestand bleibt gesperrt.
+3. **Startverteilung** (Empfänger und Sperre geändert durch Entscheidung 41): Fair Launch mit 1 % offengelegter Reserve (1 Mio. TOY für Team, Entwickler und Bug-Bounty, höchstens 100 Wallets), sonst keine Vorab-Menge. Die Reserve entsteht im Genesis-Block mit Zeitsperre, der gesamte Altbestand bleibt gesperrt.
 4. **Bridge:** 1:1 zu Polygon, Ethereum und weiteren Ketten. Die vorhandenen 2 × 100 Mio. Altbestand-Token werden zu gesperrten Reserven im Tresor-Modell. Anzeige und Ampel in ToyScan. Zum Fremdbestand gilt die Neuregelung vom 17.10.2026 (Abschnitt 12): Rückübertragung bis auf höchstens 10.000 TOY je Kette, Rest im Genesis-Block gedeckt.
 5. **Bridge-Typ:** zk-Light-Client mit Komitee als zweiter Sicherung.
 6. **Hybrid-Signaturen:** Ab Phase 1 optional verfügbar.
@@ -275,7 +278,7 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst.
 **Entschieden am 17.10.2026:**
 
 7. **Erste Epoche:** k₀ = 0,0505 % gilt, die erste Epoche bringt damit ca. 49.995 TOY (Zahl korrigiert).
-8. **Zeitsperre der Reserve:** 4 Jahre linear, auf der Kette erzwungen (Vorschlag bestätigt).
+8. **Zeitsperre der Reserve:** ersetzt durch Entscheidung 41: 3 Jahre gesperrt, danach schrittweise Freigabe an die Ersteller-Adresse.
 9. **Epochenlänge:** Nach Blöcken (1.440), der Zeitplan-Regler gleicht schnellere Epochen aus.
 10. **Lizenz:** Der Code steht unter der MIT-Lizenz.
 11. **Fremdbestand:** Rückübertragung an die Contract-Wallet bis auf höchstens 10.000 TOY je Kette vor dem Start (ersetzt die Sperr-Regel aus Nr. 4).

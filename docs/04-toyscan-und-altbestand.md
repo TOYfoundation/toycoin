@@ -6,7 +6,7 @@ ToyScan zeigt für jede Kette den Zustand der Supply-Regeln. **Grün**, wenn all
 
 1. Umlauf ≤ gemintetes TOY + Reserve ≤ 100.000.000.
 2. Die Tresor-Verträge halten mindestens den nicht freigegebenen Rest.
-3. Reserve höchstens 1.000.000 TOY in höchstens 100 Wallets, Zeitsperre intakt.
+3. Reserve: 990.000 TOY auf der Ersteller-Adresse, in den ersten 3 Jahren nichts freigegeben, danach nicht mehr als der Freigabeplan erlaubt (Entscheidung 41). Dazu 10.000 TOY Deckungsposten im Bridge-Konto.
 4. Emission nicht vor dem Zeitplan.
 5. Altbestand-Verträge ohne Mint-Funktion und ohne Upgrade-Mechanismus, Gesamtmenge je Kette ≤ 100.000.000, Tresor ohne Admin-Schlüssel.
 6. Notschalter der Bridge nicht ausgelöst, Beweis-Verifizierer aktuell.

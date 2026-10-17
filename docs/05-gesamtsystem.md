@@ -1,6 +1,6 @@
 # Gesamtsystem: ToyChain, TOYPAY, Spiele, ToyScan und Bridge
 
-Entwurf v0.1 vom 17.10.2026 · Fasst die Entscheidungen 1 bis 36 zusammen (`02-entscheidungen.md`) · Status: **zur Prüfung, mit offenen Entscheidungen in Abschnitt 10**
+Entwurf v0.2 vom 17.10.2026 · Fasst die Entscheidungen 1 bis 41 zusammen (`02-entscheidungen.md`) · Status: **zur Prüfung, mit offenen Entscheidungen in Abschnitt 10**
 
 ## 1. Die Teile auf einen Blick
 
@@ -8,7 +8,7 @@ Entwurf v0.1 vom 17.10.2026 · Fasst die Entscheidungen 1 bis 36 zusammen (`02-e
 flowchart LR
   subgraph TC["ToyChain (nur nativer TOY)"]
     N[Knoten: Validatoren, Voll-Knoten, Light-Knoten]
-    R[(Reserve 990.000 TOY<br/>4 Jahre gesperrt)]
+    R[(Reserve 990.000 TOY<br/>Ersteller-Adresse, 3 Jahre gesperrt)]
     D[(Deckungsposten<br/>10.000 TOY)]
     B[(Bridge-Konto<br/>ohne Schlüssel)]
   end
@@ -65,7 +65,7 @@ flowchart LR
 
 | Konto | Inhalt beim Start | Wer kann es bewegen |
 |---|---|---|
-| **Reserve** (höchstens 100 Wallets) | zusammen **990.000 TOY** | die Inhaber, aber nur den freigegebenen Teil: linear über **1.460 Epochen** (4 Jahre zu je 365 Epochen) |
+| **Reserve** auf der Ersteller-Adresse `0x18da…00c2` (Nr. 41) | **990.000 TOY** | der Inhaber des Ersteller-Schlüssels, aber nur den freigegebenen Teil: **nichts in den ersten 1.095 Epochen** (3 Jahre), danach schrittweise (angenommen: linear über 365 Epochen). Delegieren an das Start-Komitee ist auch gesperrt möglich (Nr. 37) |
 | **Deckungsposten Polygon** | **10.000 TOY** im Bridge-Konto, markiert als Deckung des Fremdbestands | nur das Protokoll (Bridge-Eingang) |
 | **Bridge-Konto** | die 10.000 TOY Deckung, später alle gebridgten TOY | nur die Transaktionsarten Bridge-Ausgang/-Eingang |
 | **Erstattungs-Pool** | 0, füllt sich aus 10 % der Emission und 40 % der Gebühren | nur das Protokoll |
@@ -76,7 +76,7 @@ flowchart LR
 | Adresse | Rolle |
 |---|---|
 | `0x1854b69c…A5BF` | ToyCoin-Token (ERC-20, ohne Mint, ohne Admin) |
-| `0x18da0be9…00c2` | Ersteller-Adresse: hält 97.999.000 TOY. **Keine Abgänge mehr** bis zur Tresor-Einzahlung (Nr. 17) |
+| `0x18da0be9…00c2` | Ersteller-Adresse: hält 97.999.000 TOY. **Keine Abgänge mehr** bis zur Tresor-Einzahlung (Nr. 17). Dieselbe Adresse erhält auf ToyChain die Reserve (Nr. 41) |
 | Tresor-Vertrag (neu) | nimmt den Bestand der Ersteller-Adresse auf, gibt nur gegen ToyChain-Beweis frei |
 | NFT-Vertrag (neu) | Prägen mit Gutschein, Sperre 10 TOY / 20 Tage, Auflage Sternenfeuer 1.001 |
 | Gebühren-Adresse (neu, Multisig) | empfängt Präge-Gebühren (Nr. 26) |
@@ -97,9 +97,9 @@ Der Genesis-Block ist der erste Block der Kette. **Er lässt sich nach dem Start
 
 | Inhalt | Wert | Quelle |
 |---|---|---|
-| Chain-ID | **offen** (Abschnitt 10). Muss eindeutig sein, Testnet und Mainnet bekommen verschiedene IDs | — |
+| Chain-ID | wird vor dem Testnet gewählt und gegen die öffentlichen Listen geprüft. Testnet und Mainnet bekommen verschiedene IDs | Nr. 40 |
 | Obergrenze | 10^26 kleinste Einheiten = 100.000.000 TOY, im Code fest | Spezifikation 14 |
-| Reserve | 990.000 TOY auf höchstens 100 öffentlich gelisteten Adressen, je Adresse ein Freigabeplan über 1.460 Epochen | Nr. 3, 10, 14 |
+| Reserve | 990.000 TOY auf der Ersteller-Adresse `0x18da…00c2`, Freigabeplan: 3 Jahre nichts, danach schrittweise | Nr. 14, 41 |
 | Deckungsposten | 10.000 TOY im Bridge-Konto, Zweck „Polygon-Fremdbestand“ | Nr. 13, 14 |
 | Bestand beim Start | **1.000.000 TOY** (990.000 + 10.000) | — |
 | Emissionsrest | 99.000.000 TOY, noch nicht vorhanden | Spezifikation 10 |
@@ -107,7 +107,7 @@ Der Genesis-Block ist der erste Block der Kette. **Er lässt sich nach dem Start
 | Zeit | Blockzeit 60 s (frühestens 10 s), Epoche = 1.440 Blöcke, 1 Jahr = 365 Epochen | Nr. 11 |
 | Gebühren | Kontingent 10–100 je Epoche, progressive Gebühr, ToyWork Argon2id 16 MiB, Vielnutzer ab 1.000 | Spezifikation 6, 7 |
 | Mindestguthaben | 0,1 TOY. Kontoablauf nach 1.001 Tagen unter einer Schwelle | Nr. 1 |
-| Start-Validatoren | **offen** (Abschnitt 10) | — |
+| Start-Validatoren | Start-Komitee aus 7 bis 21 offengelegten Betreibern mit delegiertem Reserve-Stake, ohne Emission für diesen Stake | Nr. 37 |
 | Prüfsumme | Hash des Genesis-Blocks wird veröffentlicht: auf GitHub, in ToyScan und in jeder Wallet. Er ist der erste Checkpoint | Spezifikation 5 |
 
 **Rechenprobe:** gemintet (0) + Reserve (990.000) + Deckung (10.000) = 1.000.000 ≤ 100.000.000. Nach 25 Jahren bei m = 1: rund 98,0 Mio. gemintet + 1 Mio. = rund 99,0 Mio., die Obergrenze bleibt unerreicht.
@@ -126,9 +126,10 @@ Schritte mit 🔒 lassen sich **nicht rückgängig machen**.
 | 5 | Rechtliche Prüfung (MiCA, Steuer, Glücksspiel/Jugendschutz für TOYPAY, Reserve) | — | Gutachten |
 | 6 | Stichtag: Fremdbestand messen (Polygon ≤ 10.000, Ethereum 0) | 1 | Messprotokoll in ToyScan |
 | 7 | 🔒 **Genesis-Block erzeugen** und Hash veröffentlichen | 4, 5, 6 | mehrere Personen erzeugen ihn unabhängig und vergleichen den Hash |
-| 8 | Mainnet-Start mit den Start-Validatoren | 7 | Blöcke, Finalität |
+| 8 | Mainnet-Start mit dem Start-Komitee (Nr. 37). Neue Knoten starten von Checkpoints (Nr. 38) | 7 | Blöcke, Finalität |
+| 8a | Phase 2 (Beweise) innerhalb von etwa 12 Monaten | 8 | Header-Speicher wächst nicht weiter |
 | 9 | ToyScan live. Kriterien zur Bridge zeigen „noch nicht aktiv“ (grau) | 8 | Ampel |
-| 10 | Tresor-Verträge und Bridge-Komitee: bauen, Audit, Testnet | Phase 2 (Beweise) | Audit |
+| 10 | Phase 3 Bridge (Nr. 39): Tresor-Verträge und Bridge-Komitee bauen, Audit, Testnet | 8a | Audit |
 | 11 | 🔒 **Ersteller-Adresse zahlt ihren Bestand in die Tresore ein** | 10 | ToyScan: Ersteller-Adresse leer, Tresore voll |
 | 12 | Bridge-Start | 11 | Ampel grün |
 | 13 | NFT-Prägung mit TOY startet (Nr. 17) | 12 | NFT-Vertrag-Audit |
@@ -176,8 +177,7 @@ TOY (Polygon) ──► Präge-Gebühr ──► Gebühren-Adresse (Multisig)   
 
 | Schlüssel | Was er kann | Sicherung (Vorschlag) |
 |---|---|---|
-| Ersteller-Adresse | 198 Mio. Token auf zwei Ketten bewegen, bis zur Tresor-Einzahlung | Hardware-Wallet, offline, Phrase an zwei getrennten Orten |
-| Reserve-Wallets | den freigegebenen Teil der Reserve bewegen | Hardware-Wallets, Liste öffentlich |
+| Ersteller-Adresse | 198 Mio. Token auf zwei Ketten bewegen (bis zur Tresor-Einzahlung) **und** die 990.000 TOY Reserve auf ToyChain empfangen und delegieren | Hardware-Wallet, offline, Phrase an zwei getrennten Orten. **Der wichtigste Schlüssel des ganzen Projekts** |
 | Gebühren- und Wechselstuben-Adresse | Gebühren und Wechselstuben-TOY bewegen | Multisig **3 von 5**, getrennte Personen und Geräte |
 | Bridge-Komitee | zweite Sicherung neben dem Beweis | Schwellensignatur, z. B. **5 von 9** unabhängige Betreiber |
 | Spielserver-Gutschein | Gutscheine fürs Prägen ausstellen | eigener Schlüssel nur dafür, in einem Hardware-Sicherheitsmodul, Limits im Vertrag |
@@ -192,7 +192,7 @@ TOY (Polygon) ──► Präge-Gebühr ──► Gebühren-Adresse (Multisig)   
 |---|---|---|
 | 1 Umlauf ≤ gemintet + Reserve ≤ 100 Mio. | ToyChain-Zustand + beide Token-Verträge | aktiv |
 | 2 Tresore halten den nicht freigegebenen Rest | Tresor-Bestände, Bridge-Konto | grau |
-| 3 Reserve ≤ 990.000 TOY in ≤ 100 Wallets, Zeitsperre intakt | Genesis-Liste + Zustand | aktiv |
+| 3 Reserve 990.000 TOY auf der Ersteller-Adresse, Sperre und Freigabeplan eingehalten | Genesis-Block + Zustand | aktiv |
 | 4 Emission nicht vor dem Zeitplan | Emissionszähler je Epoche | aktiv |
 | 5 Altbestand-Verträge ohne Mint und Upgrade, Gesamtmenge ≤ 100 Mio., Tresore ohne Admin | Bytecode, Code-Hash, `totalSupply()` | aktiv (Tresor-Teil grau) |
 | 6 Notschalter nicht ausgelöst, Beweis-Verifizierer aktuell | Tresor-Verträge | grau |
@@ -202,29 +202,35 @@ TOY (Polygon) ──► Präge-Gebühr ──► Gebühren-Adresse (Multisig)   
 
 Details folgen in `08-toyscan.md`.
 
-## 10. Offene Entscheidungen
+## 10. Entscheidungen vom 17.10.2026 und was noch offen ist
 
-**E1 · Wer validiert am Anfang?**
-Proof-of-Stake braucht gebundenes TOY. Beim Start gibt es aber nur die Reserve (990.000) und die Deckung. Ohne Lösung würden anfangs nur Reserve-Inhaber die Kette sichern, und die Kette wäre zentralisiert.
-**Vorschlag:**
-- Ein offengelegtes **Start-Komitee** von 7 bis 21 Knoten verschiedener Betreiber. Sie staken gesperrte Reserve-TOY, und die Zeitsperre bleibt dabei bestehen.
-- **Reserve-Stake bekommt keine Emission.** Der Anteil der Start-Validatoren fließt in den Erstattungs-Pool. So bereichert sich niemand am Start.
-- Ab Epoche 1 verdienen alle über **ToyWork** (40 % der Emission) und Attestierung. Wer TOY verdient hat, kann selbst staken.
-- **Übergabe:** Sobald unabhängiger Stake das Start-Komitee übersteigt (z. B. 3-mal so viel), scheidet das Start-Komitee schrittweise aus. ToyScan zeigt den Grad der Dezentralisierung an (wie viele Teilnehmer zusammen ein Drittel des Stakes halten).
+| Nr. | Thema | Entscheidung |
+|---|---|---|
+| 37 (E1) | Start-Validatoren | Start-Komitee aus 7 bis 21 offengelegten Betreibern mit delegiertem Reserve-Stake. Kein Emissionsanteil für Reserve-Stake. Übergabe, sobald unabhängiger Stake z. B. das Dreifache erreicht |
+| 38 (E2) | Mainnet-Zeitpunkt | Nach Phase 1 und Audit. Checkpoints bis zur Beweis-Schicht, Phase 2 innerhalb von etwa 12 Monaten |
+| 39 (E3) | Reihenfolge | Phase 2 Beweise, Phase 3 Bridge, Phase 4 Privatsphäre, Phase 5 Offline-Schecks |
+| 40 (E4) | Chain-ID | Vor dem Testnet wählen und prüfen |
+| 41 (E5) | Reserve | 990.000 TOY an die Ersteller-Adresse, 3 Jahre gesperrt, danach schrittweise |
 
-**E2 · Mainnet vor oder nach Phase 2 (Beweise)?**
-Ohne die Beweis-Schicht müssen Knoten alte Block-Header behalten oder **Checkpoints vertrauen**. Header wachsen um ca. 158 MB pro Jahr (525.600 Blöcke à 300 Byte). Das 256-MB-Budget wäre damit nach gut einem Jahr überschritten.
-- (a) **Mainnet nach Phase 1 und Audit.** Knoten starten von veröffentlichten Checkpoints, alte Header liegen nur auf Archiv-Knoten. Phase 2 muss dann innerhalb von etwa 12 Monaten folgen. Bis dahin vertrauen neue Knoten den Checkpoints.
-- (b) **Mainnet erst nach Phase 2.** Das ist sauberer, aber deutlich später, denn Phase 2 ist Forschungsarbeit.
+### Noch offen
 
-**E3 · Reihenfolge der Phasen 3 bis 5**
-Laut Fahrplan kommt die Bridge erst nach Privatsphäre (Phase 3) und Offline-Schecks (Phase 4). Die NFT-Prägung mit TOY wartet aber auf die Bridge (Nr. 17). **Vorschlag:** Bridge als Phase 3 vorziehen, danach Privatsphäre und Offline-Schecks.
+**O1 · Freigabe nach den 3 Jahren:** Angenommen ist linear über 1 Jahr (voll frei nach 4 Jahren). Alternativen: linear über 2 oder 3 Jahre, oder in Jahresraten.
 
-**E4 · Chain-ID**
-Die Chain-ID muss weltweit eindeutig sein, damit Signaturen nicht auf anderen Ketten gelten. Vor dem Testnet wird eine freie Nummer gewählt und gegen die öffentlichen Listen geprüft. Testnet und Mainnet bekommen verschiedene IDs.
+**O2 · Bug-Bounty in den ersten 3 Jahren:** Bisher sollte die Reserve auch Bug-Bounty-Prämien bezahlen. Sie ist aber 3 Jahre gesperrt, also gerade in der riskantesten Zeit. Möglichkeiten:
+- (a) ein kleiner, sofort verfügbarer Teil der Reserve, z. B. 20.000 TOY, auf einer Multisig-Adresse nur für Prämien,
+- (b) Prämien in den ersten 3 Jahren aus der Gebühren-Adresse auf Polygon,
+- (c) Prämien außerhalb der Kette, z. B. in Euro.
 
-**E5 · Reserve-Wallets**
-Wer erhält wie viel der 990.000 TOY, z. B. Team, Entwickler, Bug-Bounty-Topf? Die Liste ist Teil des Genesis-Blocks und danach nicht mehr änderbar.
+**O3 · Ein Schlüssel für alles:** Die Ersteller-Adresse hält dann die 198 Mio. Altbestand-Token (bis zur Tresor-Einzahlung) **und** die Reserve. Geht dieser Schlüssel verloren oder wird gestohlen, trifft es beide. Dringende Empfehlung: Hardware-Wallet, Phrase doppelt an getrennten, sicheren Orten, nie auf einem Rechner mit Internet eingeben.
 
-**E6 · Auflage Rubinglut**
-Gibt es für Gegenstände von 40 bis 79 TOY ebenfalls eine Auflage, z. B. 10.001 Stück je Art?
+**E6 · Auflage für Rubinglut (40 bis 79 TOY), „eher seltener“:**
+
+| Option | Regel | Rubinglut je Art | Sternenfeuer je Art | Bewertung |
+|---|---|---|---|---|
+| **A · Stufen ×10** | feste Zahl je Seltenheit | 10.001 | 1.001 | einfach, aber Rubinglut kaum selten |
+| **B · Stufen ×3** | feste Zahl je Seltenheit | 3.001 | 1.001 | spürbar seltener, einfache Regel |
+| **C · Preisformel** | Auflage = 100.000 ÷ Gebühr + 1 | 2.501 (40 TOY) bis 1.266 (79 TOY) | 1.001 (Nr. 33) | je teurer, desto seltener, ohne Sprünge. Bei 100 TOY ergibt die Formel genau 1.001. Der Vertrag rechnet es selbst aus, ohne Admin |
+| **D · Saison-Auflage** | je Art und Saison (101 Nächte) z. B. 1.001 | 1.001 pro Saison | 101 pro Saison | Knappheit erneuert sich jede Saison, spannend, aber mehr Logik im Vertrag und Inflation über die Jahre |
+
+**Zum Vergleich:** Bei 10.000 aktiven Spielern ab 18 kann bei Option C jeder Vierte bis Achte eine bestimmte Rubinglut-Art besitzen, bei Option B jeder Dritte. Es gibt 58 Rubinglut-Arten.
+**Empfehlung:** **C**, weil die Regel aus dem Preis folgt, keine harten Stufen hat und mit der Auflage 1.001 für Sternenfeuer zusammenpasst.
