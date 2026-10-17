@@ -174,7 +174,7 @@ Hinweis: Das ist keine Rechtsberatung. Die Punkte zeigen, wo eine rechtliche Pr�
 
 **Entschieden am 17.10.2026: A, Einbahnstraße.** TOY lassen sich in Dukaten tauschen, Dukaten und Gold nie zurück in TOY. Belohnungen gibt es nur als Spielwerte. B käme frühestens nach einer rechtlichen Prüfung in Frage, C nicht. In allen Fällen gilt: Das Spiel erzeugt **nie** neues TOY. Der Umweg über NFT-Verkäufe ist durch zwei Sorten Dukaten geschlossen (Entscheidung 28, Abschnitt 5a).
 
-**K4 Jugendschutz.** **Entschieden am 17.10.2026: ab 16 Jahren.** Daraus folgt eine Frage für die rechtliche Prüfung: 16- und 17-Jährige sind in Deutschland nur beschränkt geschäftsfähig. Verträge wie der Kauf von TOY, Sultansdukaten oder NFTs brauchen grundsätzlich die Zustimmung der Eltern, außer bei kleinen Beträgen aus dem eigenen Taschengeld. Viele Krypto-Dienste verlangen deshalb 18 Jahre. **Vorschlag:** Das Spiel ab 16. Alles, was echte TOY bewegt (Wechselstube, Prägen, Bridge, Handel), ab **18** mit Altersnachweis, oder für 16- und 17-Jährige nur mit Zustimmung der Eltern. Auch Poker mit Spielchips braucht eine passende Altersfreigabe (USK).
+**K4 Jugendschutz.** **Entschieden am 17.10.2026: ab 16 Jahren.** Daraus folgt eine Frage für die rechtliche Prüfung: 16- und 17-Jährige sind in Deutschland nur beschränkt geschäftsfähig. Verträge wie der Kauf von TOY, Sultansdukaten oder NFTs brauchen grundsätzlich die Zustimmung der Eltern, außer bei kleinen Beträgen aus dem eigenen Taschengeld. Viele Krypto-Dienste verlangen deshalb 18 Jahre. **Entschieden am 17.10.2026 (Entscheidung 31):** Die Spiele ab 16. Alles, was echte TOY bewegt (Wechselstube, Sultansdukaten, Prägen, Bridge, NFT-Handel), **ab 18 mit Altersnachweis**. Unter 18 gibt es nur Königsdukaten und Gold, und geprägte NFTs sind dann nicht möglich. Auch Poker mit Spielchips braucht eine passende Altersfreigabe (USK).
 
 **K5 Verwahrung.** Hält TOYPAY nie fremde Schlüssel, ist die App eine Software-Wallet. Wer Guthaben für Nutzer verwahrt oder tauscht, braucht nach MiCA voraussichtlich eine Zulassung als Krypto-Dienstleister. **Vorschlag:** strikt nicht verwahrend.
 
@@ -195,7 +195,7 @@ Folgen:
 
 **K10 NFTs und Recht.** Einzigartige NFTs fallen in der Regel nicht unter MiCA. Große Serien gleichartiger NFTs können aber anders bewertet werden. Gehandelte Spielgegenstände berühren zudem Steuer- und Verbraucherrecht. Teil der rechtlichen Prüfung.
 
-**K7 Eine App oder zwei.** TOYPAY kommt auf vier Plattformen (Entscheidung 30). TOYQUEST 3D ist schon heute ein eigenes Programm. Offen ist, ob Wallet, Knoten und die 2D-Spiele (Stadtviertel, Poker, TOYQUEST) **in einer** TOYPAY-App bleiben. Wallet und Spiele in einer App machen sie groß und vermischen Risiken (Glücksspiel, Jugendschutz, Finanzfunktionen). Vor allem die Altersgrenze 18 für TOY-Funktionen (K4) spricht für eine Trennung. **Möglichkeit:** „TOYPAY Wallet“ als schlanke App mit Knoten auf allen vier Plattformen, die Spiele getrennt.
+**K7 Eine App oder zwei.** TOYPAY kommt auf vier Plattformen (Entscheidung 30). TOYQUEST 3D ist schon heute ein eigenes Programm. Offen ist, ob Wallet, Knoten und die 2D-Spiele (Stadtviertel, Poker, TOYQUEST) **in einer** TOYPAY-App bleiben. Wallet und Spiele in einer App machen sie groß und vermischen Risiken (Glücksspiel, Jugendschutz, Finanzfunktionen). Vor allem die Altersgrenze 18 für TOY-Funktionen (K4) spricht für eine Trennung. **Entschieden am 17.10.2026 (Entscheidung 32):** Es gibt die **TOYPAY Wallet** als schlanke App mit Knoten auf allen vier Plattformen (ab 18). Die Spiele sind getrennte Apps (ab 16): die 2D-Spiele (Stadtviertel, Poker, TOYQUEST) und TOYQUEST 3D. Spiele und Wallet verbinden sich nur über eine Anmeldung mit der Wallet-Adresse. Das Spiel sieht die Adresse, nie den Schlüssel.
 
 ## 8. Abhängigkeiten zum ToyChain-Bauplan
 
@@ -214,11 +214,9 @@ Folgen:
 
 Beantwortet am 17.10.2026: Die App nimmt TOY auf allen Ketten an, bridgt nativen TOY und prägt NFTs auf Polygon mit Polygon-TOY (Entscheidungen 15 und 16). NFT-Prägung mit TOY erst nach dem Bridge-Start (Entscheidung 17).
 
-Beantwortet am 17.10.2026: Altersgruppe ab 16 (Entscheidung 29), Plattformen Android, Windows, Linux und Raspberry Pi (Entscheidung 30).
+Beantwortet am 17.10.2026: Altersgruppe ab 16 (Entscheidung 29), Plattformen Android, Windows, Linux und Raspberry Pi (Entscheidung 30), TOY-Funktionen ab 18 (Entscheidung 31), Wallet und Spiele getrennt (Entscheidung 32).
 
 Offen:
 1. Werden Poker-Gewinne (Spielchips) von Dukaten und TOY getrennt gehalten (K2)?
-2. TOY-Funktionen (Wechselstube, Prägen, Bridge, Handel) ab 18, oder ab 16 mit Zustimmung der Eltern (K4)?
-3. Wallet und Spiele in einer TOYPAY-App oder getrennt (K7)?
-4. Sollen NFTs schon vor dem Bridge-Start **ohne TOY** geprägt werden können (kostenlos oder gegen POL)?
-5. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?
+2. Sollen NFTs schon vor dem Bridge-Start **ohne TOY** geprägt werden können (kostenlos oder gegen POL)?
+3. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?

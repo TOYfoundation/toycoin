@@ -59,6 +59,8 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 28 | Zwei Sorten Dukaten | **Sultansdukaten**: nur gegen TOY in der Wechselstube, dürfen Präge-Gebühren zahlen, nicht übertragbar. **Königsdukaten** (und Gold): erspielt, nur für Dinge im Spiel, keine Präge-Gebühren. Kein Tausch zwischen den Sorten, keine Sorte zurück in TOY |
 | 29 | Altersgruppe | TOYPAY und Spiele **ab 16 Jahren**. Offen: TOY-Funktionen ab 18 oder mit Zustimmung der Eltern (K4 in `07-toypay.md`) |
 | 30 | Plattformen TOYPAY | **Android, Windows, Linux, Raspberry Pi**. Kein iPhone vorerst. Vorschlag: eine Codebasis mit Compose Multiplatform und dem gemeinsamen Rust-Kern |
+| 31 | Alter für TOY-Funktionen | Spiele ab 16. Wechselstube, Sultansdukaten, Prägen, Bridge und NFT-Handel **ab 18 mit Altersnachweis** |
+| 32 | Apps getrennt | **TOYPAY Wallet** (Wallet und Knoten, 4 Plattformen, ab 18) getrennt von den Spiel-Apps (2D-Spiele und TOYQUEST 3D, ab 16). Verbindung nur über die Wallet-Adresse, nie über Schlüssel |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 
