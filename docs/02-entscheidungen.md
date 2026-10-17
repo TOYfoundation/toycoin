@@ -50,8 +50,8 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 
 ## Noch offen
 
-- Gesamtmenge je Kette am Vertrag ablesen (soll 10^26 kleinste Einheiten sein) und Quellcode auf Etherscan und Polygonscan verifizieren.
-- Wer hält den Altbestand? (Anteil in der Contract-Wallet gegenüber Fremdbestand, ablesbar auf dem Holders-Tab.)
+- Quellcode auf Etherscan und Polygonscan verifizieren (am 17.10.2026 auf beiden Ketten noch **nicht verifiziert**). Prägung von je 10^26 Einheiten ist bestätigt.
+- Gehören die Polygon-Adressen `0xd908…`, `0x6b9a…` und `0x856d…` (zusammen ca. 1,99 Mio. TOY) dem Projekt? Davon hängt ab, ob der Fremdbestand ca. 2 Mio. oder nur ca. 7.700 TOY beträgt (Befund in `04-toyscan-und-altbestand.md`, Abschnitt 4).
 - Regel für den Fremdbestand später (Vorschlag: erzeugt nie neues TOY, Rücktausch nur im Rahmen zuvor ausgegebener Tresor-Token, Halter offen informieren).
 - Rechtliche Prüfung vor dem Mainnet (MiCA, Steuer, Börsenlistings, 1 % Reserve, Fremdbestand).
 - Technisch: Beweisprüfung auf Ethereum (Kosten, Trusted-Setup-Frage), in Phase 2 klären.

@@ -76,3 +76,24 @@ Die Adresse und die Chain-ID stehen jeweils als feste Werte im Code. Das bestät
 - Schutz: Limits, Zeitverzögerung bei großen Beträgen, Notschalter (kann nur pausieren).
 - Globale Invariante: Umlauf auf allen Ketten ≤ gemintetes TOY + 1 Mio. Reserve ≤ 100.000.000.
 - Fremdbestand erzeugt nie neues TOY. Vorschlag für später: Rücktausch nur im Rahmen zuvor aus dem Tresor ausgegebener Token. Halter offen informieren, dass eine 1:1-Einlösung nicht garantiert ist.
+
+## 4. On-Chain-Befund vom 17.10.2026 (Etherscan-API, nur lesend)
+
+**Herkunft:** Beide Verträge wurden von derselben Adresse erstellt: `0x18da0be974424d54519c63f62e4b26c0318c00c2` (Ersteller, im Folgenden „Contract-Wallet“). Polygon am 15.07.2022 (Block 30.731.802), Ethereum am 23.07.2022 (Block 15.198.513). Beim Erstellen wurden je **100.000.000 TOY** (10^26 Einheiten, 18 Dezimalstellen) an die Ersteller-Adresse geprägt. Name „ToyCoin“, Symbol „TOY“.
+
+**Quellcode:** Auf beiden Ketten **nicht verifiziert** (Stand 17.10.2026). Ampel-Kriterium 5 kann erst grün werden, wenn der Quellcode verifiziert ist.
+
+**Ethereum:** Die Ersteller-Adresse hat seit der Prägung **keinen einzigen Transfer** ausgeführt. Sie hält alle 100.000.000 TOY. Fremdbestand: **0**.
+
+**Polygon:** Die Ersteller-Adresse hat netto **2.001.000 TOY** abgegeben und hält **97.999.000 TOY**. Wohin der Rest ging:
+
+| Adresse | Bestand (errechnet) | Herkunft |
+|---|---|---|
+| `0xd908efed6e0c9ee1dea7cb9555c00d2eb57c3546` | 999.000 | 1.000.000 vom Ersteller (03.12.2023), 1.000 weiter an `0x6b9a…` |
+| `0x6b9a6dc8c7eedd3f0493a473c9d9752677aa0c99` | 895.111,4 | 894.111,4 vom Ersteller (06.12.2023), 1.000 von `0xd908…` |
+| `0x856d3b7ac3e329d65268160fddc867bcb92805e7` | 99.200 | 100.400 vom Ersteller, 1.200 weitergegeben |
+| übrige (Liquiditätspool von 07/2022, kleine Wallets) | ca. 7.688,6 | Summe der restlichen Abgänge |
+
+**Folgerung:** Gehören die drei großen Adressen dem Projekt, liegt der echte Fremdbestand bei nur **ca. 7.700 TOY auf Polygon und 0 auf Ethereum**. Das ist für das Bridge-Konzept entscheidend (siehe `05-gesamtsystem.md`, sobald angelegt).
+
+Einschränkung: Bestände sind aus den Transfer-Listen errechnet, nicht per `balanceOf()` abgelesen. Vor jeder Entscheidung nochmals direkt am Vertrag prüfen.

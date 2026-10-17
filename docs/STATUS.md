@@ -1,6 +1,6 @@
 # Projektstatus ToyChain
 
-Stand: 17.10.2026 · Phase 1 · Aktueller Schritt: **Start (Gerüst) abgeschlossen, offene Fragen geklärt**, als Nächstes **M1**
+Stand: 17.10.2026 · Phase 1 · Aktueller Schritt: **Konzeptphase.** Der Bau (M1 ff.) ruht, bis das Gesamtkonzept (ToyChain, ToyScan, Bridge, TOYPAY) ausgearbeitet ist
 
 ## Überblick Meilensteine
 
