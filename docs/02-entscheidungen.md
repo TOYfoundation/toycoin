@@ -43,6 +43,8 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 12 | Lizenz | MIT-Lizenz für den gesamten Code |
 | 13 | Fremdbestand | Vor dem Start werden die Token außerhalb der Contract-Wallet bis auf höchstens 10.000 TOY je Kette zurückübertragen. Ersetzt Nr. 7 |
 | 14 | Deckungsposten | **Bestätigt am 17.10.2026:** 10.000 TOY aus der Reserve decken im Genesis-Block den Polygon-Fremdbestand, damit jeder Token 1:1 einlösbar ist. Reserve für Team usw. dann 990.000 TOY |
+| 15 | TOYPAY und Ketten | TOYPAY nimmt ToyCoin auf allen Ketten an (ToyChain, Polygon, Ethereum, später weitere) und bridgt nativen TOY |
+| 16 | Spiel-NFTs | Spielgegenstände und Spielfiguren werden als NFTs auf **Polygon** geprägt, bezahlt mit Polygon-TOY. ToyChain selbst bleibt in Phase 1 ohne NFTs. Details und offene Punkte (K8 bis K10) in `07-toypay.md` |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 

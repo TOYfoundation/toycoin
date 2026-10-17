@@ -1,6 +1,6 @@
 # TOYPAY im Gesamtsystem
 
-Entwurf v0.1 vom 17.10.2026 · Grundlage: TOYPAY-Unterlagen Stand Runde 8 (im Projekt unter `toypay/docs/`) · Status: **zur Prüfung, mehrere Grundsatzentscheidungen offen (Abschnitt 7)**
+Entwurf v0.2 vom 17.10.2026 · Grundlage: TOYPAY-Unterlagen Stand Runde 8 (im Projekt unter `toypay/docs/`) · Status: **zur Prüfung, mehrere Grundsatzentscheidungen offen (Abschnitt 7)**
 
 Dieses Dokument beschreibt, wie die TOYPAY-App mit ToyChain zusammenspielt. Die Spielinhalte (TOYQUEST 3D, Grafik, Erfindungen, Sprachen) sind nicht Teil des ToyChain-Konzepts und werden hier nur erwähnt, wo sie die Kette berühren.
 
@@ -11,18 +11,18 @@ Dieses Dokument beschreibt, wie die TOYPAY-App mit ToyChain zusammenspielt. Die 
 | **TOYPAY-App** | Android, Kotlin. Enthält die „Spielwährung ToyCoin“, Stadtviertel, **Poker** und das 2D-Abenteuer TOYQUEST. 28 Sprachen. |
 | **TOYQUEST 3D** | Eigenes Spiel (Godot 4.4), Paket `app.toypay.quest3d`, Exporte für Android arm64, Windows, Linux. Spielgeld **Dukaten**, im Spiel gibt es eine **Wechselstube**. 45 Sprachen. |
 | **TOYPAY-Server** | Spielserver mit Online-Modus und Weltdaten. |
-| **Hinweise auf Blockchain** | `local.properties` enthält einen **Alchemy-Key** (Zugang zu Ethereum/Polygon), und Seed-Phrasen werden erwähnt. Die App spricht also vermutlich schon mit der Ethereum- oder Polygon-Kette. **Zu bestätigen.** |
+| **Blockchain** | `local.properties` enthält einen **Alchemy-Key** (Zugang zu Ethereum/Polygon), Seed-Phrasen werden erwähnt. **Bestätigt am 17.10.2026:** Das Spiel nutzt die ToyCoin-Token auf **Polygon**, um **NFTs** zu prägen (Spielgegenstände und Spielfiguren). |
 
-**Nicht beschrieben** sind: welche Wallet-Funktionen die App heute hat, ob „ToyCoin“ in der App der ERC-20-Token auf Polygon ist oder interne Punkte, und ob Dukaten in ToyCoin getauscht werden können.
+**Noch nicht beschrieben** sind: ob Dukaten in ToyCoin getauscht werden können, und ob es schon einen NFT-Vertrag auf Polygon gibt.
 
 ## 2. Zielbild
 
 TOYPAY wird die **Haupt-App für den nativen TOY**:
 
-1. **Wallet:** TOY senden und empfangen, Kontostand, kostenloses Kontingent anzeigen, Bridge zu Polygon und Ethereum.
+1. **Wallet für TOY auf allen Ketten (entschieden am 17.10.2026):** Die App nimmt ToyCoin auf **jeder** Kette an, auf der es ihn gibt: nativ auf ToyChain sowie als Token auf Polygon und Ethereum (später weitere). Sie zeigt den Bestand je Kette und in Summe und bridgt nativen TOY zu den anderen Ketten und zurück.
 2. **Light-Knoten:** Die App prüft die Kette selbst (Sammelsignaturen, später den rekursiven Beweis) und muss keinem Server vertrauen.
 3. **Teilhabe:** Optional mitsignieren (Attestierungs-Gruppen) und ToyWork-Arbeit leisten, wenn das Gerät lädt und im WLAN ist.
-4. **Spiele:** bleiben eigene Bereiche. Ihre Verbindung zu TOY ist bewusst eng begrenzt (Abschnitt 7).
+4. **Spiele:** Spielgegenstände und Spielfiguren können als **NFTs auf Polygon** geprägt werden, bezahlt mit Polygon-TOY (Abschnitt 5a). Sonst ist die Verbindung der Spiele zu TOY bewusst eng begrenzt (Abschnitt 7).
 
 ## 3. Technische Anbindung
 
@@ -48,6 +48,25 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
 - **Unter Personen:** Adresse oder QR-Code, Endgültigkeit nach höchstens ca. 1 Minute. Der QR-Code folgt dem Ethereum-Format (EIP-681: `ethereum:<adresse>@<chain-id>?value=…`), dadurch können ihn auch andere Wallets lesen.
 - **Im Laden:** Eine Minute an der Kasse ist spürbar lang. Möglichkeiten: Anzeige „unterwegs, wird bestätigt“ bei kleinen Beträgen, oder die Offline-Schecks (Spezifikation Abschnitt 11) von Phase 4 vorziehen. **Entscheidung offen.**
 - **Kontingent:** Die App zeigt die verbleibenden kostenlosen Transaktionen der Epoche an und warnt vor der Gebühr.
+
+## 5a. Mehrere Ketten und Spiel-NFTs
+
+**Mehrere Ketten in einer Wallet**
+- Ein Schlüssel, eine Adresse: Dank der Ethereum-kompatiblen Adressen hat der Nutzer auf ToyChain, Polygon und Ethereum **dieselbe** Adresse aus derselben Phrase.
+- **Gas-Problem:** Wer TOY auf Polygon oder Ethereum bewegt, braucht dort zusätzlich POL bzw. ETH für die Gebühr. Das verwirrt Einsteiger. **Lösung:** Beide Token-Verträge können **Permit (EIP-2612)**. Der Nutzer unterschreibt nur, ein Relayer des Projekts reicht die Transaktion ein und zahlt das Gas. Die Kosten können in TOY verrechnet werden.
+- **Zugang zu Polygon und Ethereum:** Für den ToyChain-Teil reicht der eingebaute Light-Knoten. Für Polygon und Ethereum braucht die App einen RPC-Anbieter. Der Alchemy-Key darf dafür nicht in der App stecken. Stattdessen läuft der Zugang über einen kleinen Proxy des Projekts, oder der Nutzer wählt öffentliche bzw. eigene RPC-Adressen.
+- **Anzeige:** „TOY gesamt“ ist die Summe über alle Ketten. Für jede Kette wird angezeigt, ob der Bestand aus dem Tresor stammt und damit 1:1 einlösbar ist. Laut Entscheidung 14 gilt das für alle Token.
+
+**Spiel-NFTs auf Polygon**
+- **Wo:** Die NFTs liegen auf **Polygon**, nicht auf ToyChain. Damit bleibt die Vorgabe „keine NFTs in Phase 1“ für ToyChain bestehen, und die NFTs sind sofort in bestehenden Wallets und Marktplätzen sichtbar.
+- **Vertrag:** Dafür braucht es einen **neuen NFT-Vertrag** (ERC-721 oder ERC-1155) auf Polygon. Anders als der Token-Vertrag hat er zwangsläufig eine Präge-Funktion. Sie muss streng begrenzt sein:
+  - Prägen nur mit einer Freigabe des Spielservers (signierter Gutschein nach EIP-712: „Gegenstand X gehört Spieler Y“).
+  - Jeder Gutschein ist nur einmal gültig.
+  - Bezahlt wird in TOY per Permit, also ohne gesonderte Freigabe.
+  - Kein Admin, der beliebig prägen kann.
+- **Spiel und Kette synchron halten:** Ist ein Gegenstand als NFT geprägt, gilt **das NFT** als Eigentumsnachweis. Wird das NFT verkauft, wandert der Gegenstand im Spiel zum neuen Besitzer. Der Spielserver liest dazu die Kette. Ein geprägter Gegenstand darf im Spiel nicht zusätzlich weiter gehandelt werden, sonst gäbe es ihn doppelt.
+- **Schlüssel des Spielservers:** Der Server signiert die Gutscheine und ist damit ein lohnendes Angriffsziel. Deshalb: eigener Schlüssel nur für Gutscheine (nie für TOY), Tageslimits im Vertrag und ein Notschalter, der das Prägen pausieren kann.
+- **Wohin die TOY für das Prägen fließen:** ist offen (Abschnitt 9). Die Wahl wirkt auf die ToyScan-Rechnung, siehe K8.
 
 ## 6. Schlüssel und Verwahrung
 
@@ -76,6 +95,17 @@ Hinweis: Das ist keine Rechtsberatung. Die Punkte zeigen, wo eine rechtliche Pr�
 
 **K6 Datenschutz.** Der Spielserver kennt Nutzerkonten. Verknüpft er sie mit TOY-Adressen, entstehen personenbezogene Finanzdaten (DSGVO). **Vorschlag:** Der Server speichert keine Wallet-Adressen, oder nur mit ausdrücklicher Einwilligung.
 
+**K8 NFT-Prägung vor dem Start von ToyChain berührt den Fremdbestand.** Wer im Spiel NFTs prägen will, braucht TOY auf Polygon. Vor dem Start von ToyChain und der Bridge können diese TOY nur aus der Ersteller-Adresse kommen. Jeder TOY, der von dort an Spieler geht, **erhöht den Fremdbestand**. Laut Entscheidung 13 und 14 darf er beim Start aber höchstens 10.000 TOY betragen, gedeckt aus der Reserve. Möglichkeiten:
+- (a) Die NFT-Prägung mit TOY startet erst **nach** dem Start der Bridge. Dann kommen alle Polygon-TOY aus dem Tresor und sind gedeckt.
+- (b) Die TOY, mit denen geprägt wird, fließen an die Ersteller-Adresse zurück. Der Fremdbestand bleibt dann ungefähr gleich, muss aber zum Start trotzdem ≤ 10.000 sein.
+- (c) Die Deckung im Genesis-Block wird auf den tatsächlichen Fremdbestand am Stichtag erhöht. Das geht zulasten der Reserve (990.000 TOY), und der Fremdbestand darf diese nie übersteigen.
+
+**Vorschlag:** (a), oder (b) mit einem festen Stichtag vor dem Genesis-Block.
+
+**K9 Zufalls-NFTs (Lootboxen).** NFTs mit zufälligem Wert gegen TOY zu verkaufen, gilt nach den Google-Play-Regeln als Glücksspiel, wenn die App nicht als Glücksspiel-App zugelassen ist. Außerdem dürfen NFTs nicht als Einsatz für Gewinne mit Geldwert dienen. Das betrifft auch Poker (K2). **Vorschlag:** Ein NFT bildet immer genau einen bekannten Gegenstand ab, ohne Zufall beim Kauf.
+
+**K10 NFTs und Recht.** Einzigartige NFTs fallen in der Regel nicht unter MiCA. Große Serien gleichartiger NFTs können aber anders bewertet werden. Gehandelte Spielgegenstände berühren zudem Steuer- und Verbraucherrecht. Teil der rechtlichen Prüfung.
+
 **K7 Eine App oder zwei.** Wallet mit Light-Knoten und Spiele in einer App machen die App groß und vermischen Risiken (Glücksspiel, Jugendschutz, Finanzfunktionen). **Möglichkeit:** „TOYPAY Wallet“ als schlanke eigene App mit Knoten, die Spiele als eigene Apps (TOYQUEST 3D ist es bereits).
 
 ## 8. Abhängigkeiten zum ToyChain-Bauplan
@@ -88,11 +118,18 @@ Hinweis: Das ist keine Rechtsberatung. Die Punkte zeigen, wo eine rechtliche Pr�
 | Wallet-Kern, Keystore | M8 (`toy-wallet`) |
 | Android-Bibliothek mit Kotlin-Anbindung | M9 (Plattformen) |
 | Offline-Zahlung im Laden | Phase 4 (oder vorgezogen, siehe Abschnitt 5) |
+| Bridge ToyChain ↔ Polygon/Ethereum in der App | Phase 5 (Bridge), Konzept in `06-bridge.md` |
+| NFT-Vertrag auf Polygon mit Gutschein-Prägung | eigener Baustein außerhalb von ToyChain, eigenes Audit |
 
 ## 9. Fragen an den Projektinhaber
 
-1. Was kann die App heute mit ToyCoin: Ist es der ERC-20-Token auf Polygon (über Alchemy) oder ein interner Punktestand?
-2. Kann man heute Dukaten oder Poker-Gewinne in ToyCoin tauschen, oder ToyCoin im Spiel einsetzen?
-3. Für welches Alter sind TOYPAY und TOYQUEST gedacht?
-4. Eine App mit allem, oder Wallet und Spiele getrennt (K7)?
-5. Nur Android, oder später auch iPhone?
+Beantwortet am 17.10.2026: Die App nimmt TOY auf allen Ketten an, bridgt nativen TOY und prägt NFTs auf Polygon mit Polygon-TOY (Entscheidungen 15 und 16).
+
+Offen:
+1. Kann man Dukaten oder Poker-Gewinne in ToyCoin tauschen (K3)?
+2. Für welches Alter sind TOYPAY und TOYQUEST gedacht (K4)?
+3. Eine App mit allem, oder Wallet und Spiele getrennt (K7)?
+4. Nur Android, oder später auch iPhone?
+5. Wann soll die NFT-Prägung mit TOY starten: vor oder nach dem Start von ToyChain und der Bridge (K8)?
+6. Wohin fließen die TOY, mit denen geprägt wird: an das Projekt, an einen Spiel-Topf oder an eine Burn-Adresse, also dauerhaft aus dem Umlauf?
+7. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?
