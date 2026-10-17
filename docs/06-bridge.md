@@ -1,6 +1,6 @@
 # Bridge: TOY zwischen ToyChain, Polygon und Ethereum
 
-Entwurf v0.1 vom 17.10.2026 · Phase 3 (Nr. 39) · Grundlage: Entscheidungen 4, 5, 13, 14, 17, 36, 44 und `05-gesamtsystem.md` · Status: **zur Prüfung, offene Punkte in Abschnitt 11**
+Entwurf v0.2 vom 17.10.2026 · Phase 3 (Nr. 39) · Grundlage: Entscheidungen 4, 5, 13, 14, 17, 36, 44 und `05-gesamtsystem.md` · Status: **weitgehend entschieden (Nr. 48 bis 51), offen: Komitee (B3) und B6**
 
 ## 1. Grundsätze
 
@@ -39,8 +39,8 @@ Nutzer (TOYPAY Wallet)        ToyChain                         Polygon (Tresor)
 ```
 
 - **Einmaligkeit:** Der Tresor speichert jede benutzte Nummer. Dieselbe Freigabe kann nie zweimal eingelöst werden.
-- **Dauer:** abhängig davon, wie oft Beweise gebündelt werden (offener Punkt B4). Ziel: höchstens 1 Stunde.
-- **Kosten:** Ein Beweis wird für viele Überweisungen zusammen geprüft. Die Kosten verteilen sich und werden als kleine Bridge-Gebühr in TOY verrechnet (B5).
+- **Dauer (Nr. 50):** Beweise nach Polygon gehen **alle 12 Stunden**. Eine Überweisung nach Polygon ist also spätestens nach etwa 12 Stunden da. Nach Ethereum geht **einmal in 12 Monaten** ein Sammelbeweis (Abschnitt 8).
+- **Kosten (Nr. 51):** Innerhalb des kostenlosen Kontingents ist die Bridge **gratis**, darüber kostet sie **höchstens 1 TOY**. Das Gas für die Beweise und Freigaben zahlt der Relayer des Projekts aus der Gebühren-Adresse auf Polygon. Gegen Spam: mindestens 10 TOY je Bridge-Überweisung.
 
 ## 4. Ablauf: von Polygon nach ToyChain (Eingang)
 
@@ -105,34 +105,52 @@ Nutzer                         Polygon (Tresor)                  ToyChain
 | Alle wollen gleichzeitig zurück | jeder Token ist gedeckt | B-I1: `U ≤ K` je Kette |
 | Schlüssel der Cold-Wallets gestohlen, bevor sie in die Tresore eingezahlt sind | Altbestand-Token in fremder Hand | Cold-Wallets offline (Nr. 44). Gestohlene Token können höchstens den Inhalt von `K_P`/`K_E` abziehen, nie neues TOY erzeugen. Deshalb Tresor-Einzahlung **vor** dem Bridge-Start (`05-gesamtsystem.md`, Schritt 11) |
 
-## 8. Kosten der Beweisprüfung
+## 8. Takt und Kosten der Beweise (Nr. 50, 51)
 
-- **Polygon:** günstig, Prüfung bei jedem Stapel möglich.
-- **Ethereum:** Die Prüfung eines kompakten Beweises kostet einige hunderttausend Gas. Deshalb werden dort größere Stapel gesammelt, z. B. alle paar Stunden oder ab einer Mindestsumme.
-- **Beweisverfahren:** Welche Form der Beweis auf Polygon und Ethereum hat (und ob dafür eine einmalige „Trusted Setup“-Zeremonie nötig ist), entscheidet Phase 2 (Spezifikation 12).
+| Kette | Takt | Folge für Nutzer | Kosten |
+|---|---|---|---|
+| **Polygon** | ein Beweis-Stapel **alle 12 Stunden** | Überweisungen nach Polygon dauern bis zu 12 Stunden | gering, zahlt der Relayer |
+| **Ethereum** | ein Sammelbeweis **alle 12 Monate** | Überweisungen nach Ethereum warten bis zum nächsten Jahrestermin. Die Wallet zeigt das Datum **vor** dem Absenden an und rät zum Weg über Polygon | eine Prüfung pro Jahr, also kaum Kosten |
+
+**Bewusst langsam auf Ethereum:** Eine Prüfung auf Ethereum kostet einige hunderttausend Gas. Ein Jahrestakt hält die Kosten nahe null. Wer TOY auf Ethereum braucht, muss dafür warten. Der Takt ist ein Parameter und kann später per Mitbestimmung verkürzt werden (Nr. 45).
+
+**Einzahlungen von Ethereum nach ToyChain** brauchen keinen Beweis, sondern die Bestätigung des Komitees. Sie könnten deshalb schneller gehen. Vorschlag: ebenfalls im 12-Stunden-Takt wie Polygon (Abschnitt 11, B6).
+
+**Beweisverfahren:** Welche Form der Beweis auf Polygon und Ethereum hat (und ob dafür eine einmalige „Trusted Setup“-Zeremonie nötig ist), entscheidet Phase 2 (Spezifikation 12).
 
 ## 9. In der TOYPAY Wallet
 
 - Ein Knopf **„Nach Polygon senden“** bzw. „Nach Ethereum senden“, mit Anzeige der Schritte: gesperrt → im Beweis → freigegeben.
 - Anzeige von Limit, Verzögerung (bei großen Beträgen) und geschätzter Dauer.
-- **Gas ohne POL/ETH** (Nr. 15): Die Freigabe auf Polygon reicht der Relayer ein. Der Nutzer zahlt nur die Bridge-Gebühr in TOY.
+- **Gas ohne POL/ETH** (Nr. 15): Die Freigabe auf Polygon reicht der Relayer ein. Der Nutzer zahlt nichts im Kontingent, sonst höchstens 1 TOY.
+- **Warnung bei Ethereum:** Vor dem Absenden zeigt die Wallet das Datum des nächsten Jahres-Beweises.
 
 ## 10. In ToyScan
 
 `K_P`, `K_E`, `U_P`, `U_E`, Tresor-Bestände, offene und verzögerte Überweisungen, genutzte Limits, Stand des Notschalters, Komitee-Mitglieder und ihre Unterschriften. Dazu die Regeln B-I1 bis B-I4 als Teil der Ampel.
 
-## 11. Offene Punkte
+## 11. Entscheidungen vom 17.10.2026 und offene Punkte
 
-**B1 · Darf ein Tresor je umziehen?** Ein Tresor ohne Admin und ohne Upgrade lässt sich nicht reparieren. Findet man einen Fehler, kann man ihn nur pausieren.
-- (a) **Kein Umzug**, nie. Das ist am vertrauenswürdigsten. Bei einem Fehler: pausieren, einen neuen Tresor für neue Einzahlungen bauen, und die alten Token bleiben, wo sie sind.
-- (b) **Umzug nur per Mitbestimmung mit 2/3 und 30 Tagen Wartezeit**, in einen neuen, geprüften Tresor. Das ist flexibler, aber eine zusätzliche Angriffsfläche.
+| Nr. | Thema | Entscheidung |
+|---|---|---|
+| 48 (B1) | Tresor-Umzug | **Nie.** Bei einem Fehler wird pausiert, und für neue Einzahlungen kommt ein neuer Tresor. Die alten Token bleiben, wo sie sind |
+| 49 (B2) | Limits | 50.000 TOY je Kette, Richtung und Epoche. Beträge über 10.000 TOY 24 Stunden verzögert |
+| 50 (B4) | Takt | Polygon alle 12 Stunden, Ethereum alle 12 Monate |
+| 51 (B5) | Gebühr | gratis im Kontingent, sonst höchstens 1 TOY. Mindestbetrag 10 TOY. Gas zahlt der Relayer aus der Gebühren-Adresse |
 
-**Empfehlung:** (a), passend zur Regel „kein Admin“.
+**B3 · Das Bridge-Komitee: wozu und welche Möglichkeiten**
 
-**B2 · Limits:** Sind 50.000 TOY je Kette und Epoche und 24 Stunden Verzögerung ab 10.000 TOY als Startwerte passend?
+*Wozu:* Der mathematische Beweis ist neu und könnte einen unentdeckten Fehler haben. Das Komitee ist das zweite Schloss an derselben Tür: Nur wenn Beweis **und** Komitee zustimmen, öffnet der Tresor. In der Richtung zu ToyChain gibt es am Anfang gar keinen Beweis, dort ist das Komitee die Hauptsicherung.
 
-**B3 · Komitee:** Wer sind die 9 Betreiber? Vorschlag: Bewerbung, Wahl per Mitbestimmung, verschiedene Länder und Anbieter, mindestens 10.000 TOY Stake je Mitglied.
+*Warum 5 von 9:* Es braucht eine Mehrheit. Bis zu 4 Mitglieder dürfen ausfallen oder bestochen sein, ohne dass etwas passiert.
 
-**B4 · Takt der Beweise:** Je öfter Beweise geschickt werden, desto schneller, aber teurer. Vorschlag: Polygon stündlich, Ethereum alle 6 Stunden oder ab 50.000 TOY.
+| Option | Wer sitzt im Komitee | Vorteile | Nachteile |
+|---|---|---|---|
+| **K1 · Projekt-Komitee** | Team und eng vertraute Partner | schnell startklar, einfach | zentral: Wer dem Projekt misstraut, misstraut der Bridge |
+| **K2 · Gewählte Betreiber** | 9 unabhängige Betreiber, per Mitbestimmung gewählt, aus verschiedenen Ländern und Anbietern, je mindestens 10.000 TOY Stake, der bei Fehlverhalten gekürzt wird | unabhängig, haftet mit eigenem Geld | braucht eine Community, die wählen kann. Am Anfang gibt es sie noch nicht |
+| **K3 · Die Validatoren selbst** | das Konsens-Komitee von ToyChain | keine zusätzlichen Beteiligten | keine echte zweite Sicherung: Der Beweis stützt sich ebenfalls auf die Validatoren. Und am Anfang ist das das Start-Komitee |
+| **K4 · Wächter dazu** | zusätzlich unabhängige Beobachter wie ToyScan-Betreiber und Archiv-Knoten. Sie können **nur pausieren**, nie freigeben | fängt Fehler früh ab, kostet wenig | ergänzt nur, ersetzt kein Komitee |
 
-**B5 · Bridge-Gebühr:** Vorschlag: 0,1 % des Betrags, mindestens 1 TOY. Sie deckt das Gas der Relayer, der Rest fließt in den Erstattungs-Pool.
+**Empfehlung:** Mit **K1 + K4** starten, weil es beim Start noch keine wahlfähige Community gibt. Mitglieder und Unterschriften sind öffentlich in ToyScan. Sobald die Mitbestimmung verbindlich ist (Stufe 1, `09-mitbestimmung.md`), wird schrittweise auf **K2** umgestellt: pro Monat wird ein Platz neu gewählt. Später, wenn der Light-Client läuft, schafft die Mitbestimmung das Komitee ganz ab.
+
+**B6 · Einzahlungen von Ethereum:** auch im 12-Stunden-Takt (Vorschlag) oder ebenfalls jährlich?
