@@ -46,6 +46,8 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 15 | TOYPAY und Ketten | TOYPAY nimmt ToyCoin auf allen Ketten an (ToyChain, Polygon, Ethereum, später weitere) und bridgt nativen TOY |
 | 16 | Spiel-NFTs | Spielgegenstände und Spielfiguren werden als NFTs auf **Polygon** geprägt, bezahlt mit Polygon-TOY. ToyChain selbst bleibt in Phase 1 ohne NFTs. Details und offene Punkte (K8 bis K10) in `07-toypay.md` |
 | 17 | Start der NFT-Prägung | NFTs werden erst **nach** dem Start der Bridge mit TOY geprägt (K8, Weg a). Bis zur Einzahlung in den Tresor gibt die Ersteller-Adresse keine TOY mehr aus, nur Rückübertragungen an sie sind erlaubt |
+| 18 | NFT-Vertrag: Schutz | Kein Admin-Recht zum beliebigen Prägen. Tageslimit und Notschalter (nur Pause). Ist ein Gegenstand geprägt, gilt das NFT als Eigentumsnachweis, im Spiel gibt es ihn nicht doppelt |
+| 19 | NFT-Präge-Regeln | Prägen nur mit mindestens **100 TOY** auf der Adresse. Je Adresse höchstens **5 Spielfiguren** (teils selbst, teils zufällig konfiguriert, aufwertbar) und **50 Spielgegenstände**. Pro Woche höchstens **1 Spielfigur und 10 Gegenstände**. Offene Feinheiten (Sperre der 100 TOY, Prägen oder Besitz, Aufwertung, Zufall) in `07-toypay.md` |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 
