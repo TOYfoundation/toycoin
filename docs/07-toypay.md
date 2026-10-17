@@ -13,7 +13,7 @@ Dieses Dokument beschreibt, wie die TOYPAY-App mit ToyChain zusammenspielt. Die 
 | **TOYPAY-Server** | Spielserver mit Online-Modus und Weltdaten. |
 | **Blockchain** | `local.properties` enthält einen **Alchemy-Key** (Zugang zu Ethereum/Polygon), Seed-Phrasen werden erwähnt. **Bestätigt am 17.10.2026:** Das Spiel nutzt die ToyCoin-Token auf **Polygon**, um **NFTs** zu prägen (Spielgegenstände und Spielfiguren). |
 
-**Noch nicht beschrieben** sind: ob Dukaten in ToyCoin getauscht werden können, und ob es schon einen NFT-Vertrag auf Polygon gibt.
+**Inzwischen entschieden:** Dukaten werden nie zurück in TOY getauscht (Nr. 25, 28). **Offen:** ob es schon einen NFT-Vertrag auf Polygon gibt.
 
 ## 2. Zielbild
 
@@ -89,7 +89,7 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
 | Spielfiguren | teils selbst, teils zufällig konfiguriert, **aufwertbar** | Zufall entsteht beim kostenlosen Anlegen der Figur im Spiel, nicht beim Prägen |
 | Aufwerten nach dem Prägen | Neue Stufe wird **auf der Kette** festgehalten, **nur steigend**, **ohne Extrakosten** (nur Gas) | Funktion `levelUp` mit Gutschein des Spielservers, nur durch den Besitzer |
 
-**Beispiel für den schnellsten Weg:** Woche 1: Figur 1 (Stufe 20) und bis zu 10 Gegenstände. Woche 2: Figur 2, sobald 5 Gegenstände seit Figur 1 geprägt sind, usw. Eine volle Gang mit 5 Figuren braucht also mindestens 5 Wochen und mindestens 20 Gegenstände zwischen den Figuren. In einer vollen Woche (1 Figur und 10 Gegenstände) sind 110 TOY gesperrt. Weil jede Sperre 20 Tage dauert, liegen im Dauerbetrieb höchstens rund 320 TOY je Adresse gleichzeitig fest.
+**Beispiel für den schnellsten Weg:** Woche 1: Figur 1 (Stufe 20) und bis zu 10 Gegenstände. Woche 2: Figur 2, sobald 5 Gegenstände seit Figur 1 geprägt sind, usw. Eine volle Gang mit 5 Figuren braucht also mindestens 5 Wochen und mindestens 20 Gegenstände zwischen den Figuren. In einer vollen Woche (1 Figur und 10 Gegenstände) sind 110 TOY gesperrt. Weil jede Sperre 20 Tage dauert, liegen im Dauerbetrieb höchstens 330 TOY je Adresse (Prägungen an Tag 0, 7 und 14 überlappen) gleichzeitig fest.
 
 **Wie die Regeln zusammen wirken**
 - **Gegen Massenprägung:** Stufe 20 kostet echte Spielzeit, und jede Adresse sperrt 10 TOY je NFT. Mit vielen Adressen zu arbeiten bringt deshalb wenig. Das ist wirksamer als ein reiner Kontostand-Check, den man durch Weiterreichen derselben 100 TOY umgehen könnte.
@@ -147,7 +147,7 @@ Damit erspielte Dukaten nicht über Präge-Gebühren und NFT-Verkäufe zu TOY we
 
 - **Spiel und Kette synchron halten:** Ist ein Gegenstand als NFT geprägt, gilt **das NFT** als Eigentumsnachweis. Wird das NFT verkauft, wandert der Gegenstand im Spiel zum neuen Besitzer. Der Spielserver liest dazu die Kette. Ein geprägter Gegenstand darf im Spiel nicht zusätzlich weiter gehandelt werden, sonst gäbe es ihn doppelt.
 - **Schlüssel des Spielservers:** Der Server signiert die Gutscheine und ist damit ein lohnendes Angriffsziel. Deshalb: eigener Schlüssel nur für Gutscheine (nie für TOY), Tageslimits im Vertrag und ein Notschalter, der das Prägen pausieren kann.
-- **Wohin die TOY für das Prägen fließen:** ist offen (Abschnitt 9). Die Wahl wirkt auf die ToyScan-Rechnung, siehe K8.
+- **Wohin die TOY für das Prägen fließen:** an die Multisig-Gebühren-Adresse des Projekts auf Polygon und von dort zurück ins Spiel (Nr. 26, 27). ToyScan zeigt ihren Bestand.
 
 ## 6. Schlüssel und Verwahrung
 
@@ -219,6 +219,6 @@ Beantwortet am 17.10.2026: Die App nimmt TOY auf allen Ketten an, bridgt nativen
 Beantwortet am 17.10.2026: Altersgruppe ab 16 (Entscheidung 29), Plattformen Android, Windows, Linux und Raspberry Pi (Entscheidung 30), TOY-Funktionen ab 18 (Entscheidung 31), Wallet und Spiele getrennt (Entscheidung 32).
 
 Offen:
-1. Werden Poker-Gewinne (Spielchips) von Dukaten und TOY getrennt gehalten (K2)?
+1. ~~Poker-Chips getrennt (K2)?~~ Entschieden: Poker nur mit Basar-Chips, getrennt von Dukaten und TOY (`toypay/docs/07_SPIELDESIGN.md`, Abschnitt 6).
 2. Sollen NFTs schon vor dem Bridge-Start **ohne TOY** geprägt werden können (kostenlos oder gegen POL)?
 3. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?

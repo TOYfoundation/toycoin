@@ -71,7 +71,7 @@ Hinweis zur Bauumgebung: In der Cloud-Sandbox, in der das Gerüst erstellt wurde
 ## Entscheidungen vom 17.10.2026 (eingearbeitet)
 
 1. **Erste Epoche:** k₀ = 0,0505 % gilt, die erste Epoche bringt ca. **49.995 TOY**. Spezifikation und Bauplan sind korrigiert (vorher 49.950). Nachgerechnet: Halbwertszeit 3,76 Jahre, Jahr 1 ≈ 16,67 Mio. TOY, Rest nach 25 Jahren ≈ 0,99 Mio. TOY.
-2. **Zeitsperre der Reserve:** 4 Jahre linear, bestätigt (später geändert durch Entscheidung 41: 3 Jahre Sperre, dann schrittweise).
+2. **Zeitsperre der Reserve:** ersetzt durch Entscheidungen 41 und 42: 3 Jahre Sperre, danach je Epoche über 3 Jahre.
 3. **Epochenlänge:** nach Blöcken (1.440). Schnellere Epochen gleicht der Zeitplan-Regler über m aus. 1 Jahr = 365 Epochen.
 4. **Lizenz:** MIT. Datei `LICENSE` liegt im Hauptordner, alle Crates tragen `license = "MIT"`.
 
@@ -82,12 +82,13 @@ Alle Entscheidungen stehen auch in `docs/02-entscheidungen.md` (Nr. 9 bis 12) un
 | Dokument | Stand |
 |---|---|
 | `04-toyscan-und-altbestand.md` | On-Chain-Befund ergänzt, Fremdbestand-Regel neu (Entscheidungen 13, 14) |
-| `05-gesamtsystem.md` | Entwurf v0.1: Teile, Konten, Genesis-Block, Reihenfolge bis zum Start, Deckungs-Buchhaltung (Regeln I1–I6), Schlüssel. Offen: E1–E6 |
+| `05-gesamtsystem.md` | v0.3: Teile, Konten, Genesis-Block, Reihenfolge bis zum Start, Deckungs-Buchhaltung (Regeln I1–I6), Schlüssel. E1–E6 entschieden |
 | `06-bridge.md` | v0.3, entschieden (Nr. 48 bis 54): zum Start nur Polygon, Ethereum nach Abstimmung |
 | `09-mitbestimmung.md` | entschieden (Nr. 45, 47) |
-| `07-toypay.md` | Entwurf, NFT-Regeln entschieden (Nr. 15 bis 27). Offen: Umweg über NFT-Verkäufe, Alter, eine oder zwei Apps |
+| `07-toypay.md` | Entwurf, entschieden Nr. 15 bis 35. Offen: NFTs vor dem Bridge-Start, vorhandener NFT-Vertrag |
 | `toypay/docs/07_SPIELDESIGN.md` | Entwurf: Spieldesign mit Klassen, Synergien, Wirtschaft, Lichteffekten. Gang-Regeln und Effekt-Paket gebaut und in Godot 4.4.1 getestet (`nft_items_test`, `vfx_test`: ALL OK) |
 | `toypay/docs/06_NFT_GEGENSTAENDE.md` | Katalog mit 500 Gegenständen, geprüft mit `gen_nft_items.py` und in Godot 4.4.1 (`nft_items_test`: ALL OK) |
+| `10-pruefbericht-1.md` | Prüfbericht 1 vom 17.10.2026: 17 Befunde, davon 3 kritisch. Reine Text- und Formelfehler korrigiert, P1 bis P12 zur Entscheidung. M1 erst nach P1, P3, P4 und Formel für m |
 | `08-toyscan.md` | v0.1, entschieden (Nr. 55 bis 57): Aufbau, Datenquellen, Messpunkt, Ampel A1 bis A12, API, Stufen 0 bis 3, Pflicht-Tests |
 
 ## Noch offen

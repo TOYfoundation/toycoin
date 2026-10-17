@@ -67,7 +67,7 @@ Die Grenze gilt für die Daten eines Standard-Knotens (Voll-Rolle). Aufteilung:
 **Schutz des Zustands vor Aufblähung:**
 
 - **Mindestguthaben (Existential Deposit, Polkadot-Prinzip):** Startwert 0,1 TOY. Konten darunter werden entfernt.
-- **Zustandsablauf (State Expiry):** Konten unter einer Schwelle ohne Aktivität über 1001 Tage (ca. 3 Jahre) wandern in einen Merkle-Akkumulator. Die Wiederbelebung ist unkompliziert: Die Wallet holt den nötigen Beweis automatisch von Archiv-Knoten oder ToyScan, der Nutzer bestätigt nur mit seiner Phrase. Größere Guthaben laufen nie ab.
+- **Zustandsablauf (State Expiry):** Konten unter einer Schwelle ohne Aktivität über 1001 Tage (ca. 2,7 Jahre) wandern in einen Merkle-Akkumulator. Die Wiederbelebung ist unkompliziert: Die Wallet holt den nötigen Beweis automatisch von Archiv-Knoten oder ToyScan, der Nutzer bestätigt nur mit seiner Phrase. Größere Guthaben laufen nie ab.
 - **Risiko:** Für die Wiederbelebung braucht man einen Beweis (Witness) von einem Archiv-Knoten oder aus dem eigenen Wallet-Backup. Deshalb veröffentlichen mehrere unabhängige Archiv-Knoten und ToyScan die Ablauf-Snapshots jeder Epoche, und die Wallet warnt den Nutzer rechtzeitig vor dem Ablauf.
 
 ## 5. Konsens und Teilnahme am Signieren
@@ -186,7 +186,7 @@ Optionaler **privater Pool** neben den öffentlichen Ethereum-kompatiblen Konten
 
 - k₀ ≈ 0,0505 % pro Epoche. Daraus folgt eine Halbwertszeit von ca. 3,76 Jahren und ca. 49.995 TOY in der ersten Epoche (99 Mio. × 0,0505 %, korrigiert am 17.10.2026, vorher irrtümlich 49.950).
 - **Epoche nach Blöcken (entschieden am 17.10.2026):** Eine Epoche endet nach 1.440 Blöcken, nicht nach 24 Stunden. Kommen Blöcke bei vollem Pool schneller, ist die Epoche kürzer. Der Zeitplan-Regler gleicht das über m aus. Für den 25-Jahres-Plan gilt ein Jahr = 365 Epochen.
-- Im ersten Jahr werden bei Faktor 1 rund 16,6 Mio. TOY ausgeschüttet, nach 25 Jahren bleiben ca. 1 % (1 Mio.) übrig, die danach asymptotisch auslaufen.
+- Im ersten Jahr werden bei Faktor 1 rund 16,7 Mio. TOY ausgeschüttet, nach 25 Jahren bleiben ca. 1 % (1 Mio.) übrig, die danach asymptotisch auslaufen.
 - Weil die Ausschüttung immer nur ein Bruchteil des Rests ist, wird die Obergrenze von 100 Mio. **mathematisch nie überschritten**.
 
 **Dynamischer Faktor m:** k = k₀ × m, mit m zwischen 0,5 und 2,0:
@@ -276,9 +276,9 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst.
 
 **Entschieden am 16.10.2026:**
 
-1. **Zustandsablauf:** Ja, nach 1001 Tagen (ca. 3 Jahre), mit unkomplizierter Wiederbelebung.
+1. **Zustandsablauf:** Ja, nach 1001 Tagen (ca. 2,7 Jahre), mit unkomplizierter Wiederbelebung.
 2. **Privater Pool:** Abgeschirmter zk-Pool (sicherer und kompatibler), siehe Abschnitt 9.
-3. **Startverteilung** (Empfänger und Sperre geändert durch Entscheidung 41): Fair Launch mit 1 % offengelegter Reserve (1 Mio. TOY für Team, Entwickler und Bug-Bounty, höchstens 100 Wallets), sonst keine Vorab-Menge. Die Reserve entsteht im Genesis-Block mit Zeitsperre, der gesamte Altbestand bleibt gesperrt.
+3. **Startverteilung** (Empfänger und Sperre geändert durch Entscheidung 41): Fair Launch mit 1 % offengelegter Reserve (1 Mio. TOY, Aufteilung heute: 900.000 Reserve, 90.000 Bug-Bounty, 10.000 Deckung, Entscheidungen 41 bis 44), sonst keine Vorab-Menge. Die Reserve entsteht im Genesis-Block mit Zeitsperre, der gesamte Altbestand bleibt gesperrt.
 4. **Bridge:** 1:1 zu Polygon, Ethereum und weiteren Ketten. Die vorhandenen 2 × 100 Mio. Altbestand-Token werden zu gesperrten Reserven im Tresor-Modell. Anzeige und Ampel in ToyScan. Zum Fremdbestand gilt die Neuregelung vom 17.10.2026 (Abschnitt 12): Rückübertragung bis auf höchstens 10.000 TOY je Kette, Rest im Genesis-Block gedeckt.
 5. **Bridge-Typ:** zk-Light-Client mit Komitee als zweiter Sicherung.
 6. **Hybrid-Signaturen:** Ab Phase 1 optional verfügbar.
@@ -286,7 +286,7 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst.
 **Entschieden am 17.10.2026:**
 
 7. **Erste Epoche:** k₀ = 0,0505 % gilt, die erste Epoche bringt damit ca. 49.995 TOY (Zahl korrigiert).
-8. **Zeitsperre der Reserve:** ersetzt durch Entscheidung 41: 3 Jahre gesperrt, danach schrittweise Freigabe an die Ersteller-Adresse.
+8. **Zeitsperre der Reserve:** ersetzt durch Entscheidung 41: 3 Jahre gesperrt, danach Freigabe je Epoche über 3 Jahre auf die offizielle Cold-Wallet des Erstellers (Entscheidungen 42, 44).
 9. **Epochenlänge:** Nach Blöcken (1.440), der Zeitplan-Regler gleicht schnellere Epochen aus.
 10. **Lizenz:** Der Code steht unter der MIT-Lizenz.
 11. **Fremdbestand:** Rückübertragung an die Contract-Wallet bis auf höchstens 10.000 TOY je Kette vor dem Start (ersetzt die Sperr-Regel aus Nr. 4).

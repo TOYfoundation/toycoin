@@ -24,7 +24,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 
 | Nr. | Thema | Entscheidung |
 |---|---|---|
-| 1 | Zustandsablauf | Ja, nach 1001 Tagen (ca. 3 Jahre), Wiederbelebung unkompliziert |
+| 1 | Zustandsablauf | Ja, nach 1001 Tagen (ca. 2,7 Jahre), Wiederbelebung unkompliziert |
 | 2 | Privater Pool | Die sicherere und kompatiblere Variante: abgeschirmter zk-Pool statt Ringsignaturen (Wahl dem Assistenten überlassen) |
 | 3 | Startverteilung | Fair Launch mit 1 % offengelegter Reserve (1 Mio. TOY, höchstens 100 Wallets, für Team, Entwickler, Bug-Bounty), Reserve entsteht im Genesis-Block. Zeitsperre 4 Jahre linear (am 17.10.2026 bestätigt, siehe Nr. 10) |
 | 4 | Bridge | 1:1 zu Polygon, Ethereum und weiteren Ketten. Nie mehr als 100.000.000 und nie mehr im Umlauf als auf ToyChain gemintet. ToyScan zeigt die Daten |
@@ -69,7 +69,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 38 | Mainnet-Zeitpunkt | Mainnet **nach Phase 1 und Audit**. Bis zur Beweis-Schicht starten Knoten von veröffentlichten Checkpoints. Phase 2 muss innerhalb von etwa 12 Monaten folgen |
 | 39 | Bridge vorziehen | Neue Reihenfolge: Phase 2 Beweise, **Phase 3 Bridge**, Phase 4 Privatsphäre, Phase 5 Offline-Schecks |
 | 40 | Chain-ID | Vor dem Testnet wird eine freie Chain-ID gewählt und gegen die öffentlichen Listen geprüft. Testnet und Mainnet bekommen verschiedene IDs |
-| 41 | Reserve-Empfänger und Sperre | Die 990.000 TOY Reserve gehen an **eine** Adresse: die Ersteller-Adresse des Ethereum-Tokens `0x18da0be974424d54519c63f62e4b26c0318c00c2`. In den ersten **3 Jahren** nach dem Mainnet-Start wird nichts freigegeben, danach **schrittweise**. Annahme zur Bestätigung: linear über 1 Jahr, voll frei nach 4 Jahren. Ersetzt Nr. 10 und die Verteilung auf bis zu 100 Wallets aus Nr. 3 |
+| 41 | Reserve-Empfänger und Sperre | Die 990.000 TOY Reserve gehen an **eine** Adresse: die Ersteller-Adresse des Ethereum-Tokens `0x18da0be974424d54519c63f62e4b26c0318c00c2`. In den ersten **3 Jahren** nach dem Mainnet-Start wird nichts freigegeben, danach **schrittweise**. (Freigabeplan festgelegt in Nr. 42: je Epoche über 3 Jahre.) Ersetzt Nr. 10 und die Verteilung auf bis zu 100 Wallets aus Nr. 3 |
 | 42 | Freigabe der Reserve | Nach den 3 Jahren Sperre wird **je Epoche gleichmäßig über 3 Jahre** freigegeben (rund 822 TOY pro Epoche), voll frei nach 6 Jahren. Begründung: nur 3 bis 5 % der täglich neuen TOY, fair für spätere Teilnehmer (vom Projektinhaber Claude überlassen) |
 | 43 | Bug-Bounty-Topf | **90.000 TOY** der Reserve sind sofort verfügbar, auf einem offiziellen Mehrfachsignatur-Konto (z. B. 3 von 5) nur für Prämien. Die gesperrte Reserve beträgt damit 900.000 TOY |
 | 44 | Offizielle Cold-Wallets | Große Bestände liegen auf **offiziellen, öffentlich bekannten Cold-Wallets**: die 900.000 TOY Reserve auf ToyChain und die Altbestand-Token auf Polygon und Ethereum bis zur Tresor-Einzahlung. Die Zugehörigkeit zum Ersteller wird mit signierten Nachrichten der Ersteller-Adresse belegt. Übertragungen von der Ersteller-Adresse an diese Cold-Wallets sind erlaubt, sie zählen nicht zum Fremdbestand |

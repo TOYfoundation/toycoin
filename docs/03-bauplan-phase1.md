@@ -27,7 +27,6 @@ toychain/
     toy-wallet/              Schlüssel, verschlüsselter Keystore, Senden/Empfangen
     toy-cli/                 Kommandozeile: Wallet, Node starten, Testnet starten
   tests/                     Integrations- und Simulationstests
-  docs/                      diese Dokumentation
 ```
 
 ## Meilensteine
@@ -89,13 +88,16 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 
 1. Ordner entpacken, Terminal öffnen, in den Ordner wechseln.
 2. `claude` starten. Die Datei `CLAUDE.md` wird automatisch gelesen.
-3. Mit dem Prompt für M1 beginnen (siehe unten).
+3. Mit dem Prompt für M0 beginnen, danach M1 (siehe unten).
 4. Nach jedem Meilenstein: Ergebnis prüfen, `docs/STATUS.md` ansehen, mit `/clear` neu starten, nächster Prompt.
 
 ## Fertige Prompts
 
 **Start (einmalig):**
 > Lies CLAUDE.md, docs/01-spezifikation.md und docs/02-entscheidungen.md. Fasse in 10 Zeilen zusammen, was ToyChain ist und was in Phase 1 gebaut wird. Lege dann den Rust-Workspace gemäß docs/03-bauplan-phase1.md an (leere Crates, CI-Befehle, docs/STATUS.md). Noch keine Logik.
+
+**M0:**
+> Setze M0 aus docs/03-bauplan-phase1.md um (ToyScan Stufe 0, Altbestand-Wächter im Ordner toyscan/). Lies dazu docs/08-toyscan.md und docs/04-toyscan-und-altbestand.md. Zeige zuerst einen Plan, schreibe Tests mit aufgezeichneten Daten, führe fmt, clippy und test aus, aktualisiere docs/STATUS.md. Keine Schlüssel, nur lesen.
 
 **M1:**
 > Setze Meilenstein M1 aus docs/03-bauplan-phase1.md um (toy-types und toy-emission). Zeige zuerst einen kurzen Plan. Schreibe Property-Tests (z. B. mit proptest), die belegen, dass die Obergrenze von 100.000.000 TOY nie überschritten wird. Führe cargo fmt, clippy und test aus und berichte die Ergebnisse. Aktualisiere docs/STATUS.md.
@@ -120,4 +122,4 @@ Lege ein Claude-Projekt an, lade alle Dateien dieses Ordners als Projektwissen h
 
 ## Danach: Phase 2 bis 5
 
-Reihenfolge laut Spezifikation Abschnitt 15: Beweis-Schicht, privater Pool, Offline-Schecks, Bridge. Eine EVM-Ausführung gibt es nicht (Entscheidung 36). Für jede Phase zuerst eine Detailspezifikation mit Claude erarbeiten, dann wieder Meilensteine bilden.
+Reihenfolge laut Entscheidung 39: Phase 2 Beweis-Schicht, Phase 3 Bridge, Phase 4 privater Pool, Phase 5 Offline-Schecks. Eine EVM-Ausführung gibt es nicht (Entscheidung 36). Für jede Phase zuerst eine Detailspezifikation mit Claude erarbeiten, dann wieder Meilensteine bilden.

@@ -1,6 +1,6 @@
 # Gesamtsystem: ToyChain, TOYPAY, Spiele, ToyScan und Bridge
 
-Entwurf v0.3 vom 17.10.2026 · Fasst die Entscheidungen 1 bis 45 zusammen (`02-entscheidungen.md`) · Status: **zur Prüfung, mit offenen Entscheidungen in Abschnitt 10**
+Entwurf v0.3 vom 17.10.2026 · Fasst die Entscheidungen 1 bis 57 zusammen (`02-entscheidungen.md`) · Status: **zur Prüfung, mit offenen Entscheidungen in Abschnitt 10**
 
 ## 1. Die Teile auf einen Blick
 
@@ -67,7 +67,7 @@ flowchart LR
 | Konto | Inhalt beim Start | Wer kann es bewegen |
 |---|---|---|
 | **Reserve** auf der offiziellen Cold-Wallet des Erstellers (Nr. 41, 44) | **900.000 TOY** | nur der freigegebene Teil: **nichts in den ersten 1.095 Epochen** (3 Jahre), danach je Epoche gleichmäßig über 1.095 Epochen (rund 822 TOY pro Epoche, voll frei nach 6 Jahren, Nr. 42). Delegieren an das Start-Komitee ist auch gesperrt möglich (Nr. 37) |
-| **Bug-Bounty-Topf** (Mehrfachsignatur-Konto, Nr. 43) | **90.000 TOY** | sofort verfügbar, nur mit z. B. 3 von 5 Unterschriften. Prämien über 5.000 TOY nach Abstimmung (Nr. 45) |
+| **Bug-Bounty-Topf** (Mehrfachsignatur-Konto, Nr. 43) | **90.000 TOY** | sofort verfügbar, nur mit z. B. 3 von 5 Unterschriften. Prämien über 5.000 TOY nach Abstimmung, vom Protokoll erzwungen (Nr. 55) |
 | **Deckungsposten Polygon** | **10.000 TOY** im Bridge-Konto, markiert als Deckung des Fremdbestands | nur das Protokoll (Bridge-Eingang) |
 | **Bridge-Konto** | die 10.000 TOY Deckung, später alle gebridgten TOY | nur die Transaktionsarten Bridge-Ausgang/-Eingang |
 | **Erstattungs-Pool** | 0, füllt sich aus 10 % der Emission und 40 % der Gebühren | nur das Protokoll |
@@ -154,7 +154,7 @@ Schritte mit 🔒 lassen sich **nicht rückgängig machen**.
 | I1 | `G + R + C ≤ 10^26` | Die Obergrenze hält auf ToyChain |
 | I2 | `K = C + (Σ Bridge-Ausgang) − (Σ Bridge-Eingang)` | Das Bridge-Konto enthält genau die Deckung plus alles, was hinausgebridgt wurde |
 | I3 | `U_P + U_E ≤ K` | Jeder Token im Umlauf auf Polygon und Ethereum ist durch natives TOY gedeckt |
-| I4 | `U_P = F_P + A_P` und `U_E = A_E` | Umlauf = Fremdbestand + Freigaben |
+| I4 | `U_P = F_P + A_P − D_P` und `U_E = A_E − D_E` | Umlauf = Fremdbestand + Freigaben − Einzahlungen in den Tresor (`D`) |
 | I5 | `F_P ≤ C` | Der Fremdbestand ist vollständig gedeckt (Nr. 14) |
 | I6 | TOY im Umlauf auf allen Ketten `≤ G + R + C ≤ 100 Mio.` | globale Supply-Regel (Spezifikation 12) |
 
