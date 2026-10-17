@@ -10,7 +10,7 @@ ToyScan zeigt für jede Kette den Zustand der Supply-Regeln. **Grün**, wenn all
 4. Emission nicht vor dem Zeitplan.
 5. Altbestand-Verträge ohne Mint-Funktion und ohne Upgrade-Mechanismus, Gesamtmenge je Kette ≤ 100.000.000, Tresor ohne Admin-Schlüssel.
 6. Notschalter der Bridge nicht ausgelöst, Beweis-Verifizierer aktuell.
-7. Fremdbestand je Kette ausgewiesen und seine Einlösung gesperrt.
+7. Fremdbestand je Kette ausgewiesen und nicht größer als der Deckungsposten dieser Kette (Polygon 10.000 TOY, Ethereum 0). Ist er größer, Gelb. Wächst er nach dem Start, Rot (dann wurden Token an Tresor und Bridge vorbei bewegt).
 
 **Große rote Lampe mit Warnung**, wenn auf irgendeiner Kette mehr als 100.000.000 ToyCoin festgestellt werden oder sich nachprägen ließe. Der Notschalter der Bridge kann dann Freigaben pausieren.
 
@@ -75,7 +75,7 @@ Die Adresse und die Chain-ID stehen jeweils als feste Werte im Code. Das bestät
 - Freigabe nur gegen einen verifizierten ToyChain-Beweis, 1:1. Zusätzlich Komitee-Schwellensignatur, bis der Verifizierer bewährt ist.
 - Schutz: Limits, Zeitverzögerung bei großen Beträgen, Notschalter (kann nur pausieren).
 - Globale Invariante: Umlauf auf allen Ketten ≤ gemintetes TOY + 1 Mio. Reserve ≤ 100.000.000.
-- Fremdbestand erzeugt nie neues TOY. Vorschlag für später: Rücktausch nur im Rahmen zuvor aus dem Tresor ausgegebener Token. Halter offen informieren, dass eine 1:1-Einlösung nicht garantiert ist.
+- Fremdbestand erzeugt nie neues TOY. Er wird vor dem Start auf höchstens 10.000 TOY je Kette verringert (Entscheidung 13) und im Genesis-Block durch einen Deckungsposten aus der Reserve gedeckt (Vorschlag). Dann ist jeder Token 1:1 einlösbar.
 
 ## 4. On-Chain-Befund vom 17.10.2026 (Etherscan-API, nur lesend)
 
@@ -95,5 +95,9 @@ Die Adresse und die Chain-ID stehen jeweils als feste Werte im Code. Das bestät
 | übrige (Liquiditätspool von 07/2022, kleine Wallets) | ca. 7.688,6 | Summe der restlichen Abgänge |
 
 **Folgerung:** Gehören die drei großen Adressen dem Projekt, liegt der echte Fremdbestand bei nur **ca. 7.700 TOY auf Polygon und 0 auf Ethereum**. Das ist für das Bridge-Konzept entscheidend (siehe `05-gesamtsystem.md`, sobald angelegt).
+
+**Entscheidung vom 17.10.2026:** Die Token werden vor dem Start bis auf höchstens 10.000 TOY je Kette an die Contract-Wallet zurückübertragen. Auf Polygon bleiben damit die ca. 7.700 TOY in fremden Händen plus höchstens ca. 2.300 TOY, die bei den drei großen Adressen verbleiben dürfen.
+
+**Warum klein allein nicht reicht:** ERC-20-Token sind austauschbar. Der Tresor kann alte nicht von freigegebenen Token unterscheiden. Ungedeckte 10.000 TOY könnten genau so viele TOY abziehen, die anderen Bridge-Nutzern gehören. Grün ist die Ampel deshalb erst, wenn der Fremdbestand gedeckt ist (Deckungsposten, siehe Abschnitt 3).
 
 Einschränkung: Bestände sind aus den Transfer-Listen errechnet, nicht per `balanceOf()` abgelesen. Vor jeder Entscheidung nochmals direkt am Vertrag prüfen.

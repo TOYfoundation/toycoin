@@ -30,7 +30,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 4 | Bridge | 1:1 zu Polygon, Ethereum und weiteren Ketten. Nie mehr als 100.000.000 und nie mehr im Umlauf als auf ToyChain gemintet. ToyScan zeigt die Daten |
 | 5 | Bridge-Typ | Das Sicherste: zk-Light-Client, Komitee als zweite Sicherung |
 | 6 | Hybrid-Signaturen | Antwort „Alles“, umgesetzt als: ab Phase 1 optional verfügbar |
-| 7 | Fremdbestand | Token außerhalb der Contract-Wallet, die schon zirkulieren, dürfen zum Start nicht gebridgt werden. ToyScan prüft und dokumentiert das |
+| 7 | Fremdbestand | ~~Token außerhalb der Contract-Wallet dürfen zum Start nicht gebridgt werden~~ Ersetzt durch Nr. 13 und 14 (technisch nicht durchsetzbar, siehe Spezifikation Abschnitt 12) |
 | 8 | Altbestand-Verträge | Ersteller-Adresse auf Polygon wird als Admin bezeichnet. Laut Verträgen kein Nachprägen möglich, nie mehr als 100.000.000 je Chain. Verstoß löst große rote Lampe und Warnung auf ToyScan aus |
 
 ## Entscheidungen vom 17.10.2026
@@ -41,6 +41,8 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 10 | Zeitsperre der Reserve | 4 Jahre linear, auf der Kette erzwungen (Vorschlag bestätigt) |
 | 11 | Epochenlänge | Eine Epoche endet nach 1.440 Blöcken, nicht nach Zeit. Schnellere Epochen gleicht der Zeitplan-Regler über m aus. Für den 25-Jahres-Plan: 1 Jahr = 365 Epochen |
 | 12 | Lizenz | MIT-Lizenz für den gesamten Code |
+| 13 | Fremdbestand | Vor dem Start werden die Token außerhalb der Contract-Wallet bis auf höchstens 10.000 TOY je Kette zurückübertragen. Ersetzt Nr. 7 |
+| 14 | Deckungsposten | **Vorschlag:** 10.000 TOY aus der Reserve decken im Genesis-Block den Polygon-Fremdbestand, damit jeder Token 1:1 einlösbar ist. Reserve für Team usw. dann 990.000 TOY |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 
@@ -51,7 +53,8 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 ## Noch offen
 
 - Quellcode auf Etherscan und Polygonscan verifizieren (am 17.10.2026 auf beiden Ketten noch **nicht verifiziert**). Prägung von je 10^26 Einheiten ist bestätigt.
-- Gehören die Polygon-Adressen `0xd908…`, `0x6b9a…` und `0x856d…` (zusammen ca. 1,99 Mio. TOY) dem Projekt? Davon hängt ab, ob der Fremdbestand ca. 2 Mio. oder nur ca. 7.700 TOY beträgt (Befund in `04-toyscan-und-altbestand.md`, Abschnitt 4).
-- Regel für den Fremdbestand später (Vorschlag: erzeugt nie neues TOY, Rücktausch nur im Rahmen zuvor ausgegebener Tresor-Token, Halter offen informieren).
+- Bestätigung Deckungsposten (Nr. 14).
+- Schlüssel der Contract-Wallet `0x18da…00c2`: Wer hält ihn, wie ist er gesichert? Liegt der ursprüngliche Quellcode der Verträge vor?
+- TOYPAY: bestehende oder neue App, Plattformen (Android, iPhone).
 - Rechtliche Prüfung vor dem Mainnet (MiCA, Steuer, Börsenlistings, 1 % Reserve, Fremdbestand).
 - Technisch: Beweisprüfung auf Ethereum (Kosten, Trusted-Setup-Frage), in Phase 2 klären.
