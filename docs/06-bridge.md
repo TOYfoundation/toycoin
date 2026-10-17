@@ -1,12 +1,12 @@
 # Bridge: TOY zwischen ToyChain, Polygon und Ethereum
 
-Entwurf v0.3 vom 17.10.2026 · Phase 3 (Nr. 39) · Grundlage: Entscheidungen 4, 5, 13, 14, 17, 36, 44 und `05-gesamtsystem.md` · Status: **entschieden (Nr. 48 bis 54)**
+Entwurf v0.4 vom 18.10.2026 · Phase 3 (Nr. 39) · Grundlage: Entscheidungen 4, 5, 13, 14, 17, 36, 44 und `05-gesamtsystem.md` · Status: **entschieden (Nr. 48 bis 54, 59)**
 
 ## 1. Grundsätze
 
 1. **1:1 und nie neu geprägt.** Die Bridge erzeugt weder auf ToyChain noch auf Polygon oder Ethereum neue Coins. Sie verschiebt nur Bestand zwischen dem **Bridge-Konto** auf ToyChain und den **Tresoren** auf den anderen Ketten.
 2. **Auf ToyChain ohne Smart Contracts** (Nr. 36). Die Bridge besteht dort aus zwei fest eingebauten Transaktionsarten (Bridge-Ausgang, Bridge-Eingang) und dem protokolleigenen Bridge-Konto ohne Schlüssel.
-3. **Zwei Sicherungen** (Nr. 5): Jede Freigabe braucht einen **Beweis** und die **Unterschrift des Bridge-Komitees**. Fällt eine Sicherung aus, hält die andere.
+3. **Zwei Sicherungen** (Nr. 5): Jede Freigabe braucht einen **Beweis** und die **Unterschrift des Bridge-Komitees**. Fällt eine Sicherung aus, hält die andere. Damit das stimmt, müssen beide **in verschiedenen Händen** liegen: Die Bridge startet erst, wenn mindestens 5 der 9 Komitee-Plätze mit Betreibern außerhalb von Projekt und Start-Komitee besetzt sind (Nr. 59).
 4. **Zuerst nur Polygon** (Nr. 52). Die Ethereum-Bridge startet erst, wenn die Community sie per Abstimmung freischaltet.
 5. **Getrennte Kassen je Kette.** Das Bridge-Konto führt für Polygon und Ethereum getrennte Unterkonten. Ein Fehler auf einer Kette kann nicht die Deckung der anderen leeren.
 6. **Tresore ohne Admin**, ohne Präge-Funktion und ohne manuelle Entsperrung. Ein Notschalter kann nur **pausieren**, nie freigeben.
@@ -20,8 +20,9 @@ Entwurf v0.3 vom 17.10.2026 · Phase 3 (Nr. 39) · Grundlage: Entscheidungen 4, 
 | **Bridge-Eingang** (Transaktionsart) | ToyChain | gibt TOY aus dem Unterkonto frei, gegen eine Bestätigung der Einzahlung auf der anderen Kette |
 | **Tresor-Vertrag** | Polygon, Ethereum | hält die Altbestand-Token (aus den offiziellen Cold-Wallets, Nr. 44). Gibt nur gegen Beweis + Komitee frei, nimmt Einzahlungen an |
 | **Verifizierer** | Polygon, Ethereum | prüft den Beweis des ToyChain-Zustands (aus Phase 2) in einer für die EVM günstigen Form |
-| **Bridge-Komitee** | alle | 9 Mitglieder, Schwelle **5 von 9**, mit gestaktem TOY, das bei falschen Bestätigungen gekürzt wird. Zum Start Projekt-Komitee, dann Monat für Monat gewählt (Nr. 53) |
-| **Wächter** | alle | unabhängige Beobachter (z. B. ToyScan-Betreiber). Können **nur pausieren**, nie freigeben (Nr. 53) |
+| **Bridge-Komitee** | alle | 9 Mitglieder, Schwelle **5 von 9**. Zum Start mindestens 5 unabhängige Betreiber, höchstens 4 aus dem Projekt. Ab Stufe 1 der Mitbestimmung wird jeden Monat ein Platz gewählt (Nr. 53, 59) |
+| **Pfand-Vertrag** | Polygon | hält das Pfand der Komitee-Mitglieder: **20.000 TOY je Mitglied** in ToyCoin-Token. Bei nachgewiesener falscher Bestätigung zieht er das Pfand selbst ein und gibt es an den Tresor (Abschnitt 6) |
+| **Wächter** | alle | mindestens 3 unabhängige Beobachter (z. B. ToyScan-Betreiber). **Jeder allein** kann pausieren, keiner kann freigeben (Nr. 53, 59) |
 | **Relayer** | alle | trägt Beweise und Unterschriften von Kette zu Kette. Kann nichts fälschen, nur ausliefern. Jeder darf Relayer sein |
 
 ## 3. Ablauf: von ToyChain nach Polygon (Ausgang)
@@ -41,6 +42,7 @@ Nutzer (TOYPAY Wallet)        ToyChain                         Polygon (Tresor)
 ```
 
 - **Einmaligkeit:** Der Tresor speichert jede benutzte Nummer. Dieselbe Freigabe kann nie zweimal eingelöst werden.
+- **Kein Verfall:** Ein bewiesener Ausgang bleibt auf Polygon **für immer einlösbar**, auch nach einer langen Pause (Abschnitt 6a).
 - **Dauer (Nr. 50):** Beweise nach Polygon gehen **alle 12 Stunden**. Eine Überweisung nach Polygon ist also spätestens nach etwa 12 Stunden da. Ethereum ist zum Start noch nicht dabei (Nr. 52, Abschnitt 8).
 - **Kosten (Nr. 51):** Innerhalb des kostenlosen Kontingents ist die Bridge **gratis**, darüber kostet sie **höchstens 1 TOY**. Das Gas für die Beweise und Freigaben zahlt der Relayer des Projekts aus der Gebühren-Adresse auf Polygon. Gegen Spam: mindestens 10 TOY je Bridge-Überweisung.
 
@@ -59,6 +61,8 @@ Nutzer                         Polygon (Tresor)                  ToyChain
 ```
 
 **Ehrliche Einordnung:** In dieser Richtung muss ToyChain prüfen, was auf Polygon oder Ethereum passiert ist. Ein vollwertiger Light-Client dieser Ketten auf ToyChain ist aufwendig. Zum Start der Bridge sichern deshalb **Komitee + Wartezeit + Limits** den Eingang. Ein nativer Light-Client für Ethereum (über dessen Sync-Komitee) und für Polygon wird als späteres Protokoll-Update vorgesehen und per Mitbestimmung eingeschaltet (Nr. 45).
+
+**Rückholung:** Wird eine Einzahlung nicht innerhalb von 30 Tagen auf ToyChain gutgeschrieben, kann der Einzahler sie im Tresor zurückholen (Abschnitt 6a).
 
 **Altbestand:** Auch alte Token aus dem Fremdbestand (höchstens 10.000 auf Polygon) dürfen hereinkommen. Sie sind durch den Deckungsposten in `K_P` gedeckt (Nr. 14).
 
@@ -86,24 +90,40 @@ Nutzer                         Polygon (Tresor)                  ToyChain
 
 | Schicht | Regel (Startwert) | Wer kann sie ändern |
 |---|---|---|
-| **Limit je Kette und Epoche** | höchstens **50.000 TOY** pro Richtung, Kette und Epoche | Mitbestimmung (Parameter, einfache Mehrheit) |
+| **Limit je Kette und Epoche** | höchstens **50.000 TOY** pro Richtung, Kette und Epoche. Weil eine Epoche mindestens 24 Stunden dauert (Nr. 58), sind das nie mehr als 50.000 TOY pro Tag | Mitbestimmung (Parameter, einfache Mehrheit), Untergrenze 10.000 TOY |
 | **Verzögerung großer Beträge** | Überweisungen über **10.000 TOY** werden 24 Stunden zurückgehalten. ToyScan zeigt sie vorher an | Mitbestimmung |
-| **Notschalter** | 3 von 9 Komitee-Mitgliedern können pausieren. Fortsetzen braucht 5 von 9. Eine Pause endet nach 14 Tagen von selbst, außer die Mitbestimmung verlängert sie | fest |
-| **Rückweg bei langer Pause** | Ist die Bridge länger als 30 Tage pausiert, kann jeder noch nicht gutgeschriebene Einzahlungen auf der Herkunftskette zurückholen | fest |
-| **Slashing** | Komitee-Mitglieder, die eine falsche Einzahlung bestätigen, verlieren ihren Stake. Nachweis per Betrugsbeweis auf ToyChain | fest |
+| **Notschalter** | **Jeder Wächter allein** oder 3 von 9 Komitee-Mitgliedern können pausieren, mit öffentlicher Begründung. Fortsetzen braucht 5 von 9. **Kein automatisches Fortsetzen.** Ein Wächter kann höchstens einmal je 7 Tage pausieren. Wer grundlos pausiert, kann per Abstimmung abgesetzt werden. Die Pause stoppt nur Freigaben, **nie die Rückholung** | fest |
+| **Frist und Rückholung** | Jede Überweisung hat eine Frist von 30 Tagen. Abschnitt 6a | fest |
+| **Pfand und Einzug** | Jedes Komitee-Mitglied hinterlegt **20.000 TOY auf Polygon**. Die 5 nötigen Unterschriften haften zusammen mit 100.000 TOY, doppelt so viel wie das Tageslimit. Der Nachweis läuft **auf Polygon**, weil der Tresor dort ToyChain-Beweise prüfen kann: Zeigt ein Beweis, dass ToyChain eine Einzahlung mit Nummer N gutgeschrieben hat, die es im Tresor nie gab, zieht der Pfand-Vertrag das Pfand der Unterzeichner ein und legt die Token in den Tresor. Damit ist der Schaden genau ausgeglichen: Die fehlende Deckung (`U_P > K_P`) kommt als Token in den Tresor zurück | fest |
 | **Komitee abschaffen** | sobald der Verifizierer lange genug bewährt ist und der native Light-Client läuft | Mitbestimmung (2/3) |
+
+## 6a. Frist und Rückholung (Nr. 59)
+
+Damit kein Geld zwischen zwei Ketten hängen bleibt und nichts doppelt ausgezahlt wird, gilt:
+
+**Einzahlung (Polygon → ToyChain):**
+1. Der Tresor merkt sich zu jeder Einzahlung Nummer, Betrag, Absender und Zeitpunkt.
+2. Wird sie nicht gutgeschrieben, kann der Absender nach **30 Tagen** auf ToyChain eine **Rückholung beantragen**. Er unterschreibt mit derselben Adresse, denn die Adressen sind auf beiden Ketten gleich. ToyChain prüft, dass Nummer N noch nicht gutgeschrieben ist, und markiert sie als **abgelaufen**. Ab dann ist ein Bridge-Eingang mit Nummer N für immer ungültig.
+3. Mit dem Beweis dieser Markierung gibt der Tresor die Token an den Absender zurück.
+
+Gutschrift und Rückholung schließen sich auf ToyChain gegenseitig aus. Eine doppelte Auszahlung ist deshalb unmöglich. Der Notschalter kann die Rückholung nicht stoppen.
+
+**Ausgang (ToyChain → Polygon):** Ein bewiesener Ausgang **verfällt nie**. Er bleibt auf Polygon einlösbar, auch nach einer langen Pause. Eine echte Rückholung auf ToyChain (TOY zurück aus `K_P`) ist erst möglich, wenn ToyChain selbst sehen kann, was auf Polygon passiert ist, also mit dem Light-Client. Vorher könnte ToyChain nicht ausschließen, dass der Tresor schon freigegeben hat, und würde doppelt zahlen. **Einschränkung bis zum Light-Client:** Bei einer Pause wartet ein Ausgang, er geht aber nicht verloren.
+
+**Neue Transaktionsart:** „Rückholung beantragen“ ergänzt Bridge-Ausgang und -Eingang (Spezifikation 6a, Phase 3).
 
 ## 7. Angriffsfälle
 
 | Angriff | Was passiert | Schutz |
 |---|---|---|
 | Gefälschter Beweis | Tresor lehnt ab | Verifizierer **und** 5 von 9 Komitee müssen zustimmen |
-| Komitee verschwört sich (5 von 9) | Ausgang: scheitert am Beweis. Eingang: falsche Gutschrift auf ToyChain möglich | Slashing, Limit 50.000 je Epoche, Verzögerung, Notschalter. Langfristig nativer Light-Client |
+| Komitee verschwört sich (5 von 9) | Ausgang: scheitert am Beweis. Eingang: falsche Gutschrift auf ToyChain möglich | Pfand 5 × 20.000 TOY auf Polygon, das der Tresor selbst einzieht (doppelt so viel wie das Tageslimit), Verzögerung, Wächter pausieren. Langfristig nativer Light-Client |
 | Dieselbe Freigabe zweimal einreichen | abgelehnt | Nummern werden gespeichert (B-I4) |
 | Polygon oder Ethereum ordnet Blöcke um | Einzahlung wäre doppelt | Komitee bestätigt erst nach Endgültigkeit auf der Herkunftskette |
 | Relayer wird gehackt | nichts | Relayer kann nichts unterschreiben, jeder kann einspringen |
 | Fehler im Tresor-Vertrag | im schlimmsten Fall Abfluss | Audits, formale Prüfung, Limits, Verzögerung, Notschalter. Siehe B1 zur Frage einer Migration |
-| 2/3 der ToyChain-Validatoren signieren einen falschen Zustand | Beweis wäre formal gültig | Komitee als zweite Sicherung, Limits, Slashing auf ToyChain, ToyScan-Alarm |
+| 2/3 der ToyChain-Validatoren signieren einen falschen Zustand | Beweis wäre formal gültig | Komitee als zweite Sicherung in **anderen Händen** (mindestens 5 unabhängige Mitglieder, Nr. 59), Limits, Slashing auf ToyChain, ToyScan-Alarm |
+| Ein Wächter pausiert immer wieder | Freigaben stocken | höchstens eine Pause je 7 Tage und Wächter, 5 von 9 setzen fort, Absetzung per Abstimmung. Rückholungen laufen weiter |
 | Alle wollen gleichzeitig zurück | jeder Token ist gedeckt | B-I1: `U ≤ K` je Kette |
 | Schlüssel der Cold-Wallets gestohlen, bevor sie in die Tresore eingezahlt sind | Altbestand-Token in fremder Hand | Cold-Wallets offline (Nr. 44). Gestohlene Token können höchstens den Inhalt von `K_P`/`K_E` abziehen, nie neues TOY erzeugen. Deshalb Tresor-Einzahlung **vor** dem Bridge-Start (`05-gesamtsystem.md`, Schritt 11) |
 
@@ -142,8 +162,9 @@ Nutzer                         Polygon (Tresor)                  ToyChain
 | 50 (B4) | Takt | Polygon alle 12 Stunden. Ethereum: Vorschlag alle 12 Monate, aber siehe Nr. 52 |
 | 51 (B5) | Gebühr | gratis im Kontingent, sonst höchstens 1 TOY. Mindestbetrag 10 TOY. Gas zahlt der Relayer aus der Gebühren-Adresse |
 | 52 (B4) | Ethereum später | Zum Bridge-Start **nur Polygon**. Die Ethereum-Bridge startet erst nach einer Abstimmung (Protokoll-Update, 2/3-Mehrheit), die auch den Takt festlegt |
-| 53 (B3) | Komitee | Start mit **Projekt-Komitee (5 von 9) plus Wächtern**, die nur pausieren können. Alle Mitglieder und Unterschriften öffentlich in ToyScan. Ab Stufe 1 der Mitbestimmung wird **jeden Monat ein Platz** an einen gewählten unabhängigen Betreiber mit 10.000 TOY Stake vergeben, bis alle 9 gewählt sind. Wenn der Light-Client läuft, kann die Community das Komitee abschaffen |
+| 53 (B3) | Komitee | (Start-Besetzung geändert durch Nr. 59) Start mit **Projekt-Komitee (5 von 9) plus Wächtern**, die nur pausieren können. Alle Mitglieder und Unterschriften öffentlich in ToyScan. Ab Stufe 1 der Mitbestimmung wird **jeden Monat ein Platz** an einen gewählten unabhängigen Betreiber mit 10.000 TOY Stake vergeben, bis alle 9 gewählt sind. Wenn der Light-Client läuft, kann die Community das Komitee abschaffen |
 | 54 (B6) | Einzahlungen von Ethereum | nach der Freischaltung im 12-Stunden-Takt wie bei Polygon |
+| 59 (P2, 18.10.) | Bridge-Sicherheit | mindestens 5 unabhängige Komitee-Mitglieder vor dem Start, Pfand 20.000 TOY je Mitglied auf Polygon mit Einzug durch den Tresor, Limit je Epoche (mindestens 24 Stunden), jeder Wächter darf pausieren, kein automatisches Fortsetzen, Frist 30 Tage mit Rückholung (Abschnitte 6, 6a) |
 
 **Warum ein Komitee (zum Nachlesen):** Der mathematische Beweis ist neu und könnte einen unentdeckten Fehler haben. Das Komitee ist das zweite Schloss an derselben Tür: Nur wenn Beweis **und** Komitee zustimmen, öffnet der Tresor. In der Richtung zu ToyChain gibt es am Anfang keinen Beweis, dort ist das Komitee die Hauptsicherung. 5 von 9 heißt: Bis zu 4 Mitglieder dürfen ausfallen oder bestochen sein, ohne dass etwas passiert.
 

@@ -39,7 +39,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 |---|---|---|
 | 9 | Erste Epoche | k₀ = 0,0505 % gilt. Die erste Epoche bringt ca. **49.995 TOY** (in Spezifikation und Bauplan korrigiert, vorher irrtümlich 49.950) |
 | 10 | Zeitsperre der Reserve | ~~4 Jahre linear~~ ersetzt durch Nr. 41 |
-| 11 | Epochenlänge | Eine Epoche endet nach 1.440 Blöcken, nicht nach Zeit. Schnellere Epochen gleicht der Zeitplan-Regler über m aus. Für den 25-Jahres-Plan: 1 Jahr = 365 Epochen |
+| 11 | Epochenlänge | ~~Eine Epoche endet nach 1.440 Blöcken, nicht nach Zeit.~~ **Ersetzt durch Nr. 58.** Für den 25-Jahres-Plan: 1 Jahr = 365 Epochen |
 | 12 | Lizenz | MIT-Lizenz für den gesamten Code |
 | 13 | Fremdbestand | Vor dem Start werden die Token außerhalb der Contract-Wallet bis auf höchstens 10.000 TOY je Kette zurückübertragen. Ersetzt Nr. 7 |
 | 14 | Deckungsposten | **Bestätigt am 17.10.2026:** 10.000 TOY aus der Reserve decken im Genesis-Block den Polygon-Fremdbestand, damit jeder Token 1:1 einlösbar ist. Reserve für Team usw. dann 990.000 TOY |
@@ -81,11 +81,14 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 50 | Takt der Beweise (B4) | Zunächst Polygon **alle 12 Stunden**, Ethereum **alle 12 Monate** (Ethereum geändert durch Nr. 52). Änderbar per Mitbestimmung |
 | 51 | Bridge-Gebühr (B5) | **Gratis** im kostenlosen Kontingent, darüber **höchstens 1 TOY**. Mindestbetrag 10 TOY gegen Spam. Gas zahlt der Relayer aus der Gebühren-Adresse auf Polygon |
 | 52 | Ethereum-Bridge später (B4) | Zum Bridge-Start **nur Polygon**. Die Ethereum-Bridge ist eingebaut, aber ausgeschaltet. Sie startet erst nach einer Abstimmung (Protokoll-Update, 2/3-Mehrheit), die auch den Takt festlegt (Vorschlag: alle 12 Monate). Bis dahin bleiben die Ethereum-Token auf der offiziellen Cold-Wallet |
-| 53 | Bridge-Komitee (B3) | Start mit **Projekt-Komitee 5 von 9 plus Wächtern** (nur Pausieren). Ab Stufe 1 der Mitbestimmung jeden Monat ein Platz an einen gewählten unabhängigen Betreiber mit 10.000 TOY Stake, bis alle 9 gewählt sind |
+| 53 | Bridge-Komitee (B3) | (Start-Besetzung geändert durch Nr. 59) Start mit **Projekt-Komitee 5 von 9 plus Wächtern** (nur Pausieren). Ab Stufe 1 der Mitbestimmung jeden Monat ein Platz an einen gewählten unabhängigen Betreiber mit 10.000 TOY Stake, bis alle 9 gewählt sind |
 | 54 | Einzahlungen von Ethereum (B6) | nach der Freischaltung im 12-Stunden-Takt wie bei Polygon |
 | 55 | Bug-Bounty-Prämien (T1) | Prämien über 5.000 TOY erzwingt das **Protokoll**: Die Auszahlung muss auf einen angenommenen Vorschlag mit gleichem Empfänger und Betrag verweisen. Auszahlungen an denselben Empfänger in 30 Epochen zählen zusammen |
 | 56 | ToyScan ohne Schlüssel (T2) | ToyScan pausiert nie selbst. Bei Rot alarmiert es die Wächter (Nr. 53) |
 | 57 | Altbestand-Wächter zuerst (T3) | ToyScan Stufe 0 wird als erster Baustein vor M1 gebaut (`toyscan/`, nur lesend) |
+| 58 | Epoche nach Blöcken **und** Zeit (P1) | Eine Epoche endet erst nach mindestens **1.440 Blöcken und mindestens 24 Stunden** (geprüfte Zeitstempel). Ersetzt Nr. 11. Grund: Sonst könnten Blockerzeuger mit schnellen Blöcken die Zeit stauchen (Reserve-Sperre, Fristen, Limits, Emission). Neu in der Verfassung |
+| 59 | Bridge-Sicherheit (P2) | Bridge-Start erst, wenn **mindestens 5 der 9** Komitee-Plätze mit Betreibern außerhalb von Projekt und Start-Komitee besetzt sind. **Pfand 20.000 TOY je Mitglied auf Polygon**, das der Tresor bei nachgewiesener falscher Bestätigung selbst einzieht. Limit 50.000 TOY je Kette, Richtung und Epoche (eine Epoche dauert mindestens 24 Stunden). Mindestens 3 Wächter, **jeder allein** darf pausieren, Fortsetzen nur mit 5 von 9, kein automatisches Fortsetzen. **Frist von 30 Tagen** für jede Überweisung, danach Rückholung auf der Herkunftskette in beide Richtungen, ohne doppelte Auszahlung. Ändert Nr. 53 (Start-Besetzung) |
+| 60 | Mengenregel I0 (P3) | Die **Summe aller Guthaben** ist in jedem Block genau gemintet + 1 Mio. − verbrannt, sonst ist der Block ungültig. Jede Wiederbelebung nur einmal (Einmal-Markierung). Staub und gekürzter Stake werden **verbrannt**. Restmenge = 99 Mio. − Summe aller Emissionen, Verbranntes kommt nie zurück |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 

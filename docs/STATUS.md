@@ -88,7 +88,7 @@ Alle Entscheidungen stehen auch in `docs/02-entscheidungen.md` (Nr. 9 bis 12) un
 | `07-toypay.md` | Entwurf, entschieden Nr. 15 bis 35. Offen: NFTs vor dem Bridge-Start, vorhandener NFT-Vertrag |
 | `toypay/docs/07_SPIELDESIGN.md` | Entwurf: Spieldesign mit Klassen, Synergien, Wirtschaft, Lichteffekten. Gang-Regeln und Effekt-Paket gebaut und in Godot 4.4.1 getestet (`nft_items_test`, `vfx_test`: ALL OK) |
 | `toypay/docs/06_NFT_GEGENSTAENDE.md` | Katalog mit 500 Gegenständen, geprüft mit `gen_nft_items.py` und in Godot 4.4.1 (`nft_items_test`: ALL OK) |
-| `10-pruefbericht-1.md` | Prüfbericht 1 vom 17.10.2026: 17 Befunde, davon 3 kritisch. Reine Text- und Formelfehler korrigiert, P1 bis P12 zur Entscheidung. M1 erst nach P1, P3, P4 und Formel für m |
+| `10-pruefbericht-1.md` | Prüfbericht 1 vom 17.10.2026: 17 Befunde, davon 3 kritisch. Reine Text- und Formelfehler korrigiert. P1 bis P3 entschieden (Nr. 58 bis 60), P4 bis P12 offen. M1 erst nach P4 und der Formel für m |
 | `08-toyscan.md` | v0.1, entschieden (Nr. 55 bis 57): Aufbau, Datenquellen, Messpunkt, Ampel A1 bis A12, API, Stufen 0 bis 3, Pflicht-Tests |
 
 ## Noch offen

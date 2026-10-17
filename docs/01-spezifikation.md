@@ -66,8 +66,8 @@ Die Grenze gilt für die Daten eines Standard-Knotens (Voll-Rolle). Aufteilung:
 
 **Schutz des Zustands vor Aufblähung:**
 
-- **Mindestguthaben (Existential Deposit, Polkadot-Prinzip):** Startwert 0,1 TOY. Konten darunter werden entfernt.
-- **Zustandsablauf (State Expiry):** Konten unter einer Schwelle ohne Aktivität über 1001 Tage (ca. 2,7 Jahre) wandern in einen Merkle-Akkumulator. Die Wiederbelebung ist unkompliziert: Die Wallet holt den nötigen Beweis automatisch von Archiv-Knoten oder ToyScan, der Nutzer bestätigt nur mit seiner Phrase. Größere Guthaben laufen nie ab.
+- **Mindestguthaben (Existential Deposit, Polkadot-Prinzip):** Startwert 0,1 TOY. Konten darunter werden entfernt, der Rest wird **verbrannt** und gezählt (Entscheidung 60).
+- **Zustandsablauf (State Expiry):** Konten unter einer Schwelle ohne Aktivität über 1001 Tage (ca. 2,7 Jahre) wandern in einen Merkle-Akkumulator. Der Akkumulator führt die Summe der abgelaufenen Guthaben mit. Jedes abgelaufene Konto kann **genau einmal** wiederbelebt werden: Dabei wird eine Einmal-Markierung gespeichert, eine zweite Wiederbelebung ist ungültig (Entscheidung 60). Die Wiederbelebung ist unkompliziert: Die Wallet holt den nötigen Beweis automatisch von Archiv-Knoten oder ToyScan, der Nutzer bestätigt nur mit seiner Phrase. Größere Guthaben laufen nie ab.
 - **Risiko:** Für die Wiederbelebung braucht man einen Beweis (Witness) von einem Archiv-Knoten oder aus dem eigenen Wallet-Backup. Deshalb veröffentlichen mehrere unabhängige Archiv-Knoten und ToyScan die Ablauf-Snapshots jeder Epoche, und die Wallet warnt den Nutzer rechtzeitig vor dem Ablauf.
 
 ## 5. Konsens und Teilnahme am Signieren
@@ -85,9 +85,11 @@ Die Grenze gilt für die Daten eines Standard-Knotens (Voll-Rolle). Aufteilung:
 
 **Zeitverhalten:** Ziel-Blockzeit 60 Sekunden. Ist der Transaktionspool vorher voll, wird früher ein Block vorgeschlagen (frühestens nach 10 Sekunden). Finalität nach einem Block, also höchstens ca. 1 Minute.
 
+**Zeitstempel (Entscheidung 58):** Jeder Block trägt einen Zeitstempel in Sekunden. Er muss größer sein als der des Vorgängers, mindestens 10 Sekunden danach liegen und darf höchstens 15 Sekunden vor der Uhr des prüfenden Validators liegen. Sonst stimmen die Validatoren nicht zu. **Eine Epoche endet mit dem ersten Block, der beide Bedingungen erfüllt: mindestens 1.440 Blöcke in dieser Epoche und Zeitstempel mindestens 86.400 Sekunden nach dem ersten Block der Epoche.** Kommen Blöcke schneller, wird die Epoche länger als 1.440 Blöcke, nie kürzer als 24 Stunden. Damit gelten Sperren, Fristen, Limits, Kontingent und Emission in echter Zeit. Verschieben ließe sich die Uhr nur, wenn mehr als ein Drittel der Validatoren gemeinsam lügt, und dann wäre auch die Finalität gebrochen.
+
 **Sicherheitsmechanismen:**
 
-- **Slashing:** Doppelsignaturen kosten einen Teil des Stakes.
+- **Slashing:** Doppelsignaturen kosten einen Teil des Stakes. Gekürzter Stake wird **verbrannt** (Entscheidung 60).
 - **Inaktivitäts-Abzug:** Fehlende Teilnehmer verlieren allmählich Einfluss, damit die Kette bei Ausfällen weiterläuft.
 - **Long-Range-Schutz:** Checkpoints (Weak Subjectivity) sowie der rekursive Beweis als Anker.
 - **Anti-Zentralisierung:** Der wirksame Stake pro Teilnehmer wird gedeckelt, Belohnungen steigen unterproportional (Wurzel-Gewichtung).
@@ -132,7 +134,7 @@ Weil es keine Smart Contracts gibt, kennt das Protokoll nur diese Transaktionsar
 | **Mehrfachsignatur-Konto** | Konto, das nur mit m von n Unterschriften bewegt werden kann (z. B. Bug-Bounty-Topf 3 von 5). Ersatz für Multisig-Verträge, die es ohne Smart Contracts nicht gibt. Beim Bug-Bounty-Topf braucht eine Auszahlung über 5.000 TOY zusätzlich den Verweis auf eine angenommene Abstimmung (Entscheidung 55) | 1 |
 | **Vorschlag, Abstimmung, Stimme delegieren** | Mitbestimmung der Community (`09-mitbestimmung.md`) | 1 |
 | **Konto wiederbeleben** | abgelaufenes Konto mit Merkle-Beweis zurückholen | 1 |
-| **Bridge-Ausgang / Bridge-Eingang** | TOY im protokolleigenen Bridge-Konto sperren oder daraus freigeben | 3 |
+| **Bridge-Ausgang / Bridge-Eingang / Rückholung beantragen** | TOY im protokolleigenen Bridge-Konto sperren oder daraus freigeben. Nicht gutgeschriebene Einzahlung nach 30 Tagen als abgelaufen markieren (`06-bridge.md`, Abschnitt 6a) | 3 |
 | **Abgeschirmter Pool** | Ein- und Auszahlung, private Überweisung | 4 |
 | **Offline-Escrow / Scheck einlösen** | Betrag für Offline-Schecks sperren, Schecks einlösen | 5 |
 
@@ -182,10 +184,12 @@ Optionaler **privater Pool** neben den öffentlichen Ethereum-kompatiblen Konten
   - **90.000 TOY Bug-Bounty-Topf**, sofort verfügbar, auf einem offiziellen Mehrfachsignatur-Konto (Entscheidung 43).
   - **900.000 TOY** auf einer **offiziellen, öffentlich bekannten Cold-Wallet** (Entscheidung 44). Dass sie dem Ersteller gehört, belegt eine signierte Nachricht der Ersteller-Adresse. **Sperre:** In den ersten 3 Jahren nach dem Mainnet-Start (1.095 Epochen) wird nichts freigegeben. Danach wird **je Epoche gleichmäßig über 3 Jahre** freigegeben (1.095 Epochen, rund 822 TOY pro Epoche), sodass nach 6 Jahren alles frei ist (Entscheidung 42). Das sind nur etwa 3 bis 5 % der täglich neu entstehenden TOY und damit fair für alle, die später dazukommen. Die Sperre erzwingt das Protokoll. Es gibt keinen Presale und keinen weiteren Vorab-Anteil. Das ist kein reiner Fair Launch mehr, sondern ein Fair Launch mit kleiner, transparenter Reserve. Ob das rechtlich als ausreichend dezentral gilt, muss vorab juristisch geprüft werden.
 
-**Basiskurve:** Pro Epoche (ca. 24 Stunden) werden k × Restmenge ausgeschüttet.
+**Basiskurve:** Pro Epoche (mindestens 24 Stunden) werden k × Restmenge ausgeschüttet.
 
 - k₀ ≈ 0,0505 % pro Epoche. Daraus folgt eine Halbwertszeit von ca. 3,76 Jahren und ca. 49.995 TOY in der ersten Epoche (99 Mio. × 0,0505 %, korrigiert am 17.10.2026, vorher irrtümlich 49.950).
-- **Epoche nach Blöcken (entschieden am 17.10.2026):** Eine Epoche endet nach 1.440 Blöcken, nicht nach 24 Stunden. Kommen Blöcke bei vollem Pool schneller, ist die Epoche kürzer. Der Zeitplan-Regler gleicht das über m aus. Für den 25-Jahres-Plan gilt ein Jahr = 365 Epochen.
+- **Epoche nach Blöcken und Zeit (Entscheidung 58, ersetzt Nr. 11):** Eine Epoche endet erst nach mindestens 1.440 Blöcken **und** mindestens 24 Stunden (Abschnitt 5). Eine Epoche ist also nie kürzer als ein Tag, und die Emission kann dem Plan nie davonlaufen. Für den 25-Jahres-Plan gilt ein Jahr = 365 Epochen. Sind die Epochen wegen langsamer Blöcke länger, liegt die Ausschüttung hinter dem Plan, und der Zeitplan-Regler erhöht m.
+- **Restmenge (Entscheidung 60):** Restmenge = 99.000.000 TOY − Summe aller bisherigen Emissionen. Verbranntes TOY (Staub, Slashing) kommt **nie** zurück in die Emission. Die Gesamtmenge kann dadurch nur sinken, nie steigen.
+- **Regel I0 (Entscheidung 60):** Die Summe aller Guthaben auf ToyChain (Konten, Stake, Erstattungs-Pool, Lotterie, Bridge-Konto, gesperrte Reserve, Bug-Bounty-Topf, abgelaufene Konten im Akkumulator) ist **in jedem Block genau** gleich gemintet + 1.000.000 TOY − verbrannt. Ein Block, der das verletzt, ist ungültig. ToyScan rechnet mit (`08-toyscan.md`, A1).
 - Im ersten Jahr werden bei Faktor 1 rund 16,7 Mio. TOY ausgeschüttet, nach 25 Jahren bleiben ca. 1 % (1 Mio.) übrig, die danach asymptotisch auslaufen.
 - Weil die Ausschüttung immer nur ein Bruchteil des Rests ist, wird die Obergrenze von 100 Mio. **mathematisch nie überschritten**.
 
@@ -250,7 +254,7 @@ Die Community stimmt über Parameter und Protokoll-Updates ab (Entscheidung 45).
 ## 14. Parameter-Startwerte
 
 - Ticker TOY, 18 Dezimalstellen, Gesamtmenge 10²⁶ kleinste Einheiten (passt in 128-Bit-Ganzzahlen)
-- Blockzeit 60 s, frühester Block bei vollem Pool nach 10 s, Epoche 1.440 Blöcke
+- Blockzeit 60 s, frühester Block bei vollem Pool nach 10 s, Epoche mindestens 1.440 Blöcke und mindestens 24 Stunden
 - Maximale Blockgröße 128 KB, Komitee 128, Finalität nach 1 Block
 - Kostenloses Kontingent 10 bis 100 pro Epoche, Vielnutzer-Schwelle 1.000 pro Epoche
 - Mindestguthaben 0,1 TOY, Kontoablauf nach 1001 Tagen (nur unterhalb einer Schwelle)

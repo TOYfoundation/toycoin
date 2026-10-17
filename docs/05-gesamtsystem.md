@@ -1,6 +1,6 @@
 # Gesamtsystem: ToyChain, TOYPAY, Spiele, ToyScan und Bridge
 
-Entwurf v0.3 vom 17.10.2026 · Fasst die Entscheidungen 1 bis 57 zusammen (`02-entscheidungen.md`) · Status: **zur Prüfung, mit offenen Entscheidungen in Abschnitt 10**
+Entwurf v0.3 vom 17.10.2026 · Fasst die Entscheidungen 1 bis 60 zusammen (`02-entscheidungen.md`) · Status: **zur Prüfung, mit offenen Entscheidungen in Abschnitt 10**
 
 ## 1. Die Teile auf einen Blick
 
@@ -142,7 +142,7 @@ Schritte mit 🔒 lassen sich **nicht rückgängig machen**.
 ## 6. Die Deckung über alle Ketten (Buchhaltung)
 
 **Bezeichnungen**
-- `G` = gemintetes TOY, `R` = Reserve einschließlich Bug-Bounty-Topf (990.000), `C` = Deckungsposten (10.000)
+- `V` = verbranntes TOY (Staub, Slashing), `G` = gemintetes TOY, `R` = Reserve einschließlich Bug-Bounty-Topf (990.000), `C` = Deckungsposten (10.000)
 - `K` = Bestand im Bridge-Konto auf ToyChain
 - `U_P`, `U_E` = ToyCoin-Token **im Umlauf** auf Polygon bzw. Ethereum, also außerhalb von Tresor, Ersteller-Adresse und offiziellen Cold-Wallets
 - `F_P` = Fremdbestand Polygon (≤ 10.000), `A_P`, `A_E` = vom Tresor freigegebene Token
@@ -151,6 +151,7 @@ Schritte mit 🔒 lassen sich **nicht rückgängig machen**.
 
 | Nr. | Regel | Bedeutung |
 |---|---|---|
+| **I0** | Summe aller Guthaben auf ToyChain `= G + R + C − V` in **jedem Block** (`V` = verbrannt) | Kein TOY entsteht an der Emission vorbei, auch nicht durch einen Fehler bei Wiederbelebung, Erstattung oder Lotterie. Ein Block, der das verletzt, ist ungültig (Nr. 60) |
 | I1 | `G + R + C ≤ 10^26` | Die Obergrenze hält auf ToyChain |
 | I2 | `K = C + (Σ Bridge-Ausgang) − (Σ Bridge-Eingang)` | Das Bridge-Konto enthält genau die Deckung plus alles, was hinausgebridgt wurde |
 | I3 | `U_P + U_E ≤ K` | Jeder Token im Umlauf auf Polygon und Ethereum ist durch natives TOY gedeckt |
@@ -160,7 +161,7 @@ Schritte mit 🔒 lassen sich **nicht rückgängig machen**.
 
 **Beispiel:** Anna bridgt 500 TOY nach Polygon. Auf ToyChain wandern 500 TOY ins Bridge-Konto (K: 10.000 → 10.500), auf Polygon gibt der Tresor 500 Token frei (A_P = 500). Dann gilt U_P = 7.700 + 500 = 8.200 ≤ K = 10.500. Bob, der noch alte Token hat, bridgt 1.000 zurück: K sinkt auf 9.500, U_P auf 7.200. Die Regel I3 hält weiter, und Anna kann jederzeit zurück.
 
-ToyScan rechnet I1 bis I6 live nach. Jede Verletzung färbt die Ampel rot (Abschnitt 9).
+ToyScan rechnet I0 bis I6 live nach. Jede Verletzung färbt die Ampel rot (Abschnitt 9).
 
 ## 7. Wertflüsse im Spiel
 

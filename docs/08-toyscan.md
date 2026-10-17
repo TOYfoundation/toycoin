@@ -1,6 +1,6 @@
 # ToyScan: Explorer und Ampel
 
-Entwurf v0.1 vom 17.10.2026 · Grundlage: Spezifikation 12, `04-toyscan-und-altbestand.md`, `05-gesamtsystem.md` (Regeln I1 bis I6), `06-bridge.md` (Regeln B-I1 bis B-I4), Entscheidungen 13, 14, 41 bis 54 · Status: **entschieden (Nr. 55 bis 57)**
+Entwurf v0.1 vom 17.10.2026 · Grundlage: Spezifikation 12, `04-toyscan-und-altbestand.md`, `05-gesamtsystem.md` (Regeln I0 bis I6), `06-bridge.md` (Regeln B-I1 bis B-I4), Entscheidungen 13, 14, 41 bis 60 · Status: **entschieden (Nr. 55 bis 57), angepasst an Nr. 58 bis 60**
 
 ## 1. Ziel und Grundsätze
 
@@ -63,7 +63,7 @@ Der Knoten berechnet diese Werte aus Zählern, die er ohnehin führt. Es kommt k
 | Was | Wie gelesen |
 |---|---|
 | Gesamtmenge der Token | `totalSupply()` am Altbestand-Vertrag |
-| Bestände | `balanceOf()` für Ersteller-Adresse, offizielle Cold-Wallets, Tresor, Burn-Adresse `0x…dEaD`, Gebühren-Adresse und Wechselstube des Spiels |
+| Bestände | `balanceOf()` für Pfand-Vertrag (zählt zum Umlauf, das Pfand gehört den Mitgliedern), Ersteller-Adresse, offizielle Cold-Wallets, Tresor, Burn-Adresse `0x…dEaD`, Gebühren-Adresse und Wechselstube des Spiels |
 | Bewegungen | `Transfer`-Ereignisse von und zu den oben genannten Adressen |
 | Code | `eth_getCode` für Altbestand-Verträge, Tresore und Verifizierer. Verglichen wird der Hash mit dem veröffentlichten Sollwert und die Liste der Funktionen (`04-toyscan-und-altbestand.md`, Abschnitt 2) |
 | Tresor | Ereignisse für Freigaben, Einzahlungen, benutzte Nummern, Pausen und Komitee-Unterschriften. Zeitpunkt des letzten geprüften Beweises |
@@ -100,16 +100,16 @@ Abkürzungen wie in `05-gesamtsystem.md`, Abschnitt 6: `G` gemintet, `R` Reserve
 
 | Nr. | Kriterium | Rechnung | Gelb | Rot | aktiv ab |
 |---|---|---|---|---|---|
-| **A1** | Obergrenze auf ToyChain (I1) | `G + R + C ≤ 10^26` | — | verletzt, dazu große rote Lampe | Mainnet |
-| **A2** | Tresore decken den Rest | Tresor-Bestand `≥ Ersteinzahlung + ΣD − ΣA`, errechnet aus den Ereignissen des Tresors | — | Tresor hält weniger, Token haben ihn also ohne Freigabe verlassen | Bridge-Start der Kette |
+| **A1** | Obergrenze und Summe aller Guthaben (I0, I1) | `G + R + C ≤ 10^26`. **Summe aller Guthaben** (Konten, Stake, Pools, Bridge-Konto, gesperrte Reserve, Bug-Bounty-Topf, Akkumulator der abgelaufenen Konten) `= G + R + C − V`, aus dem Archiv-Knoten selbst aufsummiert, nicht nur aus den Zählern des Knotens. Keine Einmal-Markierung einer Wiederbelebung doppelt | — | verletzt, dazu große rote Lampe | Mainnet |
+| **A2** | Tresore decken den Rest | Tresor-Bestand `≥ Ersteinzahlung + ΣD − ΣA − ΣRückholungen + ΣPfand-Einzüge`, errechnet aus den Ereignissen des Tresors | — | Tresor hält weniger, Token haben ihn also ohne Freigabe verlassen | Bridge-Start der Kette |
 | **A3** | Reserve | gesperrt `= 900.000 TOY − freigegeben(e)`, Formel unten. Bug-Bounty-Topf und Deckung wie im Genesis-Block, jede Auszahlung des Topfs mit Beleg und, über 5.000 TOY, mit der Abstimmung, auf die sie verweist | — | mehr freigegeben als der Plan erlaubt, oder eine Auszahlung über 5.000 TOY ohne angenommene Abstimmung (das Protokoll verbietet sie, Nr. 55) | Mainnet |
-| **A4** | Emission nach Formel | Emission der Epoche `= floor(Restmenge × k₀ × m)` im Ganzzahl-Format des Knotens, `0,5 ≤ m ≤ 2,0`, Epoche genau 1.440 Blöcke | Summe der Emission mehr als 2 % vor dem Plan (Plan = dieselbe Rechnung mit m = 1) | Emission weicht von der Formel ab oder m liegt außerhalb | Mainnet |
+| **A4** | Emission nach Formel | Emission der Epoche `= floor(Restmenge × k₀ × m)` im Ganzzahl-Format des Knotens, `0,5 ≤ m ≤ 2,0`, Epoche mit mindestens 1.440 Blöcken und mindestens 86.400 Sekunden zwischen erstem und letztem Block (Nr. 58), Restmenge = 99 Mio. − Σ Emission | Summe der Emission mehr als 2 % vor dem Plan (Plan = dieselbe Rechnung mit m = 1) | Emission weicht von der Formel ab oder m liegt außerhalb | Mainnet |
 | **A5** | Altbestand-Verträge und Tresore | Code-Hash und Funktionsliste unverändert, `totalSupply() = 10^26` (die Verträge können weder prägen noch verbrennen, jede Änderung ist ein Alarm), Tresor- und Verifizierer-Code gleich dem geprüften Stand | Quellcode noch nicht verifiziert | Code oder Gesamtmenge geändert, dazu große rote Lampe | sofort |
 | **A6** | Bridge betriebsbereit | Notschalter aus. Kein Ausgang wartet länger als seine Verzögerung (0 oder 24 Stunden) plus 2 × Takt (Polygon: 24 Stunden) auf seinen Beweis | pausiert oder Beweis überfällig | — | Bridge-Start der Kette |
 | **A7** | Fremdbestand | gemessener Umlauf `U = totalSupply − Tresor − Ersteller − Cold-Wallets − Burn`. Vor dem Bridge-Start: `U_P ≤ 10.000`, `U_E = 0` | vor dem Stichtag über dem Deckungsposten | nach dem Stichtag gewachsen, ohne dass der Tresor freigegeben hat | sofort |
 | **A8** | Erlaubte Abgänge | jeder `Transfer` von Ersteller-Adresse oder offizieller Cold-Wallet geht nur an eine offizielle Cold-Wallet, an den Tresor oder zurück an die Ersteller-Adresse (Nr. 44) | — | jeder andere Abgang | sofort, bis zur Tresor-Einzahlung |
 | **A9** | Deckung über alle Ketten (I2 bis I6) | `K = C + ΣAusgang − ΣEingang`, `U_P + U_E ≤ K`, gemessenes `U_P` ≤ errechnetes `F_P + A_P − D_P` (kleiner nur durch Geschenke an den Tresor, siehe unten), `F_P ≤ C`, Umlauf aller Ketten `≤ G + R + C ≤ 10^26` | — | eine Regel verletzt | Mainnet |
-| **A10** | Bridge je Kette (B-I1 bis B-I4) | `U_P ≤ K_P`, `U_E ≤ K_E`. Freigaben ≤ bewiesene Ausgänge. Eingänge ≤ Unterkonto. Keine Nummer doppelt | — | eine Regel verletzt | Bridge-Start der Kette |
+| **A10** | Bridge je Kette (B-I1 bis B-I4) | `U_P ≤ K_P`, `U_E ≤ K_E`. Freigaben ≤ bewiesene Ausgänge. Eingänge ≤ Unterkonto. Keine Nummer doppelt. Keine Einzahlung zugleich gutgeschrieben **und** zurückgeholt. Rückholung nur nach Markierung „abgelaufen“ auf ToyChain (Nr. 59) | Rückholungen häufen sich (Hinweis auf ein Problem beim Komitee) | eine Regel verletzt | Bridge-Start der Kette |
 | **A11** | Verfassung | `toy_getConstitution` liefert den veröffentlichten Hash. Alle Parameter liegen in ihrem erlaubten Bereich | — | Verfassung geändert oder Parameter außerhalb, dazu große rote Lampe | Mainnet |
 | **A12** | Datenlage | beide RPC-Quellen je Kette stimmen überein. Letzter endgültiger Block auf ToyChain jünger als 10 Minuten, auf Polygon und Ethereum jünger als 30 Minuten | Quellen uneinig oder Daten veraltet | — | sofort |
 

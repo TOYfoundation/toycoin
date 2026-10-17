@@ -43,7 +43,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 ### M1: Grundtypen und Emission
 - Typen, Konstanten (10^26 kleinste Einheiten Obergrenze), sichere Rechenfunktionen.
 - Emissionskurve mit k₀, Faktor m ∈ [0,5; 2,0], Zeitplan-Regler. Reserve im Genesis-Block: 900.000 TOY auf der offiziellen Cold-Wallet mit 3 Jahren Sperre und anschließender Freigabe je Epoche über 3 Jahre, 90.000 TOY Bug-Bounty-Topf, 10.000 TOY Deckungsposten (Entscheidungen 41 bis 44). Test: Freigabeplan rundet nie über 900.000 TOY hinaus.
-- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen die Obergrenze **nie** überschreitet (auch bei m = 2,0 über 100 Jahre simuliert). Test für Halbwertszeit ≈ 3,76 Jahre und erste Epoche ≈ 49.995 TOY bei m = 1. Spam darf m nicht erhöhen (Test mit unbezahlten Transaktionen).
+- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen die Obergrenze **nie** überschreitet (auch bei m = 2,0 über 100 Jahre simuliert). Test für Halbwertszeit ≈ 3,76 Jahre und erste Epoche ≈ 49.995 TOY bei m = 1. Spam darf m nicht erhöhen (Test mit unbezahlten Transaktionen). Epochen-Ende nur nach mindestens 1.440 Blöcken **und** 86.400 Sekunden (Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden, Nr. 58). Restmenge sinkt nie durch Verbrennen wieder auf (Nr. 60).
 
 ### M2: Kryptografie und Adressen
 - Schlüssel aus BIP-39-Phrase, Pfad m/44'/60'/0'/0/n, Adresse wie Ethereum, Signieren und Prüfen mit Chain-ID (EIP-155).
@@ -52,7 +52,8 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 ### M3: Zustand, Transaktionen, Kontingent, Gebühren
 - Konten (Guthaben, Nonce, Arbeitskredit), Merkle-Wurzel, Mindestguthaben 0,1 TOY.
 - Kontingent Q = max(10, 100 × (1 − Auslastung)) pro Epoche, Erstattung aus dem Erstattungs-Pool, progressive Gebühr, ToyWork-Share (Argon2id, 16 MiB), Pflicht für Vielnutzer ab 1.000 pro Epoche.
-- **Fertig, wenn:** Tests für Nonce-Reihenfolge, Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebührenverdopplung, ungültige und wiederverwendete Shares.
+- Regel I0: Summe aller Guthaben = gemintet + 1 Mio. − verbrannt in jedem Block. Staub unter dem Mindestguthaben wird verbrannt (Nr. 60).
+- **Fertig, wenn:** Tests für I0 nach jedem Block (auch mit absichtlich fehlerhaftem Block, der abgelehnt werden muss), Nonce-Reihenfolge, Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebührenverdopplung, ungültige und wiederverwendete Shares.
 
 ### M4: Blöcke, Konsens-Simulation
 - Blockformat, Komitee mit VRF-Auswahl, BFT-Abstimmung, BLS-Sammelsignatur, Finalität nach 1 Block, Slashing bei Doppelsignatur.
@@ -112,7 +113,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 > Setze M4 um (toy-consensus): Komitee, VRF, BFT, BLS-Sammelsignatur, Slashing. Baue eine Simulation mit 20 virtuellen Validatoren und lasse sie 10.000 Blöcke laufen, auch mit ausfallenden Knoten. Berichte Messwerte.
 
 **M5:**
-> Setze M5 um: persistenter Speicher, Block-Fenster nach Bytes, Zustandsablauf nach 1001 Tagen. Miss den Speicherverbrauch pro Konto und schreibe einen Messbericht in docs/STATUS.md. Prüfe, ob die 256 MB gehalten werden.
+> Setze M5 um: persistenter Speicher, Block-Fenster nach Bytes, Zustandsablauf nach 1001 Tagen mit Einmal-Markierung für Wiederbelebungen (Test: zweite Wiederbelebung wird abgelehnt). Miss den Speicherverbrauch pro Konto und schreibe einen Messbericht in docs/STATUS.md. Prüfe, ob die 256 MB gehalten werden.
 
 **M6 bis M10:** gleiche Form. „Setze M<Nummer> aus docs/03-bauplan-phase1.md um. Zeige zuerst einen Plan, schreibe Tests, führe fmt, clippy und test aus, aktualisiere docs/STATUS.md.“
 

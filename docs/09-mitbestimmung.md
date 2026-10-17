@@ -18,7 +18,9 @@ Diese Regeln stehen fest im Code. Das Abstimmungsmodul kann sie **technisch nich
 | Emissionsformel `k × Restmenge` mit k₀ = 0,0505 % und m nur im Bereich 0,5 bis 2,0 | Nr. 9 |
 | Reserve: Menge, Empfänger, Sperre und Freigabeplan | Nr. 41 bis 44 |
 | Nur der native Coin TOY, keine Token, keine NFTs, keine Smart Contracts | Nr. 36 |
-| Bridge 1:1, Deckungsregeln I1 bis I6, kein Prägen neuer TOY durch die Bridge | Nr. 4, 14; `05-gesamtsystem.md` |
+| Bridge 1:1, Deckungsregeln I0 bis I6, kein Prägen neuer TOY durch die Bridge, Verbranntes kommt nie zurück | Nr. 4, 14, 60; `05-gesamtsystem.md` |
+| Epoche mindestens 1.440 Blöcke **und** mindestens 24 Stunden | Nr. 58 |
+| Bridge: Frist von 30 Tagen mit Rückholung, Notschalter kann nur pausieren | Nr. 59 |
 | Adressen und Signaturen wie Ethereum, Chain-ID in jeder Signatur | Spezifikation 8 |
 | **Kein Zugriff auf fremde Guthaben:** Keine Abstimmung kann TOY von einem Konto nehmen, einfrieren oder umverteilen | neu |
 | Die Verfassungsliste selbst | neu |
