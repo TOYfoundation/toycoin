@@ -75,7 +75,7 @@ Die Adresse und die Chain-ID stehen jeweils als feste Werte im Code. Das bestät
 - Freigabe nur gegen einen verifizierten ToyChain-Beweis, 1:1. Zusätzlich Komitee-Schwellensignatur, bis der Verifizierer bewährt ist.
 - Schutz: Limits, Zeitverzögerung bei großen Beträgen, Notschalter (kann nur pausieren).
 - Globale Invariante: Umlauf auf allen Ketten ≤ gemintetes TOY + 1 Mio. Reserve ≤ 100.000.000.
-- Fremdbestand erzeugt nie neues TOY. Er wird vor dem Start auf höchstens 10.000 TOY je Kette verringert (Entscheidung 13) und im Genesis-Block durch einen Deckungsposten aus der Reserve gedeckt (Vorschlag). Dann ist jeder Token 1:1 einlösbar.
+- Fremdbestand erzeugt nie neues TOY. Er wird vor dem Start auf höchstens 10.000 TOY je Kette verringert (Entscheidung 13) und im Genesis-Block durch einen Deckungsposten von 10.000 TOY aus der Reserve gedeckt (Entscheidung 14). Dann ist jeder Token 1:1 einlösbar.
 
 ## 4. On-Chain-Befund vom 17.10.2026 (Etherscan-API, nur lesend)
 

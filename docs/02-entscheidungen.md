@@ -42,7 +42,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 11 | Epochenlänge | Eine Epoche endet nach 1.440 Blöcken, nicht nach Zeit. Schnellere Epochen gleicht der Zeitplan-Regler über m aus. Für den 25-Jahres-Plan: 1 Jahr = 365 Epochen |
 | 12 | Lizenz | MIT-Lizenz für den gesamten Code |
 | 13 | Fremdbestand | Vor dem Start werden die Token außerhalb der Contract-Wallet bis auf höchstens 10.000 TOY je Kette zurückübertragen. Ersetzt Nr. 7 |
-| 14 | Deckungsposten | **Vorschlag:** 10.000 TOY aus der Reserve decken im Genesis-Block den Polygon-Fremdbestand, damit jeder Token 1:1 einlösbar ist. Reserve für Team usw. dann 990.000 TOY |
+| 14 | Deckungsposten | **Bestätigt am 17.10.2026:** 10.000 TOY aus der Reserve decken im Genesis-Block den Polygon-Fremdbestand, damit jeder Token 1:1 einlösbar ist. Reserve für Team usw. dann 990.000 TOY |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 
@@ -53,8 +53,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 ## Noch offen
 
 - Quellcode auf Etherscan und Polygonscan verifizieren (am 17.10.2026 auf beiden Ketten noch **nicht verifiziert**). Prägung von je 10^26 Einheiten ist bestätigt.
-- Bestätigung Deckungsposten (Nr. 14).
 - Schlüssel der Contract-Wallet `0x18da…00c2`: Wer hält ihn, wie ist er gesichert? Liegt der ursprüngliche Quellcode der Verträge vor?
-- TOYPAY: bestehende oder neue App, Plattformen (Android, iPhone).
+- TOYPAY: Konzept liegt in einem eigenen claude.ai-Projekt, das von hier nicht lesbar ist. Unterlagen einholen und in `07-toypay.md` zusammenführen. Plattformen (Android, iPhone) klären.
 - Rechtliche Prüfung vor dem Mainnet (MiCA, Steuer, Börsenlistings, 1 % Reserve, Fremdbestand).
 - Technisch: Beweisprüfung auf Ethereum (Kosten, Trusted-Setup-Frage), in Phase 2 klären.
