@@ -120,14 +120,23 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
 - **Vorerst** zahlt der Spieler die Polygon-Gebühr (POL) selbst.
 - **Später:** Der Spieler kann im Spiel auch mit **Dukaten** zahlen. Ein Dienst des Projekts (Relayer) reicht die Prägung ein und bezahlt POL und die TOY-Gebühr. Die 10 TOY Sperre und die 100 TOY Mindestbestand bleiben echte TOY auf der Adresse des Spielers.
 
-**Noch offen: der Umweg über NFT-Verkäufe**
+**Zwei Sorten Dukaten (entschieden am 17.10.2026)**
 
-Bei der Einbahnstraße kommen aus dem Spiel keine TOY heraus. Es gibt aber einen Umweg: erspielte Dukaten → Präge-Gebühr mit Dukaten bezahlen (geplant, Entscheidung 24) → NFT prägen → NFT auf einem Marktplatz für TOY verkaufen. So würden erspielte Dukaten doch zu TOY, und die Einbahnstraße wäre teilweise ein Kreislauf (Möglichkeit B), mit dessen rechtlichen Folgen. Möglichkeiten:
-- (a) **Zwei Sorten Dukaten:** Mit TOY **gekaufte** Dukaten dürfen Präge-Gebühren bezahlen, **erspielte** Dukaten nur Dinge im Spiel. Der Umweg ist damit zu.
-- (b) Präge-Gebühren nur in TOY, nie in Dukaten. Auch das schließt den Umweg, widerspricht aber Entscheidung 24.
-- (c) Den Umweg bewusst zulassen und rechtlich prüfen lassen. Das ist üblich bei Spielen, deren Gegenstände gehandelt werden, aber dort sind auch die meisten Rechtsstreitigkeiten entstanden.
+Damit erspielte Dukaten nicht über Präge-Gebühren und NFT-Verkäufe zu TOY werden, gibt es zwei Sorten:
 
-**Vorschlag:** (a).
+| | **Sultansdukaten** | **Königsdukaten** |
+|---|---|---|
+| Herkunft | nur in der **Wechselstube** gegen TOY (1 TOY = 100) | **erspielt**: Belohnungen, Missionen, Funde, Schätze alter Könige |
+| Präge-Gebühren bezahlen | **ja** (über den Dienst des Projekts) | **nein** |
+| Alles andere im Spiel | ja | ja |
+| Zurück in TOY | nein (Einbahnstraße) | nein |
+| Tausch gegen die andere Sorte | **nein** | **nein** |
+| Zwischen Spielern übertragbar | **nein**, an das Spielerkonto gebunden | ja, im Spiel (Handel, Geschenke) |
+
+- **Gold** ist die kleine Münze der erspielten Sorte: 10 Gold = 1 Königsdukat (Annahme, damit der Kurs 1 TOY = 100 Dukaten = 1.000 Gold stimmt).
+- **Prüfbar:** Die Summe aller ausgegebenen Sultansdukaten ist immer genau 100 × die in der Wechselstube eingegangenen TOY. Der Spielserver führt beide Konten getrennt.
+- **Warum Sultansdukaten nicht übertragbar sind:** Sonst könnte ein Spieler erspielte Königsdukaten oder Gegenstände an andere gegen deren Sultansdukaten verkaufen, damit Gebühren zahlen und so doch zu TOY kommen.
+- **Was bewusst bleibt:** Geprägte Spielfiguren und Gegenstände sind erspielt und dürfen als NFTs verkauft werden. Das ist der Kern des Gang-Prinzips. Ihren Preis bestimmen die Spieler auf dem Marktplatz, nicht das Spiel. Dieser Punkt gehört auf die Liste der rechtlichen Prüfung (K10).
 
 - **Spiel und Kette synchron halten:** Ist ein Gegenstand als NFT geprägt, gilt **das NFT** als Eigentumsnachweis. Wird das NFT verkauft, wandert der Gegenstand im Spiel zum neuen Besitzer. Der Spielserver liest dazu die Kette. Ein geprägter Gegenstand darf im Spiel nicht zusätzlich weiter gehandelt werden, sonst gäbe es ihn doppelt.
 - **Schlüssel des Spielservers:** Der Server signiert die Gutscheine und ist damit ein lohnendes Angriffsziel. Deshalb: eigener Schlüssel nur für Gutscheine (nie für TOY), Tageslimits im Vertrag und ein Notschalter, der das Prägen pausieren kann.
@@ -158,7 +167,7 @@ Hinweis: Das ist keine Rechtsberatung. Die Punkte zeigen, wo eine rechtliche Pr�
 | Rechtliches Risiko | gering, wie Spielwährung in üblichen Spielen | **mittel bis hoch**: bezahlter Zugang (Gebühr, Sperre) plus zufällig verteilte Gewinne mit Geldwert kann als Glücksspiel gelten. Dazu Steuern für Spieler und Jugendschutz | **hoch**: Verwahrung und Umtausch nach MiCA zulassungspflichtig |
 | Technik | einfach | Belohnungs-Vertrag mit Gutscheinen, Wochenlimit und „nie mehr aus als rein“ | Hot-Wallet mit allen Spielerwerten, großes Angriffsziel |
 
-**Entschieden am 17.10.2026: A, Einbahnstraße.** TOY lassen sich in Dukaten tauschen, Dukaten und Gold nie zurück in TOY. Belohnungen gibt es nur als Spielwerte. B käme frühestens nach einer rechtlichen Prüfung in Frage, C nicht. In allen Fällen gilt: Das Spiel erzeugt **nie** neues TOY. Offen ist noch der Umweg über NFT-Verkäufe (Abschnitt 5a).
+**Entschieden am 17.10.2026: A, Einbahnstraße.** TOY lassen sich in Dukaten tauschen, Dukaten und Gold nie zurück in TOY. Belohnungen gibt es nur als Spielwerte. B käme frühestens nach einer rechtlichen Prüfung in Frage, C nicht. In allen Fällen gilt: Das Spiel erzeugt **nie** neues TOY. Der Umweg über NFT-Verkäufe ist durch zwei Sorten Dukaten geschlossen (Entscheidung 28, Abschnitt 5a).
 
 **K4 Jugendschutz.** Für welches Alter sind die Spiele gedacht? Spielen Minderjährige, brauchen alle TOY-Funktionen eine Altersgrenze, oder Spiel und Wallet werden getrennte Apps.
 
@@ -207,4 +216,3 @@ Offen:
 4. Nur Android, oder später auch iPhone?
 5. Sollen NFTs schon vor dem Bridge-Start **ohne TOY** geprägt werden können (kostenlos oder gegen POL)?
 6. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?
-7. Umweg über NFT-Verkäufe: zwei Sorten Dukaten, nur TOY als Gebühr oder bewusst zulassen? Siehe Abschnitt 5a, „Noch offen“.
