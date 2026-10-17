@@ -83,6 +83,7 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
 | Spielfiguren je Adresse | höchstens **5 geprägt**. Gekaufte Figuren dürfen dazukommen, im Spiel sind höchstens **5 gleichzeitig aktiv** in der Gang | Präge-Zähler je Adresse im Vertrag, aktive Gang im Spiel |
 | Spielgegenstände je Adresse | höchstens **50 geprägt**, Kauf frei | Präge-Zähler je Adresse |
 | Pro Woche | höchstens **1 Spielfigur** und **10 Gegenstände** je Adresse | Zähler je Adresse und Woche (7 × 86.400 s nach Blockzeit) |
+| Auflage je Art | Rubinglut höchstens **1.001 pro Saison**, Sternenfeuer höchstens **101 pro Saison** und **1.001 insgesamt** (Nr. 33, 46). Saison = 101 Tage | Zähler je Art und Saison im Vertrag, Saison aus Blockzeit und festem Start |
 | Sperre je NFT | **10 TOY für 20 Tage** | Vertrag übernimmt beim Prägen 10 TOY per Permit und gibt sie nach 20 Tagen an den Präger zurück |
 | Mindestbestand | **100 TOY** auf der Adresse, **zusätzlich** zur Sperre | `balanceOf ≥ 100 × 10^18` beim Prägen, vor Abzug der 10 TOY Sperre |
 | Spielfiguren | teils selbst, teils zufällig konfiguriert, **aufwertbar** | Zufall entsteht beim kostenlosen Anlegen der Figur im Spiel, nicht beim Prägen |

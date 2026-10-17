@@ -30,6 +30,7 @@ Der Katalog enthält **500 prägbare Spielgegenstände** aus der Welt von 1001 N
 
 - **Gebühr = Wert.** Die Präge-Gebühr richtet sich nach dem Wert im Spiel: Alltagsdinge 1 bis 4 TOY, Handwerkszeug und einfache Waffen bis etwa 15, edle Stoffe, Reittiere und Werkstätten 15 bis 60, Legenden (Wunderlampe, Fliegender Teppich, Schönes Haus) bis 100.
 - **Seltenheit** folgt direkt aus der Gebühr, damit beides nie auseinanderläuft: **Sandkorn** 1–4, **Messing** 5–14, **Türkis** 15–39, **Rubinglut** 40–79, **Sternenfeuer** 80–100 TOY. Jede Seltenheit hat eine eigene Farbe, einen eigenen Lichteffekt und eine **Mindeststufe** (1, 5, 10, 15, 20), damit niemand Stärke kaufen kann. Details: `07_SPIELDESIGN.md`.
+- **Auflage je Saison** (101 Nächte, Nr. 46): höchstens 1.001 Stück je Rubinglut-Art und 101 je Sternenfeuer-Art. Sternenfeuer insgesamt höchstens 1.001 je Art (Nr. 33).
 - **Beinamen:** Alle 77 Gegenstände ab 40 TOY tragen einen Beinamen, z. B. Wunderlampe: *„Dreimal reiben, einmal staunen“* (`data/nft_epithets.tsv`).
 - **Sets:** 10 Sets aus mehreren Gegenständen geben der ganzen Gang einen Bonus (`data/gang.json`).
 - **Dukaten und Gold** stehen fest: Gebühr × 100 Dukaten bzw. × 1.000 Gold.

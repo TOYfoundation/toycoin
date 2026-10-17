@@ -1,6 +1,6 @@
 # Mitbestimmung: Die Community entscheidet mit
 
-Entwurf v0.1 vom 17.10.2026 · Grundlage: Entscheidung 45 · Status: **Grundsatz entschieden, Ausgestaltung zur Prüfung (Abschnitt 8)**
+Entwurf v0.1 vom 17.10.2026 · Grundlage: Entscheidung 45 · Status: **entschieden** (Nr. 45 und 47)
 
 ## 1. Ziel
 
@@ -83,9 +83,9 @@ Spiel-Entscheidungen (neue Gegenstände, Akte, Events) laufen nicht auf der Kett
 
 Diese Arten werden in die Liste in Spezifikation Abschnitt 6a aufgenommen. Gespeichert werden nur Hashes und Zähler, damit das 256-MB-Budget hält. Den vollen Text halten ToyScan und GitHub.
 
-## 8. Zur Prüfung
+## 8. Entschieden am 17.10.2026 (Nr. 47)
 
-1. **Stimmgewicht:** Wurzel aus dem Stake mit Deckel 10.000 TOY (Vorschlag), reiner Stake oder „ein Konto, eine Stimme“?
-2. **Quorum 20 % und Fristen** (7 + 7 + 14 Epochen): passend?
-3. **Reserve ohne Stimmrecht:** einverstanden?
-4. **Rechtliches:** Ein Coin mit Stimmrecht kann rechtlich anders eingeordnet werden. Das gehört auf die Liste für die rechtliche Prüfung.
+1. **Stimmgewicht:** Wurzel aus dem gebundenen Stake, gedeckelt beim Gewicht von 10.000 TOY.
+2. **Quorum und Fristen:** 20 % Quorum, 7 Epochen Diskussion, 7 Epochen Abstimmung, 14 Epochen Wartezeit.
+3. **Reserve und Start-Komitee** haben kein Stimmrecht.
+4. **Offen für die rechtliche Prüfung:** Ein Coin mit Stimmrecht kann rechtlich anders eingeordnet werden.

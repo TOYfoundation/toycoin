@@ -220,17 +220,9 @@ Details folgen in `08-toyscan.md`.
 | 43 | Bug-Bounty | 90.000 TOY sofort verfügbar, Mehrfachsignatur-Konto |
 | 44 | Cold-Wallets | offizielle, öffentliche Cold-Wallets für Reserve und Altbestand |
 | 45 | Mitbestimmung | Community stimmt über Parameter und Updates ab, Verfassung bleibt fest (`09-mitbestimmung.md`) |
+| 46 (E6) | Auflage je Saison | Rubinglut 1.001, Sternenfeuer 101 je Art und Saison, Sternenfeuer insgesamt höchstens 1.001 |
+| 47 | Mitbestimmung im Detail | Stimmgewicht √Stake (Deckel 10.000 TOY), Quorum 20 %, Fristen 7 + 7 + 14 Epochen, Reserve und Start-Komitee ohne Stimmrecht |
 
 ### Noch offen
 
-**E6 · Auflage für Rubinglut (40 bis 79 TOY), „eher seltener“:**
-
-| Option | Regel | Rubinglut je Art | Sternenfeuer je Art | Bewertung |
-|---|---|---|---|---|
-| **A · Stufen ×10** | feste Zahl je Seltenheit | 10.001 | 1.001 | einfach, aber Rubinglut kaum selten |
-| **B · Stufen ×3** | feste Zahl je Seltenheit | 3.001 | 1.001 | spürbar seltener, einfache Regel |
-| **C · Preisformel** | Auflage = 100.000 ÷ Gebühr + 1 | 2.501 (40 TOY) bis 1.266 (79 TOY) | 1.001 (Nr. 33) | je teurer, desto seltener, ohne Sprünge. Bei 100 TOY ergibt die Formel genau 1.001. Der Vertrag rechnet es selbst aus, ohne Admin |
-| **D · Saison-Auflage** | je Art und Saison (101 Nächte) z. B. 1.001 | 1.001 pro Saison | 101 pro Saison | Knappheit erneuert sich jede Saison, spannend, aber mehr Logik im Vertrag und Inflation über die Jahre |
-
-**Zum Vergleich:** Bei 10.000 aktiven Spielern ab 18 kann bei Option C jeder Vierte bis Achte eine bestimmte Rubinglut-Art besitzen, bei Option B jeder Dritte. Es gibt 58 Rubinglut-Arten.
-**Empfehlung:** **C**, weil die Regel aus dem Preis folgt, keine harten Stufen hat und mit der Auflage 1.001 für Sternenfeuer zusammenpasst.
+**E6 · Auflage Rubinglut: entschieden (Nr. 46), Option D.** Je Gegenstandsart und Saison (101 Nächte) höchstens 1.001 Rubinglut und 101 Sternenfeuer. Für Sternenfeuer gilt zusätzlich die Gesamtgrenze von 1.001 Stück je Art (Nr. 33). Damit sind auch die Fragen zur Mitbestimmung beantwortet (Nr. 47). Es sind keine offenen Entscheidungen im Gesamtsystem mehr übrig.

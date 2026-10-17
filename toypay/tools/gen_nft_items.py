@@ -102,6 +102,10 @@ EPITHET_MIN_FEE = 40  # every precious and legendary item has an epithet
 # Edition cap per item type (decision 33). None = unlimited. The NFT contract
 # derives the same cap from the fee, so no admin is needed.
 MAX_SUPPLY = {"legendary": 1001}
+# Edition cap per item type and season of 101 nights (decision 46, option D).
+# The contract counts seasons from a fixed start timestamp, no admin needed.
+SEASON_SUPPLY = {"precious": 1001, "legendary": 101}
+SEASON_DAYS = 101
 # Non-stat effect keys allowed in gang.json (handled by game logic).
 SPECIAL_EFFECTS = {
     "travel_time_pct", "shop_price_pct", "riddle_hints", "boat_speed_pct",
@@ -192,6 +196,7 @@ def load() -> tuple[list[dict], list[str]]:
                 "rarity": rarity_for(fee)[2],
                 "min_level": rarity_for(fee)[6],
                 "max_supply": MAX_SUPPLY.get(rarity_for(fee)[2]),
+                "season_supply": SEASON_SUPPLY.get(rarity_for(fee)[2]),
                 "bonuses": parse_bonuses(boni, where, errors),
             }
         )
@@ -287,6 +292,7 @@ def write(items: list[dict], gang: dict) -> None:
         "generated_from": "toypay/data/nft_items.tsv",
         "rates": {"dukaten_per_toy": DUKATEN_PER_TOY, "gold_per_toy": GOLD_PER_TOY},
         "fee_bounds_toy": [FEE_MIN, FEE_MAX],
+        "season_days": SEASON_DAYS,
         "categories": {k: {"de": v[0], "en": v[1]} for k, v in CATEGORIES.items()},
         "stats": {k: {"de": v[0], "en": v[1]} for k, v in STATS.items()},
         "rarities": [

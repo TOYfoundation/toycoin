@@ -74,6 +74,8 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 43 | Bug-Bounty-Topf | **90.000 TOY** der Reserve sind sofort verfügbar, auf einem offiziellen Mehrfachsignatur-Konto (z. B. 3 von 5) nur für Prämien. Die gesperrte Reserve beträgt damit 900.000 TOY |
 | 44 | Offizielle Cold-Wallets | Große Bestände liegen auf **offiziellen, öffentlich bekannten Cold-Wallets**: die 900.000 TOY Reserve auf ToyChain und die Altbestand-Token auf Polygon und Ethereum bis zur Tresor-Einzahlung. Die Zugehörigkeit zum Ersteller wird mit signierten Nachrichten der Ersteller-Adresse belegt. Übertragungen von der Ersteller-Adresse an diese Cold-Wallets sind erlaubt, sie zählen nicht zum Fremdbestand |
 | 45 | Mitbestimmung | Die Community stimmt über Parameter und Protokoll-Updates ab. Unveränderbar bleibt eine **Verfassung** (u. a. Obergrenze, Emissionsformel, Reserve, nur nativer Coin, Bridge-Deckung, kein Zugriff auf fremde Guthaben). Ausgestaltung: `09-mitbestimmung.md` |
+| 46 | Auflage je Saison (E6, Option D) | Je Gegenstandsart und Saison (101 Nächte) höchstens **1.001 Rubinglut** und **101 Sternenfeuer**. Für Sternenfeuer gilt weiter die Gesamtgrenze 1.001 je Art (Nr. 33). Der NFT-Vertrag zählt Saisons ab einem festen Startzeitpunkt, ohne Admin |
+| 47 | Mitbestimmung im Detail | Stimmgewicht √(gebundener Stake), Deckel beim Gewicht von 10.000 TOY. Quorum 20 %, Fristen 7 + 7 + 14 Epochen. Reserve und Start-Komitee ohne Stimmrecht |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 
@@ -83,7 +85,6 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 
 ## Noch offen
 
-- **Gesamtsystem (`05-gesamtsystem.md`, Abschnitt 10):** E6 Auflage Rubinglut. Zu Nr. 45: Stimmgewicht, Quorum und Fristen, Reserve ohne Stimmrecht (`09-mitbestimmung.md`, Abschnitt 8).
 
 - Quellcode auf Etherscan und Polygonscan verifizieren (am 17.10.2026 auf beiden Ketten noch **nicht verifiziert**). Prägung von je 10^26 Einheiten ist bestätigt.
 - Schlüssel der Contract-Wallet `0x18da…00c2`: Wer hält ihn, wie ist er gesichert? Liegt der ursprüngliche Quellcode der Verträge vor?

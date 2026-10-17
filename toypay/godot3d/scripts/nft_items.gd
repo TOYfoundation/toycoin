@@ -191,6 +191,13 @@ static func max_supply(id: String) -> int:
 	return 0 if v == null else int(v)
 
 
+## Edition cap per item type and season of 101 nights (decision 46):
+## 1001 for Ruby Glow, 101 for Starfire, 0 = unlimited.
+static func season_supply(id: String) -> int:
+	var v = get_item(id).get("season_supply")
+	return 0 if v == null else int(v)
+
+
 ## Playful epithet of precious and legendary items, "" if none.
 static func epithet(id: String, lang: String = "en") -> String:
 	var item := get_item(id)
