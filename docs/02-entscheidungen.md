@@ -55,6 +55,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 24 | Gas | Vorerst zahlt der Spieler das Polygon-Gas (POL). Später kann er mit Dukaten zahlen, und ein Dienst des Projekts bezahlt die Prägung |
 | 25 | Dukaten und TOY | **Einbahnstraße (A):** TOY → Dukaten möglich, Dukaten und Gold nie zurück in TOY. Belohnungen im Spiel nur als Spielwerte (Dukaten, Gold, Gegenstände) |
 | 26 | Präge-Gebühren | Spielfigur **1 TOY**. Gegenstände **1 bis 100 TOY** je nach Wert (z. B. Flöte 1, Dolch 2, Kamel 5, Boot bis 25, schönes Haus 100). Gebühren gehen an eine Multisig-Gebühren-Adresse des Projekts auf Polygon |
+| 27 | Gegenstands-Katalog | 500 prägbare Gegenstände (5 Beispiele + 495 neue) in 16 Kategorien mit Gebühr 1–100 TOY, Seltenheit und Boni. Quelle `toypay/data/nft_items.tsv`, Beschreibung `toypay/docs/06_NFT_GEGENSTAENDE.md`. Boni und Balance sind Startwerte |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 

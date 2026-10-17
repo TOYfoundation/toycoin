@@ -105,6 +105,8 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
   | Spielfigur | **1 TOY** |
   | Spielgegenstand | **1 bis 100 TOY** je nach Wert, z. B. Flöte 1, Dolch 2, Kamel 5, Boot bis 25, schönes Haus 100 |
 
+  Der vollständige Katalog mit **500 Gegenständen** (Gebühr, Seltenheit, Boni) steht in `toypay/docs/06_NFT_GEGENSTAENDE.md` (Entscheidung 27).
+
   Die Gebühr eines Gegenstands steht im Gutschein des Spielservers. Der Vertrag nimmt nur Gebühren zwischen 1 und 100 TOY an. Neue Gegenstände brauchen deshalb keinen Admin, und ein gestohlener Server-Schlüssel kann nichts außerhalb dieser Spanne prägen (dazu kommen Tages- und Wochenlimits).
 - **Was man auf der Adresse braucht:** 100 TOY Mindestbestand (geprüft vor dem Prägen), davon gehen Gebühr und 10 TOY Sperre ab. Für ein Haus sind also mindestens 110 TOY nötig.
 - Die Gebühren gehen an eine öffentlich bekannte **Gebühren-Adresse des Projekts** auf Polygon. Sie ist **nicht** die Ersteller-Adresse und wird mit mehreren Schlüsseln gesichert (Multisig). ToyScan zeigt ihren Bestand.

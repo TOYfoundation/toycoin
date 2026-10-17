@@ -1,0 +1,501 @@
+id|kategorie|de|en|gebuehr_toy|slot|boni
+kaftan_linen|clothing|Leinen-Kaftan|Linen Kaftan|2|body|stamina:1
+kaftan_cotton_striped|clothing|Gestreifter Baumwollkaftan|Striped Cotton Kaftan|3|body|charm:1
+kaftan_silk_damask|clothing|Damast-Seidenkaftan|Silk Damask Kaftan|25|body|charm:3
+kaftan_gold_embroidered|clothing|Goldbestickter Kaftan|Gold-Embroidered Kaftan|45|body|charm:4;trade:1
+robe_scholar|clothing|Gelehrtengewand|Scholar's Robe|8|body|lore:2
+robe_merchant|clothing|Kaufmannsrobe|Merchant's Robe|10|body|trade:2
+robe_vizier|clothing|Wesirsrobe|Vizier's Robe|60|body|charm:4;lore:2
+robe_dervish|clothing|Derwischmantel|Dervish Cloak|6|body|stamina:2
+cloak_desert|clothing|Wüstenumhang|Desert Cloak|4|body|stamina:2
+cloak_night|clothing|Nachtumhang|Night Cloak|14|body|stealth:3
+cloak_hooded_wool|clothing|Wollkapuzenmantel|Hooded Wool Cloak|5|body|defense:1;stamina:1
+burnous_white|clothing|Weißer Burnus|White Burnous|7|body|stamina:2;charm:1
+abaya_black|clothing|Schwarze Abaya|Black Abaya|6|body|stealth:2
+vest_embroidered|clothing|Bestickte Weste|Embroidered Vest|3|body|charm:1
+vest_leather|clothing|Lederweste|Leather Vest|4|body|defense:1
+vest_brocade|clothing|Brokatweste|Brocade Vest|18|body|charm:2;trade:1
+sash_red|clothing|Rote Schärpe|Red Sash|1|body|charm:1
+sash_silk_gold|clothing|Seidenschärpe mit Goldfaden|Gold-Thread Silk Sash|12|body|charm:2
+belt_leather_pouches|clothing|Ledergürtel mit Taschen|Leather Belt with Pouches|3|body|carry:2
+belt_silver_buckle|clothing|Gürtel mit Silberschnalle|Silver-Buckle Belt|9|body|charm:1;carry:1
+trousers_harem_cotton|clothing|Pluderhose aus Baumwolle|Cotton Harem Trousers|2|body|climb:1
+trousers_harem_silk|clothing|Seidene Pluderhose|Silk Harem Trousers|11|body|climb:1;charm:1
+tunic_sailor|clothing|Matrosenkittel|Sailor's Tunic|3|body|swim:1
+apron_smith|clothing|Schmiedeschürze|Blacksmith's Apron|4|body|craft:2
+apron_dyer|clothing|Färberschürze|Dyer's Apron|2|body|craft:1
+garb_thief|clothing|Diebesgewand|Thief's Garb|16|body|stealth:3;climb:1
+garb_hunter|clothing|Jägerkleidung|Hunter's Garb|9|body|perception:2;stealth:1
+tabard_city_guard|clothing|Waffenrock der Stadtwache|City Guard Tabard|10|body|defense:1;charm:1
+caftan_royal_purple|clothing|Purpurkaftan des Hofes|Royal Purple Caftan|80|body|charm:5;trade:2
+gown_dancer_veils|clothing|Tänzerinnengewand mit Schleiern|Dancer's Veiled Gown|20|body|charm:3;climb:1
+turban_simple|clothing|Einfacher Turban|Simple Turban|1|head|stamina:1
+turban_jeweled|clothing|Turban mit Juwel|Jeweled Turban|30|head|charm:3
+turban_indigo|clothing|Indigoturban der Wüstennomaden|Nomad Indigo Turban|6|head|stamina:2
+fez_tassel|clothing|Fes mit Quaste|Tasseled Fez|2|head|charm:1
+headscarf_silk|clothing|Seidenkopftuch|Silk Headscarf|5|head|charm:1;stamina:1
+keffiyeh_checkered|clothing|Kariertes Kopftuch|Checkered Keffiyeh|3|head|stamina:1
+veil_gold_chain|clothing|Gesichtsschleier mit Goldkettchen|Gold-Chain Face Veil|15|head|charm:2;stealth:1
+skullcap_embroidered|clothing|Bestickte Kappe|Embroidered Skullcap|2|head|lore:1
+hood_shadow|clothing|Schattenkapuze|Shadow Hood|12|head|stealth:2
+circlet_silver|clothing|Silberner Stirnreif|Silver Circlet|35|head|charm:3;lore:1
+slippers_pointed|clothing|Schnabelschuhe|Pointed Slippers|2|feet|charm:1
+slippers_gold_thread|clothing|Goldfaden-Pantoffeln|Gold-Thread Slippers|14|feet|charm:2
+sandals_leather|clothing|Ledersandalen|Leather Sandals|1|feet|stamina:1
+boots_riding|clothing|Reitstiefel|Riding Boots|8|feet|ride:2
+boots_desert|clothing|Wüstenstiefel|Desert Boots|6|feet|stamina:2
+shoes_climbing_soft|clothing|Weiche Kletterschuhe|Soft Climbing Shoes|10|feet|climb:2;stealth:1
+shoes_felt_silent|clothing|Lautlose Filzschuhe|Silent Felt Shoes|9|feet|stealth:2
+gloves_leather|clothing|Lederhandschuhe|Leather Gloves|2|hands|climb:1
+glove_falconer|clothing|Falknerhandschuh|Falconer's Glove|7|hands|perception:1;ride:1
+glove_archer|clothing|Bogenschützenhandschuh|Archer's Glove|5|hands|combat:1
+gloves_silk|clothing|Seidenhandschuhe|Silk Gloves|8|hands|charm:1;stealth:1
+bracers_bronze|clothing|Bronzene Armschienen|Bronze Bracers|9|hands|defense:1;combat:1
+coat_fur_mountain|clothing|Pelzmantel der Bergpässe|Mountain Fur Coat|22|body|stamina:3
+cloak_peacock|clothing|Pfauenfedermantel|Peacock Feather Cloak|50|body|charm:4
+shawl_kashmir|clothing|Kaschmirschal|Kashmir Shawl|16|body|charm:2;stamina:1
+mantle_storyteller|clothing|Mantel des Geschichtenerzählers|Storyteller's Mantle|13|body|charm:2;lore:1
+wrap_pearl_diver|clothing|Gewand der Perlentaucher|Pearl Diver's Wrap|5|body|swim:2
+cloak_sandstorm|clothing|Sandsturmumhang|Sandstorm Cloak|28|body|stamina:3;stealth:1
+robe_physician|clothing|Arztgewand|Physician's Robe|12|body|lore:2
+robe_astronomer_stars|clothing|Sternbestickte Astronomenrobe|Star-Embroidered Astronomer's Robe|24|body|lore:3
+ring_silver_plain|accessories|Schlichter Silberring|Plain Silver Ring|3|jewelry|charm:1
+ring_carnelian|accessories|Karneolring|Carnelian Ring|8|jewelry|charm:1;stamina:1
+ring_signet_merchant|accessories|Siegelring des Kaufmanns|Merchant's Signet Ring|15|jewelry|trade:2
+ring_turquoise|accessories|Türkisring|Turquoise Ring|10|jewelry|perception:1;charm:1
+ring_emerald|accessories|Smaragdring|Emerald Ring|40|jewelry|charm:3;lore:1
+ring_ruby|accessories|Rubinring|Ruby Ring|45|jewelry|charm:3;combat:1
+necklace_amber|accessories|Bernsteinkette|Amber Necklace|7|jewelry|charm:1
+necklace_pearls|accessories|Perlenkette|Pearl Necklace|30|jewelry|charm:3
+necklace_coins|accessories|Münzhalskette|Coin Necklace|6|jewelry|trade:1
+amulet_silver_protect|accessories|Silbernes Schutzamulett|Silver Protective Amulet|12|jewelry|defense:1;stamina:1
+charm_blue_eye|accessories|Amulett mit blauem Auge|Blue Eye Charm|4|jewelry|perception:1
+bangles_gold|accessories|Goldene Armreifen|Gold Bangles|20|jewelry|charm:2
+bracelet_copper|accessories|Kupferarmreif|Copper Bracelet|2|jewelry|stamina:1
+anklet_bells|accessories|Fußkettchen mit Glöckchen|Belled Anklet|3|jewelry|charm:1
+earrings_crescent|accessories|Halbmond-Ohrringe|Crescent Earrings|9|jewelry|charm:1
+brooch_lapis|accessories|Lapislazuli-Brosche|Lapis Lazuli Brooch|14|jewelry|lore:1;charm:1
+pendant_lodestone|accessories|Magnetstein-Anhänger|Lodestone Pendant|11|jewelry|perception:2
+purse_embroidered|accessories|Bestickter Geldbeutel|Embroidered Purse|2|carry|trade:1
+purse_silk_tassels|accessories|Seidenbörse mit Quasten|Tasseled Silk Purse|6|carry|trade:1;charm:1
+satchel_leather|accessories|Ledertasche|Leather Satchel|4|carry|carry:2
+satchel_scroll|accessories|Schriftrollentasche|Scroll Satchel|5|carry|lore:1;carry:1
+fan_peacock|accessories|Pfauenfächer|Peacock Fan|9|trinket|charm:2
+fan_sandalwood|accessories|Sandelholzfächer|Sandalwood Fan|5|trinket|charm:1
+worry_beads_amber|accessories|Bernstein-Handkette|Amber Worry Beads|4|trinket|stamina:1
+mirror_hand_bronze|accessories|Bronzener Handspiegel|Bronze Hand Mirror|5|trinket|charm:1;perception:1
+flask_perfume_crystal|accessories|Kristallflakon|Crystal Perfume Flask|13|trinket|charm:2
+seal_cylinder_ancient|accessories|Antikes Rollsiegel|Ancient Cylinder Seal|25|trinket|lore:2;trade:1
+key_ring_iron|accessories|Eiserner Schlüsselbund|Iron Key Ring|2|carry|stealth:1
+reading_stone_beryl|accessories|Lesestein aus Beryll|Beryl Reading Stone|16|trinket|lore:2
+seal_vizier_gold|accessories|Goldenes Wesirsiegel|Vizier's Gold Seal|70|trinket|charm:3;trade:3
+armlet_serpent_gold|accessories|Goldener Schlangenarmreif|Golden Serpent Armlet|38|jewelry|charm:2;combat:1
+tiara_pearl|accessories|Perlendiadem|Pearl Tiara|55|jewelry|charm:4
+medallion_caravan_guild|accessories|Medaillon der Karawanengilde|Caravan Guild Medallion|22|jewelry|trade:2;ride:1
+locket_portrait|accessories|Medaillon mit Miniatur|Miniature Portrait Locket|10|jewelry|charm:1
+hairpin_jade|accessories|Jadehaarnadel|Jade Hairpin|7|jewelry|charm:1
+flute|instruments|Flöte|Flute|1|instrument|charm:1
+flute_ney|instruments|Ney-Rohrflöte|Ney Reed Flute|4|instrument|charm:1;lore:1
+oud_simple|instruments|Einfache Oud|Simple Oud|8|instrument|charm:2
+oud_mother_of_pearl|instruments|Oud mit Perlmutt-Intarsien|Mother-of-Pearl Inlaid Oud|35|instrument|charm:3;trade:1
+qanun|instruments|Kanun-Zither|Qanun Zither|28|instrument|charm:3
+darbuka_clay|instruments|Darbuka aus Ton|Clay Darbuka|3|instrument|stamina:1;charm:1
+daf_frame_drum|instruments|Daf-Rahmentrommel|Daf Frame Drum|4|instrument|charm:1
+riq_tambourine|instruments|Riq-Schellentrommel|Riq Tambourine|5|instrument|charm:1
+rebab|instruments|Rebab-Stachelgeige|Rebab Fiddle|10|instrument|charm:2
+kamancheh|instruments|Kamantsche|Kamancheh|14|instrument|charm:2
+santur|instruments|Santur-Hackbrett|Santur Dulcimer|22|instrument|charm:2;lore:1
+mizmar_shawm|instruments|Mizmar-Schalmei|Mizmar Shawm|4|instrument|charm:1
+zurna|instruments|Zurna|Zurna|5|instrument|charm:1;stamina:1
+sistrum|instruments|Sistrum|Sistrum|6|instrument|lore:1
+harp_angular|instruments|Winkelharfe|Angular Harp|26|instrument|charm:3
+lyre_ancient|instruments|Antike Leier|Ancient Lyre|18|instrument|charm:2;lore:1
+panpipes|instruments|Panflöte|Panpipes|3|instrument|charm:1
+finger_cymbals|instruments|Fingerzimbeln|Finger Cymbals|2|instrument|charm:1
+kettledrums_camel|instruments|Kamel-Kesselpauken|Camel Kettledrums|30|instrument|charm:2;ride:1
+horn_ram|instruments|Widderhorn|Ram's Horn|3|instrument|perception:1
+horn_conch|instruments|Muschelhorn|Conch Horn|4|instrument|swim:1
+bells_camel|instruments|Kamelglocken|Camel Bells|2|instrument|ride:1
+water_organ_model|instruments|Modell der Wasserorgel|Water Organ Model|60|instrument|lore:3;charm:2
+automaton_flute_player|instruments|Flötenspieler-Automat|Flute-Player Automaton|90|instrument|lore:4;charm:3
+tanbur_long_neck|instruments|Langhalslaute Tanbur|Long-Necked Tanbur|12|instrument|charm:2
+gong_bronze|instruments|Bronzegong|Bronze Gong|15|instrument|charm:1;perception:1
+automaton_musical_boat|instruments|Musikantenboot-Automat|Musical Boat Automaton|85|instrument|lore:4;charm:2
+ney_gilded|instruments|Vergoldete Ney|Gilded Ney|24|instrument|charm:3
+whistle_bird|instruments|Vogelpfeife|Bird Whistle|1|instrument|perception:1
+lute_travel|instruments|Reiselaute|Travel Lute|6|instrument|charm:1;stamina:1
+hammer_smith|tools|Schmiedehammer|Blacksmith's Hammer|3|tool|craft:2
+tongs_forge|tools|Schmiedezange|Forge Tongs|2|tool|craft:1
+anvil_small|tools|Kleiner Amboss|Small Anvil|12|tool|craft:3
+chisel_stone|tools|Steinmeißel|Stone Chisel|2|tool|craft:1
+saw_bow|tools|Bogensäge|Bow Saw|3|tool|craft:1
+adze_shipwright|tools|Dechsel des Schiffbauers|Shipwright's Adze|5|tool|craft:2
+drill_bow|tools|Fiedelbohrer|Bow Drill|3|tool|craft:1
+plane_wood|tools|Hobel|Wood Plane|3|tool|craft:1
+shovel_iron|tools|Eiserne Schaufel|Iron Shovel|2|tool|stamina:1;craft:1
+pickaxe|tools|Spitzhacke|Pickaxe|4|tool|craft:1;climb:1
+rope_hemp|tools|Hanfseil|Hemp Rope|1|tool|climb:1
+grappling_hook|tools|Seil mit Wurfhaken|Grappling Hook and Rope|9|tool|climb:3
+ladder_rope|tools|Strickleiter|Rope Ladder|5|tool|climb:2
+lockpicks|tools|Dietrichset|Lockpick Set|14|tool|stealth:3
+lantern_iron|tools|Schmiedeeiserne Laterne|Wrought-Iron Lantern|3|tool|perception:1
+lantern_brass_pierced|tools|Durchbrochene Messinglaterne|Pierced Brass Lantern|8|tool|perception:2
+oil_lamp_clay|tools|Öllampe aus Ton|Clay Oil Lamp|1|tool|perception:1
+fishing_net|tools|Fischernetz|Fishing Net|3|tool|swim:1;craft:1
+fishing_rod_bamboo|tools|Bambusangel|Bamboo Fishing Rod|2|tool|perception:1
+diving_stone|tools|Taucherstein|Diver's Weight Stone|2|tool|swim:2
+loom_hand|tools|Handwebstuhl|Hand Loom|15|tool|craft:3
+spindle|tools|Handspindel|Drop Spindle|1|tool|craft:1
+sewing_kit_tailor|tools|Schneider-Nähset|Tailor's Sewing Kit|3|tool|craft:1;charm:1
+potters_wheel|tools|Töpferscheibe|Potter's Wheel|18|tool|craft:3
+glassblower_pipe|tools|Glasmacherpfeife|Glassblower's Pipe|10|tool|craft:2;lore:1
+mortar_brass|tools|Messingmörser|Brass Mortar and Pestle|4|tool|lore:1;craft:1
+scales_jeweler|tools|Juwelierswaage|Jeweler's Scales|12|tool|trade:2
+calligraphy_set|tools|Kalligraphie-Set|Calligraphy Set|9|tool|lore:2
+reed_pens|tools|Rohrfedern|Reed Pens|1|tool|lore:1
+inkwell_brass|tools|Messing-Tintenfass|Brass Inkwell|3|tool|lore:1
+sickle|tools|Sichel|Sickle|2|tool|craft:1
+plough_wooden|tools|Holzpflug|Wooden Plough|10|tool|stamina:2
+shaduf|tools|Schaduf-Wasserheber|Shaduf Water Lift|14|tool|stamina:2;craft:1
+water_screw_hand|tools|Hand-Wasserschraube|Hand-Cranked Water Screw|20|tool|craft:2;lore:1
+pulley_block|tools|Flaschenzug|Pulley Block|8|tool|carry:2;craft:1
+crowbar_iron|tools|Eisernes Brecheisen|Iron Crowbar|4|tool|stealth:1;craft:1
+bellows_leather|tools|Lederblasebalg|Leather Bellows|6|tool|craft:2
+file_rasp|tools|Feile und Raspel|File and Rasp|2|tool|craft:1
+awl_leatherworker|tools|Ahle und Lederwerkzeug|Leatherworker's Awl Kit|3|tool|craft:1
+square_carpenter|tools|Winkelmaß des Zimmermanns|Carpenter's Square|2|tool|craft:1;lore:1
+plumb_line|tools|Senkblei|Plumb Line|2|tool|lore:1
+groma|tools|Groma-Vermessungskreuz|Groma Surveying Cross|16|tool|lore:2;perception:1
+odometer_cart|tools|Wegmesser-Wagen|Odometer Cart|35|tool|lore:3;ride:1
+well_bucket_chain|tools|Brunneneimer mit Kette|Well Bucket and Chain|2|tool|stamina:1
+whetstone|tools|Wetzstein|Whetstone|1|tool|combat:1
+dagger|weapons|Dolch|Dagger|2|weapon|combat:1;stealth:1
+jambiya_curved|weapons|Krummdolch Dschambia|Curved Jambiya|6|weapon|combat:2;charm:1
+dagger_jeweled|weapons|Juwelenbesetzter Dolch|Jeweled Dagger|40|weapon|combat:2;charm:3
+throwing_knives|weapons|Wurfmesser-Set|Throwing Knife Set|7|weapon|combat:2;stealth:1
+scimitar_iron|weapons|Eiserner Krummsäbel|Iron Scimitar|8|weapon|combat:3
+scimitar_damascus|weapons|Damaszener Krummsäbel|Damascus Scimitar|45|weapon|combat:5
+scimitar_gold_hilt|weapons|Krummsäbel mit Goldgriff|Gold-Hilted Scimitar|65|weapon|combat:5;charm:2
+saber_cavalry|weapons|Reitersäbel|Cavalry Saber|20|weapon|combat:3;ride:2
+sword_straight|weapons|Gerades Schwert|Straight Sword|12|weapon|combat:3
+spear_guard|weapons|Wachspeer|Guard Spear|5|weapon|combat:2;defense:1
+lance_cavalry|weapons|Reiterlanze|Cavalry Lance|16|weapon|combat:3;ride:1
+javelins|weapons|Wurfspeerbündel|Bundle of Javelins|6|weapon|combat:2
+bow_short|weapons|Kurzbogen|Short Bow|5|weapon|combat:2;perception:1
+bow_composite|weapons|Kompositbogen|Composite Bow|25|weapon|combat:4;perception:1
+bow_horn_lacquered|weapons|Lackierter Hornbogen|Lacquered Horn Bow|50|weapon|combat:4;perception:2
+crossbow_light|weapons|Leichte Armbrust|Light Crossbow|14|weapon|combat:3
+quiver_leather|weapons|Lederköcher|Leather Quiver|3|carry|combat:1
+quiver_embroidered|weapons|Bestickter Köcher|Embroidered Quiver|9|carry|combat:1;charm:1
+sling_leather|weapons|Lederschleuder|Leather Sling|1|weapon|combat:1
+quarterstaff|weapons|Kampfstab|Quarterstaff|2|weapon|combat:1;defense:1
+staff_dervish_iron|weapons|Eisenbeschlagener Derwischstab|Iron-Shod Dervish Staff|9|weapon|combat:2;stamina:1
+mace_flanged|weapons|Streitkolben|Flanged Mace|11|weapon|combat:3
+axe_battle|weapons|Streitaxt|Battle Axe|13|weapon|combat:3
+axe_tabar|weapons|Tabar-Axt|Tabar Axe|10|weapon|combat:2;craft:1
+whip_camel|weapons|Kamelpeitsche|Camel Whip|2|weapon|ride:1
+khanjar_silver|weapons|Silberner Khandschar|Silver Khanjar|22|weapon|combat:2;charm:2
+trident_fisher|weapons|Fischerdreizack|Fisher's Trident|5|weapon|combat:1;swim:1
+harpoon_iron|weapons|Eiserne Harpune|Iron Harpoon|7|weapon|combat:2;swim:1
+bola|weapons|Bola|Bola|4|weapon|combat:1;perception:1
+chakram|weapons|Chakram-Wurfring|Chakram Throwing Ring|12|weapon|combat:2
+sword_cane|weapons|Stockdegen|Sword Cane|28|weapon|combat:2;stealth:2
+scimitar_moonlight|weapons|Mondlicht-Krummsäbel|Moonlight Scimitar|95|weapon|combat:6;charm:2
+bow_roc_feather|weapons|Bogen mit Rokh-Feder|Roc-Feather Bow|85|weapon|combat:5;perception:3
+spear_lion_hunter|weapons|Löwenjägerspeer|Lion Hunter's Spear|18|weapon|combat:3;perception:1
+dagger_scorpion|weapons|Skorpiondolch|Scorpion Dagger|15|weapon|combat:2;stealth:2
+dagger_bone|weapons|Knochendolch|Bone Dagger|3|weapon|combat:1
+cutlass_corsair|weapons|Korsarensäbel|Corsair Cutlass|14|weapon|combat:3;swim:1
+flail|weapons|Morgenstern|Flail|12|weapon|combat:3
+crook_shepherd|weapons|Hirtenstab|Shepherd's Crook|1|weapon|stamina:1
+sword_ceremonial|weapons|Zeremonienschwert|Ceremonial Sword|55|weapon|combat:3;charm:3
+staff_sling|weapons|Stabschleuder|Staff Sling|4|weapon|combat:2
+knife_hunting|weapons|Jagdmesser|Hunting Knife|2|weapon|combat:1;craft:1
+daggers_twin|weapons|Zwillingsdolche|Twin Daggers|20|weapon|combat:3;stealth:1
+spear_parade_tasseled|weapons|Prunkspeer mit Quasten|Tasseled Parade Spear|26|weapon|combat:2;charm:2
+saber_bronze_old|weapons|Alter Bronzesäbel|Old Bronze Saber|4|weapon|combat:2
+shield_round_wood|armor|Hölzerner Rundschild|Wooden Round Shield|3|offhand|defense:2
+shield_hide|armor|Lederschild|Hide Shield|4|offhand|defense:2
+shield_bronze_boss|armor|Bronzeschild mit Buckel|Bronze-Bossed Shield|12|offhand|defense:3
+shield_cane_woven|armor|Geflochtener Rohrschild|Woven Cane Shield|5|offhand|defense:2
+shield_kite_painted|armor|Bemalter Mandelschild|Painted Kite Shield|15|offhand|defense:3;charm:1
+shield_gold_inlaid|armor|Goldtauschierter Schild|Gold-Inlaid Shield|60|offhand|defense:4;charm:2
+helmet_spiked|armor|Spitzhelm|Spiked Helmet|8|head|defense:2
+mail_coif|armor|Kettenhaube|Mail Coif|6|head|defense:2
+helmet_turban|armor|Turbanhelm|Turban Helmet|25|head|defense:3;charm:1
+helmet_gilded_plume|armor|Vergoldeter Federhelm|Gilded Plumed Helmet|45|head|defense:3;charm:2
+mail_shirt|armor|Kettenhemd|Mail Shirt|18|body|defense:3
+mail_hauberk_long|armor|Langes Kettenhemd|Long Mail Hauberk|30|body|defense:4
+breastplate_bronze|armor|Bronzene Brustplatte|Bronze Breastplate|22|body|defense:3
+lamellar_leather|armor|Lederlamellenpanzer|Leather Lamellar Armor|14|body|defense:2;stealth:1
+brigandine_silk|armor|Seidenbezogene Brigantine|Silk-Covered Brigandine|40|body|defense:4;charm:1
+gambeson_quilted|armor|Gesteppter Wams|Quilted Gambeson|7|body|defense:2
+armor_mirror|armor|Spiegelpanzer|Mirror Armor|70|body|defense:5;charm:2
+greaves_iron|armor|Eiserne Beinschienen|Iron Greaves|10|feet|defense:2
+vambraces_engraved|armor|Gravierte Armschienen|Engraved Vambraces|16|hands|defense:2;combat:1
+barding_mail|armor|Ketten-Pferderüstung|Mail Horse Barding|35|mount|defense:3;ride:1
+shield_city_guard|armor|Schild der Stadtwache|City Guard Shield|9|offhand|defense:2;charm:1
+armor_desert_scale|armor|Wüsten-Schuppenpanzer|Desert Scale Armor|28|body|defense:3;stamina:1
+buckler_steel|armor|Stahlbuckler|Steel Buckler|8|offhand|defense:2;combat:1
+harness_corsair_leather|armor|Lederharnisch der Korsaren|Corsair Leather Harness|11|body|defense:2;swim:1
+helmet_lion_mask|armor|Helm mit Löwenmaske|Lion-Mask Helmet|55|head|defense:3;charm:3
+camel|animals|Kamel|Camel|5|mount|ride:2;carry:2
+camel_racing|animals|Rennkamel|Racing Camel|20|mount|ride:4
+camel_white_royal|animals|Weißes Königskamel|Royal White Camel|60|mount|ride:4;charm:3
+camel_bactrian|animals|Trampeltier|Bactrian Camel|12|mount|ride:2;carry:4
+donkey|animals|Esel|Donkey|2|mount|carry:2
+mule|animals|Maultier|Mule|4|mount|carry:3;stamina:1
+pony|animals|Pony|Pony|5|mount|ride:2
+horse_bay|animals|Brauner Wallach|Bay Gelding|10|mount|ride:3
+horse_arabian_grey|animals|Grauer Araberhengst|Grey Arabian Stallion|40|mount|ride:5
+horse_arabian_black|animals|Schwarze Araberstute|Black Arabian Mare|55|mount|ride:5;charm:2
+horse_golden|animals|Goldfuchs|Golden Steed|80|mount|ride:6;charm:3
+elephant_young|animals|Junger Elefant|Young Elephant|90|mount|carry:6;defense:2
+falcon_saker|animals|Sakerfalke|Saker Falcon|25|companion|perception:3
+falcon_peregrine_hooded|animals|Wanderfalke mit Haube|Hooded Peregrine Falcon|35|companion|perception:4
+hound_saluki|animals|Saluki-Windhund|Saluki Hound|15|companion|perception:2;stamina:1
+cat_sand|animals|Wüstenkatze|Sand Cat|6|companion|stealth:1;perception:1
+monkey_trained|animals|Dressierter Affe|Trained Monkey|9|companion|climb:2;stealth:1
+parrot_talking|animals|Sprechender Papagei|Talking Parrot|12|companion|charm:2
+pigeon_carrier|animals|Brieftaube|Carrier Pigeon|4|companion|perception:1
+peacock_tame|animals|Zahmer Pfau|Tame Peacock|18|companion|charm:3
+goats_small_herd|animals|Kleine Ziegenherde|Small Goat Herd|8|livestock|trade:1;stamina:1
+sheep_small_flock|animals|Kleine Schafherde|Small Sheep Flock|10|livestock|trade:2
+oxen_plough_pair|animals|Ochsengespann|Pair of Plough Oxen|14|livestock|carry:3
+cheetah_tamed|animals|Gezähmter Gepard|Tamed Cheetah|65|companion|perception:3;combat:2
+camel_caravan_five|animals|Kamelkarawane mit fünf Tieren|Camel Caravan of Five|75|mount|carry:6;trade:3
+boat|vessels|Boot|Boat|25|vessel|swim:2;trade:2
+raft_reed|vessels|Schilffloß|Reed Raft|2|vessel|swim:1
+canoe_dugout|vessels|Einbaum|Dugout Canoe|5|vessel|swim:2
+boat_fishing|vessels|Fischerboot|Fishing Boat|10|vessel|swim:2;craft:1
+barge_river|vessels|Flusskahn|River Barge|18|vessel|carry:4
+dhow_small|vessels|Kleine Dau|Small Dhow|22|vessel|swim:2;trade:1
+boat_pleasure_canopy|vessels|Lustboot mit Baldachin|Canopied Pleasure Boat|24|vessel|charm:3
+dhow_merchant|vessels|Handelsdau|Merchant Dhow|70|vessel|trade:4;carry:4
+baghlah_two_mast|vessels|Zweimaster-Baghla|Two-Masted Baghlah|90|vessel|trade:5;carry:5
+handcart|vessels|Handkarren|Handcart|2|vehicle|carry:2
+cart_ox|vessels|Ochsenkarren|Ox Cart|8|vehicle|carry:4
+wagon_covered|vessels|Planwagen|Covered Wagon|15|vehicle|carry:5
+chariot_light|vessels|Leichter Streitwagen|Light Chariot|30|vehicle|ride:3;combat:1
+palanquin|vessels|Sänfte|Palanquin|35|vehicle|charm:4
+howdah_camel|vessels|Kamelsänfte|Camel Howdah|20|vehicle|charm:2;ride:1
+house_beautiful|buildings|Schönes Haus|Beautiful House|100|building|charm:4;trade:2
+tent_nomad|buildings|Nomadenzelt|Nomad Tent|5|building|stamina:2
+pavilion_silk|buildings|Seidenpavillon|Silk Pavilion|25|building|charm:2
+hut_reed|buildings|Schilfhütte|Reed Hut|8|building|stamina:1
+house_mud_brick|buildings|Lehmziegelhaus|Mud-Brick House|30|building|stamina:2
+house_courtyard|buildings|Hofhaus|Courtyard House|65|building|charm:3;stamina:2
+house_harbor|buildings|Haus am Hafen|Harbor House|55|building|swim:1;trade:3
+house_wind_tower|buildings|Windturmhaus|Wind-Tower House|80|building|stamina:3;charm:2
+stall_market|buildings|Marktstand|Market Stall|12|building|trade:2
+shop_spice|buildings|Gewürzladen|Spice Shop|40|building|trade:3
+workshop_smithy|buildings|Schmiedewerkstatt|Smithy Workshop|45|building|craft:4
+workshop_pottery|buildings|Töpferei|Pottery Workshop|35|building|craft:3
+workshop_weaving|buildings|Weberei|Weaving Workshop|38|building|craft:3;trade:1
+teahouse|buildings|Teehaus|Teahouse|70|building|charm:3;trade:3
+stable|buildings|Stall|Stable|28|building|ride:3
+dovecote_tower|buildings|Taubenturm|Dovecote Tower|20|building|perception:2
+well_private|buildings|Eigener Brunnen|Private Well|15|building|stamina:2
+orchard_garden|buildings|Obstgarten|Orchard Garden|32|building|stamina:2;charm:1
+watermill|buildings|Wassermühle|Watermill|60|building|craft:4
+caravanserai_room|buildings|Zimmer in der Karawanserei|Caravanserai Room|10|building|stamina:1;trade:1
+kilim_small|furniture|Kleiner Kelim|Small Kilim Rug|3|furnishing|charm:1
+kilim_large|furniture|Großer Kelim|Large Kilim Rug|10|furnishing|charm:2
+carpet_persian_silk|furniture|Persischer Seidenteppich|Persian Silk Carpet|45|furnishing|charm:4
+carpet_wool_medallion|furniture|Medaillonteppich aus Wolle|Wool Medallion Carpet|20|furnishing|charm:2;stamina:1
+cushion_embroidered|furniture|Besticktes Sitzkissen|Embroidered Floor Cushion|2|furnishing|stamina:1
+cushions_silk_set|furniture|Seidenkissen-Set|Set of Silk Cushions|12|furnishing|charm:2;stamina:1
+divan_low|furniture|Niedriger Diwan|Low Divan|15|furnishing|stamina:2
+divan_brocade|furniture|Brokatdiwan|Brocade Divan|35|furnishing|charm:3;stamina:2
+table_brass_tray|furniture|Niedriger Messingtisch|Low Brass Tray Table|8|furnishing|trade:1;charm:1
+table_inlaid_octagonal|furniture|Achteckiger Intarsientisch|Inlaid Octagonal Table|22|furnishing|charm:2
+chest_cedar|furniture|Zedernholztruhe|Cedarwood Chest|9|furnishing|carry:2
+chest_iron_bound|furniture|Eisenbeschlagene Truhe|Iron-Bound Chest|14|furnishing|carry:2;defense:1
+chest_secret_lock|furniture|Schatztruhe mit Geheimschloss|Treasure Chest with Secret Lock|40|furnishing|carry:3;stealth:1
+screen_mashrabiya|furniture|Maschrabiya-Paravent|Mashrabiya Screen|18|furnishing|stealth:1;charm:1
+lamp_mosaic_hanging|furniture|Mosaik-Hängelampe|Mosaic Hanging Lamp|11|furnishing|charm:2
+lantern_brass_floor|furniture|Messing-Stehlaterne|Brass Floor Lantern|9|furnishing|perception:1;charm:1
+chandelier_glass|furniture|Glaskronleuchter|Glass Chandelier|50|furnishing|charm:4
+mirror_wall_inlaid|furniture|Wandspiegel mit Intarsien|Inlaid Wall Mirror|16|furnishing|charm:2
+bookshelf_carved|furniture|Geschnitztes Bücherregal|Carved Bookshelf|14|furnishing|lore:2
+bed_canopy|furniture|Himmelbett|Canopy Bed|40|furnishing|stamina:3
+cradle_carved|furniture|Geschnitzte Wiege|Carved Cradle|6|furnishing|charm:1
+wardrobe_painted|furniture|Bemalter Kleiderschrank|Painted Wardrobe|12|furnishing|carry:2
+fountain_indoor|furniture|Zimmerbrunnen|Indoor Fountain|55|furnishing|charm:3;stamina:1
+tapestry_hunting|furniture|Jagd-Wandteppich|Hunting Tapestry|25|furnishing|charm:2;perception:1
+tapestry_garden|furniture|Garten-Wandteppich|Garden Tapestry|25|furnishing|charm:2;stamina:1
+brazier_bronze|furniture|Bronzene Kohlenpfanne|Bronze Brazier|7|furnishing|stamina:1
+chair_throne_carved|furniture|Geschnitzter Prunksessel|Carved Throne Chair|75|furnishing|charm:5
+birdcage_gilded|furniture|Vergoldeter Vogelkäfig|Gilded Birdcage|13|furnishing|charm:2
+hammock_rope|furniture|Hängematte|Rope Hammock|3|furnishing|stamina:1
+desk_lap_writing|furniture|Schreibpult|Lap Writing Desk|7|furnishing|lore:1
+shutters_painted|furniture|Bemalte Klappläden|Painted Shutters|5|furnishing|stealth:1
+door_cedar_carved|furniture|Geschnitzte Zederntür|Carved Cedar Door|20|furnishing|defense:1;charm:1
+tiles_zellige_set|furniture|Zellige-Fliesen im Satz|Set of Zellige Tiles|30|furnishing|charm:3
+planters_rooftop|furniture|Dachgarten-Pflanzkübel|Rooftop Planters|4|furnishing|stamina:1
+clothesline_colorful|furniture|Bunte Wäscheleine|Colorful Clothesline|1|furnishing|charm:1
+jug_clay|household|Tonkrug|Clay Jug|1|household|stamina:1
+amphora|household|Amphore|Amphora|3|household|carry:1;trade:1
+ewer_brass|household|Messingkanne|Brass Ewer|5|household|charm:1
+teapot_silver|household|Silberne Teekanne|Silver Teapot|18|household|charm:2;trade:1
+tea_glasses_set|household|Teegläser-Set|Set of Tea Glasses|4|household|charm:1
+dallah_coffee_pot|household|Dallah-Kaffeekanne|Dallah Coffee Pot|9|household|charm:1;trade:1
+porcelain_bowls_overseas|household|Porzellanschalen aus Übersee|Overseas Porcelain Bowls|20|household|trade:2;charm:1
+bowl_copper|household|Kupferschale|Copper Bowl|2|household|trade:1
+tray_engraved|household|Gravierte Platte|Engraved Tray|6|household|charm:1
+cauldron_iron|household|Eiserner Kessel|Iron Cauldron|4|household|stamina:1
+tagine_pot|household|Tajine-Topf|Tagine Pot|2|household|stamina:1
+oven_tannur|household|Tannur-Lehmofen|Clay Tannur Oven|12|household|stamina:2
+quern_hand|household|Handmühle|Hand Quern|3|household|craft:1
+waterskin_goat|household|Ziegenleder-Wasserschlauch|Goatskin Waterskin|2|carry|stamina:2
+jar_cooling_clay|household|Kühlgefäß aus porösem Ton|Porous Clay Cooling Jar|3|household|stamina:1
+incense_burner_brass|household|Messing-Räuchergefäß|Brass Incense Burner|7|household|charm:1;lore:1
+rosewater_sprinkler|household|Rosenwasser-Sprenkler|Rosewater Sprinkler|8|household|charm:2
+basket_woven|household|Geflochtener Korb|Woven Basket|1|carry|carry:1
+basket_market_large|household|Großer Marktkorb|Large Market Basket|2|carry|carry:2
+broom_palm|household|Palmwedelbesen|Palm-Frond Broom|1|household|stamina:1
+storage_jars_set|household|Vorratskrüge im Satz|Set of Storage Jars|5|household|carry:2
+spice_box_carved|household|Geschnitzte Gewürzschatulle|Carved Spice Box|10|household|trade:1;charm:1
+sieve_brass|household|Messingsieb|Brass Sieve|2|household|craft:1
+candlesticks_bronze|household|Bronzene Kerzenleuchter|Bronze Candlesticks|6|household|perception:1
+bath_set_hammam|household|Hammam-Badeset|Hammam Bath Set|6|household|stamina:2
+pitcher_blue_glass|household|Blauer Glaskrug|Blue Glass Pitcher|11|household|charm:2
+plates_lustreware|household|Lüsterkeramik-Teller|Lustreware Plates|24|household|charm:2;trade:2
+samovar_brass|household|Messing-Samowar|Brass Samovar|16|household|stamina:1;charm:1
+date_press|household|Dattelpresse|Date Press|5|household|craft:1
+chess_set_ebony|household|Ebenholz-Schachspiel|Ebony Chess Set|20|household|lore:2
+scales_merchant_brass|trade|Messing-Händlerwaage|Brass Merchant's Scales|8|trade|trade:2
+weights_bronze_set|trade|Bronzegewichte im Satz|Set of Bronze Weights|4|trade|trade:1
+abacus|trade|Abakus|Abacus|5|trade|trade:1;lore:1
+ledger_leather|trade|Ledergebundenes Kassenbuch|Leather-Bound Ledger|3|trade|trade:1;lore:1
+strongbox_iron|trade|Eiserne Geldkassette|Iron Strongbox|12|trade|trade:1;defense:1
+touchstone_coins|trade|Probierstein für Münzen|Coin Touchstone|6|trade|trade:2
+cubit_rod|trade|Elle als Maßstab|Cubit Measuring Rod|2|trade|trade:1
+spice_cone_display|trade|Gewürzkegel-Auslage|Spice Cone Display|9|trade|trade:2;charm:1
+silk_bolts_bundle|trade|Seidenballen|Bundle of Silk Bolts|30|trade|trade:3
+casket_saffron|trade|Safrankästchen|Saffron Casket|25|trade|trade:3
+chest_frankincense|trade|Weihrauchtruhe|Frankincense Chest|28|trade|trade:3;lore:1
+crate_indigo|trade|Kiste Indigo|Crate of Indigo|14|trade|trade:2
+carpets_trade_stack|trade|Teppichstapel für den Handel|Stack of Trade Carpets|35|trade|trade:4
+caravan_safe_conduct|trade|Karawanen-Geleitbrief|Caravan Safe-Conduct|18|trade|trade:2;ride:1
+awning_market|trade|Marktsonnensegel|Market Awning|4|trade|trade:1;stamina:1
+seal_box|trade|Siegelkästchen|Seal Box|5|trade|trade:1
+sakk_letter_of_credit|trade|Sakk-Wechselbrief|Sakk Letter of Credit|20|trade|trade:3
+bell_merchant|trade|Händlerglocke|Merchant's Bell|2|trade|charm:1;trade:1
+sieves_pearl_sorting|trade|Perlensortiersiebe|Pearl Sorting Sieves|16|trade|trade:2;perception:1
+amber_raw_lump|trade|Rohbernstein-Handelsstück|Raw Amber Trade Lump|12|trade|trade:2
+astrolabe_brass|scholarship|Messing-Astrolab|Brass Astrolabe|30|scholarship|lore:3;perception:1
+armillary_sphere_small|scholarship|Kleine Armillarsphäre|Small Armillary Sphere|40|scholarship|lore:4
+sundial_portable|scholarship|Taschensonnenuhr|Portable Sundial|8|scholarship|lore:1;perception:1
+water_clock_model|scholarship|Modell einer Wasseruhr|Water Clock Model|25|scholarship|lore:3
+dioptra|scholarship|Dioptra|Dioptra|22|scholarship|lore:2;perception:2
+antikythera_replica|scholarship|Nachbau des Antikythera-Mechanismus|Antikythera Mechanism Replica|95|scholarship|lore:6
+aeolipile_model|scholarship|Äolipile-Modell|Aeolipile Model|35|scholarship|lore:3;craft:1
+heron_fountain_model|scholarship|Heronsbrunnen-Modell|Heron's Fountain Model|30|scholarship|lore:3
+coin_dispenser_model|scholarship|Modell des Münzautomaten|Coin-Operated Dispenser Model|28|scholarship|lore:2;trade:1
+south_pointing_chariot_model|scholarship|Modell des Südweisenden Wagens|South-Pointing Chariot Model|45|scholarship|lore:3;perception:2
+noria_model|scholarship|Noria-Modell|Noria Model|20|scholarship|lore:2;craft:1
+windmill_persian_model|scholarship|Modell der Persischen Windmühle|Persian Windmill Model|24|scholarship|lore:2;craft:1
+trebuchet_model|scholarship|Trebuchet-Modell|Trebuchet Model|26|scholarship|lore:2;combat:1
+baghdad_battery_replica|scholarship|Nachbau der Bagdad-Batterie|Baghdad Battery Replica|15|scholarship|lore:2
+burning_lens|scholarship|Brennglas|Burning Lens|12|scholarship|lore:1;craft:1
+book_optics_copy|scholarship|Buch der Optik als Abschrift|Book of Optics (Copy)|35|scholarship|lore:4
+book_ingenious_devices|scholarship|Buch der genialen Vorrichtungen|Book of Ingenious Devices|40|scholarship|lore:4;craft:1
+star_tables_zij|scholarship|Sterntafeln (Zidsch)|Star Tables (Zij)|30|scholarship|lore:3;perception:1
+canon_medicine_copy|scholarship|Kanon der Medizin als Abschrift|Canon of Medicine (Copy)|45|scholarship|lore:5
+book_thousand_and_one_nights|scholarship|Buch der Tausendundeinen Nacht|Book of the Thousand and One Nights|50|scholarship|lore:3;charm:3
+map_silk_road|scholarship|Karte der Seidenstraße|Silk Road Map|20|scholarship|lore:2;ride:1
+sea_charts_indian_ocean|scholarship|Seekarten des Indischen Ozeans|Indian Ocean Sea Charts|26|scholarship|lore:2;swim:1
+globe_celestial|scholarship|Himmelsglobus|Celestial Globe|55|scholarship|lore:4;perception:1
+quadrant_wooden|scholarship|Hölzerner Quadrant|Wooden Quadrant|10|scholarship|lore:1;perception:1
+kamal_navigation|scholarship|Kamal-Navigationsbrett|Kamal Navigation Board|5|scholarship|perception:2
+surgical_set|scholarship|Chirurgisches Besteck|Surgical Instrument Set|25|scholarship|lore:3
+herbarium|scholarship|Kräuterbuch mit Pressblumen|Herbarium|12|scholarship|lore:2
+slate_tablet|scholarship|Schreibtafel aus Schiefer|Slate Writing Tablet|1|scholarship|lore:1
+prosthesis_wooden_leg|scholarship|Hölzerne Beinprothese|Wooden Leg Prosthesis|10|scholarship|stamina:1;lore:1
+gears_bronze_collection|scholarship|Bronzene Zahnradsammlung|Bronze Gear Collection|18|scholarship|craft:2;lore:1
+planetary_gear_model|scholarship|Planetengetriebe-Modell|Planetary Gear Model|32|scholarship|lore:3;craft:1
+hourglass|scholarship|Sanduhr|Hourglass|4|scholarship|lore:1
+crown_test_archimedes|scholarship|Archimedes' Kronenprobe im Satz|Archimedes' Crown Test Kit|22|scholarship|lore:2;trade:1
+paper_samarkand_ream|scholarship|Papier aus Samarkand (Ries)|Ream of Samarkand Paper|6|scholarship|lore:1;trade:1
+manuscript_algebra_copy|scholarship|Algebra-Handschrift als Abschrift|Algebra Manuscript (Copy)|30|scholarship|lore:3;trade:1
+saddle_camel|travel|Kamelsattel|Camel Saddle|4|mount|ride:1;stamina:1
+saddle_camel_carpet|travel|Kamelsattel mit Teppichauflage|Carpeted Camel Saddle|12|mount|ride:2;charm:1
+saddle_horse_leather|travel|Lederner Pferdesattel|Leather Horse Saddle|8|mount|ride:2
+saddle_silver_studded|travel|Silberbeschlagener Sattel|Silver-Studded Saddle|35|mount|ride:3;charm:2
+bridle_tasseled|travel|Zaumzeug mit Quasten|Tasseled Bridle|5|mount|ride:1;charm:1
+saddlebags_leather|travel|Ledersatteltaschen|Leather Saddlebags|6|mount|carry:3
+compass_floating|travel|Schwimmkompass|Floating Compass|14|travel|perception:2
+map_case_brass|travel|Messing-Kartenrohr|Brass Map Case|5|travel|lore:1;carry:1
+bedroll_wool|travel|Wollene Schlafrolle|Wool Bedroll|2|travel|stamina:2
+blanket_camel_hair|travel|Kamelhaardecke|Camel-Hair Blanket|4|travel|stamina:2
+walking_staff_carved|travel|Geschnitzter Wanderstab|Carved Walking Staff|3|travel|stamina:1;climb:1
+parasol|travel|Sonnenschirm|Parasol|5|travel|stamina:1;charm:1
+fire_kit_flint|travel|Feuerstein-Set|Flint Fire Kit|1|travel|stamina:1
+cookware_travel|travel|Reisekochgeschirr|Travel Cookware|3|travel|stamina:1
+star_chart_folding|travel|Faltbare Sternkarte|Folding Star Chart|9|travel|perception:2;lore:1
+signal_mirror|travel|Signalspiegel|Signal Mirror|3|travel|perception:1
+lantern_storm|travel|Sturmlaterne|Storm Lantern|6|travel|perception:1;stamina:1
+oars_pair|travel|Ruderpaar|Pair of Oars|3|travel|swim:1
+sail_lateen|travel|Lateinersegel|Lateen Sail|15|travel|swim:2
+anchor_stone|travel|Steinanker|Stone Anchor|4|travel|swim:1
+trunk_leather_travel|travel|Lederreisetruhe|Leather Travel Trunk|8|travel|carry:3
+book_roads_kingdoms|travel|Buch der Wege und Königreiche|Book of Roads and Kingdoms|18|travel|lore:2;ride:1
+rope_bridge_kit|travel|Seilbrücken-Set|Rope Bridge Kit|12|travel|climb:2;craft:1
+float_goatskin|travel|Schwimmbalg aus Ziegenleder|Inflated Goatskin Float|3|travel|swim:2
+dowsing_rod|travel|Wünschelrute|Dowsing Rod|5|travel|perception:2
+lamp_brass_old|magic|Alte Messinglampe|Old Brass Lamp|20|magic|lore:2;charm:1
+lamp_wondrous|magic|Wunderlampe|Wondrous Lamp|100|magic|charm:4;lore:4
+carpet_flying|magic|Fliegender Teppich|Flying Carpet|100|mount|ride:5;climb:3
+ring_djinn|magic|Ring des Dschinns|Djinn's Ring|90|magic|combat:2;charm:3;stealth:2
+mirror_truth|magic|Spiegel der Wahrheit|Mirror of Truth|60|magic|perception:4
+cap_invisibility|magic|Tarnkappe|Cap of Invisibility|85|head|stealth:6
+horse_ebony_enchanted|magic|Verzaubertes Ebenholzpferd|Enchanted Ebony Horse|95|mount|ride:6
+alembic_glass|magic|Gläserner Destillierkolben|Glass Alembic|12|magic|lore:2;craft:1
+athanor_small|magic|Kleiner Alchemistenofen|Small Alchemist's Furnace|25|magic|craft:3;lore:1
+crucibles_set|magic|Schmelztiegel im Satz|Set of Crucibles|5|magic|craft:1;lore:1
+philosophers_stone_fake|magic|Stein der Weisen (unecht)|Philosopher's Stone (Counterfeit)|7|magic|charm:1
+potion_rack|magic|Zaubertrank-Flaschengestell|Potion Flask Rack|8|magic|lore:1;carry:1
+crystal_ball_quartz|magic|Bergkristallkugel|Quartz Crystal Ball|35|magic|perception:3
+talisman_star|magic|Sternentalisman|Star Talisman|18|magic|lore:2;defense:1
+scroll_sealed_spell|magic|Versiegelte Zauberrolle|Sealed Spell Scroll|15|magic|lore:2
+bottle_djinn_empty|magic|Leere Dschinnflasche|Empty Djinn Bottle|10|magic|lore:1;charm:1
+feather_roc|magic|Rokh-Feder|Roc Feather|40|magic|perception:2;ride:1
+eggshell_roc|magic|Schalenstück eines Rokh-Eis|Roc Eggshell Fragment|30|magic|lore:2;defense:1
+key_sesame_cave|magic|Schlüssel zur Sesam-Höhle|Key to the Sesame Cave|75|magic|stealth:3;perception:2
+wand_tamarisk|magic|Tamariskenstab|Tamarisk Wand|14|magic|lore:2
+amulet_sandstorm|magic|Sandsturm-Amulett|Sandstorm Amulet|28|magic|stamina:2;stealth:2
+compass_dreams|magic|Traumkompass|Dream Compass|45|magic|perception:3;lore:1
+mask_thousand_faces|magic|Maske der tausend Gesichter|Mask of a Thousand Faces|55|head|stealth:4;charm:1
+sandals_swift_wind|magic|Sandalen des schnellen Windes|Sandals of the Swift Wind|50|feet|stamina:3;climb:1
+jar_everlasting_oil|magic|Krug mit ewigem Öl|Jar of Everlasting Oil|22|magic|perception:2
+rope_rising|magic|Aufsteigendes Seil|Rising Rope|65|magic|climb:5
+bird_brass_singing|magic|Singender Messingvogel|Singing Brass Bird|38|magic|charm:3;lore:1
+pearl_moon_glowing|magic|Leuchtende Mondperle|Glowing Moon Pearl|70|magic|perception:3;swim:2
+chalice_spring_water|magic|Kristallkelch des Quellwassers|Crystal Chalice of Spring Water|45|magic|stamina:4
+hourglass_reversing|magic|Umgekehrte Sanduhr|Reversing Hourglass|60|magic|lore:3;stealth:1
+vase_celadon|treasures|Seladon-Vase|Celadon Vase|28|treasure|charm:2;trade:1
+vase_lustre_tall|treasures|Hohe Lüstervase|Tall Lustre Vase|35|treasure|charm:3
+goblet_gold|treasures|Goldener Pokal|Golden Goblet|40|treasure|charm:3
+ewer_rock_crystal|treasures|Bergkristallkanne|Rock Crystal Ewer|65|treasure|charm:4;lore:1
+statuette_lion_bronze|treasures|Bronzene Löwenstatuette|Bronze Lion Statuette|18|treasure|charm:1;defense:1
+figurine_jade_horse|treasures|Jadepferdchen|Jade Horse Figurine|30|treasure|charm:2;ride:1
+casket_bone_carved|treasures|Geschnitztes Beinkästchen|Carved Bone Casket|22|treasure|charm:2
+casket_enamel|treasures|Emaille-Schatulle|Enamel Casket|26|treasure|charm:2
+miniature_painting|treasures|Miniaturmalerei|Miniature Painting|20|treasure|charm:2;lore:1
+calligraphy_panel|treasures|Kalligraphie-Tafel|Calligraphy Panel|16|treasure|lore:2;charm:1
+manuscript_illuminated|treasures|Illuminierte Handschrift|Illuminated Manuscript|55|treasure|lore:4;charm:2
+mosaic_panel|treasures|Mosaiktafel|Mosaic Panel|24|treasure|charm:2
+coins_ancient_collection|treasures|Antike Münzsammlung|Ancient Coin Collection|30|treasure|lore:2;trade:2
+sapphire_uncut|treasures|Ungeschliffener Saphir|Uncut Sapphire|35|treasure|trade:3
+diamond_great|treasures|Großer Diamant|Great Diamond|90|treasure|trade:5;charm:3
+ruby_pigeon_blood|treasures|Taubenblut-Rubin|Pigeon's Blood Ruby|75|treasure|trade:4;charm:2
+pearl_black_large|treasures|Große Schwarze Perle|Large Black Pearl|50|treasure|trade:3;charm:2
+crown_forgotten_king|treasures|Krone eines vergessenen Königs|Crown of a Forgotten King|95|treasure|charm:5;lore:3
+rhyton_silver|treasures|Silbernes Trinkhorn|Silver Rhyton|32|treasure|charm:2;lore:1
+plate_silver_hunting_scene|treasures|Silberteller mit Jagdszene|Silver Hunting-Scene Plate|38|treasure|charm:2;perception:1
+bowl_enamelled_glass|treasures|Emailbemalte Glasschale|Enamelled Glass Bowl|28|treasure|charm:2
+tile_lustre_star|treasures|Lüster-Sternfliese|Lustre Star Tile|8|treasure|charm:1
+treasure_map_fragment|treasures|Fragment einer Schatzkarte|Treasure Map Fragment|12|treasure|perception:2
+carpet_ancient_royal|treasures|Uralter Königsteppich|Ancient Royal Carpet|85|treasure|charm:5
+pomegranate_golden|treasures|Goldener Granatapfel|Golden Pomegranate|60|treasure|charm:3;trade:2
