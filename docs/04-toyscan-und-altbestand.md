@@ -6,7 +6,7 @@ ToyScan zeigt für jede Kette den Zustand der Supply-Regeln. **Grün**, wenn all
 
 1. Umlauf ≤ gemintetes TOY + Reserve ≤ 100.000.000.
 2. Die Tresor-Verträge halten mindestens den nicht freigegebenen Rest.
-3. Reserve: 990.000 TOY auf der Ersteller-Adresse, in den ersten 3 Jahren nichts freigegeben, danach nicht mehr als der Freigabeplan erlaubt (Entscheidung 41). Dazu 10.000 TOY Deckungsposten im Bridge-Konto.
+3. Reserve: 900.000 TOY auf der offiziellen Cold-Wallet, in den ersten 3 Jahren nichts freigegeben, danach höchstens der Freigabeplan (je Epoche über 3 Jahre). 90.000 TOY Bug-Bounty-Topf auf dem Mehrfachsignatur-Konto, Auszahlungen öffentlich. 10.000 TOY Deckungsposten im Bridge-Konto (Entscheidungen 41 bis 44).
 4. Emission nicht vor dem Zeitplan.
 5. Altbestand-Verträge ohne Mint-Funktion und ohne Upgrade-Mechanismus, Gesamtmenge je Kette ≤ 100.000.000, Tresor ohne Admin-Schlüssel.
 6. Notschalter der Bridge nicht ausgelöst, Beweis-Verifizierer aktuell.
@@ -68,7 +68,7 @@ Die Adresse und die Chain-ID stehen jeweils als feste Werte im Code. Das bestät
 - Code-Hash an der Adresse unverändert. Alarm bei jeder Änderung.
 - `totalSupply()` ≤ 100.000.000 × 10^18 je Kette.
 - Verteilung: Contract-Wallet, Tresor, Fremdbestand, Burn-Adresse.
-- **Ersteller-Adresse `0x18da…00c2` bis zur Tresor-Einzahlung:** Jeder Abgang wird angezeigt (Entscheidung 17). Zugänge, also Rückübertragungen, sind erwünscht.
+- **Ersteller-Adresse `0x18da…00c2` und offizielle Cold-Wallets bis zur Tresor-Einzahlung:** Abgänge sind nur an die öffentlich gelisteten offiziellen Cold-Wallets oder an den Tresor erlaubt (Entscheidungen 17, 44). Jeder andere Abgang wird rot angezeigt. Bestände auf offiziellen Cold-Wallets zählen nicht zum Fremdbestand.
 
 ## 3. Tresor-Modell (Vorschlag, zur Bestätigung)
 

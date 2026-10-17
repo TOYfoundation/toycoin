@@ -1,6 +1,6 @@
 # Gesamtsystem: ToyChain, TOYPAY, Spiele, ToyScan und Bridge
 
-Entwurf v0.2 vom 17.10.2026 · Fasst die Entscheidungen 1 bis 41 zusammen (`02-entscheidungen.md`) · Status: **zur Prüfung, mit offenen Entscheidungen in Abschnitt 10**
+Entwurf v0.3 vom 17.10.2026 · Fasst die Entscheidungen 1 bis 45 zusammen (`02-entscheidungen.md`) · Status: **zur Prüfung, mit offenen Entscheidungen in Abschnitt 10**
 
 ## 1. Die Teile auf einen Blick
 
@@ -8,7 +8,8 @@ Entwurf v0.2 vom 17.10.2026 · Fasst die Entscheidungen 1 bis 41 zusammen (`02-e
 flowchart LR
   subgraph TC["ToyChain (nur nativer TOY)"]
     N[Knoten: Validatoren, Voll-Knoten, Light-Knoten]
-    R[(Reserve 990.000 TOY<br/>Ersteller-Adresse, 3 Jahre gesperrt)]
+    R[(Reserve 900.000 TOY<br/>Cold-Wallet, 3+3 Jahre)]
+    BB[(Bug-Bounty 90.000 TOY<br/>Mehrfachsignatur)]
     D[(Deckungsposten<br/>10.000 TOY)]
     B[(Bridge-Konto<br/>ohne Schlüssel)]
   end
@@ -65,7 +66,8 @@ flowchart LR
 
 | Konto | Inhalt beim Start | Wer kann es bewegen |
 |---|---|---|
-| **Reserve** auf der Ersteller-Adresse `0x18da…00c2` (Nr. 41) | **990.000 TOY** | der Inhaber des Ersteller-Schlüssels, aber nur den freigegebenen Teil: **nichts in den ersten 1.095 Epochen** (3 Jahre), danach schrittweise (angenommen: linear über 365 Epochen). Delegieren an das Start-Komitee ist auch gesperrt möglich (Nr. 37) |
+| **Reserve** auf der offiziellen Cold-Wallet des Erstellers (Nr. 41, 44) | **900.000 TOY** | nur der freigegebene Teil: **nichts in den ersten 1.095 Epochen** (3 Jahre), danach je Epoche gleichmäßig über 1.095 Epochen (rund 822 TOY pro Epoche, voll frei nach 6 Jahren, Nr. 42). Delegieren an das Start-Komitee ist auch gesperrt möglich (Nr. 37) |
+| **Bug-Bounty-Topf** (Mehrfachsignatur-Konto, Nr. 43) | **90.000 TOY** | sofort verfügbar, nur mit z. B. 3 von 5 Unterschriften. Prämien über 5.000 TOY nach Abstimmung (Nr. 45) |
 | **Deckungsposten Polygon** | **10.000 TOY** im Bridge-Konto, markiert als Deckung des Fremdbestands | nur das Protokoll (Bridge-Eingang) |
 | **Bridge-Konto** | die 10.000 TOY Deckung, später alle gebridgten TOY | nur die Transaktionsarten Bridge-Ausgang/-Eingang |
 | **Erstattungs-Pool** | 0, füllt sich aus 10 % der Emission und 40 % der Gebühren | nur das Protokoll |
@@ -76,7 +78,8 @@ flowchart LR
 | Adresse | Rolle |
 |---|---|
 | `0x1854b69c…A5BF` | ToyCoin-Token (ERC-20, ohne Mint, ohne Admin) |
-| `0x18da0be9…00c2` | Ersteller-Adresse: hält 97.999.000 TOY. **Keine Abgänge mehr** bis zur Tresor-Einzahlung (Nr. 17). Dieselbe Adresse erhält auf ToyChain die Reserve (Nr. 41) |
+| `0x18da0be9…00c2` | Ersteller-Adresse: hält 97.999.000 TOY. Abgänge nur an die offizielle Cold-Wallet oder den Tresor (Nr. 17, 44) |
+| Offizielle Cold-Wallet Polygon (neu, öffentlich) | übernimmt den Bestand der Ersteller-Adresse bis zur Tresor-Einzahlung. Zählt nicht zum Fremdbestand |
 | Tresor-Vertrag (neu) | nimmt den Bestand der Ersteller-Adresse auf, gibt nur gegen ToyChain-Beweis frei |
 | NFT-Vertrag (neu) | Prägen mit Gutschein, Sperre 10 TOY / 20 Tage, Auflage Sternenfeuer 1.001 |
 | Gebühren-Adresse (neu, Multisig) | empfängt Präge-Gebühren (Nr. 26) |
@@ -89,6 +92,7 @@ flowchart LR
 |---|---|
 | `0xA5B04ce6…678A` | ToyCoin-Token (ERC-20, ohne Mint, ohne Admin) |
 | `0x18da0be9…00c2` | Ersteller-Adresse: hält alle 100.000.000 TOY, nie bewegt |
+| Offizielle Cold-Wallet Ethereum (neu, öffentlich) | übernimmt den Bestand bis zur Tresor-Einzahlung |
 | Tresor-Vertrag (neu) | wie auf Polygon |
 
 ## 4. Der Genesis-Block
@@ -99,7 +103,7 @@ Der Genesis-Block ist der erste Block der Kette. **Er lässt sich nach dem Start
 |---|---|---|
 | Chain-ID | wird vor dem Testnet gewählt und gegen die öffentlichen Listen geprüft. Testnet und Mainnet bekommen verschiedene IDs | Nr. 40 |
 | Obergrenze | 10^26 kleinste Einheiten = 100.000.000 TOY, im Code fest | Spezifikation 14 |
-| Reserve | 990.000 TOY auf der Ersteller-Adresse `0x18da…00c2`, Freigabeplan: 3 Jahre nichts, danach schrittweise | Nr. 14, 41 |
+| Reserve | 900.000 TOY auf der offiziellen Cold-Wallet (Freigabeplan: 3 Jahre nichts, dann je Epoche über 3 Jahre) und 90.000 TOY Bug-Bounty-Topf auf dem Mehrfachsignatur-Konto | Nr. 14, 41–44 |
 | Deckungsposten | 10.000 TOY im Bridge-Konto, Zweck „Polygon-Fremdbestand“ | Nr. 13, 14 |
 | Bestand beim Start | **1.000.000 TOY** (990.000 + 10.000) | — |
 | Emissionsrest | 99.000.000 TOY, noch nicht vorhanden | Spezifikation 10 |
@@ -110,7 +114,7 @@ Der Genesis-Block ist der erste Block der Kette. **Er lässt sich nach dem Start
 | Start-Validatoren | Start-Komitee aus 7 bis 21 offengelegten Betreibern mit delegiertem Reserve-Stake, ohne Emission für diesen Stake | Nr. 37 |
 | Prüfsumme | Hash des Genesis-Blocks wird veröffentlicht: auf GitHub, in ToyScan und in jeder Wallet. Er ist der erste Checkpoint | Spezifikation 5 |
 
-**Rechenprobe:** gemintet (0) + Reserve (990.000) + Deckung (10.000) = 1.000.000 ≤ 100.000.000. Nach 25 Jahren bei m = 1: rund 98,0 Mio. gemintet + 1 Mio. = rund 99,0 Mio., die Obergrenze bleibt unerreicht.
+**Rechenprobe:** gemintet (0) + Reserve (900.000) + Bug-Bounty (90.000) + Deckung (10.000) = 1.000.000 ≤ 100.000.000. Nach 25 Jahren bei m = 1: rund 98,0 Mio. gemintet + 1 Mio. = rund 99,0 Mio., die Obergrenze bleibt unerreicht.
 
 ## 5. Reihenfolge bis zum Start
 
@@ -118,7 +122,7 @@ Schritte mit 🔒 lassen sich **nicht rückgängig machen**.
 
 | Nr. | Schritt | Voraussetzung | Prüfung |
 |---|---|---|---|
-| 0 | **Sofort:** Ersteller-Adresse auf eine Hardware-Wallet bringen. Keine Abgänge mehr | — | ToyScan-Skript zeigt Abgänge |
+| 0 | **Sofort:** offizielle Cold-Wallets für Polygon und Ethereum anlegen, öffentlich bekanntgeben und mit einer signierten Nachricht der Ersteller-Adresse belegen. Bestände dorthin übertragen (Nr. 44). Sonst keine Abgänge | — | ToyScan zeigt jeden Abgang, der nicht an eine offizielle Cold-Wallet geht |
 | 1 | Rückübertragung von `0xd908…`, `0x6b9a…`, `0x856d…` an die Ersteller-Adresse, erst ein Testbetrag | 0 | Fremdbestand Polygon ≤ 10.000 TOY |
 | 2 | Quellcode der beiden Token-Verträge auf Polygonscan und Etherscan verifizieren | Original-Quellcode | Häkchen „Verified“ |
 | 3 | Phase 1 bauen (M1–M10), öffentliches Testnet | — | Fertig-Kriterien des Bauplans |
@@ -130,16 +134,16 @@ Schritte mit 🔒 lassen sich **nicht rückgängig machen**.
 | 8a | Phase 2 (Beweise) innerhalb von etwa 12 Monaten | 8 | Header-Speicher wächst nicht weiter |
 | 9 | ToyScan live. Kriterien zur Bridge zeigen „noch nicht aktiv“ (grau) | 8 | Ampel |
 | 10 | Phase 3 Bridge (Nr. 39): Tresor-Verträge und Bridge-Komitee bauen, Audit, Testnet | 8a | Audit |
-| 11 | 🔒 **Ersteller-Adresse zahlt ihren Bestand in die Tresore ein** | 10 | ToyScan: Ersteller-Adresse leer, Tresore voll |
+| 11 | 🔒 **Die offiziellen Cold-Wallets zahlen ihren Bestand in die Tresore ein** | 10 | ToyScan: Cold-Wallets leer, Tresore voll |
 | 12 | Bridge-Start | 11 | Ampel grün |
 | 13 | NFT-Prägung mit TOY startet (Nr. 17) | 12 | NFT-Vertrag-Audit |
 
 ## 6. Die Deckung über alle Ketten (Buchhaltung)
 
 **Bezeichnungen**
-- `G` = gemintetes TOY, `R` = Reserve (990.000), `C` = Deckungsposten (10.000)
+- `G` = gemintetes TOY, `R` = Reserve einschließlich Bug-Bounty-Topf (990.000), `C` = Deckungsposten (10.000)
 - `K` = Bestand im Bridge-Konto auf ToyChain
-- `U_P`, `U_E` = ToyCoin-Token **im Umlauf** auf Polygon bzw. Ethereum, also außerhalb von Tresor und Ersteller-Adresse
+- `U_P`, `U_E` = ToyCoin-Token **im Umlauf** auf Polygon bzw. Ethereum, also außerhalb von Tresor, Ersteller-Adresse und offiziellen Cold-Wallets
 - `F_P` = Fremdbestand Polygon (≤ 10.000), `A_P`, `A_E` = vom Tresor freigegebene Token
 
 **Regeln, die immer gelten müssen**
@@ -177,7 +181,8 @@ TOY (Polygon) ──► Präge-Gebühr ──► Gebühren-Adresse (Multisig)   
 
 | Schlüssel | Was er kann | Sicherung (Vorschlag) |
 |---|---|---|
-| Ersteller-Adresse | 198 Mio. Token auf zwei Ketten bewegen (bis zur Tresor-Einzahlung) **und** die 990.000 TOY Reserve auf ToyChain empfangen und delegieren | Hardware-Wallet, offline, Phrase an zwei getrennten Orten. **Der wichtigste Schlüssel des ganzen Projekts** |
+| Ersteller-Adresse und offizielle Cold-Wallets | Altbestand-Token bis zur Tresor-Einzahlung; die gesperrte Reserve auf ToyChain empfangen und delegieren | **Cold-Wallets**: Schlüssel nie auf einem Gerät mit Internet, Phrase doppelt an getrennten sicheren Orten. Adressen öffentlich, Zugehörigkeit per signierter Nachricht belegt (Nr. 44) |
+| Bug-Bounty-Topf | 90.000 TOY auszahlen | Mehrfachsignatur-Konto 3 von 5, Auszahlungen öffentlich |
 | Gebühren- und Wechselstuben-Adresse | Gebühren und Wechselstuben-TOY bewegen | Multisig **3 von 5**, getrennte Personen und Geräte |
 | Bridge-Komitee | zweite Sicherung neben dem Beweis | Schwellensignatur, z. B. **5 von 9** unabhängige Betreiber |
 | Spielserver-Gutschein | Gutscheine fürs Prägen ausstellen | eigener Schlüssel nur dafür, in einem Hardware-Sicherheitsmodul, Limits im Vertrag |
@@ -192,12 +197,12 @@ TOY (Polygon) ──► Präge-Gebühr ──► Gebühren-Adresse (Multisig)   
 |---|---|---|
 | 1 Umlauf ≤ gemintet + Reserve ≤ 100 Mio. | ToyChain-Zustand + beide Token-Verträge | aktiv |
 | 2 Tresore halten den nicht freigegebenen Rest | Tresor-Bestände, Bridge-Konto | grau |
-| 3 Reserve 990.000 TOY auf der Ersteller-Adresse, Sperre und Freigabeplan eingehalten | Genesis-Block + Zustand | aktiv |
+| 3 Reserve 900.000 TOY auf der Cold-Wallet mit Freigabeplan, Bug-Bounty-Topf 90.000 TOY, Deckung 10.000 TOY | Genesis-Block + Zustand | aktiv |
 | 4 Emission nicht vor dem Zeitplan | Emissionszähler je Epoche | aktiv |
 | 5 Altbestand-Verträge ohne Mint und Upgrade, Gesamtmenge ≤ 100 Mio., Tresore ohne Admin | Bytecode, Code-Hash, `totalSupply()` | aktiv (Tresor-Teil grau) |
 | 6 Notschalter nicht ausgelöst, Beweis-Verifizierer aktuell | Tresor-Verträge | grau |
 | 7 Fremdbestand je Kette ≤ Deckungsposten | Token-Verträge, Ersteller- und Tresor-Bestände | aktiv |
-| neu: Ersteller-Adresse ohne Abgänge | Polygon und Ethereum | aktiv bis zur Tresor-Einzahlung |
+| neu: Ersteller-Adresse und Cold-Wallets nur mit erlaubten Abgängen | Polygon und Ethereum | aktiv bis zur Tresor-Einzahlung |
 | neu: Regeln I1 bis I6 | alle Ketten | aktiv |
 
 Details folgen in `08-toyscan.md`.
@@ -210,18 +215,13 @@ Details folgen in `08-toyscan.md`.
 | 38 (E2) | Mainnet-Zeitpunkt | Nach Phase 1 und Audit. Checkpoints bis zur Beweis-Schicht, Phase 2 innerhalb von etwa 12 Monaten |
 | 39 (E3) | Reihenfolge | Phase 2 Beweise, Phase 3 Bridge, Phase 4 Privatsphäre, Phase 5 Offline-Schecks |
 | 40 (E4) | Chain-ID | Vor dem Testnet wählen und prüfen |
-| 41 (E5) | Reserve | 990.000 TOY an die Ersteller-Adresse, 3 Jahre gesperrt, danach schrittweise |
+| 41 (E5) | Reserve | gehört dem Ersteller des Tokens, 3 Jahre gesperrt |
+| 42 | Freigabe | danach je Epoche gleichmäßig über 3 Jahre, voll frei nach 6 Jahren |
+| 43 | Bug-Bounty | 90.000 TOY sofort verfügbar, Mehrfachsignatur-Konto |
+| 44 | Cold-Wallets | offizielle, öffentliche Cold-Wallets für Reserve und Altbestand |
+| 45 | Mitbestimmung | Community stimmt über Parameter und Updates ab, Verfassung bleibt fest (`09-mitbestimmung.md`) |
 
 ### Noch offen
-
-**O1 · Freigabe nach den 3 Jahren:** Angenommen ist linear über 1 Jahr (voll frei nach 4 Jahren). Alternativen: linear über 2 oder 3 Jahre, oder in Jahresraten.
-
-**O2 · Bug-Bounty in den ersten 3 Jahren:** Bisher sollte die Reserve auch Bug-Bounty-Prämien bezahlen. Sie ist aber 3 Jahre gesperrt, also gerade in der riskantesten Zeit. Möglichkeiten:
-- (a) ein kleiner, sofort verfügbarer Teil der Reserve, z. B. 20.000 TOY, auf einer Multisig-Adresse nur für Prämien,
-- (b) Prämien in den ersten 3 Jahren aus der Gebühren-Adresse auf Polygon,
-- (c) Prämien außerhalb der Kette, z. B. in Euro.
-
-**O3 · Ein Schlüssel für alles:** Die Ersteller-Adresse hält dann die 198 Mio. Altbestand-Token (bis zur Tresor-Einzahlung) **und** die Reserve. Geht dieser Schlüssel verloren oder wird gestohlen, trifft es beide. Dringende Empfehlung: Hardware-Wallet, Phrase doppelt an getrennten, sicheren Orten, nie auf einem Rechner mit Internet eingeben.
 
 **E6 · Auflage für Rubinglut (40 bis 79 TOY), „eher seltener“:**
 

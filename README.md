@@ -24,6 +24,7 @@ Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit 
 | `docs/03-bauplan-phase1.md` | Bauplan Phase 1: 10 Meilensteine mit Fertig-Kriterien und Prompts |
 | `docs/04-toyscan-und-altbestand.md` | ToyScan-Ampel, Prüfung und On-Chain-Befund der Token-Verträge, Tresor-Modell |
 | `docs/05-gesamtsystem.md` | Gesamtbild: alle Teile und Konten, Genesis-Block, Reihenfolge bis zum Start, Deckung über alle Ketten |
+| `docs/09-mitbestimmung.md` | Mitbestimmung der Community: Verfassung, Stimmgewicht, Ablauf, Einführung |
 | `docs/07-toypay.md` | Wie TOYPAY ToyChain nutzt, Knotenrollen in der App, Grundsatzfragen |
 | `docs/STATUS.md` | Aktueller Stand, Prüfergebnisse, offene Fragen |
 

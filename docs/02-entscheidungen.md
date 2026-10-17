@@ -45,7 +45,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 14 | Deckungsposten | **Bestätigt am 17.10.2026:** 10.000 TOY aus der Reserve decken im Genesis-Block den Polygon-Fremdbestand, damit jeder Token 1:1 einlösbar ist. Reserve für Team usw. dann 990.000 TOY |
 | 15 | TOYPAY und Ketten | TOYPAY nimmt ToyCoin auf allen Ketten an (ToyChain, Polygon, Ethereum, später weitere) und bridgt nativen TOY |
 | 16 | Spiel-NFTs | Spielgegenstände und Spielfiguren werden als NFTs auf **Polygon** geprägt, bezahlt mit Polygon-TOY. ToyChain selbst hat keine NFTs (Entscheidung 36). Details und offene Punkte (K8 bis K10) in `07-toypay.md` |
-| 17 | Start der NFT-Prägung | NFTs werden erst **nach** dem Start der Bridge mit TOY geprägt (K8, Weg a). Bis zur Einzahlung in den Tresor gibt die Ersteller-Adresse keine TOY mehr aus, nur Rückübertragungen an sie sind erlaubt |
+| 17 | Start der NFT-Prägung | NFTs werden erst **nach** dem Start der Bridge mit TOY geprägt (K8, Weg a). Bis zur Einzahlung in den Tresor gibt die Ersteller-Adresse keine TOY mehr aus, nur Rückübertragungen an sie sind erlaubt (ergänzt durch Nr. 44: Übertragungen an offizielle Cold-Wallets sind erlaubt) |
 | 18 | NFT-Vertrag: Schutz | Kein Admin-Recht zum beliebigen Prägen. Tageslimit und Notschalter (nur Pause). Ist ein Gegenstand geprägt, gilt das NFT als Eigentumsnachweis, im Spiel gibt es ihn nicht doppelt |
 | 19 | NFT-Präge-Regeln | Prägen nur mit mindestens **100 TOY** auf der Adresse. Je Adresse höchstens **5 Spielfiguren** (teils selbst, teils zufällig konfiguriert, aufwertbar) und **50 Spielgegenstände**. Pro Woche höchstens **1 Spielfigur und 10 Gegenstände**. Offene Feinheiten (Sperre der 100 TOY, Prägen oder Besitz, Aufwertung, Zufall) in `07-toypay.md` |
 | 20 | Gang-Prinzip | Spielfiguren erst ab **Stufe 20** prägbar. Danach mindestens **5 Gegenstände**, erst dann die nächste Figur. So entsteht Stück für Stück eine Gang mit gemeinsamen Gegenständen und Synergien. Löst die Lootbox-Frage K9 |
@@ -70,6 +70,10 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 39 | Bridge vorziehen | Neue Reihenfolge: Phase 2 Beweise, **Phase 3 Bridge**, Phase 4 Privatsphäre, Phase 5 Offline-Schecks |
 | 40 | Chain-ID | Vor dem Testnet wird eine freie Chain-ID gewählt und gegen die öffentlichen Listen geprüft. Testnet und Mainnet bekommen verschiedene IDs |
 | 41 | Reserve-Empfänger und Sperre | Die 990.000 TOY Reserve gehen an **eine** Adresse: die Ersteller-Adresse des Ethereum-Tokens `0x18da0be974424d54519c63f62e4b26c0318c00c2`. In den ersten **3 Jahren** nach dem Mainnet-Start wird nichts freigegeben, danach **schrittweise**. Annahme zur Bestätigung: linear über 1 Jahr, voll frei nach 4 Jahren. Ersetzt Nr. 10 und die Verteilung auf bis zu 100 Wallets aus Nr. 3 |
+| 42 | Freigabe der Reserve | Nach den 3 Jahren Sperre wird **je Epoche gleichmäßig über 3 Jahre** freigegeben (rund 822 TOY pro Epoche), voll frei nach 6 Jahren. Begründung: nur 3 bis 5 % der täglich neuen TOY, fair für spätere Teilnehmer (vom Projektinhaber Claude überlassen) |
+| 43 | Bug-Bounty-Topf | **90.000 TOY** der Reserve sind sofort verfügbar, auf einem offiziellen Mehrfachsignatur-Konto (z. B. 3 von 5) nur für Prämien. Die gesperrte Reserve beträgt damit 900.000 TOY |
+| 44 | Offizielle Cold-Wallets | Große Bestände liegen auf **offiziellen, öffentlich bekannten Cold-Wallets**: die 900.000 TOY Reserve auf ToyChain und die Altbestand-Token auf Polygon und Ethereum bis zur Tresor-Einzahlung. Die Zugehörigkeit zum Ersteller wird mit signierten Nachrichten der Ersteller-Adresse belegt. Übertragungen von der Ersteller-Adresse an diese Cold-Wallets sind erlaubt, sie zählen nicht zum Fremdbestand |
+| 45 | Mitbestimmung | Die Community stimmt über Parameter und Protokoll-Updates ab. Unveränderbar bleibt eine **Verfassung** (u. a. Obergrenze, Emissionsformel, Reserve, nur nativer Coin, Bridge-Deckung, kein Zugriff auf fremde Guthaben). Ausgestaltung: `09-mitbestimmung.md` |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 
@@ -79,7 +83,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 
 ## Noch offen
 
-- **Gesamtsystem (`05-gesamtsystem.md`, Abschnitt 10):** E6 Auflage Rubinglut. Zu Nr. 41: Freigabe-Dauer nach den 3 Jahren bestätigen; Finanzierung des Bug-Bounty in den ersten 3 Jahren.
+- **Gesamtsystem (`05-gesamtsystem.md`, Abschnitt 10):** E6 Auflage Rubinglut. Zu Nr. 45: Stimmgewicht, Quorum und Fristen, Reserve ohne Stimmrecht (`09-mitbestimmung.md`, Abschnitt 8).
 
 - Quellcode auf Etherscan und Polygonscan verifizieren (am 17.10.2026 auf beiden Ketten noch **nicht verifiziert**). Prägung von je 10^26 Einheiten ist bestätigt.
 - Schlüssel der Contract-Wallet `0x18da…00c2`: Wer hält ihn, wie ist er gesichert? Liegt der ursprüngliche Quellcode der Verträge vor?
