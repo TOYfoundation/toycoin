@@ -69,20 +69,39 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
 
 **Präge-Regeln (entschieden am 17.10.2026)**
 
-| Regel | Wert | Durchsetzung im Vertrag |
+*Grundidee:* Der Spieler baut sich Stück für Stück eine **Gang** auf. Spielfiguren mit unterschiedlichen Stärken und Fähigkeiten, die sie in Missionen und Herausforderungen erwerben, greifen auf gemeinsame Gegenstände zu und erzeugen Synergie-Effekte. NFTs entstehen nur aus erspieltem Fortschritt, nicht aus Geld allein.
+
+| Regel | Wert | Durchsetzung |
 |---|---|---|
-| Mindestbestand zum Prägen | **100 TOY** auf der prägenden Adresse | Prüfung `balanceOf ≥ 100 × 10^18` beim Prägen (siehe Lücke 1) |
-| Spielfiguren je Adresse | höchstens **5** | Zähler je Adresse |
+| Spielfigur prägbar ab | **Stufe 20** | Spielserver bestätigt die Stufe im Gutschein, der Vertrag prüft den Gutschein |
+| Reihenfolge | Figur prägen → mindestens **5 Gegenstände** prägen → erst dann die nächste Figur | Vertrag zählt die Gegenstände seit der letzten Figur je Adresse |
+| Spielfiguren je Adresse | höchstens **5** (die Gang) | Zähler je Adresse |
 | Spielgegenstände je Adresse | höchstens **50** | Zähler je Adresse |
-| Pro Woche | höchstens **1 Spielfigur** und **10 Gegenstände** je Adresse | Zähler je Adresse und Kalenderwoche (Woche = 7 × 86.400 s nach Blockzeit) |
-| Spielfiguren | teils selbst, teils zufällig konfiguriert, **aufwertbar** | Eigenschaften im Gutschein. Aufwertungen nur mit eigenem Gutschein (siehe Lücke 3) |
+| Pro Woche | höchstens **1 Spielfigur** und **10 Gegenstände** je Adresse | Zähler je Adresse und Woche (7 × 86.400 s nach Blockzeit) |
+| Sperre je NFT | **10 TOY für 20 Tage** | Vertrag übernimmt beim Prägen 10 TOY per Permit und gibt sie nach 20 Tagen an den Präger zurück |
+| Mindestbestand | 100 TOY auf der Adresse (Entscheidung 19) | `balanceOf ≥ 100 × 10^18` beim Prägen. Ob das neben der Sperre bestehen bleibt, ist offen |
+| Spielfiguren | teils selbst, teils zufällig konfiguriert, **aufwertbar** | Zufall entsteht beim kostenlosen Anlegen der Figur im Spiel, nicht beim Prägen |
 
-**Lücken, die das Regelwerk noch schließen muss**
+**Beispiel für den schnellsten Weg:** Woche 1: Figur 1 (Stufe 20) und bis zu 10 Gegenstände. Woche 2: Figur 2, sobald 5 Gegenstände seit Figur 1 geprägt sind, usw. Eine volle Gang mit 5 Figuren braucht also mindestens 5 Wochen und mindestens 20 Gegenstände zwischen den Figuren. In einer vollen Woche (1 Figur und 10 Gegenstände) sind 110 TOY gesperrt. Weil jede Sperre 20 Tage dauert, liegen im Dauerbetrieb höchstens rund 320 TOY je Adresse gleichzeitig fest.
 
-1. **Die 100 TOY lassen sich weiterreichen.** Ein Vertrag sieht nur den Bestand im Moment des Prägens. Wer 100 TOY besitzt, könnte prägen, die TOY an die nächste eigene Adresse schicken, dort wieder prägen und so weiter. Die Limits „je Adresse“ gälten dann praktisch nicht, denn neue Adressen kosten nichts. **Vorschlag:** Die 100 TOY werden beim Prägen nicht nur geprüft, sondern **im NFT-Vertrag gesperrt**, z. B. 30 Tage nach der letzten Prägung. Danach holt der Spieler sie zurück. Wer zehn Adressen nutzen will, muss dann 1.000 TOY sperren. Das ist die eigentliche Bremse gegen Massenprägung.
-2. **Prägen oder Besitzen?** „Höchstens 5 Spielfiguren je Adresse“ kann heißen: höchstens 5 **geprägt**, oder höchstens 5 **im Besitz**. Eine Besitzgrenze müsste jeden Verkauf an Adressen mit schon 5 Figuren blockieren. Marktplätze kommen damit schlecht zurecht. **Vorschlag:** Grenze nur für das Prägen. Kaufen und Verkaufen bleibt frei.
-3. **Aufwerten:** Wer darf aufwerten (nur der Besitzer, mit Gutschein des Spielservers), kostet es TOY, und dürfen Werte auch sinken? **Vorschlag:** Aufwertung nur durch den Besitzer mit Gutschein, Werte steigen nur, jede Aufwertung ist auf der Kette sichtbar.
-4. **Welcher Bestand zählt:** Der Polygon-Vertrag sieht nur Polygon-TOY, also nicht die TOY auf ToyChain oder Ethereum. **Vorschlag:** Es zählen nur Polygon-TOY. Wer TOY woanders hat, bridgt sie vorher.
+**Wie die Regeln zusammen wirken**
+- **Gegen Massenprägung:** Stufe 20 kostet echte Spielzeit, und jede Adresse sperrt 10 TOY je NFT. Mit vielen Adressen zu arbeiten bringt deshalb wenig. Das ist wirksamer als ein reiner Kontostand-Check, den man durch Weiterreichen derselben 100 TOY umgehen könnte.
+- **Gegen Lootboxen (K9):** Der Zufall entsteht beim kostenlosen Anlegen der Figur. Geprägt wird nur eine Figur, deren Eigenschaften der Spieler kennt, weil er sie bis Stufe 20 gespielt hat. Niemand bezahlt für eine Überraschung.
+- **Gang und Verkauf:** Jede Figur und jeder Gegenstand ist ein eigenes NFT. Synergien und gemeinsame Gegenstände berechnet das Spiel aus dem, was eine Adresse **gerade besitzt**. Wird eine Figur verkauft, verlässt sie die Gang, die Gegenstände bleiben beim Verkäufer.
+
+**Regeln für die Sperre**
+- Die 10 TOY gehören immer dem **Präger**, auch wenn das NFT innerhalb der 20 Tage verkauft wird.
+- Nach 20 Tagen kann der Präger sie jederzeit abholen. Niemand sonst kann sie bewegen, auch das Projekt nicht.
+- Der Notschalter kann nur **neues Prägen** pausieren, **nie** das Abholen gesperrter TOY. Sonst könnte ein Fehler oder Angriff fremde TOY festhalten.
+- Gesperrte TOY bleiben gedeckte TOY im Umlauf. An der ToyScan-Rechnung ändert sich nichts.
+
+**Noch offen**
+1. **Mindestbestand:** Bleiben die 100 TOY auf der Adresse zusätzlich zur Sperre von 10 TOY je NFT Pflicht?
+2. **Prägen oder Besitzen:** Gilt „höchstens 5 Figuren und 50 Gegenstände“ nur für das Prägen oder auch für den Besitz? Zu einer Gang passt eine Grenze für das Prägen. Gekaufte Figuren könnten dann über 5 hinausgehen. Soll eine Gang im Spiel trotzdem auf 5 **aktive** Figuren begrenzt sein?
+3. **Aufwerten nach dem Prägen:** Figuren steigen auch nach dem Prägen weiter auf. Wird die neue Stufe auf der Kette festgehalten (mit Gutschein, nur steigend), und kostet das TOY?
+4. **Gebühr:** Gibt es neben der Sperre eine Präge-Gebühr in TOY, und wohin fließt sie? Wer bezahlt das Polygon-Gas, Spieler oder Relayer?
+5. **„Mindestens 5 bis 10“ Gegenstände** vor der nächsten Figur: Angesetzt ist 5. Soll die Zahl mit jeder Figur steigen, z. B. 5, 6, 7 …?
+
 - **Spiel und Kette synchron halten:** Ist ein Gegenstand als NFT geprägt, gilt **das NFT** als Eigentumsnachweis. Wird das NFT verkauft, wandert der Gegenstand im Spiel zum neuen Besitzer. Der Spielserver liest dazu die Kette. Ein geprägter Gegenstand darf im Spiel nicht zusätzlich weiter gehandelt werden, sonst gäbe es ihn doppelt.
 - **Schlüssel des Spielservers:** Der Server signiert die Gutscheine und ist damit ein lohnendes Angriffsziel. Deshalb: eigener Schlüssel nur für Gutscheine (nie für TOY), Tageslimits im Vertrag und ein Notschalter, der das Prägen pausieren kann.
 - **Wohin die TOY für das Prägen fließen:** ist offen (Abschnitt 9). Die Wahl wirkt auf die ToyScan-Rechnung, siehe K8.
@@ -125,7 +144,7 @@ Folgen:
 - **Die Ersteller-Adresse gibt bis zur Einzahlung in den Tresor keine TOY mehr aus.** Erlaubt ist nur die Rückübertragung nach Entscheidung 13, in Richtung Ersteller-Adresse. Jeder Abgang würde den Fremdbestand über die 10.000 TOY hinaus erhöhen. ToyScan überwacht die Adresse ab sofort und zeigt jeden Abgang an.
 - **NFTs ohne TOY** (kostenlos oder gegen POL) sind auch vorher möglich, ohne die Deckung zu berühren. Ob das gewünscht ist, ist offen.
 
-**K9 Zufalls-NFTs (Lootboxen).** NFTs mit zufälligem Wert gegen TOY zu verkaufen, gilt nach den Google-Play-Regeln als Glücksspiel, wenn die App nicht als Glücksspiel-App zugelassen ist. Außerdem dürfen NFTs nicht als Einsatz für Gewinne mit Geldwert dienen. Das betrifft auch Poker (K2). Spielfiguren sollen teils zufällig konfiguriert werden (Entscheidung 19). **Vorschlag: „erst würfeln, dann bezahlen“.** Der Spielserver würfelt die zufälligen Eigenschaften und **zeigt sie vor dem Prägen an**. Der Spieler entscheidet dann, ob er genau diese Figur prägt, und darf kostenlos neu würfeln. So bleibt der Zufall als Spielspaß erhalten, aber niemand bezahlt für eine Figur, deren Wert er nicht kennt.
+**K9 Zufalls-NFTs (Lootboxen).** NFTs mit zufälligem Wert gegen TOY zu verkaufen, gilt nach den Google-Play-Regeln als Glücksspiel, wenn die App nicht als Glücksspiel-App zugelassen ist. Außerdem dürfen NFTs nicht als Einsatz für Gewinne mit Geldwert dienen. Das betrifft auch Poker (K2). Spielfiguren sollen teils zufällig konfiguriert werden (Entscheidung 19). **Gelöst durch Entscheidung 20:** Figuren werden erst ab Stufe 20 geprägt. Der Zufall entsteht beim kostenlosen Anlegen im Spiel, geprägt wird nur eine bekannte, erspielte Figur. Dasselbe gilt für Gegenstände: Prägbar ist nur, was der Spieler schon im Spiel besitzt.
 
 **K10 NFTs und Recht.** Einzigartige NFTs fallen in der Regel nicht unter MiCA. Große Serien gleichartiger NFTs können aber anders bewertet werden. Gehandelte Spielgegenstände berühren zudem Steuer- und Verbraucherrecht. Teil der rechtlichen Prüfung.
 
@@ -154,9 +173,5 @@ Offen:
 3. Eine App mit allem, oder Wallet und Spiele getrennt (K7)?
 4. Nur Android, oder später auch iPhone?
 5. Sollen NFTs schon vor dem Bridge-Start **ohne TOY** geprägt werden können (kostenlos oder gegen POL)?
-6. Wohin fließen die TOY, mit denen geprägt wird: an das Projekt, an einen Spiel-Topf oder an eine Burn-Adresse, also dauerhaft aus dem Umlauf?
-7. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?
-8. Sollen die 100 TOY beim Prägen gesperrt werden, und wie lange (Lücke 1, Vorschlag 30 Tage)?
-9. Gilt die Grenze von 5 Figuren und 50 Gegenständen für das Prägen oder auch für den Besitz (Lücke 2)?
-10. Aufwerten: Kostet es TOY, und wer darf es (Lücke 3)?
-11. Zufall bei Spielfiguren: Einverstanden mit „erst würfeln, dann bezahlen“ (K9)?
+6. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?
+7. Offene Feinheiten der Präge-Regeln (Mindestbestand neben der Sperre, Prägen oder Besitzen, Aufwerten, Gebühr und wohin sie fließt, steigende Zahl an Gegenständen): siehe Abschnitt 5a, „Noch offen“.
