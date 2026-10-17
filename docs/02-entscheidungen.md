@@ -57,6 +57,8 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 26 | Präge-Gebühren | Spielfigur **1 TOY**. Gegenstände **1 bis 100 TOY** je nach Wert (z. B. Flöte 1, Dolch 2, Kamel 5, Boot bis 25, schönes Haus 100). Gebühren gehen an eine Multisig-Gebühren-Adresse des Projekts auf Polygon |
 | 27 | Gegenstands-Katalog | 500 prägbare Gegenstände (5 Beispiele + 495 neue) in 16 Kategorien mit Gebühr 1–100 TOY, Seltenheit und Boni. Quelle `toypay/data/nft_items.tsv`, Beschreibung `toypay/docs/06_NFT_GEGENSTAENDE.md`. Boni und Balance sind Startwerte |
 | 28 | Zwei Sorten Dukaten | **Sultansdukaten**: nur gegen TOY in der Wechselstube, dürfen Präge-Gebühren zahlen, nicht übertragbar. **Königsdukaten** (und Gold): erspielt, nur für Dinge im Spiel, keine Präge-Gebühren. Kein Tausch zwischen den Sorten, keine Sorte zurück in TOY |
+| 29 | Altersgruppe | TOYPAY und Spiele **ab 16 Jahren**. Offen: TOY-Funktionen ab 18 oder mit Zustimmung der Eltern (K4 in `07-toypay.md`) |
+| 30 | Plattformen TOYPAY | **Android, Windows, Linux, Raspberry Pi**. Kein iPhone vorerst. Vorschlag: eine Codebasis mit Compose Multiplatform und dem gemeinsamen Rust-Kern |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 

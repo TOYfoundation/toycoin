@@ -8,7 +8,7 @@ Dieses Dokument beschreibt, wie die TOYPAY-App mit ToyChain zusammenspielt. Die 
 
 | Teil | Stand |
 |---|---|
-| **TOYPAY-App** | Android, Kotlin. Enthält die „Spielwährung ToyCoin“, Stadtviertel, **Poker** und das 2D-Abenteuer TOYQUEST. 28 Sprachen. |
+| **TOYPAY-App** | Android, Kotlin (künftig auch Windows, Linux, Raspberry Pi, Entscheidung 30). Enthält die „Spielwährung ToyCoin“, Stadtviertel, **Poker** und das 2D-Abenteuer TOYQUEST. 28 Sprachen. |
 | **TOYQUEST 3D** | Eigenes Spiel (Godot 4.4), Paket `app.toypay.quest3d`, Exporte für Android arm64, Windows, Linux. Spielgeld **Dukaten**, im Spiel gibt es eine **Wechselstube**. 45 Sprachen. |
 | **TOYPAY-Server** | Spielserver mit Online-Modus und Weltdaten. |
 | **Blockchain** | `local.properties` enthält einen **Alchemy-Key** (Zugang zu Ethereum/Polygon), Seed-Phrasen werden erwähnt. **Bestätigt am 17.10.2026:** Das Spiel nutzt die ToyCoin-Token auf **Polygon**, um **NFTs** zu prägen (Spielgegenstände und Spielfiguren). |
@@ -27,6 +27,7 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
 ## 3. Technische Anbindung
 
 - **Ein gemeinsamer Rust-Kern.** Die Crates `toy-crypto`, `toy-tx` und `toy-wallet` sowie ein Light-Client werden als Android-Bibliothek gebaut (arm64-v8a, zusätzlich armeabi-v7a für alte Geräte). Die Kotlin-App ruft sie über **UniFFI** auf, das Werkzeug von Mozilla, das aus Rust automatisch Kotlin-Anbindungen erzeugt. Kryptografie wird **nicht** in Kotlin neu geschrieben. Derselbe Kern läuft auf Linux, Windows und Raspberry Pi.
+- **Vier Plattformen (entschieden am 17.10.2026):** TOYPAY gibt es als App für **Android, Windows, Linux und Raspberry Pi**. Kein iPhone vorerst. Die heutige App ist Android-Kotlin. **Vorschlag:** Die Oberfläche wird auf **Compose Multiplatform** umgestellt. Damit läuft derselbe Kotlin-Code auf Android und als Desktop-Programm auf Windows, Linux und Raspberry Pi (Linux arm64). UniFFI erzeugt die Rust-Anbindung für beide Fälle. So entsteht **eine** Codebasis statt vier. Zu prüfen beim Bau: die Desktop-Unterstützung für Linux arm64 auf dem Pi.
 - **Sanfter Umstieg dank Ethereum-Kompatibilität.** ToyChain bietet ab M7 eine Ethereum-kompatible Schnittstelle (`eth_chainId`, `eth_getBalance`, `eth_sendRawTransaction` …). Spricht die App heute über Alchemy mit Polygon, kann sie in einem ersten Schritt dieselben Aufrufe an einen ToyChain-Knoten richten: andere Adresse, andere Chain-ID. Danach übernimmt der eingebaute Light-Knoten.
 - **Das 3D-Spiel hält keine Schlüssel.** TOYQUEST 3D und der Spielserver bekommen nie Zugriff auf Phrase oder private Schlüssel.
 - **API-Schlüssel gehören nicht in die App.** Der Alchemy-Key darf nicht in der ausgelieferten App stecken, weil jeder ihn aus der APK auslesen kann. Spätestens mit dem Umstieg auf ToyChain entfällt er.
@@ -39,7 +40,11 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
 | Attestierungs-Gruppe (mitsignieren) | **optional**, nur beim Laden und im WLAN | bringt Belohnung. Wer offline geht, verliert nur diese Runde, keinen Stake |
 | ToyWork-Shares (Arbeit) | **optional**, nur beim Laden | Argon2id mit 16 MiB läuft auch auf alten Geräten |
 | Voll-Knoten (256 MB) | **aus**, auf Tablets einschaltbar | braucht Speicher und eine dauerhafte Verbindung |
-| Validator im Komitee | **nein** | muss rund um die Uhr erreichbar sein. Android beendet Hintergrund-Apps, und Ausfälle kosten Einfluss. Dafür eignen sich Raspberry Pi oder PC |
+| Validator im Komitee | **nein** auf Android | muss rund um die Uhr erreichbar sein. Android beendet Hintergrund-Apps, und Ausfälle kosten Einfluss |
+
+**Auf PC und Raspberry Pi** kann TOYPAY mehr: Voll-Knoten (256 MB) und Validator sind dort möglich, auf dem Pi als Hintergrunddienst, der rund um die Uhr läuft. Der Raspberry Pi ist damit die natürliche Plattform für Teilnehmer, die mitsignieren und an der Emission teilhaben wollen.
+
+**TOYQUEST 3D auf dem Raspberry Pi:** Das 3D-Spiel braucht viel Grafikleistung (1 bis 3 Mio. Dreiecke je Szene). Auf einem Pi 5 ist es höchstens mit der Stufe „Niedrig“ und dem OpenGL-Renderer denkbar, auf einem Pi 4 kaum. Das muss getestet werden. Wallet und Knoten laufen auf dem Pi unabhängig davon.
 
 **Schutz vor Sybil-Angriffen:** Belohnungen gibt es nur für Stake und geprüfte Arbeit, nie pro Gerät oder Installation. Sonst könnte jemand tausend Emulatoren starten.
 
@@ -169,7 +174,7 @@ Hinweis: Das ist keine Rechtsberatung. Die Punkte zeigen, wo eine rechtliche Pr�
 
 **Entschieden am 17.10.2026: A, Einbahnstraße.** TOY lassen sich in Dukaten tauschen, Dukaten und Gold nie zurück in TOY. Belohnungen gibt es nur als Spielwerte. B käme frühestens nach einer rechtlichen Prüfung in Frage, C nicht. In allen Fällen gilt: Das Spiel erzeugt **nie** neues TOY. Der Umweg über NFT-Verkäufe ist durch zwei Sorten Dukaten geschlossen (Entscheidung 28, Abschnitt 5a).
 
-**K4 Jugendschutz.** Für welches Alter sind die Spiele gedacht? Spielen Minderjährige, brauchen alle TOY-Funktionen eine Altersgrenze, oder Spiel und Wallet werden getrennte Apps.
+**K4 Jugendschutz.** **Entschieden am 17.10.2026: ab 16 Jahren.** Daraus folgt eine Frage für die rechtliche Prüfung: 16- und 17-Jährige sind in Deutschland nur beschränkt geschäftsfähig. Verträge wie der Kauf von TOY, Sultansdukaten oder NFTs brauchen grundsätzlich die Zustimmung der Eltern, außer bei kleinen Beträgen aus dem eigenen Taschengeld. Viele Krypto-Dienste verlangen deshalb 18 Jahre. **Vorschlag:** Das Spiel ab 16. Alles, was echte TOY bewegt (Wechselstube, Prägen, Bridge, Handel), ab **18** mit Altersnachweis, oder für 16- und 17-Jährige nur mit Zustimmung der Eltern. Auch Poker mit Spielchips braucht eine passende Altersfreigabe (USK).
 
 **K5 Verwahrung.** Hält TOYPAY nie fremde Schlüssel, ist die App eine Software-Wallet. Wer Guthaben für Nutzer verwahrt oder tauscht, braucht nach MiCA voraussichtlich eine Zulassung als Krypto-Dienstleister. **Vorschlag:** strikt nicht verwahrend.
 
@@ -190,7 +195,7 @@ Folgen:
 
 **K10 NFTs und Recht.** Einzigartige NFTs fallen in der Regel nicht unter MiCA. Große Serien gleichartiger NFTs können aber anders bewertet werden. Gehandelte Spielgegenstände berühren zudem Steuer- und Verbraucherrecht. Teil der rechtlichen Prüfung.
 
-**K7 Eine App oder zwei.** Wallet mit Light-Knoten und Spiele in einer App machen die App groß und vermischen Risiken (Glücksspiel, Jugendschutz, Finanzfunktionen). **Möglichkeit:** „TOYPAY Wallet“ als schlanke eigene App mit Knoten, die Spiele als eigene Apps (TOYQUEST 3D ist es bereits).
+**K7 Eine App oder zwei.** TOYPAY kommt auf vier Plattformen (Entscheidung 30). TOYQUEST 3D ist schon heute ein eigenes Programm. Offen ist, ob Wallet, Knoten und die 2D-Spiele (Stadtviertel, Poker, TOYQUEST) **in einer** TOYPAY-App bleiben. Wallet und Spiele in einer App machen sie groß und vermischen Risiken (Glücksspiel, Jugendschutz, Finanzfunktionen). Vor allem die Altersgrenze 18 für TOY-Funktionen (K4) spricht für eine Trennung. **Möglichkeit:** „TOYPAY Wallet“ als schlanke App mit Knoten auf allen vier Plattformen, die Spiele getrennt.
 
 ## 8. Abhängigkeiten zum ToyChain-Bauplan
 
@@ -209,10 +214,11 @@ Folgen:
 
 Beantwortet am 17.10.2026: Die App nimmt TOY auf allen Ketten an, bridgt nativen TOY und prägt NFTs auf Polygon mit Polygon-TOY (Entscheidungen 15 und 16). NFT-Prägung mit TOY erst nach dem Bridge-Start (Entscheidung 17).
 
+Beantwortet am 17.10.2026: Altersgruppe ab 16 (Entscheidung 29), Plattformen Android, Windows, Linux und Raspberry Pi (Entscheidung 30).
+
 Offen:
 1. Werden Poker-Gewinne (Spielchips) von Dukaten und TOY getrennt gehalten (K2)?
-2. Für welches Alter sind TOYPAY und TOYQUEST gedacht (K4)?
-3. Eine App mit allem, oder Wallet und Spiele getrennt (K7)?
-4. Nur Android, oder später auch iPhone?
-5. Sollen NFTs schon vor dem Bridge-Start **ohne TOY** geprägt werden können (kostenlos oder gegen POL)?
-6. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?
+2. TOY-Funktionen (Wechselstube, Prägen, Bridge, Handel) ab 18, oder ab 16 mit Zustimmung der Eltern (K4)?
+3. Wallet und Spiele in einer TOYPAY-App oder getrennt (K7)?
+4. Sollen NFTs schon vor dem Bridge-Start **ohne TOY** geprägt werden können (kostenlos oder gegen POL)?
+5. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?
