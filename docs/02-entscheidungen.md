@@ -85,6 +85,8 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 
 ## Noch offen
 
+- **Bridge (`06-bridge.md`, Abschnitt 11):** B1 Umzug von Tresoren, B2 Limits, B3 Komitee-Mitglieder, B4 Takt der Beweise, B5 Bridge-Gebühr.
+
 
 - Quellcode auf Etherscan und Polygonscan verifizieren (am 17.10.2026 auf beiden Ketten noch **nicht verifiziert**). Prägung von je 10^26 Einheiten ist bestätigt.
 - Schlüssel der Contract-Wallet `0x18da…00c2`: Wer hält ihn, wie ist er gesichert? Liegt der ursprüngliche Quellcode der Verträge vor?
