@@ -24,7 +24,8 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 - Emission: Pro Epoche `k × Restmenge`, k₀ ≈ 0,0505 %, dynamischer Faktor m ∈ [0,5; 2,0], Restmenge der Emission 99 Mio. (1 Mio. Reserve im Genesis-Block, Zeitsperre 4 Jahre linear). Eine Epoche endet nach 1.440 Blöcken, nicht nach Zeit. Die Obergrenze 100 Mio. darf **nie** überschritten werden.
 - Kostenloses Kontingent 10 bis 100 Transaktionen pro Wallet und Epoche, darüber progressive Gebühr oder ToyWork-Share (Argon2id, 16 MiB).
 - Lizenz: **MIT** (nur Bibliotheken mit dazu verträglicher Lizenz verwenden, z. B. MIT, Apache-2.0, BSD, CC0).
-- **Nicht in Phase 1:** Layer-2-Token, NFTs, benutzerdefinierte Smart Contracts, EVM-Ausführung, Bridge, privater Pool, Offline-Schecks.
+- **Nur der native Coin TOY auf ToyChain, für immer:** keine Token, keine NFTs, keine Smart Contracts, keine EVM-Ausführung (Entscheidung 36). Jede Funktion ist eine fest eingebaute Transaktionsart (Spezifikation Abschnitt 6a). Keine Vertrags-Engine einbauen, auch nicht "für später".
+- **Nicht in Phase 1:** Bridge, privater Pool, Offline-Schecks.
 
 ## Regeln für Kryptografie und Sicherheit
 

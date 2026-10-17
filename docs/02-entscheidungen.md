@@ -11,7 +11,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 - Jeder Nutzer kann an Signaturen und am Mint-Prozess teilhaben.
 - Möglichst Monero-Logik (z. B. Ringsignaturen).
 - Offline-Transaktionen zwischen Wallets künftig möglich.
-- Vorerst keine Layer-2-Token, keine NFTs, keine eigenen Smart Contracts.
+- Vorerst keine Layer-2-Token, keine NFTs, keine eigenen Smart Contracts. (Am 17.10.2026 verschärft: auf ToyChain nie, siehe Entscheidung 36.)
 - Gesamtmenge 100.000.000 TOY, in ca. 25 Jahren durch Programm und Netzwerk gemintet.
 - Je Wallet 10 bis 100 kostenlose Transaktionen je nach Auslastung (Gebühr wird erstattet). Bei Wallets mit hohem Volumen geringe Gebühr, die zufällig anderen Teilnehmern zugutekommt, neben dem Mint-Prozess.
 - Transaktionen dauern höchstens ca. 1 Minute oder bis der Pool voll ist.
@@ -44,7 +44,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 13 | Fremdbestand | Vor dem Start werden die Token außerhalb der Contract-Wallet bis auf höchstens 10.000 TOY je Kette zurückübertragen. Ersetzt Nr. 7 |
 | 14 | Deckungsposten | **Bestätigt am 17.10.2026:** 10.000 TOY aus der Reserve decken im Genesis-Block den Polygon-Fremdbestand, damit jeder Token 1:1 einlösbar ist. Reserve für Team usw. dann 990.000 TOY |
 | 15 | TOYPAY und Ketten | TOYPAY nimmt ToyCoin auf allen Ketten an (ToyChain, Polygon, Ethereum, später weitere) und bridgt nativen TOY |
-| 16 | Spiel-NFTs | Spielgegenstände und Spielfiguren werden als NFTs auf **Polygon** geprägt, bezahlt mit Polygon-TOY. ToyChain selbst bleibt in Phase 1 ohne NFTs. Details und offene Punkte (K8 bis K10) in `07-toypay.md` |
+| 16 | Spiel-NFTs | Spielgegenstände und Spielfiguren werden als NFTs auf **Polygon** geprägt, bezahlt mit Polygon-TOY. ToyChain selbst hat keine NFTs (Entscheidung 36). Details und offene Punkte (K8 bis K10) in `07-toypay.md` |
 | 17 | Start der NFT-Prägung | NFTs werden erst **nach** dem Start der Bridge mit TOY geprägt (K8, Weg a). Bis zur Einzahlung in den Tresor gibt die Ersteller-Adresse keine TOY mehr aus, nur Rückübertragungen an sie sind erlaubt |
 | 18 | NFT-Vertrag: Schutz | Kein Admin-Recht zum beliebigen Prägen. Tageslimit und Notschalter (nur Pause). Ist ein Gegenstand geprägt, gilt das NFT als Eigentumsnachweis, im Spiel gibt es ihn nicht doppelt |
 | 19 | NFT-Präge-Regeln | Prägen nur mit mindestens **100 TOY** auf der Adresse. Je Adresse höchstens **5 Spielfiguren** (teils selbst, teils zufällig konfiguriert, aufwertbar) und **50 Spielgegenstände**. Pro Woche höchstens **1 Spielfigur und 10 Gegenstände**. Offene Feinheiten (Sperre der 100 TOY, Prägen oder Besitz, Aufwertung, Zufall) in `07-toypay.md` |
@@ -64,6 +64,7 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 33 | Auflage Sternenfeuer | Jede Gegenstandsart der Seltenheit Sternenfeuer (80–100 TOY) gibt es höchstens **1.001-mal**. Der NFT-Vertrag leitet die Grenze aus der Gebühr ab, ohne Admin |
 | 34 | Gold | Gold gehört zur erspielten Sorte: 10 Gold = 1 Königsdukat |
 | 35 | Königsdukaten verschenken | Königsdukaten und Gold dürfen zwischen Spielern verschenkt und im Spiel gehandelt werden. Sultansdukaten bleiben an das Konto gebunden |
+| 36 | Nur nativer Coin | Auf ToyChain gibt es **nur TOY**: keine Token, keine NFTs, keine Smart Contracts, keine EVM-Ausführung, **auch nicht später**. Alle Funktionen sind fest eingebaute Transaktionsarten (Spezifikation Abschnitt 6a). Verträge gibt es nur auf anderen Ketten (Tresore, NFT-Vertrag auf Polygon und Ethereum) |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 

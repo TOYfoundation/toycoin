@@ -63,7 +63,7 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
 - **Anzeige:** „TOY gesamt“ ist die Summe über alle Ketten. Für jede Kette wird angezeigt, ob der Bestand aus dem Tresor stammt und damit 1:1 einlösbar ist. Laut Entscheidung 14 gilt das für alle Token.
 
 **Spiel-NFTs auf Polygon**
-- **Wo:** Die NFTs liegen auf **Polygon**, nicht auf ToyChain. Damit bleibt die Vorgabe „keine NFTs in Phase 1“ für ToyChain bestehen, und die NFTs sind sofort in bestehenden Wallets und Marktplätzen sichtbar.
+- **Wo:** Die NFTs liegen auf **Polygon**, nicht auf ToyChain. ToyChain selbst hat keine NFTs und keine Verträge (Entscheidung 36), und die NFTs sind sofort in bestehenden Wallets und Marktplätzen sichtbar.
 - **Vertrag:** Dafür braucht es einen **neuen NFT-Vertrag** (ERC-721 oder ERC-1155) auf Polygon. Anders als der Token-Vertrag hat er zwangsläufig eine Präge-Funktion. Sie muss streng begrenzt sein:
   - Prägen nur mit einer Freigabe des Spielservers (signierter Gutschein nach EIP-712: „Gegenstand X gehört Spieler Y“).
   - Jeder Gutschein ist nur einmal gültig.

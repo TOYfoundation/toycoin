@@ -112,4 +112,4 @@ Lege ein Claude-Projekt an, lade alle Dateien dieses Ordners als Projektwissen h
 
 ## Danach: Phase 2 bis 5
 
-Reihenfolge laut Spezifikation Abschnitt 15: Beweis-Schicht, privater Pool, Offline-Schecks, Bridge und EVM-Ausführung. Für jede Phase zuerst eine Detailspezifikation mit Claude erarbeiten, dann wieder Meilensteine bilden.
+Reihenfolge laut Spezifikation Abschnitt 15: Beweis-Schicht, privater Pool, Offline-Schecks, Bridge. Eine EVM-Ausführung gibt es nicht (Entscheidung 36). Für jede Phase zuerst eine Detailspezifikation mit Claude erarbeiten, dann wieder Meilensteine bilden.

@@ -15,7 +15,7 @@ Die Kernideen:
 - **Spam wird teuer:** Jede Wallet hat ein kostenloses Kontingent. Wer mehr braucht, zahlt progressive Gebühren oder leistet Rechenarbeit (CPU/GPU).
 - **Privatsphäre, Offline-Zahlung und Bridge** kommen in späteren Phasen, sind aber von Anfang an im Design vorgesehen. Der Start ist ein Fair Launch mit nur 1 % offengelegter Reserve.
 
-**Nicht Teil von Phase 1** (laut Vorgabe): Layer-2-Token, NFTs, benutzerdefinierte Smart Contracts.
+**Grundregel (entschieden am 17.10.2026, Entscheidung 36):** Auf ToyChain gibt es **nur den nativen Coin TOY**. Es gibt dort **keine Token, keine NFTs und keine Smart Contracts**, auch nicht in späteren Phasen. Alles, was die Kette können muss, ist eine **fest eingebaute Transaktionsart** des Protokolls (Abschnitt 6a). Token, NFTs und Verträge gibt es nur auf anderen Ketten, z. B. die Spiel-NFTs und die Bridge-Tresore auf Polygon und Ethereum.
 
 ## 2. Ehrliche Einordnung
 
@@ -24,7 +24,7 @@ Damit die Erwartungen stimmen:
 - **Sicherheit „wie Bitcoin“** entsteht nicht durch Design allein, sondern durch viele unabhängige Teilnehmer und wirtschaftlichen Einsatz. Eine neue Kette ist anfangs verwundbar. Deshalb gehören Testnet, Audits und ein vorsichtiger Start fest zum Plan.
 - **„Eigene Verschlüsselung“** bedeutet hier eine eigene Zusammenstellung geprüfter Verfahren, nicht neu erfundene Algorithmen. Selbst entwickelte Kryptografie ist ein bekanntes Risiko und wird bewusst vermieden (siehe Abschnitt 8).
 - **256 MB** lassen sich nur mit Pruning und Beweisen halten. Vollständige Historie gibt es dann nur auf freiwilligen Archiv-Knoten (siehe Abschnitt 4).
-- **EVM-Kompatibilität** bedeutet in Phase 1: gleiche Adressen, Signaturen und eine JSON-RPC-Schnittstelle. Eine Ausführung von EVM-Verträgen gibt es erst später.
+- **EVM-Kompatibilität** bedeutet: gleiche Adressen, Signaturen und eine JSON-RPC-Schnittstelle. Eine Ausführung von EVM-Verträgen gibt es auf ToyChain **nie** (Entscheidung 36). dApps, die Verträge brauchen, nutzen TOY auf Polygon oder Ethereum über die Bridge.
 - Eine Kryptowährung mit Datenschutzfunktionen und eigener Ausgabe berührt Recht und Regulierung (z. B. MiCA in der EU, Steuer, Börsenlistings). Vor einem Mainnet-Start wird eine rechtliche Prüfung empfohlen.
 
 ## 3. Architektur im Überblick
@@ -116,6 +116,27 @@ Die Grenze gilt für die Daten eines Standard-Knotens (Voll-Rolle). Aufteilung:
 
 Berechtigt für die Lotterie sind nur Teilnehmer, die in der letzten Epoche nachweislich aktiv waren. Das erschwert Manipulation durch viele leere Konten.
 
+## 6a. Fest eingebaute Transaktionsarten (abschließende Liste)
+
+Weil es keine Smart Contracts gibt, kennt das Protokoll nur diese Transaktionsarten. Jede neue Art braucht ein Protokoll-Update, das alle Knoten übernehmen.
+
+| Art | Zweck | ab Phase |
+|---|---|---|
+| **Überweisung** | TOY von Konto zu Konto, optional mit Hybrid-Signatur | 1 |
+| **Stake / Unstake** | TOY für Konsens und Attestierung binden oder lösen | 1 |
+| **Validator anmelden / abmelden** | BLS-Schlüssel registrieren | 1 |
+| **Attestierung** | Mitsignieren in Komitee oder Attestierungs-Gruppe | 1 |
+| **Belohnung und Lotterie** | vom Protokoll selbst ausgelöst, keine Nutzer-Transaktion | 1 |
+| **Reserve-Freigabe** | lineare Zeitsperre der Reserve, vom Protokoll erzwungen | 1 |
+| **Konto wiederbeleben** | abgelaufenes Konto mit Merkle-Beweis zurückholen | 1 |
+| **Bridge-Ausgang / Bridge-Eingang** | TOY im protokolleigenen Bridge-Konto sperren oder daraus freigeben | 5 |
+| **Abgeschirmter Pool** | Ein- und Auszahlung, private Überweisung | 3 |
+| **Offline-Escrow / Scheck einlösen** | Betrag für Offline-Schecks sperren, Schecks einlösen | 4 |
+
+Protokolleigene Konten wie Reserve, Deckungsposten und Bridge-Konto haben **keinen privaten Schlüssel**. Nur die Regeln des Protokolls können sie bewegen.
+
+**Vorteile:** kleinere Angriffsfläche (keine Vertragsfehler wie bei DeFi-Hacks), vorhersehbare Größe der Transaktionen (gut für das 256-MB-Budget), einfachere Beweise in Phase 2 und schnellere Prüfung auf Light-Clients.
+
 ## 7. Arbeit: CPU und GPU
 
 Reine Hash-Arbeit verschwendet Energie. Deshalb zwei Stufen:
@@ -188,11 +209,11 @@ Das Doppelausgabe-Problem wird durch ein **vorab hinterlegtes Offline-Budget** g
 
 Sicherheitsregeln: Ablaufzeit je Scheck, Höchstbetrag je Scheck, Gerätebindung über Secure Element oder Keystore. Auf Geräten ohne Hardware-Schutz gelten niedrigere Limits.
 
-## 12. EVM-Kompatibilität und Bridge (Phase 5)
+## 12. Ethereum-Kompatibilität und Bridge (Phase 5)
 
-**Phase 1 bis 4:** Ethereum-Adressen, Signaturformat und JSON-RPC-Teilmenge. MetaMask und ähnliche Wallets können ToyChain als eigenes Netzwerk einbinden und TOY senden. Eine Ausführung von Smart Contracts findet noch nicht statt.
+**Auf ToyChain:** Ethereum-Adressen, Signaturformat und JSON-RPC-Teilmenge. MetaMask und ähnliche Wallets können ToyChain als eigenes Netzwerk einbinden und TOY senden. Smart Contracts gibt es nicht (Entscheidung 36).
 
-**Später:** EVM-Ausführung (z. B. mit der Bibliothek revm) kann nachgerüstet werden, wenn das Kernnetz stabil ist.
+**Verträge nur auf den anderen Ketten:** Tresor-Verträge und der NFT-Vertrag liegen auf Polygon und Ethereum. Auf ToyChain ist die Bridge eine fest eingebaute Transaktionsart mit einem protokolleigenen Bridge-Konto ohne Schlüssel (Abschnitt 6a).
 
 **Bridge (entschieden: das Sicherste):** TOY wird 1:1 auf Polygon, Ethereum und weitere Ketten gebridgt. Weil auf Polygon und Ethereum schon je 100 Mio. ToyCoin existieren, wird nichts neu geprägt: Die Bridge arbeitet mit Tresor-Verträgen (Vorschlag, zur Bestätigung).
 
@@ -232,11 +253,11 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst.
 ## 15. Fahrplan
 
 1. **Phase 0, Spezifikation:** Dieses Dokument, Parameter festlegen, Entscheidungen aus Abschnitt 16 treffen.
-2. **Phase 1, Kern:** Rust-Knoten mit Konten, Konsens, 60-Sekunden-Blöcken, Emission, Kontingent und Gebühren. Wallet für Android, Linux, Windows und Raspberry Pi. EVM-kompatible Adressen und JSON-RPC. Öffentliches Testnet.
+2. **Phase 1, Kern:** Rust-Knoten mit Konten, Konsens, 60-Sekunden-Blöcken, Emission, Kontingent und Gebühren. Wallet für Android, Linux, Windows und Raspberry Pi. Ethereum-kompatible Adressen und JSON-RPC. Öffentliches Testnet.
 3. **Phase 2, Beweise:** Rekursives Falten der Historie, Prover-Rolle, Einhaltung des 256-MB-Budgets, Light-Clients.
 4. **Phase 3, Privatsphäre:** Stealth-Adressen, privater Pool.
 5. **Phase 4, Offline-Schecks.**
-6. **Phase 5, Bridge und EVM-Ausführung.**
+6. **Phase 5, Bridge** (ohne EVM-Ausführung, Entscheidung 36).
 
 **Pflicht-Freigaben:** Kein Mainnet ohne externes Audit der Kryptografie und des Konsenses, ohne Testnet-Phase mit Lasttests und ohne rechtliche Prüfung.
 
@@ -259,6 +280,7 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst.
 10. **Lizenz:** Der Code steht unter der MIT-Lizenz.
 11. **Fremdbestand:** Rückübertragung an die Contract-Wallet bis auf höchstens 10.000 TOY je Kette vor dem Start (ersetzt die Sperr-Regel aus Nr. 4).
 12. **Deckungsposten:** 10.000 TOY aus der Reserve decken im Genesis-Block den Polygon-Fremdbestand. Jeder bestehende Token ist 1:1 einlösbar. Reserve für Team, Entwickler und Bug-Bounty: 990.000 TOY.
+13. **Nur nativer Coin:** Auf ToyChain gibt es nur TOY, keine Token, keine NFTs, keine Smart Contracts, auch später nicht (Entscheidung 36).
 
 **Noch offen:**
 
