@@ -63,6 +63,8 @@ func _ready() -> void:
 	_check(NftItems.min_level("lamp_wondrous") == 20, "legendary needs level 20")
 	_check(not NftItems.can_use("lamp_wondrous", 19), "level 19 cannot use legendary")
 	_check(NftItems.can_use("flute", 1), "level 1 can use flute")
+	_check(NftItems.max_supply("lamp_wondrous") == 1001, "Starfire edition 1001")
+	_check(NftItems.max_supply("goblet_gold") == 0, "Ruby Glow unlimited for now")
 	for item in NftItems.all_items():
 		if item["fee_toy"] >= 40:
 			_check(NftItems.epithet(item["id"], "en") != "", "epithet for %s" % item["id"])

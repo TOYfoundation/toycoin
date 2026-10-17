@@ -99,6 +99,9 @@ RARITIES = [
     (80, 100, "legendary", "Sternenfeuer", "Starfire", "#FFE9A8", 20, 4),
 ]
 EPITHET_MIN_FEE = 40  # every precious and legendary item has an epithet
+# Edition cap per item type (decision 33). None = unlimited. The NFT contract
+# derives the same cap from the fee, so no admin is needed.
+MAX_SUPPLY = {"legendary": 1001}
 # Non-stat effect keys allowed in gang.json (handled by game logic).
 SPECIAL_EFFECTS = {
     "travel_time_pct", "shop_price_pct", "riddle_hints", "boat_speed_pct",
@@ -188,6 +191,7 @@ def load() -> tuple[list[dict], list[str]]:
                 "fee_gold": fee * GOLD_PER_TOY,
                 "rarity": rarity_for(fee)[2],
                 "min_level": rarity_for(fee)[6],
+                "max_supply": MAX_SUPPLY.get(rarity_for(fee)[2]),
                 "bonuses": parse_bonuses(boni, where, errors),
             }
         )

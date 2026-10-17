@@ -185,6 +185,12 @@ static func can_use(id: String, character_level: int) -> bool:
 	return has_item(id) and character_level >= min_level(id)
 
 
+## Edition cap per item type (decision 33): 1001 for Starfire, 0 = unlimited.
+static func max_supply(id: String) -> int:
+	var v = get_item(id).get("max_supply")
+	return 0 if v == null else int(v)
+
+
 ## Playful epithet of precious and legendary items, "" if none.
 static func epithet(id: String, lang: String = "en") -> String:
 	var item := get_item(id)

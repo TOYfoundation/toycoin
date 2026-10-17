@@ -138,7 +138,8 @@ Damit erspielte Dukaten nicht über Präge-Gebühren und NFT-Verkäufe zu TOY we
 | Tausch gegen die andere Sorte | **nein** | **nein** |
 | Zwischen Spielern übertragbar | **nein**, an das Spielerkonto gebunden | ja, im Spiel (Handel, Geschenke) |
 
-- **Gold** ist die kleine Münze der erspielten Sorte: 10 Gold = 1 Königsdukat (Annahme, damit der Kurs 1 TOY = 100 Dukaten = 1.000 Gold stimmt).
+- **Gold** ist die kleine Münze der erspielten Sorte: 10 Gold = 1 Königsdukat (Entscheidung 34).
+- **Königsdukaten und Gold** dürfen Spieler einander schenken und im Spiel handeln (Entscheidung 35). Sultansdukaten nie.
 - **Prüfbar:** Die Summe aller ausgegebenen Sultansdukaten ist immer genau 100 × die in der Wechselstube eingegangenen TOY. Der Spielserver führt beide Konten getrennt.
 - **Warum Sultansdukaten nicht übertragbar sind:** Sonst könnte ein Spieler erspielte Königsdukaten oder Gegenstände an andere gegen deren Sultansdukaten verkaufen, damit Gebühren zahlen und so doch zu TOY kommen.
 - **Was bewusst bleibt:** Geprägte Spielfiguren und Gegenstände sind erspielt und dürfen als NFTs verkauft werden. Das ist der Kern des Gang-Prinzips. Ihren Preis bestimmen die Spieler auf dem Marktplatz, nicht das Spiel. Dieser Punkt gehört auf die Liste der rechtlichen Prüfung (K10).

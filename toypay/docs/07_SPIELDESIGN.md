@@ -167,7 +167,7 @@ Die Präge-Gebühren einer Woche speisen die Schatzfunde der nächsten (Haushalt
 | **Viele Konten** | 100 TOY Mindestbestand und 10 TOY Sperre je NFT (Entscheidungen 19 und 21), Stufe 20 vor dem Prägen |
 | **Reiche werden immer reicher** | Abnehmender Ertrag beim Stapeln. Saisontitel nach Können (Bestzeiten, Meisterprüfungen), nie nach Besitz |
 | **Trittbrettfahrer in Gruppen-Missionen** | Belohnung nach Beitrag: Wer seine Probe schafft, bekommt seinen Anteil |
-| **Zu viele Legenden** | Vorschlag: feste Auflage je Gegenstandsart, z. B. Sternenfeuer höchstens 1.001 Stück, Rubinglut höchstens 10.001. Der Vertrag leitet die Auflage aus der Gebühr ab, also ohne Admin. **Zur Bestätigung** |
+| **Zu viele Legenden** | **Entschieden (Nr. 33):** Jede Sternenfeuer-Art gibt es höchstens **1.001-mal**. Der Vertrag leitet die Auflage aus der Gebühr ab, also ohne Admin. Eine Grenze für Rubinglut (z. B. 10.001) ist noch offen |
 
 ### Bündnisse
 

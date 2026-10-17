@@ -61,6 +61,9 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 30 | Plattformen TOYPAY | **Android, Windows, Linux, Raspberry Pi**. Kein iPhone vorerst. Vorschlag: eine Codebasis mit Compose Multiplatform und dem gemeinsamen Rust-Kern |
 | 31 | Alter für TOY-Funktionen | Spiele ab 16. Wechselstube, Sultansdukaten, Prägen, Bridge und NFT-Handel **ab 18 mit Altersnachweis** |
 | 32 | Apps getrennt | **TOYPAY Wallet** (Wallet und Knoten, 4 Plattformen, ab 18) getrennt von den Spiel-Apps (2D-Spiele und TOYQUEST 3D, ab 16). Verbindung nur über die Wallet-Adresse, nie über Schlüssel |
+| 33 | Auflage Sternenfeuer | Jede Gegenstandsart der Seltenheit Sternenfeuer (80–100 TOY) gibt es höchstens **1.001-mal**. Der NFT-Vertrag leitet die Grenze aus der Gebühr ab, ohne Admin |
+| 34 | Gold | Gold gehört zur erspielten Sorte: 10 Gold = 1 Königsdukat |
+| 35 | Königsdukaten verschenken | Königsdukaten und Gold dürfen zwischen Spielern verschenkt und im Spiel gehandelt werden. Sultansdukaten bleiben an das Konto gebunden |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 
