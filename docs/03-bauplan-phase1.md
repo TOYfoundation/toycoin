@@ -34,6 +34,13 @@ toychain/
 
 Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht es weiter.
 
+### M0: ToyScan Stufe 0, Altbestand-Wächter (vor M1, Entscheidung 57)
+- Kleines eigenes Rust-Programm im Ordner `toyscan/`, unabhängig vom Knoten. Liest nur, hat keine Schlüssel.
+- Kriterien A5, A7, A8 und A12 aus `docs/08-toyscan.md` für Polygon (Chain-ID 137) und Ethereum (Chain-ID 1): Code-Hash und Funktionsliste der Token-Verträge, `totalSupply()`, Bestände von Ersteller-Adresse und offiziellen Cold-Wallets, jede Bewegung dieser Adressen, Fremdbestand, Vergleich von zwei RPC-Quellen.
+- Ausgabe als JSON (`/api/v1/ampel`) und als einfache Webseite. RPC-Schlüssel nur aus Umgebungsvariablen, nie im Repository.
+- Tests mit aufgezeichneten Testdaten, ohne Netz: je Kriterium ein Fall Grün, Gelb und Rot.
+- **Fertig, wenn:** der Wächter gegen die echten Verträge läuft (nur lesend) und das Ergebnis mit dem On-Chain-Befund in `docs/04-toyscan-und-altbestand.md` übereinstimmt.
+
 ### M1: Grundtypen und Emission
 - Typen, Konstanten (10^26 kleinste Einheiten Obergrenze), sichere Rechenfunktionen.
 - Emissionskurve mit k₀, Faktor m ∈ [0,5; 2,0], Zeitplan-Regler. Reserve im Genesis-Block: 900.000 TOY auf der offiziellen Cold-Wallet mit 3 Jahren Sperre und anschließender Freigabe je Epoche über 3 Jahre, 90.000 TOY Bug-Bounty-Topf, 10.000 TOY Deckungsposten (Entscheidungen 41 bis 44). Test: Freigabeplan rundet nie über 900.000 TOY hinaus.

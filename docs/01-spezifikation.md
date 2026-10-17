@@ -129,7 +129,7 @@ Weil es keine Smart Contracts gibt, kennt das Protokoll nur diese Transaktionsar
 | **Attestierung** | Mitsignieren in Komitee oder Attestierungs-Gruppe | 1 |
 | **Belohnung und Lotterie** | vom Protokoll selbst ausgelöst, keine Nutzer-Transaktion | 1 |
 | **Reserve-Freigabe** | 3 Jahre Sperre, danach Freigabe je Epoche über 3 Jahre auf die offizielle Cold-Wallet, vom Protokoll erzwungen (Entscheidungen 41, 42, 44) | 1 |
-| **Mehrfachsignatur-Konto** | Konto, das nur mit m von n Unterschriften bewegt werden kann (z. B. Bug-Bounty-Topf 3 von 5). Ersatz für Multisig-Verträge, die es ohne Smart Contracts nicht gibt | 1 |
+| **Mehrfachsignatur-Konto** | Konto, das nur mit m von n Unterschriften bewegt werden kann (z. B. Bug-Bounty-Topf 3 von 5). Ersatz für Multisig-Verträge, die es ohne Smart Contracts nicht gibt. Beim Bug-Bounty-Topf braucht eine Auszahlung über 5.000 TOY zusätzlich den Verweis auf eine angenommene Abstimmung (Entscheidung 55) | 1 |
 | **Vorschlag, Abstimmung, Stimme delegieren** | Mitbestimmung der Community (`09-mitbestimmung.md`) | 1 |
 | **Konto wiederbeleben** | abgelaufenes Konto mit Merkle-Beweis zurückholen | 1 |
 | **Bridge-Ausgang / Bridge-Eingang** | TOY im protokolleigenen Bridge-Konto sperren oder daraus freigeben | 3 |

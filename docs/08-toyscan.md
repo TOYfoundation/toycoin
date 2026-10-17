@@ -1,6 +1,6 @@
 # ToyScan: Explorer und Ampel
 
-Entwurf v0.1 vom 17.10.2026 · Grundlage: Spezifikation 12, `04-toyscan-und-altbestand.md`, `05-gesamtsystem.md` (Regeln I1 bis I6), `06-bridge.md` (Regeln B-I1 bis B-I4), Entscheidungen 13, 14, 41 bis 54 · Status: **zur Prüfung, offene Punkte in Abschnitt 11**
+Entwurf v0.1 vom 17.10.2026 · Grundlage: Spezifikation 12, `04-toyscan-und-altbestand.md`, `05-gesamtsystem.md` (Regeln I1 bis I6), `06-bridge.md` (Regeln B-I1 bis B-I4), Entscheidungen 13, 14, 41 bis 54 · Status: **entschieden (Nr. 55 bis 57)**
 
 ## 1. Ziel und Grundsätze
 
@@ -102,7 +102,7 @@ Abkürzungen wie in `05-gesamtsystem.md`, Abschnitt 6: `G` gemintet, `R` Reserve
 |---|---|---|---|---|---|
 | **A1** | Obergrenze auf ToyChain (I1) | `G + R + C ≤ 10^26` | — | verletzt, dazu große rote Lampe | Mainnet |
 | **A2** | Tresore decken den Rest | Tresor-Bestand `≥ Ersteinzahlung + ΣD − ΣA`, errechnet aus den Ereignissen des Tresors | — | Tresor hält weniger, Token haben ihn also ohne Freigabe verlassen | Bridge-Start der Kette |
-| **A3** | Reserve | gesperrt `= 900.000 TOY − freigegeben(e)`, Formel unten. Bug-Bounty-Topf und Deckung wie im Genesis-Block, jede Auszahlung des Topfs mit Beleg | Auszahlung über 5.000 TOY ohne passende Abstimmung (siehe T1) | mehr freigegeben als der Plan erlaubt | Mainnet |
+| **A3** | Reserve | gesperrt `= 900.000 TOY − freigegeben(e)`, Formel unten. Bug-Bounty-Topf und Deckung wie im Genesis-Block, jede Auszahlung des Topfs mit Beleg und, ab 5.000 TOY, mit der Abstimmung, auf die sie verweist | — | mehr freigegeben als der Plan erlaubt, oder eine Auszahlung über 5.000 TOY ohne angenommene Abstimmung (das Protokoll verbietet sie, Nr. 55) | Mainnet |
 | **A4** | Emission nach Formel | Emission der Epoche `= floor(Restmenge × k₀ × m)` im Ganzzahl-Format des Knotens, `0,5 ≤ m ≤ 2,0`, Epoche genau 1.440 Blöcke | Summe der Emission mehr als 2 % vor dem Plan (Plan = dieselbe Rechnung mit m = 1) | Emission weicht von der Formel ab oder m liegt außerhalb | Mainnet |
 | **A5** | Altbestand-Verträge und Tresore | Code-Hash und Funktionsliste unverändert, `totalSupply() = 10^26`, Tresor- und Verifizierer-Code gleich dem geprüften Stand | Quellcode noch nicht verifiziert | Code oder Gesamtmenge geändert, dazu große rote Lampe | sofort |
 | **A6** | Bridge betriebsbereit | Notschalter aus. Kein Ausgang wartet länger als 2 × Takt (Polygon: 24 Stunden) auf seinen Beweis | pausiert oder Beweis überfällig | — | Bridge-Start der Kette |
@@ -136,7 +136,7 @@ Dann zeigt ToyScan oben auf jeder Seite einen roten Balken mit Erklärung und Be
 
 ### 5.4 Alarm an die Wächter
 
-ToyScan selbst kann nichts pausieren. Wird ein Kriterium rot, schickt der Ampel-Rechner sofort einen Alarm an die Wächter (Nr. 53). Ein Mensch prüft den Beleg und löst bei Bedarf den Notschalter aus (siehe T2).
+ToyScan selbst kann nichts pausieren. Wird ein Kriterium rot, schickt der Ampel-Rechner sofort einen Alarm an die Wächter (Nr. 53). Ein Mensch prüft den Beleg und löst bei Bedarf den Notschalter aus. ToyScan bekommt bewusst **nie** einen Schlüssel zum Pausieren (Nr. 56).
 
 ### 5.5 Verlauf
 
@@ -192,7 +192,7 @@ Das Bridge-Konto bleibt draußen, weil seine TOY schon als Token auf Polygon ode
 
 | Stufe | Wann | Was |
 |---|---|---|
-| **0 · Altbestand-Wächter** | so bald wie möglich, vor dem Mainnet | A5, A7, A8, A12 für Polygon und Ethereum. Zeigt jede Bewegung der Ersteller-Adresse und der Cold-Wallets und das Messprotokoll am Stichtag (`05-gesamtsystem.md`, Schritte 0 und 6) |
+| **0 · Altbestand-Wächter** | **als erster Baustein, noch vor M1** (Nr. 57) | A5, A7, A8, A12 für Polygon und Ethereum. Zeigt jede Bewegung der Ersteller-Adresse und der Cold-Wallets und das Messprotokoll am Stichtag (`05-gesamtsystem.md`, Schritte 0 und 6) |
 | **1 · Explorer** | Mainnet-Start (Schritt 9) | dazu A1, A3, A4, A9, A11, Blöcke, Epochen, Reserve, Mitbestimmung. Bridge-Kriterien grau |
 | **2 · Bridge Polygon** | Bridge-Start (Schritt 12) | A2, A6, A10 für Polygon |
 | **3 · Bridge Ethereum** | nach der Freischaltung per Abstimmung (Schritt 12a, Nr. 52) | A2, A6, A10 für Ethereum |
@@ -207,10 +207,10 @@ Das Bridge-Konto bleibt draußen, weil seine TOY schon als Token auf Polygon ode
 - Ein Block wird vor der Endgültigkeit ersetzt: Die Ampel ändert sich nicht.
 - Rust-Rechner und Prüfskript kommen bei denselben Rohdaten zum selben Ergebnis.
 
-## 11. Offene Punkte
+## 11. Entscheidungen vom 17.10.2026
 
-**T1 · Prämien des Bug-Bounty-Topfs über 5.000 TOY:** Laut `09-mitbestimmung.md` braucht so eine Prämie eine Abstimmung. Soll das **Protokoll** das erzwingen (die Mehrfachsignatur-Transaktion muss dann auf einen angenommenen Vorschlag verweisen, sonst ist sie ungültig) oder reicht es, dass **ToyScan** einen Verstoß gelb anzeigt? *Empfehlung:* vom Protokoll erzwingen. Das ist eine kleine Prüfung, und niemand muss sich auf die Ehrlichkeit der Unterzeichner verlassen.
-
-**T2 · Automatisch pausieren?** Soll ToyScan bei Rot die Bridge selbst pausieren dürfen? *Empfehlung:* nein. ToyScan bleibt ohne Schlüssel und alarmiert nur die Wächter. Eine Software, die selbst pausieren kann, wäre ein neues Ziel für Angreifer, und ein Fehlalarm würde alle Nutzer treffen.
-
-**T3 · Stufe 0 vorziehen?** Der Altbestand-Wächter braucht ToyChain noch nicht. Er könnte als kleines eigenes Programm **vor** den übrigen Meilensteinen entstehen und die Ersteller-Adresse und die Cold-Wallets sofort öffentlich überwachen (`05-gesamtsystem.md`, Schritt 0). *Empfehlung:* ja, als erster kleiner Baustein im Ordner `toyscan/`.
+| Nr. | Thema | Entscheidung |
+|---|---|---|
+| 55 (T1) | Prämien über 5.000 TOY | Das **Protokoll erzwingt** die Abstimmung: Eine Auszahlung des Bug-Bounty-Topfs über 5.000 TOY muss auf einen angenommenen Vorschlag mit demselben Empfänger und Betrag verweisen, sonst ist sie ungültig. Auszahlungen an denselben Empfänger innerhalb von 30 Epochen werden zusammengezählt, damit niemand eine große Prämie in kleine Stücke teilt |
+| 56 (T2) | Kein automatisches Pausieren | ToyScan bleibt ohne Schlüssel. Bei Rot alarmiert es die Wächter, ein Mensch entscheidet über den Notschalter |
+| 57 (T3) | Altbestand-Wächter zuerst | Stufe 0 wird als **erster Baustein** gebaut, vor M1, als kleines eigenes Programm im Ordner `toyscan/`. Es liest nur über RPC von Polygon und Ethereum |

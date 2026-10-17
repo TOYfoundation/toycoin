@@ -83,6 +83,9 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 52 | Ethereum-Bridge später (B4) | Zum Bridge-Start **nur Polygon**. Die Ethereum-Bridge ist eingebaut, aber ausgeschaltet. Sie startet erst nach einer Abstimmung (Protokoll-Update, 2/3-Mehrheit), die auch den Takt festlegt (Vorschlag: alle 12 Monate). Bis dahin bleiben die Ethereum-Token auf der offiziellen Cold-Wallet |
 | 53 | Bridge-Komitee (B3) | Start mit **Projekt-Komitee 5 von 9 plus Wächtern** (nur Pausieren). Ab Stufe 1 der Mitbestimmung jeden Monat ein Platz an einen gewählten unabhängigen Betreiber mit 10.000 TOY Stake, bis alle 9 gewählt sind |
 | 54 | Einzahlungen von Ethereum (B6) | nach der Freischaltung im 12-Stunden-Takt wie bei Polygon |
+| 55 | Bug-Bounty-Prämien (T1) | Prämien über 5.000 TOY erzwingt das **Protokoll**: Die Auszahlung muss auf einen angenommenen Vorschlag mit gleichem Empfänger und Betrag verweisen. Auszahlungen an denselben Empfänger in 30 Epochen zählen zusammen |
+| 56 | ToyScan ohne Schlüssel (T2) | ToyScan pausiert nie selbst. Bei Rot alarmiert es die Wächter (Nr. 53) |
+| 57 | Altbestand-Wächter zuerst (T3) | ToyScan Stufe 0 wird als erster Baustein vor M1 gebaut (`toyscan/`, nur lesend) |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 
@@ -98,5 +101,4 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 - Schlüssel der Contract-Wallet `0x18da…00c2`: Wer hält ihn, wie ist er gesichert? Liegt der ursprüngliche Quellcode der Verträge vor?
 - TOYPAY: Grundsatzfragen K1 bis K7 in `07-toypay.md` (Spielwährung oder Kryptowährung, Poker, Umtausch Dukaten ↔ TOY, Jugendschutz, Verwahrung, Datenschutz, eine oder zwei Apps).
 - Rechtliche Prüfung vor dem Mainnet (MiCA, Steuer, Börsenlistings, 1 % Reserve, Fremdbestand).
-- **ToyScan (`08-toyscan.md`, Abschnitt 11):** T1 Prämien über 5.000 TOY vom Protokoll erzwingen, T2 kein automatisches Pausieren, T3 Altbestand-Wächter vorziehen.
 - Technisch: Beweisprüfung auf Ethereum (Kosten, Trusted-Setup-Frage), in Phase 2 klären.

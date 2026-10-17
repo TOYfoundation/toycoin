@@ -7,7 +7,8 @@ Stand: 17.10.2026 · Phase 1 · Aktueller Schritt: **Konzeptphase.** Der Bau (M1
 | Meilenstein | Inhalt | Status |
 |---|---|---|
 | Start | Rust-Workspace, leere Crates, CI, STATUS.md | ✅ fertig |
-| M1 | Grundtypen und Emission (`toy-types`, `toy-emission`) | ⏳ offen, nächster Schritt |
+| M0 | ToyScan Stufe 0: Altbestand-Wächter (`toyscan/`, Nr. 57) | ⏳ offen, nächster Schritt |
+| M1 | Grundtypen und Emission (`toy-types`, `toy-emission`) | ⏳ offen |
 | M2 | Kryptografie und Adressen (`toy-crypto`) | ⏳ offen |
 | M3 | Zustand, Transaktionen, Kontingent, Gebühren (`toy-state`, `toy-tx`) | ⏳ offen |
 | M4 | Blöcke, Konsens-Simulation (`toy-consensus`) | ⏳ offen |
@@ -87,7 +88,7 @@ Alle Entscheidungen stehen auch in `docs/02-entscheidungen.md` (Nr. 9 bis 12) un
 | `07-toypay.md` | Entwurf, NFT-Regeln entschieden (Nr. 15 bis 27). Offen: Umweg über NFT-Verkäufe, Alter, eine oder zwei Apps |
 | `toypay/docs/07_SPIELDESIGN.md` | Entwurf: Spieldesign mit Klassen, Synergien, Wirtschaft, Lichteffekten. Gang-Regeln und Effekt-Paket gebaut und in Godot 4.4.1 getestet (`nft_items_test`, `vfx_test`: ALL OK) |
 | `toypay/docs/06_NFT_GEGENSTAENDE.md` | Katalog mit 500 Gegenständen, geprüft mit `gen_nft_items.py` und in Godot 4.4.1 (`nft_items_test`: ALL OK) |
-| `08-toyscan.md` | Entwurf v0.1: Aufbau, Datenquellen, Messpunkt, Ampel mit Kriterien A1 bis A12, API, Stufen 0 bis 3, Pflicht-Tests. Offen: T1 bis T3 |
+| `08-toyscan.md` | v0.1, entschieden (Nr. 55 bis 57): Aufbau, Datenquellen, Messpunkt, Ampel A1 bis A12, API, Stufen 0 bis 3, Pflicht-Tests |
 
 ## Noch offen
 
