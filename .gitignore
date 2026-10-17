@@ -1,5 +1,34 @@
-/target
+# Build output
+target/
 **/*.rs.bk
-*.keystore
-*.key
+
+# Secrets: never commit keys, seed phrases or API tokens
 .env
+.env.*
+*.key
+*.pem
+*.p12
+*.jks
+*.keystore
+keystore*.json
+local.properties
+# TOYPAY: gradle.properties contains a token there (see toypay/docs/01_PROJEKT_UEBERSICHT.md)
+toypay/**/gradle.properties
+
+# Android / Gradle
+.gradle/
+**/build/
+captures/
+*.apk
+*.aab
+
+# Godot
+.godot/
+*.import.tmp
+
+# Editors and OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

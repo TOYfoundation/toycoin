@@ -8,7 +8,9 @@ Ziel von Phase 1: ein lauffähiges **lokales Testnet** mit mehreren Knoten, Ethe
 - Die Beweis-Schicht (rekursives Falten der Historie, nötig für 256 MB über lange Zeit) ist Forschungsarbeit. Sie wird in Phase 2 angegangen, wenn Phase 1 stabil ist.
 - Mit einem Pro-Abo gelten Nutzungslimits. Deshalb ist der Plan in kleine Meilensteine geteilt. Pro Sitzung einen Meilenstein bearbeiten und danach mit `/clear` neu beginnen. Der Stand steht in `docs/STATUS.md`.
 
-## Vorgeschlagene Ordnerstruktur (Rust-Workspace)
+## Ordnerstruktur (Rust-Workspace)
+
+Umgesetzt im Repository `toycoin` im Ordner `toychain/`. Die Dokumentation liegt im Hauptordner unter `docs/`, nicht in `toychain/docs/`.
 
 ```
 toychain/

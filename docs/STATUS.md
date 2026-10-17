@@ -52,8 +52,8 @@ toy-cli: node, rpc, wallet, types   ·   tests/: alle
 
 | Wo | Befehl |
 |---|---|
-| Linux/macOS/Pi | `./scripts/check.sh` |
-| Windows | `powershell -File scripts\check.ps1` |
+| Linux/macOS/Pi | `toychain/scripts/check.sh` |
+| Windows | `powershell -File toychain\scripts\check.ps1` |
 | GitHub Actions | `.github/workflows/ci.yml` (Linux x86_64, Windows x86_64, Linux aarch64) |
 
 Die Skripte führen genau das aus, was `CLAUDE.md` verlangt:

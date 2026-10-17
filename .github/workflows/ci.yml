@@ -1,8 +1,14 @@
-name: CI
+name: ToyChain CI
 
 on:
   push:
+    paths:
+      - "toychain/**"
+      - ".github/workflows/ci.yml"
   pull_request:
+    paths:
+      - "toychain/**"
+      - ".github/workflows/ci.yml"
 
 env:
   CARGO_TERM_COLOR: always
@@ -16,9 +22,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, ubuntu-24.04-arm]
+    defaults:
+      run:
+        working-directory: toychain
     steps:
       - uses: actions/checkout@v4
-      # rust-toolchain.toml pins the exact version; rustup installs it on demand.
+      # toychain/rust-toolchain.toml pins the exact version; rustup installs it on demand.
       - name: Show toolchain
         run: rustup show
       - name: Format

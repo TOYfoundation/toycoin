@@ -1,41 +1,47 @@
-# ToyChain – Konzeptpaket
+# ToyCoin
 
-Dieses Paket enthält das komplette Konzept für ToyChain (native Kryptowährung ToyCoin, Ticker TOY) und eine Anleitung, es mit Claude Schritt für Schritt zu bauen.
+Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit dem nativen TOY, der Explorer **ToyScan**, die **Bridge** zu den bestehenden ToyCoin-Token auf Polygon und Ethereum und die App **TOYPAY**, die TOY nutzt und selbst als Knoten dient.
 
-## Inhalt
+**Status:** Konzeptphase. Der ToyChain-Workspace steht als leeres Gerüst, gebaut wird erst, wenn das Gesamtkonzept steht. Aktueller Stand: [`docs/STATUS.md`](docs/STATUS.md).
+
+## Aufbau
+
+| Ordner | Inhalt |
+|---|---|
+| [`docs/`](docs/) | Konzept für das Gesamtsystem (Deutsch): Spezifikation, Entscheidungen, Bauplan, ToyScan und Altbestand, TOYPAY |
+| [`toychain/`](toychain/) | Rust-Workspace des Knotens (Crates `toy-types` … `toy-cli`), Prüfskripte |
+| [`toyscan/`](toyscan/) | Explorer (noch kein Code) |
+| [`toypay/`](toypay/) | TOYPAY-Unterlagen. Der App-Code folgt |
+| `CLAUDE.md` | Arbeitsanweisungen für Claude (feste Vorgaben, Sicherheitsregeln, Arbeitsweise) |
+| `SECURITY.md` | Was nie ins Repository darf, wie man Schwachstellen meldet |
+
+## Dokumente
 
 | Datei | Wofür |
 |---|---|
-| `CLAUDE.md` | Projektanweisungen. Claude Code liest sie automatisch. Enthält feste Vorgaben, Sicherheitsregeln und Arbeitsweise. |
-| `docs/01-spezifikation.md` | Die vollständige technische Spezifikation (v0.2, 16 Abschnitte). |
-| `docs/02-entscheidungen.md` | Entscheidungsprotokoll: Vorgaben, getroffene Entscheidungen, offene Punkte. |
-| `docs/03-bauplan-phase1.md` | Bauplan für Phase 1 mit 10 Meilensteinen, Fertig-Kriterien und fertigen Prompts. |
-| `docs/04-toyscan-und-altbestand.md` | ToyScan-Ampel, Analyse der beiden bestehenden Token-Verträge, Tresor-Modell. |
-| `docs/07-toypay.md` | Wie die TOYPAY-App ToyChain nutzt, Knotenrollen in der App, offene Grundsatzfragen. |
-| `docs/STATUS.md` | Aktueller Projektstand, Prüfergebnisse, offene Fragen. |
+| `docs/01-spezifikation.md` | Technische Spezifikation (maßgeblich) |
+| `docs/02-entscheidungen.md` | Entscheidungsprotokoll und offene Punkte |
+| `docs/03-bauplan-phase1.md` | Bauplan Phase 1: 10 Meilensteine mit Fertig-Kriterien und Prompts |
+| `docs/04-toyscan-und-altbestand.md` | ToyScan-Ampel, Prüfung und On-Chain-Befund der Token-Verträge, Tresor-Modell |
+| `docs/07-toypay.md` | Wie TOYPAY ToyChain nutzt, Knotenrollen in der App, Grundsatzfragen |
+| `docs/STATUS.md` | Aktueller Stand, Prüfergebnisse, offene Fragen |
 
-## So fängst du an
+Geplant: `05-gesamtsystem.md` (Genesis, Zusammenspiel), `06-bridge.md` (Abläufe, Deckung, Angriffsfälle), `08-toyscan.md` (Datenquellen, Ampel-Berechnung).
 
-**Variante A: Claude Code (empfohlen)**
-1. ZIP entpacken und in den Ordner wechseln.
-2. Im Terminal `claude` starten (Claude Code, mit deinem Pro-Konto anmelden).
-3. Den Start-Prompt aus `docs/03-bauplan-phase1.md` einfügen, danach Meilenstein für Meilenstein.
-4. Nach jedem Meilenstein `docs/STATUS.md` ansehen, `/clear` eingeben und den nächsten Prompt nutzen.
+## Entwicklung (ToyChain)
 
-**Variante B: Claude im Browser oder in der App**
-1. Ein neues Projekt anlegen und alle Dateien als Projektwissen hochladen.
-2. Die Meilenstein-Prompts im Chat nutzen und den Code als Dateien speichern.
+- Voraussetzung: [rustup](https://rustup.rs). Die passende Rust-Version (`toychain/rust-toolchain.toml`) wird automatisch installiert.
+- Alle Prüfungen ausführen: `toychain/scripts/check.sh` (Windows: `powershell -File toychain\scripts\check.ps1`).
+- GitHub Actions prüfen jede Änderung im Ordner `toychain/` auf Linux x86_64, Windows x86_64 und Linux aarch64.
 
-## Entwicklung
+## Mit Claude arbeiten
 
-- Voraussetzung: [rustup](https://rustup.rs). Die passende Rust-Version (siehe `rust-toolchain.toml`) wird automatisch installiert.
-- Alle Prüfungen ausführen: `./scripts/check.sh` (Windows: `powershell -File scripts\check.ps1`).
-- Code liegt in `crates/`, Integrationstests in `tests/`, aktueller Stand in `docs/STATUS.md`.
+1. In Claude Code das Repository öffnen (lokal: `claude` im Hauptordner starten, `CLAUDE.md` wird automatisch gelesen).
+2. Pro Sitzung einen Schritt, Stand steht in `docs/STATUS.md`.
+3. Die Konzeptdokumente liegen zusätzlich im claude.ai-Projekt „ToyCoin“.
 
 ## Wichtige Hinweise
 
-- Das Pro-Abo hat Nutzungslimits. Deshalb ist der Bau in kleine Meilensteine geteilt. Pro Sitzung einen Meilenstein.
-- Phase 1 ergibt einen **Testnet-Prototyp**. Für ein echtes Mainnet braucht es externe Audits, Lasttests und eine rechtliche Prüfung (MiCA, Steuer, Börsenlistings).
-- Die Beweis-Schicht (Phase 2), die für dauerhaft 256 MB nötig ist, ist Forschungsarbeit und kommt erst nach einem stabilen Phase 1.
-- Nutze keine echten Schlüssel oder Gelder im Prototyp.
-- Offene Punkte stehen in `docs/02-entscheidungen.md`. Claude soll dazu nachfragen, nicht raten.
+- Phase 1 ergibt einen **Testnet-Prototyp**. Für ein Mainnet braucht es externe Audits, Lasttests und eine rechtliche Prüfung (MiCA, Glücksspielrecht für TOYPAY, Steuer, Börsenlistings).
+- Keine echten Schlüssel oder Gelder im Prototyp.
+- Lizenz: [MIT](LICENSE).

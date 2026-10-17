@@ -8,6 +8,12 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 - Code, Bezeichner, Commit-Nachrichten, Code-Kommentare: Englisch.
 - Dokumentation im Ordner `docs/`: Deutsch.
 
+## Repository-Aufbau (GitHub `Safehaigit/toycoin`)
+
+- `docs/`: Konzept für das Gesamtsystem. `toychain/`: Rust-Workspace des Knotens (alle `cargo`-Befehle dort ausführen). `toyscan/`: Explorer. `toypay/`: TOYPAY-App und Spiele.
+- Prüfungen: `toychain/scripts/check.sh` (Windows: `toychain\scripts\check.ps1`).
+- **Nie** Geheimnisse committen (siehe `SECURITY.md`), vor allem nicht beim Übernehmen von TOYPAY-Code.
+
 ## Feste Vorgaben (nicht ohne Rückfrage ändern)
 
 - Ticker **TOY**, **18 Dezimalstellen**, Gesamtmenge **100.000.000 TOY** (= 10^26 kleinste Einheiten, passt in `u128`).
