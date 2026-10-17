@@ -105,7 +105,7 @@ Der Genesis-Block ist der erste Block der Kette. **Er lässt sich nach dem Start
 | Obergrenze | 10^26 kleinste Einheiten = 100.000.000 TOY, im Code fest | Spezifikation 14 |
 | Reserve | 900.000 TOY auf der offiziellen Cold-Wallet (Freigabeplan: 3 Jahre nichts, dann je Epoche über 3 Jahre) und 90.000 TOY Bug-Bounty-Topf auf dem Mehrfachsignatur-Konto | Nr. 14, 41–44 |
 | Deckungsposten | 10.000 TOY im Bridge-Konto, Zweck „Polygon-Fremdbestand“ | Nr. 13, 14 |
-| Bestand beim Start | **1.000.000 TOY** (990.000 + 10.000) | — |
+| Bestand beim Start | **1.000.000 TOY** (900.000 Reserve + 90.000 Bug-Bounty + 10.000 Deckung) | — |
 | Emissionsrest | 99.000.000 TOY, noch nicht vorhanden | Spezifikation 10 |
 | Emission | k₀ = 0,0505 % je Epoche, m ∈ [0,5; 2,0], erste Epoche ca. 49.995 TOY | Nr. 9 |
 | Zeit | Blockzeit 60 s (frühestens 10 s), Epoche = 1.440 Blöcke, 1 Jahr = 365 Epochen | Nr. 11 |
