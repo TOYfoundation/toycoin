@@ -52,4 +52,4 @@ Linux x86_64, Windows x86_64, Linux aarch64 (Raspberry Pi 4/5), Linux armv7 (äl
 
 ## ToyScan (später)
 
-Der Explorer **ToyScan** zeigt Supply-Daten und eine Ampel (grün/gelb/rot) mit den Kriterien aus `docs/04-toyscan-und-altbestand.md`. Der Kern-Node soll dafür Daten offen und maschinenlesbar bereitstellen (Gesamtmenge, gemintet, Reserve, Epoche, Emissionsfaktor).
+Der Explorer **ToyScan** zeigt Supply-Daten und eine Ampel (grün/gelb/rot) mit den Kriterien A1 bis A12 aus `docs/08-toyscan.md` (Hintergrund in `docs/04-toyscan-und-altbestand.md`). ToyScan hat nie Schlüssel (Entscheidung 56). Der Kern-Node soll dafür Daten offen und maschinenlesbar bereitstellen (Gesamtmenge, gemintet, Reserve, Epoche, Emissionsfaktor).
