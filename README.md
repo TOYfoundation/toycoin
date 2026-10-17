@@ -29,7 +29,7 @@ Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit 
 | `docs/07-toypay.md` | Wie TOYPAY ToyChain nutzt, Knotenrollen in der App, Grundsatzfragen |
 | `docs/STATUS.md` | Aktueller Stand, Prüfergebnisse, offene Fragen |
 
-Neu: `06-bridge.md` (Abläufe, getrennte Kassen je Kette, Schutzschichten, Angriffsfälle). Geplant: (Abläufe, Deckung, Angriffsfälle), `08-toyscan.md` (Datenquellen, Ampel-Berechnung).
+Geplant: `08-toyscan.md` (Datenquellen, Ampel-Berechnung).
 
 ## Entwicklung (ToyChain)
 
