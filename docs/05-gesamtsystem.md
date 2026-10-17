@@ -134,8 +134,9 @@ Schritte mit 🔒 lassen sich **nicht rückgängig machen**.
 | 8a | Phase 2 (Beweise) innerhalb von etwa 12 Monaten | 8 | Header-Speicher wächst nicht weiter |
 | 9 | ToyScan live. Kriterien zur Bridge zeigen „noch nicht aktiv“ (grau) | 8 | Ampel |
 | 10 | Phase 3 Bridge (Nr. 39): Tresor-Verträge und Bridge-Komitee bauen, Audit, Testnet | 8a | Audit |
-| 11 | 🔒 **Die offiziellen Cold-Wallets zahlen ihren Bestand in die Tresore ein** | 10 | ToyScan: Cold-Wallets leer, Tresore voll |
-| 12 | Bridge-Start | 11 | Ampel grün |
+| 11 | 🔒 **Die offizielle Cold-Wallet auf Polygon zahlt ihren Bestand in den Tresor ein** | 10 | ToyScan: Cold-Wallet leer, Tresor voll |
+| 12 | Bridge-Start, **nur Polygon** (Nr. 52) | 11 | Ampel grün |
+| 12a | Abstimmung über die Ethereum-Bridge (2/3-Mehrheit). Danach 🔒 Einzahlung der Ethereum-Cold-Wallet in den Tresor und Freischaltung | 12, Stufe 2 der Mitbestimmung | Ampel grün, auch für Ethereum |
 | 13 | NFT-Prägung mit TOY startet (Nr. 17) | 12 | NFT-Vertrag-Audit |
 
 ## 6. Die Deckung über alle Ketten (Buchhaltung)

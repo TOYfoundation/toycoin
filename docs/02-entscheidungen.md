@@ -78,8 +78,11 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 47 | Mitbestimmung im Detail | Stimmgewicht √(gebundener Stake), Deckel beim Gewicht von 10.000 TOY. Quorum 20 %, Fristen 7 + 7 + 14 Epochen. Reserve und Start-Komitee ohne Stimmrecht |
 | 48 | Tresor-Umzug (B1) | Tresore ziehen **nie** um. Bei einem Fehler: pausieren, neuer Tresor nur für neue Einzahlungen |
 | 49 | Bridge-Limits (B2) | 50.000 TOY je Kette, Richtung und Epoche. Beträge über 10.000 TOY 24 Stunden verzögert. Änderbar per Mitbestimmung |
-| 50 | Takt der Beweise (B4) | Zunächst Polygon **alle 12 Stunden**, Ethereum **alle 12 Monate**. Änderbar per Mitbestimmung |
+| 50 | Takt der Beweise (B4) | Zunächst Polygon **alle 12 Stunden**, Ethereum **alle 12 Monate** (Ethereum geändert durch Nr. 52). Änderbar per Mitbestimmung |
 | 51 | Bridge-Gebühr (B5) | **Gratis** im kostenlosen Kontingent, darüber **höchstens 1 TOY**. Mindestbetrag 10 TOY gegen Spam. Gas zahlt der Relayer aus der Gebühren-Adresse auf Polygon |
+| 52 | Ethereum-Bridge später (B4) | Zum Bridge-Start **nur Polygon**. Die Ethereum-Bridge ist eingebaut, aber ausgeschaltet. Sie startet erst nach einer Abstimmung (Protokoll-Update, 2/3-Mehrheit), die auch den Takt festlegt (Vorschlag: alle 12 Monate). Bis dahin bleiben die Ethereum-Token auf der offiziellen Cold-Wallet |
+| 53 | Bridge-Komitee (B3) | Start mit **Projekt-Komitee 5 von 9 plus Wächtern** (nur Pausieren). Ab Stufe 1 der Mitbestimmung jeden Monat ein Platz an einen gewählten unabhängigen Betreiber mit 10.000 TOY Stake, bis alle 9 gewählt sind |
+| 54 | Einzahlungen von Ethereum (B6) | nach der Freischaltung im 12-Stunden-Takt wie bei Polygon |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 
@@ -89,7 +92,6 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 
 ## Noch offen
 
-- **Bridge (`06-bridge.md`, Abschnitt 11):** B3 Zusammensetzung des Komitees, B6 Takt der Einzahlungen von Ethereum.
 
 
 - Quellcode auf Etherscan und Polygonscan verifizieren (am 17.10.2026 auf beiden Ketten noch **nicht verifiziert**). Prägung von je 10^26 Einheiten ist bestätigt.
