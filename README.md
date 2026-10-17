@@ -11,6 +11,7 @@ Dieses Paket enthält das komplette Konzept für ToyChain (native Kryptowährung
 | `docs/02-entscheidungen.md` | Entscheidungsprotokoll: Vorgaben, getroffene Entscheidungen, offene Punkte. |
 | `docs/03-bauplan-phase1.md` | Bauplan für Phase 1 mit 10 Meilensteinen, Fertig-Kriterien und fertigen Prompts. |
 | `docs/04-toyscan-und-altbestand.md` | ToyScan-Ampel, Analyse der beiden bestehenden Token-Verträge, Tresor-Modell. |
+| `docs/07-toypay.md` | Wie die TOYPAY-App ToyChain nutzt, Knotenrollen in der App, offene Grundsatzfragen. |
 | `docs/STATUS.md` | Aktueller Projektstand, Prüfergebnisse, offene Fragen. |
 
 ## So fängst du an

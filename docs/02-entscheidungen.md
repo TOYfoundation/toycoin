@@ -54,6 +54,6 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 
 - Quellcode auf Etherscan und Polygonscan verifizieren (am 17.10.2026 auf beiden Ketten noch **nicht verifiziert**). Prägung von je 10^26 Einheiten ist bestätigt.
 - Schlüssel der Contract-Wallet `0x18da…00c2`: Wer hält ihn, wie ist er gesichert? Liegt der ursprüngliche Quellcode der Verträge vor?
-- TOYPAY: Konzept liegt in einem eigenen claude.ai-Projekt, das von hier nicht lesbar ist. Unterlagen einholen und in `07-toypay.md` zusammenführen. Plattformen (Android, iPhone) klären.
+- TOYPAY: Grundsatzfragen K1 bis K7 in `07-toypay.md` (Spielwährung oder Kryptowährung, Poker, Umtausch Dukaten ↔ TOY, Jugendschutz, Verwahrung, Datenschutz, eine oder zwei Apps).
 - Rechtliche Prüfung vor dem Mainnet (MiCA, Steuer, Börsenlistings, 1 % Reserve, Fremdbestand).
 - Technisch: Beweisprüfung auf Ethereum (Kosten, Trusted-Setup-Frage), in Phase 2 klären.
