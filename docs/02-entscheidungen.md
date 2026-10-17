@@ -50,6 +50,9 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 | 19 | NFT-Präge-Regeln | Prägen nur mit mindestens **100 TOY** auf der Adresse. Je Adresse höchstens **5 Spielfiguren** (teils selbst, teils zufällig konfiguriert, aufwertbar) und **50 Spielgegenstände**. Pro Woche höchstens **1 Spielfigur und 10 Gegenstände**. Offene Feinheiten (Sperre der 100 TOY, Prägen oder Besitz, Aufwertung, Zufall) in `07-toypay.md` |
 | 20 | Gang-Prinzip | Spielfiguren erst ab **Stufe 20** prägbar. Danach mindestens **5 Gegenstände**, erst dann die nächste Figur. So entsteht Stück für Stück eine Gang mit gemeinsamen Gegenständen und Synergien. Löst die Lootbox-Frage K9 |
 | 21 | Sperre je NFT | Pro geprägtem NFT werden **10 TOY für 20 Tage** im NFT-Vertrag gesperrt und danach an den Präger zurückgegeben. Der Notschalter darf das Abholen nie blockieren |
+| 22 | NFT-Feinheiten | 100 TOY Mindestbestand bleibt **zusätzlich** zur Sperre. Grenzen 5 Figuren und 50 Gegenstände gelten für das **Prägen**, gekaufte NFTs dürfen dazukommen, höchstens 5 Figuren sind gleichzeitig aktiv in der Gang. Aufwertungen werden auf der Kette festgehalten, nur steigend, ohne Extrakosten. Vor jeder neuen Figur mindestens 5 Gegenstände, die Zahl steigt nicht |
+| 23 | Präge-Gebühr und Kreislauf | Die Präge-Gebühr fließt zurück ins Spiel: Belohnungen im Wert von 0,01 bis 2 TOY werden zufällig an logischen Orten verteilt und sind nur mit geprägten Spielfiguren einsammelbar. Kurs **1 TOY = 100 Dukaten = 1.000 Gold**. Offen: ob Belohnungen als echte TOY oder als Spielwerte ausgezahlt werden (K3) |
+| 24 | Gas | Vorerst zahlt der Spieler das Polygon-Gas (POL). Später kann er mit Dukaten zahlen, und ein Dienst des Projekts bezahlt die Prägung |
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 

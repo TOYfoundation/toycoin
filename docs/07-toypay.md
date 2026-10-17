@@ -74,13 +74,14 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
 | Regel | Wert | Durchsetzung |
 |---|---|---|
 | Spielfigur prägbar ab | **Stufe 20** | Spielserver bestätigt die Stufe im Gutschein, der Vertrag prüft den Gutschein |
-| Reihenfolge | Figur prägen → mindestens **5 Gegenstände** prägen → erst dann die nächste Figur | Vertrag zählt die Gegenstände seit der letzten Figur je Adresse |
-| Spielfiguren je Adresse | höchstens **5** (die Gang) | Zähler je Adresse |
-| Spielgegenstände je Adresse | höchstens **50** | Zähler je Adresse |
+| Reihenfolge | Figur prägen → mindestens **5 Gegenstände** prägen → erst dann die nächste Figur. Die Zahl steigt nicht (bis zu 10 pro Woche sind möglich) | Vertrag zählt die Gegenstände seit der letzten Figur je Adresse |
+| Spielfiguren je Adresse | höchstens **5 geprägt**. Gekaufte Figuren dürfen dazukommen, im Spiel sind höchstens **5 gleichzeitig aktiv** in der Gang | Präge-Zähler je Adresse im Vertrag, aktive Gang im Spiel |
+| Spielgegenstände je Adresse | höchstens **50 geprägt**, Kauf frei | Präge-Zähler je Adresse |
 | Pro Woche | höchstens **1 Spielfigur** und **10 Gegenstände** je Adresse | Zähler je Adresse und Woche (7 × 86.400 s nach Blockzeit) |
 | Sperre je NFT | **10 TOY für 20 Tage** | Vertrag übernimmt beim Prägen 10 TOY per Permit und gibt sie nach 20 Tagen an den Präger zurück |
-| Mindestbestand | 100 TOY auf der Adresse (Entscheidung 19) | `balanceOf ≥ 100 × 10^18` beim Prägen. Ob das neben der Sperre bestehen bleibt, ist offen |
+| Mindestbestand | **100 TOY** auf der Adresse, **zusätzlich** zur Sperre | `balanceOf ≥ 100 × 10^18` beim Prägen, vor Abzug der 10 TOY Sperre |
 | Spielfiguren | teils selbst, teils zufällig konfiguriert, **aufwertbar** | Zufall entsteht beim kostenlosen Anlegen der Figur im Spiel, nicht beim Prägen |
+| Aufwerten nach dem Prägen | Neue Stufe wird **auf der Kette** festgehalten, **nur steigend**, **ohne Extrakosten** (nur Gas) | Funktion `levelUp` mit Gutschein des Spielservers, nur durch den Besitzer |
 
 **Beispiel für den schnellsten Weg:** Woche 1: Figur 1 (Stufe 20) und bis zu 10 Gegenstände. Woche 2: Figur 2, sobald 5 Gegenstände seit Figur 1 geprägt sind, usw. Eine volle Gang mit 5 Figuren braucht also mindestens 5 Wochen und mindestens 20 Gegenstände zwischen den Figuren. In einer vollen Woche (1 Figur und 10 Gegenstände) sind 110 TOY gesperrt. Weil jede Sperre 20 Tage dauert, liegen im Dauerbetrieb höchstens rund 320 TOY je Adresse gleichzeitig fest.
 
@@ -95,12 +96,21 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
 - Der Notschalter kann nur **neues Prägen** pausieren, **nie** das Abholen gesperrter TOY. Sonst könnte ein Fehler oder Angriff fremde TOY festhalten.
 - Gesperrte TOY bleiben gedeckte TOY im Umlauf. An der ToyScan-Rechnung ändert sich nichts.
 
+**Präge-Gebühr und Belohnungs-Kreislauf (entschieden am 17.10.2026)**
+
+- Neben der Sperre gibt es eine **Präge-Gebühr** in TOY. Sie bleibt nicht beim Projekt, sondern **fließt zurück ins Spiel**.
+- **Kreislauf:** Belohnungen wie Goldtaler, Gegenstände, Nahrungsmittel, Zaubertränke, Kamelsättel und Werkzeuge im Wert von **0,01 bis 2 TOY** werden zufällig an logischen Orten der Spielwelt verteilt. **Nur geprägte Spielfiguren (NFTs)** können sie einsammeln.
+- **Fester Kurs:** **1 TOY = 100 Dukaten = 1.000 Gold.** Dukaten und Gold sind die Spielwährungen. Der Kurs bleibt fest, auch wenn sich der Marktpreis von TOY ändert.
+- **Haushaltsregel (Vorschlag):** Ausgeschüttet wird nie mehr, als an Gebühren eingegangen ist. Die Belohnungen einer Woche sind z. B. auf die Gebühren der Vorwoche begrenzt. So erzeugt das Spiel nie neues TOY, und die Obergrenze von 100 Mio. bleibt allein Sache der Emission auf ToyChain.
+
+**Gas und Bezahlen mit Dukaten (entschieden am 17.10.2026)**
+
+- **Vorerst** zahlt der Spieler die Polygon-Gebühr (POL) selbst.
+- **Später:** Der Spieler kann im Spiel auch mit **Dukaten** zahlen. Ein Dienst des Projekts (Relayer) reicht die Prägung ein und bezahlt POL und die TOY-Gebühr. Die 10 TOY Sperre und die 100 TOY Mindestbestand bleiben echte TOY auf der Adresse des Spielers.
+
 **Noch offen**
-1. **Mindestbestand:** Bleiben die 100 TOY auf der Adresse zusätzlich zur Sperre von 10 TOY je NFT Pflicht?
-2. **Prägen oder Besitzen:** Gilt „höchstens 5 Figuren und 50 Gegenstände“ nur für das Prägen oder auch für den Besitz? Zu einer Gang passt eine Grenze für das Prägen. Gekaufte Figuren könnten dann über 5 hinausgehen. Soll eine Gang im Spiel trotzdem auf 5 **aktive** Figuren begrenzt sein?
-3. **Aufwerten nach dem Prägen:** Figuren steigen auch nach dem Prägen weiter auf. Wird die neue Stufe auf der Kette festgehalten (mit Gutschein, nur steigend), und kostet das TOY?
-4. **Gebühr:** Gibt es neben der Sperre eine Präge-Gebühr in TOY, und wohin fließt sie? Wer bezahlt das Polygon-Gas, Spieler oder Relayer?
-5. **„Mindestens 5 bis 10“ Gegenstände** vor der nächsten Figur: Angesetzt ist 5. Soll die Zahl mit jeder Figur steigen, z. B. 5, 6, 7 …?
+1. **Die Kernfrage, siehe K3:** Sind Dukaten nur eine **Einbahnstraße** (TOY → Dukaten) oder **in beide Richtungen** tauschbar? Werden eingesammelte Belohnungen als **echte TOY** ausgezahlt oder als Dukaten, Gold und Gegenstände im Spiel?
+2. **Höhe der Präge-Gebühr** je Spielfigur und je Gegenstand?
 
 - **Spiel und Kette synchron halten:** Ist ein Gegenstand als NFT geprägt, gilt **das NFT** als Eigentumsnachweis. Wird das NFT verkauft, wandert der Gegenstand im Spiel zum neuen Besitzer. Der Spielserver liest dazu die Kette. Ein geprägter Gegenstand darf im Spiel nicht zusätzlich weiter gehandelt werden, sonst gäbe es ihn doppelt.
 - **Schlüssel des Spielservers:** Der Server signiert die Gutscheine und ist damit ein lohnendes Angriffsziel. Deshalb: eigener Schlüssel nur für Gutscheine (nie für TOY), Tageslimits im Vertrag und ein Notschalter, der das Prägen pausieren kann.
@@ -120,12 +130,18 @@ Hinweis: Das ist keine Rechtsberatung. Die Punkte zeigen, wo eine rechtliche Pr�
 
 **K2 Poker.** Poker mit TOY als Einsatz wäre Echtgeld-Glücksspiel. In Deutschland ist Online-Glücksspiel nur mit deutscher Erlaubnis zulässig, und erlaubte Anbieter dürfen Kryptowährungen nicht als Zahlungsmittel annehmen. Google Play verlangt für Krypto-Funktionen zertifizierte Dienste in regulierten Ländern und verbietet ausdrücklich, Krypto-Werte als Einsatz für Gewinne mit Geldwert zu nutzen. **Vorschlag:** Poker nur mit Spielchips, die nie in TOY getauscht und nie mit TOY gekauft werden können. Oder Poker ganz aus der App nehmen, in der TOY liegt.
 
-**K3 Dukaten und Wechselstube.** Wenn Spiel-Belohnungen in TOY getauscht werden können („Play-to-Earn“), gilt:
-- Das Spiel darf **nie neues TOY erzeugen.** Die Obergrenze von 100 Mio. hängt allein an der Emission auf der Kette.
-- TOY für Belohnungen müsste aus einem vorab gefüllten, öffentlich sichtbaren Spiel-Topf kommen. Der Server bräuchte dafür einen Schlüssel, also eine Hot-Wallet, die angreifbar ist.
-- Das berührt Glücksspiel-, Jugendschutz- und Steuerrecht.
+**K3 Dukaten, Gold und TOY: Einbahnstraße oder Kreislauf?** Mit dem festen Kurs 1 TOY = 100 Dukaten = 1.000 Gold und Belohnungen im Wert von 0,01 bis 2 TOY (Entscheidung 23) muss geklärt sein, ob aus dem Spiel **echte TOY herauskommen**. Drei Möglichkeiten:
 
-**Vorschlag:** Zum Start **kein** Umtausch zwischen Dukaten und TOY.
+| | A: Einbahnstraße | B: Kreislauf auf der Kette | C: Dukaten frei tauschbar |
+|---|---|---|---|
+| TOY → Dukaten | ja | ja | ja |
+| Dukaten → TOY | **nein** | nein, aber Belohnungen werden als **echte TOY** aus einem Belohnungs-Vertrag ausgezahlt | **ja**, jederzeit 1:100 |
+| Wo liegen die Gebühren | beim Projekt, das sie in Form von Spiel-Belohnungen zurückgibt | in einem **Belohnungs-Vertrag** auf Polygon, sichtbar für alle | beim Spielserver |
+| Wer verwahrt Werte der Spieler | niemand, Dukaten sind reines Spielgeld | der Vertrag, nicht das Projekt | **der Spielserver**, er wird zur Bank |
+| Rechtliches Risiko | gering, wie Spielwährung in üblichen Spielen | **mittel bis hoch**: bezahlter Zugang (Gebühr, Sperre) plus zufällig verteilte Gewinne mit Geldwert kann als Glücksspiel gelten. Dazu Steuern für Spieler und Jugendschutz | **hoch**: Verwahrung und Umtausch nach MiCA zulassungspflichtig |
+| Technik | einfach | Belohnungs-Vertrag mit Gutscheinen, Wochenlimit und „nie mehr aus als rein“ | Hot-Wallet mit allen Spielerwerten, großes Angriffsziel |
+
+**Vorschlag:** **A zum Start.** B erst nach einer rechtlichen Prüfung, dann streng als geschlossener Kreislauf (nur Gebühren, die eingegangen sind, werden ausgeschüttet). **C nicht.** In allen Fällen gilt: Das Spiel erzeugt **nie** neues TOY.
 
 **K4 Jugendschutz.** Für welches Alter sind die Spiele gedacht? Spielen Minderjährige, brauchen alle TOY-Funktionen eine Altersgrenze, oder Spiel und Wallet werden getrennte Apps.
 
@@ -168,10 +184,10 @@ Folgen:
 Beantwortet am 17.10.2026: Die App nimmt TOY auf allen Ketten an, bridgt nativen TOY und prägt NFTs auf Polygon mit Polygon-TOY (Entscheidungen 15 und 16). NFT-Prägung mit TOY erst nach dem Bridge-Start (Entscheidung 17).
 
 Offen:
-1. Kann man Dukaten oder Poker-Gewinne in ToyCoin tauschen (K3)?
+1. Werden Poker-Gewinne (Spielchips) von Dukaten und TOY getrennt gehalten (K2)?
 2. Für welches Alter sind TOYPAY und TOYQUEST gedacht (K4)?
 3. Eine App mit allem, oder Wallet und Spiele getrennt (K7)?
 4. Nur Android, oder später auch iPhone?
 5. Sollen NFTs schon vor dem Bridge-Start **ohne TOY** geprägt werden können (kostenlos oder gegen POL)?
 6. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?
-7. Offene Feinheiten der Präge-Regeln (Mindestbestand neben der Sperre, Prägen oder Besitzen, Aufwerten, Gebühr und wohin sie fließt, steigende Zahl an Gegenständen): siehe Abschnitt 5a, „Noch offen“.
+7. Dukaten und TOY: Einbahnstraße, Kreislauf auf der Kette oder frei tauschbar (K3)? Höhe der Präge-Gebühr? Siehe Abschnitt 5a, „Noch offen“.
