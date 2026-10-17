@@ -100,7 +100,11 @@ Hinweis: Das ist keine Rechtsberatung. Die Punkte zeigen, wo eine rechtliche Pr�
 - (b) Die TOY, mit denen geprägt wird, fließen an die Ersteller-Adresse zurück. Der Fremdbestand bleibt dann ungefähr gleich, muss aber zum Start trotzdem ≤ 10.000 sein.
 - (c) Die Deckung im Genesis-Block wird auf den tatsächlichen Fremdbestand am Stichtag erhöht. Das geht zulasten der Reserve (990.000 TOY), und der Fremdbestand darf diese nie übersteigen.
 
-**Vorschlag:** (a), oder (b) mit einem festen Stichtag vor dem Genesis-Block.
+**Entschieden am 17.10.2026: (a).** Die NFT-Prägung mit TOY startet erst nach dem Start der Bridge. Alle Polygon-TOY, mit denen Spieler prägen, kommen dann aus dem Tresor und sind durch native TOY gedeckt.
+
+Folgen:
+- **Die Ersteller-Adresse gibt bis zur Einzahlung in den Tresor keine TOY mehr aus.** Erlaubt ist nur die Rückübertragung nach Entscheidung 13, in Richtung Ersteller-Adresse. Jeder Abgang würde den Fremdbestand über die 10.000 TOY hinaus erhöhen. ToyScan überwacht die Adresse ab sofort und zeigt jeden Abgang an.
+- **NFTs ohne TOY** (kostenlos oder gegen POL) sind auch vorher möglich, ohne die Deckung zu berühren. Ob das gewünscht ist, ist offen.
 
 **K9 Zufalls-NFTs (Lootboxen).** NFTs mit zufälligem Wert gegen TOY zu verkaufen, gilt nach den Google-Play-Regeln als Glücksspiel, wenn die App nicht als Glücksspiel-App zugelassen ist. Außerdem dürfen NFTs nicht als Einsatz für Gewinne mit Geldwert dienen. Das betrifft auch Poker (K2). **Vorschlag:** Ein NFT bildet immer genau einen bekannten Gegenstand ab, ohne Zufall beim Kauf.
 
@@ -123,13 +127,13 @@ Hinweis: Das ist keine Rechtsberatung. Die Punkte zeigen, wo eine rechtliche Pr�
 
 ## 9. Fragen an den Projektinhaber
 
-Beantwortet am 17.10.2026: Die App nimmt TOY auf allen Ketten an, bridgt nativen TOY und prägt NFTs auf Polygon mit Polygon-TOY (Entscheidungen 15 und 16).
+Beantwortet am 17.10.2026: Die App nimmt TOY auf allen Ketten an, bridgt nativen TOY und prägt NFTs auf Polygon mit Polygon-TOY (Entscheidungen 15 und 16). NFT-Prägung mit TOY erst nach dem Bridge-Start (Entscheidung 17).
 
 Offen:
 1. Kann man Dukaten oder Poker-Gewinne in ToyCoin tauschen (K3)?
 2. Für welches Alter sind TOYPAY und TOYQUEST gedacht (K4)?
 3. Eine App mit allem, oder Wallet und Spiele getrennt (K7)?
 4. Nur Android, oder später auch iPhone?
-5. Wann soll die NFT-Prägung mit TOY starten: vor oder nach dem Start von ToyChain und der Bridge (K8)?
+5. Sollen NFTs schon vor dem Bridge-Start **ohne TOY** geprägt werden können (kostenlos oder gegen POL)?
 6. Wohin fließen die TOY, mit denen geprägt wird: an das Projekt, an einen Spiel-Topf oder an eine Burn-Adresse, also dauerhaft aus dem Umlauf?
 7. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?

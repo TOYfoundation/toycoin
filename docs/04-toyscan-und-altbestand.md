@@ -68,6 +68,7 @@ Die Adresse und die Chain-ID stehen jeweils als feste Werte im Code. Das bestät
 - Code-Hash an der Adresse unverändert. Alarm bei jeder Änderung.
 - `totalSupply()` ≤ 100.000.000 × 10^18 je Kette.
 - Verteilung: Contract-Wallet, Tresor, Fremdbestand, Burn-Adresse.
+- **Ersteller-Adresse `0x18da…00c2` bis zur Tresor-Einzahlung:** Jeder Abgang wird angezeigt (Entscheidung 17). Zugänge, also Rückübertragungen, sind erwünscht.
 
 ## 3. Tresor-Modell (Vorschlag, zur Bestätigung)
 
