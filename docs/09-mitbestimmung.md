@@ -32,8 +32,8 @@ Diese Regeln stehen fest im Code. Das Abstimmungsmodul kann sie **technisch nich
 | **Parameter** | Kontingent 10 bis 100, Bridge-Limits und -Takt, Schwelle für Vielnutzer, progressive Gebühr, Blockgröße, Mindestguthaben, Ablauf-Schwelle, ToyWork-Speicher, Aufteilung der Gebühren | jeder Parameter hat einen festen erlaubten Bereich im Code, z. B. Mindestguthaben 0,01 bis 1 TOY | einfache Mehrheit |
 | **Protokoll-Updates** | neue Transaktionsart einschalten (z. B. Start von Phase 3 Bridge, Freischaltung der Ethereum-Bridge (Nr. 52), Phase 4 Privatsphäre), Fehlerbehebungen | nur innerhalb der Verfassung | **2/3-Mehrheit** |
 | **Bug-Bounty-Topf** | Auszahlung einer Prämie über 5.000 TOY | aus den 90.000 TOY (Nr. 43) | einfache Mehrheit, kleinere Prämien entscheidet die Multisig allein |
-| **Stimmungsbilder** | Richtung für Spiel, App und ToyScan |
-| **Bridge-Komitee** | ab Stufe 1 jeden Monat ein Platz neu (Nr. 53) | Kandidat mit mindestens 10.000 TOY Stake | einfache Mehrheit | rechtlich nicht bindend für die Kette | einfache Mehrheit |
+| **Bridge-Komitee** | ab Stufe 1 jeden Monat ein Platz neu (Nr. 53) | Kandidat mit mindestens 10.000 TOY Stake | einfache Mehrheit |
+| **Stimmungsbilder** | Richtung für Spiel, App und ToyScan | rechtlich nicht bindend für die Kette | einfache Mehrheit |
 
 Spiel-Entscheidungen (neue Gegenstände, Akte, Events) laufen nicht auf der Kette. Dafür gibt es **Stimmungsbilder**: Die TOYPAY Wallet signiert die Stimme, ToyScan zählt sie öffentlich mit denselben Stimmgewichten aus.
 
