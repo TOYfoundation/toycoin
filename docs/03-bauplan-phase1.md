@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Kern-Node und Wallet (Testnet-Prototyp)
 
-Ziel von Phase 1: ein lauffähiges **lokales Testnet** mit mehreren Knoten, Ethereum-kompatiblen Adressen, Emission, Kontingent und Gebühren, plus einer einfachen Wallet. Beweis-Schicht (Phase 2), privater Pool (Phase 3), Offline-Schecks (Phase 4) und Bridge (Phase 5) kommen später.
+Ziel von Phase 1: ein lauffähiges **lokales Testnet** mit mehreren Knoten, Ethereum-kompatiblen Adressen, Emission, Kontingent und Gebühren, plus einer einfachen Wallet. Beweis-Schicht (Phase 2), Bridge (Phase 3), privater Pool (Phase 4) und Offline-Schecks (Phase 5) kommen später (Entscheidung 39).
 
 ## Ehrliche Einschätzung
 
@@ -63,6 +63,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 
 ### M7: JSON-RPC (Ethereum-Teilmenge)
 - `eth_chainId`, `eth_getBalance`, `eth_getTransactionCount`, `eth_sendRawTransaction`, `eth_blockNumber`, `net_version`.
+- Für ToyScan: `toy_getSupply`, `toy_getEpoch`, `toy_getReserve`, `toy_getConstitution` (Beträge als Dezimaltext in kleinsten Einheiten, mit Blocknummer und Block-Hash, `08-toyscan.md` Abschnitt 3.1). Weitere `toy_`-Methoden folgen mit ihren Phasen.
 - **Fertig, wenn:** MetaMask (oder ein Skript mit einer Ethereum-Bibliothek) kann ToyChain als eigenes Netzwerk einbinden, den Kontostand lesen und TOY senden.
 
 ### M8: Wallet und CLI

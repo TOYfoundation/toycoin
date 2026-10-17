@@ -27,9 +27,8 @@ Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit 
 | `docs/06-bridge.md` | Bridge: Abläufe in beide Richtungen, Buchhaltung je Kette, Schutzschichten, Angriffsfälle |
 | `docs/09-mitbestimmung.md` | Mitbestimmung der Community: Verfassung, Stimmgewicht, Ablauf, Einführung |
 | `docs/07-toypay.md` | Wie TOYPAY ToyChain nutzt, Knotenrollen in der App, Grundsatzfragen |
+| `docs/08-toyscan.md` | ToyScan: Aufbau, Datenquellen, Ampel mit allen Formeln, offene API |
 | `docs/STATUS.md` | Aktueller Stand, Prüfergebnisse, offene Fragen |
-
-Geplant: `08-toyscan.md` (Datenquellen, Ampel-Berechnung).
 
 ## Entwicklung (ToyChain)
 

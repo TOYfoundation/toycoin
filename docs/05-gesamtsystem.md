@@ -206,7 +206,7 @@ TOY (Polygon) ──► Präge-Gebühr ──► Gebühren-Adresse (Multisig)   
 | neu: Ersteller-Adresse und Cold-Wallets nur mit erlaubten Abgängen | Polygon und Ethereum | aktiv bis zur Tresor-Einzahlung |
 | neu: Regeln I1 bis I6 | alle Ketten | aktiv |
 
-Details folgen in `08-toyscan.md`.
+Details, Formeln und Farben in `08-toyscan.md`.
 
 ## 10. Entscheidungen vom 17.10.2026 und was noch offen ist
 
