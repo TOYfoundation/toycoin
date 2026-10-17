@@ -28,11 +28,50 @@ g_nftstat_trade|Handel|Trade
 g_nftstat_charm|Ausstrahlung|Charm
 g_nftstat_lore|Wissen|Lore
 g_nftstat_craft|Handwerk|Craft
-g_nftrar_common|Gewöhnlich|Common
-g_nftrar_uncommon|Ungewöhnlich|Uncommon
-g_nftrar_rare|Selten|Rare
-g_nftrar_precious|Kostbar|Precious
-g_nftrar_legendary|Legendär|Legendary
+g_nftrar_common|Sandkorn|Sand Grain
+g_nftrar_uncommon|Messing|Brass
+g_nftrar_rare|Türkis|Turquoise
+g_nftrar_precious|Rubinglut|Ruby Glow
+g_nftrar_legendary|Sternenfeuer|Starfire
+g_gang_class_rooftop_fox|Dachfuchs|Rooftop Fox
+g_gang_class_desert_bolt|Wüstenblitz|Desert Bolt
+g_gang_class_bazaar_tongue|Basarzunge|Bazaar Tongue
+g_gang_class_stargazer|Sterngucker|Stargazer
+g_gang_class_saber_whirl|Säbelwirbel|Saber Whirl
+g_gang_class_pearl_shark|Perlenhai|Pearl Shark
+g_gang_class_shadow_quill|Schattenfeder|Shadow Quill
+g_gang_class_lute_charmer|Lautenzauber|Lute Charmer
+g_gang_duo_midnight_duo|Mitternachtsduo|Midnight Duo
+g_gang_duo_golden_throat|Goldkehlchen|Golden Throat
+g_gang_duo_sand_and_salt|Sand und Salz|Sand and Salt
+g_gang_duo_star_saber|Sternensäbel|Star Saber
+g_gang_duo_flying_traders|Fliegende Händler|Flying Traders
+g_gang_duo_diving_bell|Taucherglocke|Diving Bell
+g_gang_duo_rooftop_concert|Dachkonzert|Rooftop Concert
+g_gang_duo_shield_and_shadow|Schild und Schatten|Shield and Shadow
+g_gang_set_vizier_wardrobe|Garderobe des Wesirs|Vizier's Wardrobe
+g_gang_set_forty_light_fingers|Die vierzig Langfinger|The Forty Light-Fingers
+g_gang_set_dawn_caravan|Karawane der Morgenröte|Caravan of the Dawn
+g_gang_set_sindbad_sea_chest|Sindbads Seekiste|Sindbad's Sea Chest
+g_gang_set_stargazers_of_baghdad|Sterndeuter von Bagdad|Stargazers of Baghdad
+g_gang_set_saber_dance|Säbeltanz|Saber Dance
+g_gang_set_bazaar_barons|Basar-Barone|Bazaar Barons
+g_gang_set_nights_of_music|Nächte der Musik|Nights of Music
+g_gang_set_flying_merchants|Fliegende Händler|Flying Merchants
+g_gang_set_djinn_legacy|Erbe der Dschinn|Legacy of the Djinn
+g_gang_rank_street_dust|Straßenstaub|Street Dust
+g_gang_rank_bazaar_band|Basarbande|Bazaar Band
+g_gang_rank_caravan_clan|Karawanenclan|Caravan Clan
+g_gang_rank_desert_legend|Wüstenlegende|Desert Legend
+g_gang_rank_star_covenant|Sternenbund|Star Covenant
+g_gang_trick_rooftop_fox|Katzensprung|Cat Leap
+g_gang_trick_desert_bolt|Sandsprint|Sand Sprint
+g_gang_trick_bazaar_tongue|Feilschwalzer|Haggle Waltz
+g_gang_trick_stargazer|Himmelsblick|Sky Sight
+g_gang_trick_saber_whirl|Wirbelhieb|Whirl Strike
+g_gang_trick_pearl_shark|Tiefenatem|Deep Breath
+g_gang_trick_shadow_quill|Nachtschritt|Night Step
+g_gang_trick_lute_charmer|Ohrwurm|Earworm
 g_nft_kaftan_linen|Leinen-Kaftan|Linen Kaftan
 g_nft_kaftan_cotton_striped|Gestreifter Baumwollkaftan|Striped Cotton Kaftan
 g_nft_kaftan_silk_damask|Damast-Seidenkaftan|Silk Damask Kaftan
@@ -533,3 +572,80 @@ g_nft_tile_lustre_star|Lüster-Sternfliese|Lustre Star Tile
 g_nft_treasure_map_fragment|Fragment einer Schatzkarte|Treasure Map Fragment
 g_nft_carpet_ancient_royal|Uralter Königsteppich|Ancient Royal Carpet
 g_nft_pomegranate_golden|Goldener Granatapfel|Golden Pomegranate
+g_nftepi_kaftan_gold_embroidered|Der Glänzer vom Goldmarkt|The Gold-Market Gleamer
+g_nftepi_robe_vizier|Wichtiger als der Wesir selbst|More Important Than the Vizier
+g_nftepi_caftan_royal_purple|Purpur, der Türen öffnet|The Purple That Opens Doors
+g_nftepi_cloak_peacock|Hundert Augen, null Bescheidenheit|A Hundred Eyes, Zero Modesty
+g_nftepi_ring_emerald|Das grüne Flüstern|The Green Whisper
+g_nftepi_ring_ruby|Funke im Faustschlag|Spark in the Punch
+g_nftepi_seal_vizier_gold|Ein Stempel, und der Basar gehorcht|One Stamp and the Bazaar Obeys
+g_nftepi_tiara_pearl|Mondtropfen auf der Stirn|Moondrops on the Brow
+g_nftepi_water_organ_model|Die Orgel, die gluckert|The Organ That Gurgles
+g_nftepi_automaton_flute_player|Spielt besser als du, aber bescheidener|Plays Better Than You, but Humbler
+g_nftepi_automaton_musical_boat|Die Kapelle, die nie seekrank wird|The Band That Never Gets Seasick
+g_nftepi_dagger_jeweled|Hübsch, spitz, eitel|Pretty, Pointy, Proud
+g_nftepi_scimitar_damascus|Wellen aus Stahl|Waves of Steel
+g_nftepi_scimitar_gold_hilt|Zu schön zum Ziehen. Fast.|Too Pretty to Draw. Almost.
+g_nftepi_bow_horn_lacquered|Der schwarze Glanzbogen|The Black Gloss Bow
+g_nftepi_scimitar_moonlight|Schneidet Schatten in Scheiben|Slices Shadows into Slivers
+g_nftepi_bow_roc_feather|Pfeile ohne Höhenangst|Arrows Without Fear of Heights
+g_nftepi_sword_ceremonial|Für Paraden. Und für Notfälle.|For Parades. And Emergencies.
+g_nftepi_shield_gold_inlaid|Blendet zuerst, schützt danach|Dazzles First, Protects Second
+g_nftepi_helmet_gilded_plume|Federleicht, goldschwer|Feather-Light, Gold-Heavy
+g_nftepi_brigandine_silk|Seide außen, Ärger innen|Silk Outside, Trouble Inside
+g_nftepi_armor_mirror|Der Feind sieht nur sich selbst|The Enemy Sees Only Himself
+g_nftepi_helmet_lion_mask|Brüllt, bevor du es tust|Roars Before You Do
+g_nftepi_camel_white_royal|Die Hoheit mit den Höckern|Her Humped Highness
+g_nftepi_horse_arabian_grey|Der Silberwind|The Silver Wind
+g_nftepi_horse_arabian_black|Mitternacht auf vier Hufen|Midnight on Four Hooves
+g_nftepi_horse_golden|Sonnenaufgang im Galopp|Sunrise at a Gallop
+g_nftepi_elephant_young|Klein für einen Elefanten|Small for an Elephant
+g_nftepi_cheetah_tamed|Schnurrt mit Höchstgeschwindigkeit|Purrs at Full Speed
+g_nftepi_camel_caravan_five|Fünf Höcker, fünf Launen|Five Humps, Five Moods
+g_nftepi_dhow_merchant|Ein Bauch voller Gewürze|A Belly Full of Spices
+g_nftepi_baghlah_two_mast|Königin der Monsunwinde|Queen of the Monsoon Winds
+g_nftepi_house_beautiful|Das Haus, über das die Nachbarn reden|The House the Neighbors Talk About
+g_nftepi_house_courtyard|Ein Innenhof voller Stille|A Courtyard Full of Quiet
+g_nftepi_house_harbor|Meerblick mit Möwenkonzert|Sea View with Seagull Concert
+g_nftepi_house_wind_tower|Klimaanlage aus dem Jahr 900|Air Conditioning from the Year 900
+g_nftepi_shop_spice|Riecht nach Abenteuer|Smells Like Adventure
+g_nftepi_workshop_smithy|Wo Funken Freunde werden|Where Sparks Become Friends
+g_nftepi_teahouse|Klatsch, Kardamom, Karawanen|Gossip, Cardamom, Caravans
+g_nftepi_watermill|Mahlt, während du schläfst|Grinds While You Sleep
+g_nftepi_carpet_persian_silk|Zu kostbar zum Drauftreten|Too Precious to Step On
+g_nftepi_chest_secret_lock|Öffnet sich nur für Freunde. Vielleicht.|Opens Only for Friends. Maybe.
+g_nftepi_chandelier_glass|Tausend kleine Sonnen|A Thousand Tiny Suns
+g_nftepi_bed_canopy|Träume mit Dach|Dreams with a Roof
+g_nftepi_fountain_indoor|Plätschert gegen schlechte Laune|Babbles Away Bad Moods
+g_nftepi_chair_throne_carved|Sitzen wie ein Sultan, aufstehen wie ein Held|Sit Like a Sultan, Rise Like a Hero
+g_nftepi_armillary_sphere_small|Der Himmel zum Mitnehmen|The Sky To Go
+g_nftepi_antikythera_replica|Rechnet schneller als der Mond|Counts Faster Than the Moon
+g_nftepi_south_pointing_chariot_model|Verirrt sich nie, egal wie du fährst|Never Lost, However You Steer
+g_nftepi_book_ingenious_devices|Bauanleitung für Wunder|Instructions for Wonders
+g_nftepi_canon_medicine_copy|Ein Pflaster aus Wissen|A Bandage Made of Knowledge
+g_nftepi_book_thousand_and_one_nights|Noch eine Geschichte, dann ist Schluss|One More Story, Then Bedtime
+g_nftepi_globe_celestial|Alle Sterne, kein Staub|Every Star, No Dust
+g_nftepi_lamp_wondrous|Dreimal reiben, einmal staunen|Rub Thrice, Marvel Once
+g_nftepi_carpet_flying|Keine Warteschlange, kein Kamel|No Queues, No Camels
+g_nftepi_ring_djinn|Wünsche mit Kleingedrucktem|Wishes, Fine Print Included
+g_nftepi_mirror_truth|Sagt dir, was du nicht hören willst|Tells You What You'd Rather Not Hear
+g_nftepi_cap_invisibility|Wo ist sie hin?|Where Did It Go?
+g_nftepi_horse_ebony_enchanted|Ein Dreh, und ab in die Wolken|One Twist and Off to the Clouds
+g_nftepi_feather_roc|Leicht wie Luft, groß wie ein Segel|Light as Air, Big as a Sail
+g_nftepi_key_sesame_cave|Sesam, öffne dich. Bitte.|Open Sesame. Please.
+g_nftepi_compass_dreams|Zeigt dorthin, wo du hinwillst|Points Where You Want to Go
+g_nftepi_mask_thousand_faces|Heute du, morgen jemand anderes|Today You, Tomorrow Someone Else
+g_nftepi_sandals_swift_wind|Füße mit Rückenwind|Feet with a Tailwind
+g_nftepi_rope_rising|Klettert für dich. Du hältst nur fest.|Climbs for You. Just Hold On.
+g_nftepi_pearl_moon_glowing|Ein Stück Mond für die Hosentasche|A Pocket-Sized Piece of Moon
+g_nftepi_chalice_spring_water|Nie leer, nie lauwarm|Never Empty, Never Lukewarm
+g_nftepi_hourglass_reversing|Sand, der bergauf rieselt|Sand That Trickles Uphill
+g_nftepi_goblet_gold|Schmeckt nach Sieg|Tastes Like Victory
+g_nftepi_ewer_rock_crystal|Wasser im Diamantkleid|Water in a Diamond Dress
+g_nftepi_manuscript_illuminated|Buchstaben, die leuchten|Letters That Glow
+g_nftepi_diamond_great|Zu groß für Ringe, zu schön für Truhen|Too Big for Rings, Too Pretty for Chests
+g_nftepi_ruby_pigeon_blood|Das rote Herz des Basars|The Red Heart of the Bazaar
+g_nftepi_pearl_black_large|Die Perle der Mitternacht|The Midnight Pearl
+g_nftepi_crown_forgotten_king|Er hat sie vergessen. Du nicht.|He Forgot It. You Didn't.
+g_nftepi_carpet_ancient_royal|Älter als die Wüste, weicher als Wolken|Older Than the Desert, Softer Than Clouds
+g_nftepi_pomegranate_golden|Zu golden zum Essen|Too Golden to Eat

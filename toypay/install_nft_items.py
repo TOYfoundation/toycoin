@@ -11,7 +11,9 @@ Same conventions as install_v6.py ... install_v8.py:
 - Only new files are added; no existing game script is edited.
 
 Copied files:
-    godot3d/data/nft_items.json          catalog for the 3D game
+    godot3d/data/nft_items.json          catalog + gang rules for the 3D game
+    godot3d/vfx/**                       VFX pack: rarity glow, glitter, lightning,
+                                         minting ceremony, flash protection
     godot3d/scripts/nft_items.gd         loader (class_name NftItems)
     godot3d/tests/nft_items_test.gd/.tscn headless test
     tools/i18n/master_nftitems.tsv       names (key|de|en) for the i18n pipeline
@@ -35,7 +37,15 @@ FILES = [
     ("godot3d/scripts/nft_items.gd", "godot3d/scripts/nft_items.gd"),
     ("godot3d/tests/nft_items_test.gd", "godot3d/tests/nft_items_test.gd"),
     ("godot3d/tests/nft_items_test.tscn", "godot3d/tests/nft_items_test.tscn"),
+    ("godot3d/tests/vfx_test.gd", "godot3d/tests/vfx_test.gd"),
+    ("godot3d/tests/vfx_test.tscn", "godot3d/tests/vfx_test.tscn"),
     ("tools/i18n/master_nftitems.tsv", "tools/i18n/master_nftitems.tsv"),
+]
+# The whole VFX pack (scripts, shaders, preview scene).
+FILES += [
+    (str(p.relative_to(HERE)), str(p.relative_to(HERE)))
+    for p in sorted((HERE / "godot3d" / "vfx").rglob("*"))
+    if p.is_file() and p.suffix in {".gd", ".gdshader", ".tscn"}
 ]
 OPTIONAL = [
     ("data/nft_items.json", "server/data/nft_items.json", "server"),
@@ -83,6 +93,8 @@ def main() -> int:
     print("Next steps:")
     print("  1. godot --headless --path godot3d --import")
     print("  2. godot --headless --path godot3d tests/nft_items_test.tscn")
+    print("     godot --headless --path godot3d tests/vfx_test.tscn")
+    print("     Preview: godot --path godot3d vfx/preview/vfx_showcase.tscn -- shot=mint")
     print("  3. If tools/i18n/gen.py reads a fixed list of master files, add master_nftitems.tsv.")
     return 0
 

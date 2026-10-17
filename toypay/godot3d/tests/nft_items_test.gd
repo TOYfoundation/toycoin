@@ -54,6 +54,59 @@ func _ready() -> void:
 	_check(gang.get("ride", 0) == 5, "gang ride bonus 2+1+2 (got %s)" % gang.get("ride", 0))
 	_check(NftItems.toy_to_dukaten(3) == 300, "3 TOY = 300 Dukaten")
 
+	# Rarity names, epithets, level requirements (07_SPIELDESIGN.md).
+	_check(NftItems.rarity_info("legendary").get("de", "") == "Sternenfeuer", "legendary = Sternenfeuer")
+	_check(NftItems.rarity_info("common").get("en", "") == "Sand Grain", "common = Sand Grain")
+	_check(NftItems.vfx_tier("lamp_wondrous") == 4 and NftItems.vfx_tier("flute") == 0, "vfx tiers")
+	_check(NftItems.epithet("lamp_wondrous", "de") == "Dreimal reiben, einmal staunen", "epithet de")
+	_check(NftItems.epithet("flute", "de") == "", "no epithet for cheap items")
+	_check(NftItems.min_level("lamp_wondrous") == 20, "legendary needs level 20")
+	_check(not NftItems.can_use("lamp_wondrous", 19), "level 19 cannot use legendary")
+	_check(NftItems.can_use("flute", 1), "level 1 can use flute")
+	for item in NftItems.all_items():
+		if item["fee_toy"] >= 40:
+			_check(NftItems.epithet(item["id"], "en") != "", "epithet for %s" % item["id"])
+
+	# Gang: 8 classes, diminishing returns, auras, duos.
+	_check(NftItems.classes().size() == 8, "8 classes")
+	var g1 := NftItems.gang_stats(["rooftop_fox", "shadow_quill"], ["camel", "saddle_camel", "boots_riding"])
+	_check(g1["stats"].get("ride", 0) == 4, "ride 2+2*0.75+1*0.5 = 4 (got %s)" % g1["stats"].get("ride", 0))
+	_check(g1["stats"].get("climb", 0) == 1, "rooftop fox aura climb +1")
+	_check(g1["stats"].get("stealth", 0) == 2, "midnight duo stealth +2")
+	_check(g1["duos"] == ["midnight_duo"], "midnight duo active")
+	_check(not g1["full_caravan"], "two classes are no full caravan")
+
+	# Completed set adds its bonus.
+	var dawn := ["camel", "saddle_camel_carpet", "saddlebags_leather", "bells_camel"]
+	var g2 := NftItems.gang_stats([], dawn)
+	_check(g2["sets"] == ["dawn_caravan"], "dawn caravan set complete")
+	_check(g2["stats"].get("ride", 0) == 6, "ride 4 from items + 2 set (got %s)" % g2["stats"].get("ride", 0))
+	_check(g2["stats"].get("carry", 0) == 8, "carry 5 from items + 3 set (got %s)" % g2["stats"].get("carry", 0))
+	var g2b := NftItems.gang_stats([], dawn.slice(0, 3))
+	_check(g2b["sets"].is_empty(), "incomplete set gives no bonus")
+
+	# Cap of +12 per stat from items.
+	var blades := ["scimitar_moonlight", "scimitar_damascus", "scimitar_gold_hilt", "bow_roc_feather", "bow_composite", "bow_horn_lacquered"]
+	_check(NftItems.gang_stats([], blades)["stats"].get("combat", 0) == 12, "combat capped at 12")
+
+	# Full caravan: five different classes, +10 %, two duos.
+	var five := ["rooftop_fox", "desert_bolt", "bazaar_tongue", "stargazer", "saber_whirl"]
+	var g3 := NftItems.gang_stats(five, ["boots_riding", "camel_racing"])
+	_check(g3["full_caravan"], "full caravan")
+	_check(g3["duos"].size() == 2, "flying traders + star saber (got %s)" % [g3["duos"]])
+	_check(g3["stats"].get("ride", 0) == 7, "ride round(round(4+2*0.75)*1.1) = 7 (got %s)" % g3["stats"].get("ride", 0))
+	_check(g3["effects"].get("travel_time_pct", 0) == -15, "desert bolt aura in effects")
+
+	# XP curve and gang names.
+	_check(NftItems.xp_to_next(1) == 100, "xp to level 2")
+	var xp_total := 0
+	for lvl in range(1, 20):
+		xp_total += NftItems.xp_to_next(lvl)
+	_check(abs(xp_total - 86877) <= 2, "about 86,877 XP to level 20 (got %d)" % xp_total)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 7
+	_check(NftItems.random_gang_name("de", rng).length() > 5, "gang name generator")
+
 	if _failures == 0:
 		print("nft_items_test: ALL OK (%d items)" % NftItems.count())
 	else:

@@ -154,3 +154,158 @@ static func gang_bonus(item_ids: Array) -> Dictionary:
 ## Converts a TOY amount (whole TOY) to Dukaten at the fixed rate.
 static func toy_to_dukaten(toy: int) -> int:
 	return toy * DUKATEN_PER_TOY
+
+
+# --- Rarity, epithets, level requirements (docs: 07_SPIELDESIGN.md) ---
+
+## Rarity info: {key, de, en, color, min_level, vfx_tier, min_fee, max_fee}.
+static func rarity_info(key: String) -> Dictionary:
+	for r in _catalog.get("rarities", []):
+		if r["key"] == key:
+			return r
+	return {}
+
+
+static func rarity_color(id: String) -> Color:
+	var info := rarity_info(rarity(id))
+	return Color(info.get("color", "#FFFFFF"))
+
+
+## 0 = Sand Grain ... 4 = Starfire. Drives the VFX intensity.
+static func vfx_tier(id: String) -> int:
+	return int(rarity_info(rarity(id)).get("vfx_tier", 0))
+
+
+static func min_level(id: String) -> int:
+	return int(get_item(id).get("min_level", 1))
+
+
+## True if a character of this level may use the item.
+static func can_use(id: String, character_level: int) -> bool:
+	return has_item(id) and character_level >= min_level(id)
+
+
+## Playful epithet of precious and legendary items, "" if none.
+static func epithet(id: String, lang: String = "en") -> String:
+	var item := get_item(id)
+	return item.get("epithet_de" if lang == "de" else "epithet_en", "")
+
+
+# --- Gang: classes, duos, sets, stacking (data: gang.json) ---
+
+static func _gang() -> Dictionary:
+	return _catalog.get("gang", {})
+
+
+static func classes() -> Array:
+	return _gang().get("classes", [])
+
+
+static func get_class_info(class_id: String) -> Dictionary:
+	for c in classes():
+		if c["id"] == class_id:
+			return c
+	return {}
+
+
+## Duos whose two classes are both among the active gang classes.
+static func active_duos(active_classes: Array) -> Array:
+	return _gang().get("duos", []).filter(
+		func(d): return active_classes.has(d["classes"][0]) and active_classes.has(d["classes"][1]))
+
+
+## Sets whose items are all owned by the address.
+static func completed_sets(owned_item_ids: Array) -> Array:
+	return _gang().get("sets", []).filter(
+		func(s): return s["items"].all(func(i): return owned_item_ids.has(i)))
+
+
+static func is_full_caravan(active_classes: Array) -> bool:
+	var distinct := {}
+	for c in active_classes:
+		distinct[c] = true
+	return distinct.size() >= MAX_ACTIVE_GANG
+
+
+static func _add(target: Dictionary, effects: Dictionary) -> void:
+	for k in effects:
+		target[k] = target.get(k, 0) + effects[k]
+
+
+## Gang totals for one character of the gang.
+## - Item bonuses per stat: strongest counts fully, next x0.75, rest x0.5
+##   (gang.json limits.stacking_factors), capped at +12 per stat.
+## - Plus class auras, active duos and completed sets.
+## - Full caravan (5 different classes): +10 % on all stats.
+## Returns {"stats": {stat: int}, "effects": {special_key: number},
+##          "duos": [ids], "sets": [ids], "full_caravan": bool}.
+static func gang_stats(active_classes: Array, owned_item_ids: Array) -> Dictionary:
+	var limits: Dictionary = _gang().get("limits", {})
+	var factors: Array = limits.get("stacking_factors", [1.0, 0.75, 0.5])
+	var cap := int(limits.get("stat_cap_from_items_per_character", 12))
+	var stat_keys: Dictionary = _catalog.get("stats", {})
+
+	# 1. Items with diminishing returns per stat.
+	var per_stat := {}
+	for id in owned_item_ids:
+		var b := bonuses(id)
+		for stat in b:
+			if not per_stat.has(stat):
+				per_stat[stat] = []
+			per_stat[stat].append(b[stat])
+	var stats := {}
+	for stat in per_stat:
+		var values: Array = per_stat[stat]
+		values.sort()
+		values.reverse()
+		var total := 0.0
+		for i in values.size():
+			total += values[i] * float(factors[min(i, factors.size() - 1)])
+		stats[stat] = min(int(round(total)), cap)
+
+	# 2. Auras, duos and sets; split real stats from special effects.
+	var extra := {}
+	for c in active_classes:
+		_add(extra, get_class_info(c).get("aura", {}))
+	var duos := active_duos(active_classes)
+	for d in duos:
+		_add(extra, d["effect"])
+	var sets := completed_sets(owned_item_ids)
+	for s in sets:
+		_add(extra, s["bonus"])
+	var effects := {}
+	for k in extra:
+		if stat_keys.has(k):
+			stats[k] = stats.get(k, 0) + int(extra[k])
+		else:
+			effects[k] = extra[k]
+
+	# 3. Full caravan.
+	var full := is_full_caravan(active_classes)
+	if full:
+		var pct := float(limits.get("full_caravan_bonus_pct", 10)) / 100.0
+		for k in stats:
+			stats[k] = int(round(stats[k] * (1.0 + pct)))
+
+	return {
+		"stats": stats,
+		"effects": effects,
+		"duos": duos.map(func(d): return d["id"]),
+		"sets": sets.map(func(s): return s["id"]),
+		"full_caravan": full,
+	}
+
+
+## Experience needed to go from `level` to `level + 1`: 100 * level^1.6.
+static func xp_to_next(level: int) -> int:
+	var curve: Dictionary = _gang().get("limits", {}).get("xp_curve", {"base": 100, "exponent": 1.6})
+	return int(round(float(curve["base"]) * pow(level, float(curve["exponent"]))))
+
+
+## Random funny gang name from gang.json (free re-roll, no paid randomness).
+static func random_gang_name(lang: String = "de", rng: RandomNumberGenerator = null) -> String:
+	var parts: Dictionary = _gang().get("gang_name_parts", {})
+	var first: Array = parts.get(lang + "_first", parts.get("en_first", ["Gang"]))
+	var second: Array = parts.get(lang + "_second", parts.get("en_second", [""]))
+	var r: RandomNumberGenerator = rng if rng != null else RandomNumberGenerator.new()
+	return "%s %s" % [first[r.randi_range(0, first.size() - 1)], second[r.randi_range(0, second.size() - 1)]]

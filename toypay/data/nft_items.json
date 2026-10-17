@@ -134,38 +134,532 @@
    "key": "common",
    "min_fee": 1,
    "max_fee": 4,
-   "de": "Gewöhnlich",
-   "en": "Common"
+   "de": "Sandkorn",
+   "en": "Sand Grain",
+   "color": "#C8B48A",
+   "min_level": 1,
+   "vfx_tier": 0
   },
   {
    "key": "uncommon",
    "min_fee": 5,
    "max_fee": 14,
-   "de": "Ungewöhnlich",
-   "en": "Uncommon"
+   "de": "Messing",
+   "en": "Brass",
+   "color": "#D9A441",
+   "min_level": 5,
+   "vfx_tier": 1
   },
   {
    "key": "rare",
    "min_fee": 15,
    "max_fee": 39,
-   "de": "Selten",
-   "en": "Rare"
+   "de": "Türkis",
+   "en": "Turquoise",
+   "color": "#2EC4B6",
+   "min_level": 10,
+   "vfx_tier": 2
   },
   {
    "key": "precious",
    "min_fee": 40,
    "max_fee": 79,
-   "de": "Kostbar",
-   "en": "Precious"
+   "de": "Rubinglut",
+   "en": "Ruby Glow",
+   "color": "#E0115F",
+   "min_level": 15,
+   "vfx_tier": 3
   },
   {
    "key": "legendary",
    "min_fee": 80,
    "max_fee": 100,
-   "de": "Legendär",
-   "en": "Legendary"
+   "de": "Sternenfeuer",
+   "en": "Starfire",
+   "color": "#FFE9A8",
+   "min_level": 20,
+   "vfx_tier": 4
   }
  ],
+ "gang": {
+  "schema": 1,
+  "note": "Gang rules for TOYQUEST (toypay/docs/07_SPIELDESIGN.md). Start values for play-testing.",
+  "limits": {
+   "max_active_gang": 5,
+   "stat_cap_from_items_per_character": 12,
+   "stacking_factors": [
+    1.0,
+    0.75,
+    0.5
+   ],
+   "full_caravan_bonus_pct": 10,
+   "mentor_xp_bonus_pct_per_minted": 15,
+   "mentor_xp_bonus_pct_max": 45,
+   "xp_curve": {
+    "base": 100,
+    "exponent": 1.6
+   },
+   "max_level": 50,
+   "mint_min_level": 20
+  },
+  "classes": [
+   {
+    "id": "rooftop_fox",
+    "de": "Dachfuchs",
+    "en": "Rooftop Fox",
+    "stats": [
+     "climb",
+     "stealth"
+    ],
+    "trick_de": "Katzensprung",
+    "trick_en": "Cat Leap",
+    "aura": {
+     "climb": 1
+    }
+   },
+   {
+    "id": "desert_bolt",
+    "de": "Wüstenblitz",
+    "en": "Desert Bolt",
+    "stats": [
+     "ride",
+     "stamina"
+    ],
+    "trick_de": "Sandsprint",
+    "trick_en": "Sand Sprint",
+    "aura": {
+     "travel_time_pct": -15
+    }
+   },
+   {
+    "id": "bazaar_tongue",
+    "de": "Basarzunge",
+    "en": "Bazaar Tongue",
+    "stats": [
+     "trade",
+     "charm"
+    ],
+    "trick_de": "Feilschwalzer",
+    "trick_en": "Haggle Waltz",
+    "aura": {
+     "shop_price_pct": -5
+    }
+   },
+   {
+    "id": "stargazer",
+    "de": "Sterngucker",
+    "en": "Stargazer",
+    "stats": [
+     "lore",
+     "perception"
+    ],
+    "trick_de": "Himmelsblick",
+    "trick_en": "Sky Sight",
+    "aura": {
+     "riddle_hints": 1
+    }
+   },
+   {
+    "id": "saber_whirl",
+    "de": "Säbelwirbel",
+    "en": "Saber Whirl",
+    "stats": [
+     "combat",
+     "defense"
+    ],
+    "trick_de": "Wirbelhieb",
+    "trick_en": "Whirl Strike",
+    "aura": {
+     "defense": 1
+    }
+   },
+   {
+    "id": "pearl_shark",
+    "de": "Perlenhai",
+    "en": "Pearl Shark",
+    "stats": [
+     "swim",
+     "perception"
+    ],
+    "trick_de": "Tiefenatem",
+    "trick_en": "Deep Breath",
+    "aura": {
+     "boat_speed_pct": 20
+    }
+   },
+   {
+    "id": "shadow_quill",
+    "de": "Schattenfeder",
+    "en": "Shadow Quill",
+    "stats": [
+     "stealth",
+     "perception"
+    ],
+    "trick_de": "Nachtschritt",
+    "trick_en": "Night Step",
+    "aura": {
+     "wanted_decay_x": 2
+    }
+   },
+   {
+    "id": "lute_charmer",
+    "de": "Lautenzauber",
+    "en": "Lute Charmer",
+    "stats": [
+     "charm",
+     "lore"
+    ],
+    "trick_de": "Ohrwurm",
+    "trick_en": "Earworm",
+    "aura": {
+     "xp_pct": 5
+    }
+   }
+  ],
+  "duos": [
+   {
+    "id": "midnight_duo",
+    "de": "Mitternachtsduo",
+    "en": "Midnight Duo",
+    "classes": [
+     "rooftop_fox",
+     "shadow_quill"
+    ],
+    "effect": {
+     "stealth": 2
+    }
+   },
+   {
+    "id": "golden_throat",
+    "de": "Goldkehlchen",
+    "en": "Golden Throat",
+    "classes": [
+     "bazaar_tongue",
+     "lute_charmer"
+    ],
+    "effect": {
+     "trade": 2,
+     "charm": 2
+    }
+   },
+   {
+    "id": "sand_and_salt",
+    "de": "Sand und Salz",
+    "en": "Sand and Salt",
+    "classes": [
+     "desert_bolt",
+     "pearl_shark"
+    ],
+    "effect": {
+     "travel_time_pct": -20
+    }
+   },
+   {
+    "id": "star_saber",
+    "de": "Sternensäbel",
+    "en": "Star Saber",
+    "classes": [
+     "stargazer",
+     "saber_whirl"
+    ],
+    "effect": {
+     "combat_night": 1,
+     "enemies_on_minimap": 1
+    }
+   },
+   {
+    "id": "flying_traders",
+    "de": "Fliegende Händler",
+    "en": "Flying Traders",
+    "classes": [
+     "bazaar_tongue",
+     "desert_bolt"
+    ],
+    "effect": {
+     "special_merchant": 1
+    }
+   },
+   {
+    "id": "diving_bell",
+    "de": "Taucherglocke",
+    "en": "Diving Bell",
+    "classes": [
+     "pearl_shark",
+     "stargazer"
+    ],
+    "effect": {
+     "underwater_riddle_hints": 2
+    }
+   },
+   {
+    "id": "rooftop_concert",
+    "de": "Dachkonzert",
+    "en": "Rooftop Concert",
+    "classes": [
+     "rooftop_fox",
+     "lute_charmer"
+    ],
+    "effect": {
+     "guard_distraction": 1
+    }
+   },
+   {
+    "id": "shield_and_shadow",
+    "de": "Schild und Schatten",
+    "en": "Shield and Shadow",
+    "classes": [
+     "saber_whirl",
+     "shadow_quill"
+    ],
+    "effect": {
+     "ambush_damage_x": 1.5
+    }
+   }
+  ],
+  "sets": [
+   {
+    "id": "vizier_wardrobe",
+    "de": "Garderobe des Wesirs",
+    "en": "Vizier's Wardrobe",
+    "items": [
+     "robe_vizier",
+     "seal_vizier_gold",
+     "turban_jeweled"
+    ],
+    "bonus": {
+     "charm": 3,
+     "trade": 2
+    }
+   },
+   {
+    "id": "forty_light_fingers",
+    "de": "Die vierzig Langfinger",
+    "en": "The Forty Light-Fingers",
+    "items": [
+     "garb_thief",
+     "hood_shadow",
+     "lockpicks",
+     "shoes_felt_silent"
+    ],
+    "bonus": {
+     "stealth": 4
+    }
+   },
+   {
+    "id": "dawn_caravan",
+    "de": "Karawane der Morgenröte",
+    "en": "Caravan of the Dawn",
+    "items": [
+     "camel",
+     "saddle_camel_carpet",
+     "saddlebags_leather",
+     "bells_camel"
+    ],
+    "bonus": {
+     "ride": 2,
+     "carry": 3
+    }
+   },
+   {
+    "id": "sindbad_sea_chest",
+    "de": "Sindbads Seekiste",
+    "en": "Sindbad's Sea Chest",
+    "items": [
+     "tunic_sailor",
+     "sail_lateen",
+     "compass_floating",
+     "sea_charts_indian_ocean"
+    ],
+    "bonus": {
+     "swim": 3,
+     "perception": 2
+    }
+   },
+   {
+    "id": "stargazers_of_baghdad",
+    "de": "Sterndeuter von Bagdad",
+    "en": "Stargazers of Baghdad",
+    "items": [
+     "astrolabe_brass",
+     "robe_astronomer_stars",
+     "star_tables_zij",
+     "globe_celestial"
+    ],
+    "bonus": {
+     "lore": 4
+    }
+   },
+   {
+    "id": "saber_dance",
+    "de": "Säbeltanz",
+    "en": "Saber Dance",
+    "items": [
+     "scimitar_damascus",
+     "shield_kite_painted",
+     "helmet_turban",
+     "mail_shirt"
+    ],
+    "bonus": {
+     "combat": 3,
+     "defense": 2
+    }
+   },
+   {
+    "id": "bazaar_barons",
+    "de": "Basar-Barone",
+    "en": "Bazaar Barons",
+    "items": [
+     "scales_merchant_brass",
+     "abacus",
+     "ledger_leather",
+     "purse_silk_tassels"
+    ],
+    "bonus": {
+     "trade": 4
+    }
+   },
+   {
+    "id": "nights_of_music",
+    "de": "Nächte der Musik",
+    "en": "Nights of Music",
+    "items": [
+     "oud_simple",
+     "darbuka_clay",
+     "flute_ney",
+     "finger_cymbals"
+    ],
+    "bonus": {
+     "charm": 4,
+     "xp_pct": 5
+    }
+   },
+   {
+    "id": "flying_merchants",
+    "de": "Fliegende Händler",
+    "en": "Flying Merchants",
+    "items": [
+     "carpet_flying",
+     "spice_cone_display",
+     "parrot_talking"
+    ],
+    "bonus": {
+     "trade": 3,
+     "ride": 2
+    }
+   },
+   {
+    "id": "djinn_legacy",
+    "de": "Erbe der Dschinn",
+    "en": "Legacy of the Djinn",
+    "items": [
+     "lamp_wondrous",
+     "ring_djinn",
+     "bottle_djinn_empty"
+    ],
+    "bonus": {
+     "combat": 1,
+     "defense": 1,
+     "climb": 1,
+     "swim": 1,
+     "ride": 1,
+     "stealth": 1,
+     "perception": 1,
+     "stamina": 1,
+     "carry": 1,
+     "trade": 1,
+     "charm": 1,
+     "lore": 1,
+     "craft": 1
+    }
+   }
+  ],
+  "ranks": [
+   {
+    "id": "street_dust",
+    "de": "Straßenstaub",
+    "en": "Street Dust",
+    "needs": {}
+   },
+   {
+    "id": "bazaar_band",
+    "de": "Basarbande",
+    "en": "Bazaar Band",
+    "needs": {
+     "active": 2,
+     "quests": 10
+    }
+   },
+   {
+    "id": "caravan_clan",
+    "de": "Karawanenclan",
+    "en": "Caravan Clan",
+    "needs": {
+     "active": 3,
+     "sets": 1
+    }
+   },
+   {
+    "id": "desert_legend",
+    "de": "Wüstenlegende",
+    "en": "Desert Legend",
+    "needs": {
+     "active": 5,
+     "duos": 3
+    }
+   },
+   {
+    "id": "star_covenant",
+    "de": "Sternenbund",
+    "en": "Star Covenant",
+    "needs": {
+     "full_caravan": 1,
+     "season_finale": 1
+    }
+   }
+  ],
+  "gang_name_parts": {
+   "de_first": [
+    "Die Kamel-Kumpanen",
+    "Die Dattel-Diebe",
+    "Die Sandsturm-Schwestern",
+    "Die Basar-Bande",
+    "Die Mondschein-Meute",
+    "Die Turban-Truppe",
+    "Die Laternen-Lumpen",
+    "Die Kupferkessel-Clique"
+   ],
+   "de_second": [
+    "vom Dienstag",
+    "von Bagdad",
+    "Bummelbart",
+    "mit Glitzer",
+    "der tausend Ausreden",
+    "ohne Kamel",
+    "vom Dachfirst",
+    "im Galopp"
+   ],
+   "en_first": [
+    "The Camel Comrades",
+    "The Date Thieves",
+    "The Sandstorm Sisters",
+    "The Bazaar Band",
+    "The Moonlight Mob",
+    "The Turban Troop",
+    "The Lantern Rascals",
+    "The Copper Kettle Crew"
+   ],
+   "en_second": [
+    "of Tuesday",
+    "of Baghdad",
+    "Dawdlebeard",
+    "with Glitter",
+    "of a Thousand Excuses",
+    "Without a Camel",
+    "from the Rooftops",
+    "at a Gallop"
+   ]
+  }
+ },
  "items": [
   {
    "item_type": 1,
@@ -180,6 +674,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -197,6 +692,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -214,6 +710,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3
    }
@@ -231,10 +728,14 @@
    "fee_dukaten": 4500,
    "fee_gold": 45000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 4,
     "trade": 1
-   }
+   },
+   "epithet_key": "g_nftepi_kaftan_gold_embroidered",
+   "epithet_de": "Der Glänzer vom Goldmarkt",
+   "epithet_en": "The Gold-Market Gleamer"
   },
   {
    "item_type": 5,
@@ -249,6 +750,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 2
    }
@@ -266,6 +768,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 2
    }
@@ -283,10 +786,14 @@
    "fee_dukaten": 6000,
    "fee_gold": 60000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 4,
     "lore": 2
-   }
+   },
+   "epithet_key": "g_nftepi_robe_vizier",
+   "epithet_de": "Wichtiger als der Wesir selbst",
+   "epithet_en": "More Important Than the Vizier"
   },
   {
    "item_type": 8,
@@ -301,6 +808,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 2
    }
@@ -318,6 +826,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 2
    }
@@ -335,6 +844,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stealth": 3
    }
@@ -352,6 +862,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 1,
     "stamina": 1
@@ -370,6 +881,7 @@
    "fee_dukaten": 700,
    "fee_gold": 7000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 2,
     "charm": 1
@@ -388,6 +900,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stealth": 2
    }
@@ -405,6 +918,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -422,6 +936,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "defense": 1
    }
@@ -439,6 +954,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "trade": 1
@@ -457,6 +973,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -474,6 +991,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -491,6 +1009,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "carry": 2
    }
@@ -508,6 +1027,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1,
     "carry": 1
@@ -526,6 +1046,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "climb": 1
    }
@@ -543,6 +1064,7 @@
    "fee_dukaten": 1100,
    "fee_gold": 11000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "climb": 1,
     "charm": 1
@@ -561,6 +1083,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "swim": 1
    }
@@ -578,6 +1101,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 2
    }
@@ -595,6 +1119,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -612,6 +1137,7 @@
    "fee_dukaten": 1600,
    "fee_gold": 16000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "stealth": 3,
     "climb": 1
@@ -630,6 +1156,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 2,
     "stealth": 1
@@ -648,6 +1175,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 1,
     "charm": 1
@@ -666,10 +1194,14 @@
    "fee_dukaten": 8000,
    "fee_gold": 80000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "charm": 5,
     "trade": 2
-   }
+   },
+   "epithet_key": "g_nftepi_caftan_royal_purple",
+   "epithet_de": "Purpur, der Türen öffnet",
+   "epithet_en": "The Purple That Opens Doors"
   },
   {
    "item_type": 30,
@@ -684,6 +1216,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3,
     "climb": 1
@@ -702,6 +1235,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -719,6 +1253,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3
    }
@@ -736,6 +1271,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 2
    }
@@ -753,6 +1289,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -770,6 +1307,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1,
     "stamina": 1
@@ -788,6 +1326,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -805,6 +1344,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "stealth": 1
@@ -823,6 +1363,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "lore": 1
    }
@@ -840,6 +1381,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stealth": 2
    }
@@ -857,6 +1399,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3,
     "lore": 1
@@ -875,6 +1418,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -892,6 +1436,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -909,6 +1454,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -926,6 +1472,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "ride": 2
    }
@@ -943,6 +1490,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 2
    }
@@ -960,6 +1508,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "climb": 2,
     "stealth": 1
@@ -978,6 +1527,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stealth": 2
    }
@@ -995,6 +1545,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "climb": 1
    }
@@ -1012,6 +1563,7 @@
    "fee_dukaten": 700,
    "fee_gold": 7000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 1,
     "ride": 1
@@ -1030,6 +1582,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 1
    }
@@ -1047,6 +1600,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1,
     "stealth": 1
@@ -1065,6 +1619,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 1,
     "combat": 1
@@ -1083,6 +1638,7 @@
    "fee_dukaten": 2200,
    "fee_gold": 22000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "stamina": 3
    }
@@ -1100,9 +1656,13 @@
    "fee_dukaten": 5000,
    "fee_gold": 50000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 4
-   }
+   },
+   "epithet_key": "g_nftepi_cloak_peacock",
+   "epithet_de": "Hundert Augen, null Bescheidenheit",
+   "epithet_en": "A Hundred Eyes, Zero Modesty"
   },
   {
    "item_type": 55,
@@ -1117,6 +1677,7 @@
    "fee_dukaten": 1600,
    "fee_gold": 16000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "stamina": 1
@@ -1135,6 +1696,7 @@
    "fee_dukaten": 1300,
    "fee_gold": 13000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2,
     "lore": 1
@@ -1153,6 +1715,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "swim": 2
    }
@@ -1170,6 +1733,7 @@
    "fee_dukaten": 2800,
    "fee_gold": 28000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "stamina": 3,
     "stealth": 1
@@ -1188,6 +1752,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 2
    }
@@ -1205,6 +1770,7 @@
    "fee_dukaten": 2400,
    "fee_gold": 24000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 3
    }
@@ -1222,6 +1788,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -1239,6 +1806,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1,
     "stamina": 1
@@ -1257,6 +1825,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "trade": 2
    }
@@ -1274,6 +1843,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 1,
     "charm": 1
@@ -1292,10 +1862,14 @@
    "fee_dukaten": 4000,
    "fee_gold": 40000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 3,
     "lore": 1
-   }
+   },
+   "epithet_key": "g_nftepi_ring_emerald",
+   "epithet_de": "Das grüne Flüstern",
+   "epithet_en": "The Green Whisper"
   },
   {
    "item_type": 66,
@@ -1310,10 +1884,14 @@
    "fee_dukaten": 4500,
    "fee_gold": 45000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 3,
     "combat": 1
-   }
+   },
+   "epithet_key": "g_nftepi_ring_ruby",
+   "epithet_de": "Funke im Faustschlag",
+   "epithet_en": "Spark in the Punch"
   },
   {
    "item_type": 67,
@@ -1328,6 +1906,7 @@
    "fee_dukaten": 700,
    "fee_gold": 7000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1
    }
@@ -1345,6 +1924,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3
    }
@@ -1362,6 +1942,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 1
    }
@@ -1379,6 +1960,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 1,
     "stamina": 1
@@ -1397,6 +1979,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "perception": 1
    }
@@ -1414,6 +1997,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2
    }
@@ -1431,6 +2015,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -1448,6 +2033,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -1465,6 +2051,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1
    }
@@ -1482,6 +2069,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 1,
     "charm": 1
@@ -1500,6 +2088,7 @@
    "fee_dukaten": 1100,
    "fee_gold": 11000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 2
    }
@@ -1517,6 +2106,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "trade": 1
    }
@@ -1534,6 +2124,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 1,
     "charm": 1
@@ -1552,6 +2143,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "carry": 2
    }
@@ -1569,6 +2161,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 1,
     "carry": 1
@@ -1587,6 +2180,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -1604,6 +2198,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1
    }
@@ -1621,6 +2216,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -1638,6 +2234,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1,
     "perception": 1
@@ -1656,6 +2253,7 @@
    "fee_dukaten": 1300,
    "fee_gold": 13000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -1673,6 +2271,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "trade": 1
@@ -1691,6 +2290,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stealth": 1
    }
@@ -1708,6 +2308,7 @@
    "fee_dukaten": 1600,
    "fee_gold": 16000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2
    }
@@ -1725,10 +2326,14 @@
    "fee_dukaten": 7000,
    "fee_gold": 70000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 3,
     "trade": 3
-   }
+   },
+   "epithet_key": "g_nftepi_seal_vizier_gold",
+   "epithet_de": "Ein Stempel, und der Basar gehorcht",
+   "epithet_en": "One Stamp and the Bazaar Obeys"
   },
   {
    "item_type": 91,
@@ -1743,6 +2348,7 @@
    "fee_dukaten": 3800,
    "fee_gold": 38000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "combat": 1
@@ -1761,9 +2367,13 @@
    "fee_dukaten": 5500,
    "fee_gold": 55000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 4
-   }
+   },
+   "epithet_key": "g_nftepi_tiara_pearl",
+   "epithet_de": "Mondtropfen auf der Stirn",
+   "epithet_en": "Moondrops on the Brow"
   },
   {
    "item_type": 93,
@@ -1778,6 +2388,7 @@
    "fee_dukaten": 2200,
    "fee_gold": 22000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "trade": 2,
     "ride": 1
@@ -1796,6 +2407,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1
    }
@@ -1813,6 +2425,7 @@
    "fee_dukaten": 700,
    "fee_gold": 7000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1
    }
@@ -1830,6 +2443,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -1847,6 +2461,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1,
     "lore": 1
@@ -1865,6 +2480,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -1882,6 +2498,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3,
     "trade": 1
@@ -1900,6 +2517,7 @@
    "fee_dukaten": 2800,
    "fee_gold": 28000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3
    }
@@ -1917,6 +2535,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1,
     "charm": 1
@@ -1935,6 +2554,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -1952,6 +2572,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1
    }
@@ -1969,6 +2590,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -1986,6 +2608,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -2003,6 +2626,7 @@
    "fee_dukaten": 2200,
    "fee_gold": 22000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "lore": 1
@@ -2021,6 +2645,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -2038,6 +2663,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1,
     "stamina": 1
@@ -2056,6 +2682,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 1
    }
@@ -2073,6 +2700,7 @@
    "fee_dukaten": 2600,
    "fee_gold": 26000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3
    }
@@ -2090,6 +2718,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "lore": 1
@@ -2108,6 +2737,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -2125,6 +2755,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -2142,6 +2773,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "ride": 1
@@ -2160,6 +2792,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "perception": 1
    }
@@ -2177,6 +2810,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "swim": 1
    }
@@ -2194,6 +2828,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "ride": 1
    }
@@ -2211,10 +2846,14 @@
    "fee_dukaten": 6000,
    "fee_gold": 60000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "lore": 3,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_water_organ_model",
+   "epithet_de": "Die Orgel, die gluckert",
+   "epithet_en": "The Organ That Gurgles"
   },
   {
    "item_type": 119,
@@ -2229,10 +2868,14 @@
    "fee_dukaten": 9000,
    "fee_gold": 90000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "lore": 4,
     "charm": 3
-   }
+   },
+   "epithet_key": "g_nftepi_automaton_flute_player",
+   "epithet_de": "Spielt besser als du, aber bescheidener",
+   "epithet_en": "Plays Better Than You, but Humbler"
   },
   {
    "item_type": 120,
@@ -2247,6 +2890,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -2264,6 +2908,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 1,
     "perception": 1
@@ -2282,10 +2927,14 @@
    "fee_dukaten": 8500,
    "fee_gold": 85000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "lore": 4,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_automaton_musical_boat",
+   "epithet_de": "Die Kapelle, die nie seekrank wird",
+   "epithet_en": "The Band That Never Gets Seasick"
   },
   {
    "item_type": 123,
@@ -2300,6 +2949,7 @@
    "fee_dukaten": 2400,
    "fee_gold": 24000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3
    }
@@ -2317,6 +2967,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "perception": 1
    }
@@ -2334,6 +2985,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1,
     "stamina": 1
@@ -2352,6 +3004,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 2
    }
@@ -2369,6 +3022,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -2386,6 +3040,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "craft": 3
    }
@@ -2403,6 +3058,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -2420,6 +3076,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -2437,6 +3094,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "craft": 2
    }
@@ -2454,6 +3112,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -2471,6 +3130,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -2488,6 +3148,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1,
     "craft": 1
@@ -2506,6 +3167,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1,
     "climb": 1
@@ -2524,6 +3186,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "climb": 1
    }
@@ -2541,6 +3204,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "climb": 3
    }
@@ -2558,6 +3222,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "climb": 2
    }
@@ -2575,6 +3240,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stealth": 3
    }
@@ -2592,6 +3258,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "perception": 1
    }
@@ -2609,6 +3276,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 2
    }
@@ -2626,6 +3294,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "perception": 1
    }
@@ -2643,6 +3312,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "swim": 1,
     "craft": 1
@@ -2661,6 +3331,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "perception": 1
    }
@@ -2678,6 +3349,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "swim": 2
    }
@@ -2695,6 +3367,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "craft": 3
    }
@@ -2712,6 +3385,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -2729,6 +3403,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1,
     "charm": 1
@@ -2747,6 +3422,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "craft": 3
    }
@@ -2764,6 +3440,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "craft": 2,
     "lore": 1
@@ -2782,6 +3459,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "lore": 1,
     "craft": 1
@@ -2800,6 +3478,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 2
    }
@@ -2817,6 +3496,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 2
    }
@@ -2834,6 +3514,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "lore": 1
    }
@@ -2851,6 +3532,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "lore": 1
    }
@@ -2868,6 +3550,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -2885,6 +3568,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 2
    }
@@ -2902,6 +3586,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 2,
     "craft": 1
@@ -2920,6 +3605,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "craft": 2,
     "lore": 1
@@ -2938,6 +3624,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "carry": 2,
     "craft": 1
@@ -2956,6 +3643,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stealth": 1,
     "craft": 1
@@ -2974,6 +3662,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "craft": 2
    }
@@ -2991,6 +3680,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -3008,6 +3698,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -3025,6 +3716,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1,
     "lore": 1
@@ -3043,6 +3735,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "lore": 1
    }
@@ -3060,6 +3753,7 @@
    "fee_dukaten": 1600,
    "fee_gold": 16000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "perception": 1
@@ -3078,6 +3772,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 3,
     "ride": 1
@@ -3096,6 +3791,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -3113,6 +3809,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "combat": 1
    }
@@ -3130,6 +3827,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "combat": 1,
     "stealth": 1
@@ -3148,6 +3846,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 2,
     "charm": 1
@@ -3166,10 +3865,14 @@
    "fee_dukaten": 4000,
    "fee_gold": 40000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "combat": 2,
     "charm": 3
-   }
+   },
+   "epithet_key": "g_nftepi_dagger_jeweled",
+   "epithet_de": "Hübsch, spitz, eitel",
+   "epithet_en": "Pretty, Pointy, Proud"
   },
   {
    "item_type": 174,
@@ -3184,6 +3887,7 @@
    "fee_dukaten": 700,
    "fee_gold": 7000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 2,
     "stealth": 1
@@ -3202,6 +3906,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 3
    }
@@ -3219,9 +3924,13 @@
    "fee_dukaten": 4500,
    "fee_gold": 45000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "combat": 5
-   }
+   },
+   "epithet_key": "g_nftepi_scimitar_damascus",
+   "epithet_de": "Wellen aus Stahl",
+   "epithet_en": "Waves of Steel"
   },
   {
    "item_type": 177,
@@ -3236,10 +3945,14 @@
    "fee_dukaten": 6500,
    "fee_gold": 65000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "combat": 5,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_scimitar_gold_hilt",
+   "epithet_de": "Zu schön zum Ziehen. Fast.",
+   "epithet_en": "Too Pretty to Draw. Almost."
   },
   {
    "item_type": 178,
@@ -3254,6 +3967,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "combat": 3,
     "ride": 2
@@ -3272,6 +3986,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 3
    }
@@ -3289,6 +4004,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 2,
     "defense": 1
@@ -3307,6 +4023,7 @@
    "fee_dukaten": 1600,
    "fee_gold": 16000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "combat": 3,
     "ride": 1
@@ -3325,6 +4042,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 2
    }
@@ -3342,6 +4060,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 2,
     "perception": 1
@@ -3360,6 +4079,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "combat": 4,
     "perception": 1
@@ -3378,10 +4098,14 @@
    "fee_dukaten": 5000,
    "fee_gold": 50000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "combat": 4,
     "perception": 2
-   }
+   },
+   "epithet_key": "g_nftepi_bow_horn_lacquered",
+   "epithet_de": "Der schwarze Glanzbogen",
+   "epithet_en": "The Black Gloss Bow"
   },
   {
    "item_type": 186,
@@ -3396,6 +4120,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 3
    }
@@ -3413,6 +4138,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "combat": 1
    }
@@ -3430,6 +4156,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 1,
     "charm": 1
@@ -3448,6 +4175,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "combat": 1
    }
@@ -3465,6 +4193,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "combat": 1,
     "defense": 1
@@ -3483,6 +4212,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 2,
     "stamina": 1
@@ -3501,6 +4231,7 @@
    "fee_dukaten": 1100,
    "fee_gold": 11000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 3
    }
@@ -3518,6 +4249,7 @@
    "fee_dukaten": 1300,
    "fee_gold": 13000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 3
    }
@@ -3535,6 +4267,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 2,
     "craft": 1
@@ -3553,6 +4286,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "ride": 1
    }
@@ -3570,6 +4304,7 @@
    "fee_dukaten": 2200,
    "fee_gold": 22000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "combat": 2,
     "charm": 2
@@ -3588,6 +4323,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 1,
     "swim": 1
@@ -3606,6 +4342,7 @@
    "fee_dukaten": 700,
    "fee_gold": 7000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 2,
     "swim": 1
@@ -3624,6 +4361,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "combat": 1,
     "perception": 1
@@ -3642,6 +4380,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 2
    }
@@ -3659,6 +4398,7 @@
    "fee_dukaten": 2800,
    "fee_gold": 28000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "combat": 2,
     "stealth": 2
@@ -3677,10 +4417,14 @@
    "fee_dukaten": 9500,
    "fee_gold": 95000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "combat": 6,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_scimitar_moonlight",
+   "epithet_de": "Schneidet Schatten in Scheiben",
+   "epithet_en": "Slices Shadows into Slivers"
   },
   {
    "item_type": 203,
@@ -3695,10 +4439,14 @@
    "fee_dukaten": 8500,
    "fee_gold": 85000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "combat": 5,
     "perception": 3
-   }
+   },
+   "epithet_key": "g_nftepi_bow_roc_feather",
+   "epithet_de": "Pfeile ohne Höhenangst",
+   "epithet_en": "Arrows Without Fear of Heights"
   },
   {
    "item_type": 204,
@@ -3713,6 +4461,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "combat": 3,
     "perception": 1
@@ -3731,6 +4480,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "combat": 2,
     "stealth": 2
@@ -3749,6 +4499,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "combat": 1
    }
@@ -3766,6 +4517,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 3,
     "swim": 1
@@ -3784,6 +4536,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "combat": 3
    }
@@ -3801,6 +4554,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -3818,10 +4572,14 @@
    "fee_dukaten": 5500,
    "fee_gold": 55000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "combat": 3,
     "charm": 3
-   }
+   },
+   "epithet_key": "g_nftepi_sword_ceremonial",
+   "epithet_de": "Für Paraden. Und für Notfälle.",
+   "epithet_en": "For Parades. And Emergencies."
   },
   {
    "item_type": 211,
@@ -3836,6 +4594,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "combat": 2
    }
@@ -3853,6 +4612,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "combat": 1,
     "craft": 1
@@ -3871,6 +4631,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "combat": 3,
     "stealth": 1
@@ -3889,6 +4650,7 @@
    "fee_dukaten": 2600,
    "fee_gold": 26000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "combat": 2,
     "charm": 2
@@ -3907,6 +4669,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "combat": 2
    }
@@ -3924,6 +4687,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "defense": 2
    }
@@ -3941,6 +4705,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "defense": 2
    }
@@ -3958,6 +4723,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 3
    }
@@ -3975,6 +4741,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 2
    }
@@ -3992,6 +4759,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "defense": 3,
     "charm": 1
@@ -4010,10 +4778,14 @@
    "fee_dukaten": 6000,
    "fee_gold": 60000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "defense": 4,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_shield_gold_inlaid",
+   "epithet_de": "Blendet zuerst, schützt danach",
+   "epithet_en": "Dazzles First, Protects Second"
   },
   {
    "item_type": 222,
@@ -4028,6 +4800,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 2
    }
@@ -4045,6 +4818,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 2
    }
@@ -4062,6 +4836,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "defense": 3,
     "charm": 1
@@ -4080,10 +4855,14 @@
    "fee_dukaten": 4500,
    "fee_gold": 45000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "defense": 3,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_helmet_gilded_plume",
+   "epithet_de": "Federleicht, goldschwer",
+   "epithet_en": "Feather-Light, Gold-Heavy"
   },
   {
    "item_type": 226,
@@ -4098,6 +4877,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "defense": 3
    }
@@ -4115,6 +4895,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "defense": 4
    }
@@ -4132,6 +4913,7 @@
    "fee_dukaten": 2200,
    "fee_gold": 22000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "defense": 3
    }
@@ -4149,6 +4931,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 2,
     "stealth": 1
@@ -4167,10 +4950,14 @@
    "fee_dukaten": 4000,
    "fee_gold": 40000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "defense": 4,
     "charm": 1
-   }
+   },
+   "epithet_key": "g_nftepi_brigandine_silk",
+   "epithet_de": "Seide außen, Ärger innen",
+   "epithet_en": "Silk Outside, Trouble Inside"
   },
   {
    "item_type": 231,
@@ -4185,6 +4972,7 @@
    "fee_dukaten": 700,
    "fee_gold": 7000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 2
    }
@@ -4202,10 +4990,14 @@
    "fee_dukaten": 7000,
    "fee_gold": 70000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "defense": 5,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_armor_mirror",
+   "epithet_de": "Der Feind sieht nur sich selbst",
+   "epithet_en": "The Enemy Sees Only Himself"
   },
   {
    "item_type": 233,
@@ -4220,6 +5012,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 2
    }
@@ -4237,6 +5030,7 @@
    "fee_dukaten": 1600,
    "fee_gold": 16000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "defense": 2,
     "combat": 1
@@ -4255,6 +5049,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "defense": 3,
     "ride": 1
@@ -4273,6 +5068,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 2,
     "charm": 1
@@ -4291,6 +5087,7 @@
    "fee_dukaten": 2800,
    "fee_gold": 28000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "defense": 3,
     "stamina": 1
@@ -4309,6 +5106,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 2,
     "combat": 1
@@ -4327,6 +5125,7 @@
    "fee_dukaten": 1100,
    "fee_gold": 11000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "defense": 2,
     "swim": 1
@@ -4345,10 +5144,14 @@
    "fee_dukaten": 5500,
    "fee_gold": 55000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "defense": 3,
     "charm": 3
-   }
+   },
+   "epithet_key": "g_nftepi_helmet_lion_mask",
+   "epithet_de": "Brüllt, bevor du es tust",
+   "epithet_en": "Roars Before You Do"
   },
   {
    "item_type": 241,
@@ -4363,6 +5166,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "ride": 2,
     "carry": 2
@@ -4381,6 +5185,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "ride": 4
    }
@@ -4398,10 +5203,14 @@
    "fee_dukaten": 6000,
    "fee_gold": 60000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "ride": 4,
     "charm": 3
-   }
+   },
+   "epithet_key": "g_nftepi_camel_white_royal",
+   "epithet_de": "Die Hoheit mit den Höckern",
+   "epithet_en": "Her Humped Highness"
   },
   {
    "item_type": 244,
@@ -4416,6 +5225,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "ride": 2,
     "carry": 4
@@ -4434,6 +5244,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "carry": 2
    }
@@ -4451,6 +5262,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "carry": 3,
     "stamina": 1
@@ -4469,6 +5281,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "ride": 2
    }
@@ -4486,6 +5299,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "ride": 3
    }
@@ -4503,9 +5317,13 @@
    "fee_dukaten": 4000,
    "fee_gold": 40000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "ride": 5
-   }
+   },
+   "epithet_key": "g_nftepi_horse_arabian_grey",
+   "epithet_de": "Der Silberwind",
+   "epithet_en": "The Silver Wind"
   },
   {
    "item_type": 250,
@@ -4520,10 +5338,14 @@
    "fee_dukaten": 5500,
    "fee_gold": 55000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "ride": 5,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_horse_arabian_black",
+   "epithet_de": "Mitternacht auf vier Hufen",
+   "epithet_en": "Midnight on Four Hooves"
   },
   {
    "item_type": 251,
@@ -4538,10 +5360,14 @@
    "fee_dukaten": 8000,
    "fee_gold": 80000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "ride": 6,
     "charm": 3
-   }
+   },
+   "epithet_key": "g_nftepi_horse_golden",
+   "epithet_de": "Sonnenaufgang im Galopp",
+   "epithet_en": "Sunrise at a Gallop"
   },
   {
    "item_type": 252,
@@ -4556,10 +5382,14 @@
    "fee_dukaten": 9000,
    "fee_gold": 90000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "carry": 6,
     "defense": 2
-   }
+   },
+   "epithet_key": "g_nftepi_elephant_young",
+   "epithet_de": "Klein für einen Elefanten",
+   "epithet_en": "Small for an Elephant"
   },
   {
    "item_type": 253,
@@ -4574,6 +5404,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "perception": 3
    }
@@ -4591,6 +5422,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "perception": 4
    }
@@ -4608,6 +5440,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "perception": 2,
     "stamina": 1
@@ -4626,6 +5459,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stealth": 1,
     "perception": 1
@@ -4644,6 +5478,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "climb": 2,
     "stealth": 1
@@ -4662,6 +5497,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -4679,6 +5515,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "perception": 1
    }
@@ -4696,6 +5533,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3
    }
@@ -4713,6 +5551,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 1,
     "stamina": 1
@@ -4731,6 +5570,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 2
    }
@@ -4748,6 +5588,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "carry": 3
    }
@@ -4765,10 +5606,14 @@
    "fee_dukaten": 6500,
    "fee_gold": 65000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "perception": 3,
     "combat": 2
-   }
+   },
+   "epithet_key": "g_nftepi_cheetah_tamed",
+   "epithet_de": "Schnurrt mit Höchstgeschwindigkeit",
+   "epithet_en": "Purrs at Full Speed"
   },
   {
    "item_type": 265,
@@ -4783,10 +5628,14 @@
    "fee_dukaten": 7500,
    "fee_gold": 75000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "carry": 6,
     "trade": 3
-   }
+   },
+   "epithet_key": "g_nftepi_camel_caravan_five",
+   "epithet_de": "Fünf Höcker, fünf Launen",
+   "epithet_en": "Five Humps, Five Moods"
   },
   {
    "item_type": 266,
@@ -4801,6 +5650,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "swim": 2,
     "trade": 2
@@ -4819,6 +5669,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "swim": 1
    }
@@ -4836,6 +5687,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "swim": 2
    }
@@ -4853,6 +5705,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "swim": 2,
     "craft": 1
@@ -4871,6 +5724,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "carry": 4
    }
@@ -4888,6 +5742,7 @@
    "fee_dukaten": 2200,
    "fee_gold": 22000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "swim": 2,
     "trade": 1
@@ -4906,6 +5761,7 @@
    "fee_dukaten": 2400,
    "fee_gold": 24000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3
    }
@@ -4923,10 +5779,14 @@
    "fee_dukaten": 7000,
    "fee_gold": 70000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "trade": 4,
     "carry": 4
-   }
+   },
+   "epithet_key": "g_nftepi_dhow_merchant",
+   "epithet_de": "Ein Bauch voller Gewürze",
+   "epithet_en": "A Belly Full of Spices"
   },
   {
    "item_type": 274,
@@ -4941,10 +5801,14 @@
    "fee_dukaten": 9000,
    "fee_gold": 90000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "trade": 5,
     "carry": 5
-   }
+   },
+   "epithet_key": "g_nftepi_baghlah_two_mast",
+   "epithet_de": "Königin der Monsunwinde",
+   "epithet_en": "Queen of the Monsoon Winds"
   },
   {
    "item_type": 275,
@@ -4959,6 +5823,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "carry": 2
    }
@@ -4976,6 +5841,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "carry": 4
    }
@@ -4993,6 +5859,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "carry": 5
    }
@@ -5010,6 +5877,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "ride": 3,
     "combat": 1
@@ -5028,6 +5896,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 4
    }
@@ -5045,6 +5914,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "ride": 1
@@ -5063,10 +5933,14 @@
    "fee_dukaten": 10000,
    "fee_gold": 100000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "charm": 4,
     "trade": 2
-   }
+   },
+   "epithet_key": "g_nftepi_house_beautiful",
+   "epithet_de": "Das Haus, über das die Nachbarn reden",
+   "epithet_en": "The House the Neighbors Talk About"
   },
   {
    "item_type": 282,
@@ -5081,6 +5955,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 2
    }
@@ -5098,6 +5973,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2
    }
@@ -5115,6 +5991,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 1
    }
@@ -5132,6 +6009,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "stamina": 2
    }
@@ -5149,10 +6027,14 @@
    "fee_dukaten": 6500,
    "fee_gold": 65000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 3,
     "stamina": 2
-   }
+   },
+   "epithet_key": "g_nftepi_house_courtyard",
+   "epithet_de": "Ein Innenhof voller Stille",
+   "epithet_en": "A Courtyard Full of Quiet"
   },
   {
    "item_type": 287,
@@ -5167,10 +6049,14 @@
    "fee_dukaten": 5500,
    "fee_gold": 55000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "swim": 1,
     "trade": 3
-   }
+   },
+   "epithet_key": "g_nftepi_house_harbor",
+   "epithet_de": "Meerblick mit Möwenkonzert",
+   "epithet_en": "Sea View with Seagull Concert"
   },
   {
    "item_type": 288,
@@ -5185,10 +6071,14 @@
    "fee_dukaten": 8000,
    "fee_gold": 80000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "stamina": 3,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_house_wind_tower",
+   "epithet_de": "Klimaanlage aus dem Jahr 900",
+   "epithet_en": "Air Conditioning from the Year 900"
   },
   {
    "item_type": 289,
@@ -5203,6 +6093,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 2
    }
@@ -5220,9 +6111,13 @@
    "fee_dukaten": 4000,
    "fee_gold": 40000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "trade": 3
-   }
+   },
+   "epithet_key": "g_nftepi_shop_spice",
+   "epithet_de": "Riecht nach Abenteuer",
+   "epithet_en": "Smells Like Adventure"
   },
   {
    "item_type": 291,
@@ -5237,9 +6132,13 @@
    "fee_dukaten": 4500,
    "fee_gold": 45000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "craft": 4
-   }
+   },
+   "epithet_key": "g_nftepi_workshop_smithy",
+   "epithet_de": "Wo Funken Freunde werden",
+   "epithet_en": "Where Sparks Become Friends"
   },
   {
    "item_type": 292,
@@ -5254,6 +6153,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "craft": 3
    }
@@ -5271,6 +6171,7 @@
    "fee_dukaten": 3800,
    "fee_gold": 38000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "craft": 3,
     "trade": 1
@@ -5289,10 +6190,14 @@
    "fee_dukaten": 7000,
    "fee_gold": 70000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 3,
     "trade": 3
-   }
+   },
+   "epithet_key": "g_nftepi_teahouse",
+   "epithet_de": "Klatsch, Kardamom, Karawanen",
+   "epithet_en": "Gossip, Cardamom, Caravans"
   },
   {
    "item_type": 295,
@@ -5307,6 +6212,7 @@
    "fee_dukaten": 2800,
    "fee_gold": 28000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "ride": 3
    }
@@ -5324,6 +6230,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "perception": 2
    }
@@ -5341,6 +6248,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "stamina": 2
    }
@@ -5358,6 +6266,7 @@
    "fee_dukaten": 3200,
    "fee_gold": 32000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "stamina": 2,
     "charm": 1
@@ -5376,9 +6285,13 @@
    "fee_dukaten": 6000,
    "fee_gold": 60000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "craft": 4
-   }
+   },
+   "epithet_key": "g_nftepi_watermill",
+   "epithet_de": "Mahlt, während du schläfst",
+   "epithet_en": "Grinds While You Sleep"
   },
   {
    "item_type": 300,
@@ -5393,6 +6306,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 1,
     "trade": 1
@@ -5411,6 +6325,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -5428,6 +6343,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -5445,9 +6361,13 @@
    "fee_dukaten": 4500,
    "fee_gold": 45000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 4
-   }
+   },
+   "epithet_key": "g_nftepi_carpet_persian_silk",
+   "epithet_de": "Zu kostbar zum Drauftreten",
+   "epithet_en": "Too Precious to Step On"
   },
   {
    "item_type": 304,
@@ -5462,6 +6382,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "stamina": 1
@@ -5480,6 +6401,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -5497,6 +6419,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2,
     "stamina": 1
@@ -5515,6 +6438,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "stamina": 2
    }
@@ -5532,6 +6456,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3,
     "stamina": 2
@@ -5550,6 +6475,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 1,
     "charm": 1
@@ -5568,6 +6494,7 @@
    "fee_dukaten": 2200,
    "fee_gold": 22000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2
    }
@@ -5585,6 +6512,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "carry": 2
    }
@@ -5602,6 +6530,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "carry": 2,
     "defense": 1
@@ -5620,10 +6549,14 @@
    "fee_dukaten": 4000,
    "fee_gold": 40000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "carry": 3,
     "stealth": 1
-   }
+   },
+   "epithet_key": "g_nftepi_chest_secret_lock",
+   "epithet_de": "Öffnet sich nur für Freunde. Vielleicht.",
+   "epithet_en": "Opens Only for Friends. Maybe."
   },
   {
    "item_type": 314,
@@ -5638,6 +6571,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "stealth": 1,
     "charm": 1
@@ -5656,6 +6590,7 @@
    "fee_dukaten": 1100,
    "fee_gold": 11000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -5673,6 +6608,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 1,
     "charm": 1
@@ -5691,9 +6627,13 @@
    "fee_dukaten": 5000,
    "fee_gold": 50000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 4
-   }
+   },
+   "epithet_key": "g_nftepi_chandelier_glass",
+   "epithet_de": "Tausend kleine Sonnen",
+   "epithet_en": "A Thousand Tiny Suns"
   },
   {
    "item_type": 318,
@@ -5708,6 +6648,7 @@
    "fee_dukaten": 1600,
    "fee_gold": 16000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2
    }
@@ -5725,6 +6666,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 2
    }
@@ -5742,9 +6684,13 @@
    "fee_dukaten": 4000,
    "fee_gold": 40000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "stamina": 3
-   }
+   },
+   "epithet_key": "g_nftepi_bed_canopy",
+   "epithet_de": "Träume mit Dach",
+   "epithet_en": "Dreams with a Roof"
   },
   {
    "item_type": 321,
@@ -5759,6 +6705,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1
    }
@@ -5776,6 +6723,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "carry": 2
    }
@@ -5793,10 +6741,14 @@
    "fee_dukaten": 5500,
    "fee_gold": 55000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 3,
     "stamina": 1
-   }
+   },
+   "epithet_key": "g_nftepi_fountain_indoor",
+   "epithet_de": "Plätschert gegen schlechte Laune",
+   "epithet_en": "Babbles Away Bad Moods"
   },
   {
    "item_type": 324,
@@ -5811,6 +6763,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "perception": 1
@@ -5829,6 +6782,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "stamina": 1
@@ -5847,6 +6801,7 @@
    "fee_dukaten": 700,
    "fee_gold": 7000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 1
    }
@@ -5864,9 +6819,13 @@
    "fee_dukaten": 7500,
    "fee_gold": 75000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 5
-   }
+   },
+   "epithet_key": "g_nftepi_chair_throne_carved",
+   "epithet_de": "Sitzen wie ein Sultan, aufstehen wie ein Held",
+   "epithet_en": "Sit Like a Sultan, Rise Like a Hero"
   },
   {
    "item_type": 328,
@@ -5881,6 +6840,7 @@
    "fee_dukaten": 1300,
    "fee_gold": 13000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -5898,6 +6858,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -5915,6 +6876,7 @@
    "fee_dukaten": 700,
    "fee_gold": 7000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 1
    }
@@ -5932,6 +6894,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stealth": 1
    }
@@ -5949,6 +6912,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "defense": 1,
     "charm": 1
@@ -5967,6 +6931,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3
    }
@@ -5984,6 +6949,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -6001,6 +6967,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -6018,6 +6985,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -6035,6 +7003,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "carry": 1,
     "trade": 1
@@ -6053,6 +7022,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1
    }
@@ -6070,6 +7040,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "trade": 1
@@ -6088,6 +7059,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1
    }
@@ -6105,6 +7077,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1,
     "trade": 1
@@ -6123,6 +7096,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "trade": 2,
     "charm": 1
@@ -6141,6 +7115,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "trade": 1
    }
@@ -6158,6 +7133,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1
    }
@@ -6175,6 +7151,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -6192,6 +7169,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -6209,6 +7187,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 2
    }
@@ -6226,6 +7205,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -6243,6 +7223,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 2
    }
@@ -6260,6 +7241,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -6277,6 +7259,7 @@
    "fee_dukaten": 700,
    "fee_gold": 7000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1,
     "lore": 1
@@ -6295,6 +7278,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -6312,6 +7296,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "carry": 1
    }
@@ -6329,6 +7314,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "carry": 2
    }
@@ -6346,6 +7332,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -6363,6 +7350,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "carry": 2
    }
@@ -6380,6 +7368,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 1,
     "charm": 1
@@ -6398,6 +7387,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "craft": 1
    }
@@ -6415,6 +7405,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 1
    }
@@ -6432,6 +7423,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 2
    }
@@ -6449,6 +7441,7 @@
    "fee_dukaten": 1100,
    "fee_gold": 11000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 2
    }
@@ -6466,6 +7459,7 @@
    "fee_dukaten": 2400,
    "fee_gold": 24000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "trade": 2
@@ -6484,6 +7478,7 @@
    "fee_dukaten": 1600,
    "fee_gold": 16000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "stamina": 1,
     "charm": 1
@@ -6502,6 +7497,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "craft": 1
    }
@@ -6519,6 +7515,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2
    }
@@ -6536,6 +7533,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 2
    }
@@ -6553,6 +7551,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "trade": 1
    }
@@ -6570,6 +7569,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 1,
     "lore": 1
@@ -6588,6 +7588,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "trade": 1,
     "lore": 1
@@ -6606,6 +7607,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 1,
     "defense": 1
@@ -6624,6 +7626,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 2
    }
@@ -6641,6 +7644,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "trade": 1
    }
@@ -6658,6 +7662,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 2,
     "charm": 1
@@ -6676,6 +7681,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "trade": 3
    }
@@ -6693,6 +7699,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "trade": 3
    }
@@ -6710,6 +7717,7 @@
    "fee_dukaten": 2800,
    "fee_gold": 28000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "trade": 3,
     "lore": 1
@@ -6728,6 +7736,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 2
    }
@@ -6745,6 +7754,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "trade": 4
    }
@@ -6762,6 +7772,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "trade": 2,
     "ride": 1
@@ -6780,6 +7791,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "trade": 1,
     "stamina": 1
@@ -6798,6 +7810,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 1
    }
@@ -6815,6 +7828,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "trade": 3
    }
@@ -6832,6 +7846,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "charm": 1,
     "trade": 1
@@ -6850,6 +7865,7 @@
    "fee_dukaten": 1600,
    "fee_gold": 16000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "trade": 2,
     "perception": 1
@@ -6868,6 +7884,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "trade": 2
    }
@@ -6885,6 +7902,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 3,
     "perception": 1
@@ -6903,9 +7921,13 @@
    "fee_dukaten": 4000,
    "fee_gold": 40000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "lore": 4
-   }
+   },
+   "epithet_key": "g_nftepi_armillary_sphere_small",
+   "epithet_de": "Der Himmel zum Mitnehmen",
+   "epithet_en": "The Sky To Go"
   },
   {
    "item_type": 388,
@@ -6920,6 +7942,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 1,
     "perception": 1
@@ -6938,6 +7961,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 3
    }
@@ -6955,6 +7979,7 @@
    "fee_dukaten": 2200,
    "fee_gold": 22000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "perception": 2
@@ -6973,9 +7998,13 @@
    "fee_dukaten": 9500,
    "fee_gold": 95000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "lore": 6
-   }
+   },
+   "epithet_key": "g_nftepi_antikythera_replica",
+   "epithet_de": "Rechnet schneller als der Mond",
+   "epithet_en": "Counts Faster Than the Moon"
   },
   {
    "item_type": 392,
@@ -6990,6 +8019,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 3,
     "craft": 1
@@ -7008,6 +8038,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 3
    }
@@ -7025,6 +8056,7 @@
    "fee_dukaten": 2800,
    "fee_gold": 28000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "trade": 1
@@ -7043,10 +8075,14 @@
    "fee_dukaten": 4500,
    "fee_gold": 45000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "lore": 3,
     "perception": 2
-   }
+   },
+   "epithet_key": "g_nftepi_south_pointing_chariot_model",
+   "epithet_de": "Verirrt sich nie, egal wie du fährst",
+   "epithet_en": "Never Lost, However You Steer"
   },
   {
    "item_type": 396,
@@ -7061,6 +8097,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "craft": 1
@@ -7079,6 +8116,7 @@
    "fee_dukaten": 2400,
    "fee_gold": 24000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "craft": 1
@@ -7097,6 +8135,7 @@
    "fee_dukaten": 2600,
    "fee_gold": 26000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "combat": 1
@@ -7115,6 +8154,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2
    }
@@ -7132,6 +8172,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 1,
     "craft": 1
@@ -7150,6 +8191,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 4
    }
@@ -7167,10 +8209,14 @@
    "fee_dukaten": 4000,
    "fee_gold": 40000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "lore": 4,
     "craft": 1
-   }
+   },
+   "epithet_key": "g_nftepi_book_ingenious_devices",
+   "epithet_de": "Bauanleitung für Wunder",
+   "epithet_en": "Instructions for Wonders"
   },
   {
    "item_type": 403,
@@ -7185,6 +8231,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 3,
     "perception": 1
@@ -7203,9 +8250,13 @@
    "fee_dukaten": 4500,
    "fee_gold": 45000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "lore": 5
-   }
+   },
+   "epithet_key": "g_nftepi_canon_medicine_copy",
+   "epithet_de": "Ein Pflaster aus Wissen",
+   "epithet_en": "A Bandage Made of Knowledge"
   },
   {
    "item_type": 405,
@@ -7220,10 +8271,14 @@
    "fee_dukaten": 5000,
    "fee_gold": 50000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "lore": 3,
     "charm": 3
-   }
+   },
+   "epithet_key": "g_nftepi_book_thousand_and_one_nights",
+   "epithet_de": "Noch eine Geschichte, dann ist Schluss",
+   "epithet_en": "One More Story, Then Bedtime"
   },
   {
    "item_type": 406,
@@ -7238,6 +8293,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "ride": 1
@@ -7256,6 +8312,7 @@
    "fee_dukaten": 2600,
    "fee_gold": 26000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "swim": 1
@@ -7274,10 +8331,14 @@
    "fee_dukaten": 5500,
    "fee_gold": 55000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "lore": 4,
     "perception": 1
-   }
+   },
+   "epithet_key": "g_nftepi_globe_celestial",
+   "epithet_de": "Alle Sterne, kein Staub",
+   "epithet_en": "Every Star, No Dust"
   },
   {
    "item_type": 409,
@@ -7292,6 +8353,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 1,
     "perception": 1
@@ -7310,6 +8372,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 2
    }
@@ -7327,6 +8390,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 3
    }
@@ -7344,6 +8408,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 2
    }
@@ -7361,6 +8426,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "lore": 1
    }
@@ -7378,6 +8444,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 1,
     "lore": 1
@@ -7396,6 +8463,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "craft": 2,
     "lore": 1
@@ -7414,6 +8482,7 @@
    "fee_dukaten": 3200,
    "fee_gold": 32000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 3,
     "craft": 1
@@ -7432,6 +8501,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "lore": 1
    }
@@ -7449,6 +8519,7 @@
    "fee_dukaten": 2200,
    "fee_gold": 22000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "trade": 1
@@ -7467,6 +8538,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 1,
     "trade": 1
@@ -7485,6 +8557,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 3,
     "trade": 1
@@ -7503,6 +8576,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "ride": 1,
     "stamina": 1
@@ -7521,6 +8595,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "ride": 2,
     "charm": 1
@@ -7539,6 +8614,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "ride": 2
    }
@@ -7556,6 +8632,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "ride": 3,
     "charm": 2
@@ -7574,6 +8651,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "ride": 1,
     "charm": 1
@@ -7592,6 +8670,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "carry": 3
    }
@@ -7609,6 +8688,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 2
    }
@@ -7626,6 +8706,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 1,
     "carry": 1
@@ -7644,6 +8725,7 @@
    "fee_dukaten": 200,
    "fee_gold": 2000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 2
    }
@@ -7661,6 +8743,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 2
    }
@@ -7678,6 +8761,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1,
     "climb": 1
@@ -7696,6 +8780,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "stamina": 1,
     "charm": 1
@@ -7714,6 +8799,7 @@
    "fee_dukaten": 100,
    "fee_gold": 1000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -7731,6 +8817,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "stamina": 1
    }
@@ -7748,6 +8835,7 @@
    "fee_dukaten": 900,
    "fee_gold": 9000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 2,
     "lore": 1
@@ -7766,6 +8854,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "perception": 1
    }
@@ -7783,6 +8872,7 @@
    "fee_dukaten": 600,
    "fee_gold": 6000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 1,
     "stamina": 1
@@ -7801,6 +8891,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "swim": 1
    }
@@ -7818,6 +8909,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "swim": 2
    }
@@ -7835,6 +8927,7 @@
    "fee_dukaten": 400,
    "fee_gold": 4000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "swim": 1
    }
@@ -7852,6 +8945,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "carry": 3
    }
@@ -7869,6 +8963,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "ride": 1
@@ -7887,6 +8982,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "climb": 2,
     "craft": 1
@@ -7905,6 +9001,7 @@
    "fee_dukaten": 300,
    "fee_gold": 3000,
    "rarity": "common",
+   "min_level": 1,
    "bonuses": {
     "swim": 2
    }
@@ -7922,6 +9019,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 2
    }
@@ -7939,6 +9037,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "charm": 1
@@ -7957,10 +9056,14 @@
    "fee_dukaten": 10000,
    "fee_gold": 100000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "charm": 4,
     "lore": 4
-   }
+   },
+   "epithet_key": "g_nftepi_lamp_wondrous",
+   "epithet_de": "Dreimal reiben, einmal staunen",
+   "epithet_en": "Rub Thrice, Marvel Once"
   },
   {
    "item_type": 448,
@@ -7975,10 +9078,14 @@
    "fee_dukaten": 10000,
    "fee_gold": 100000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "ride": 5,
     "climb": 3
-   }
+   },
+   "epithet_key": "g_nftepi_carpet_flying",
+   "epithet_de": "Keine Warteschlange, kein Kamel",
+   "epithet_en": "No Queues, No Camels"
   },
   {
    "item_type": 449,
@@ -7993,11 +9100,15 @@
    "fee_dukaten": 9000,
    "fee_gold": 90000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "combat": 2,
     "charm": 3,
     "stealth": 2
-   }
+   },
+   "epithet_key": "g_nftepi_ring_djinn",
+   "epithet_de": "Wünsche mit Kleingedrucktem",
+   "epithet_en": "Wishes, Fine Print Included"
   },
   {
    "item_type": 450,
@@ -8012,9 +9123,13 @@
    "fee_dukaten": 6000,
    "fee_gold": 60000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "perception": 4
-   }
+   },
+   "epithet_key": "g_nftepi_mirror_truth",
+   "epithet_de": "Sagt dir, was du nicht hören willst",
+   "epithet_en": "Tells You What You'd Rather Not Hear"
   },
   {
    "item_type": 451,
@@ -8029,9 +9144,13 @@
    "fee_dukaten": 8500,
    "fee_gold": 85000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "stealth": 6
-   }
+   },
+   "epithet_key": "g_nftepi_cap_invisibility",
+   "epithet_de": "Wo ist sie hin?",
+   "epithet_en": "Where Did It Go?"
   },
   {
    "item_type": 452,
@@ -8046,9 +9165,13 @@
    "fee_dukaten": 9500,
    "fee_gold": 95000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "ride": 6
-   }
+   },
+   "epithet_key": "g_nftepi_horse_ebony_enchanted",
+   "epithet_de": "Ein Dreh, und ab in die Wolken",
+   "epithet_en": "One Twist and Off to the Clouds"
   },
   {
    "item_type": 453,
@@ -8063,6 +9186,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 2,
     "craft": 1
@@ -8081,6 +9205,7 @@
    "fee_dukaten": 2500,
    "fee_gold": 25000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "craft": 3,
     "lore": 1
@@ -8099,6 +9224,7 @@
    "fee_dukaten": 500,
    "fee_gold": 5000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "craft": 1,
     "lore": 1
@@ -8117,6 +9243,7 @@
    "fee_dukaten": 700,
    "fee_gold": 7000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1
    }
@@ -8134,6 +9261,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 1,
     "carry": 1
@@ -8152,6 +9280,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "perception": 3
    }
@@ -8169,6 +9298,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "defense": 1
@@ -8187,6 +9317,7 @@
    "fee_dukaten": 1500,
    "fee_gold": 15000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2
    }
@@ -8204,6 +9335,7 @@
    "fee_dukaten": 1000,
    "fee_gold": 10000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 1,
     "charm": 1
@@ -8222,10 +9354,14 @@
    "fee_dukaten": 4000,
    "fee_gold": 40000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "perception": 2,
     "ride": 1
-   }
+   },
+   "epithet_key": "g_nftepi_feather_roc",
+   "epithet_de": "Leicht wie Luft, groß wie ein Segel",
+   "epithet_en": "Light as Air, Big as a Sail"
   },
   {
    "item_type": 463,
@@ -8240,6 +9376,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "defense": 1
@@ -8258,10 +9395,14 @@
    "fee_dukaten": 7500,
    "fee_gold": 75000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "stealth": 3,
     "perception": 2
-   }
+   },
+   "epithet_key": "g_nftepi_key_sesame_cave",
+   "epithet_de": "Sesam, öffne dich. Bitte.",
+   "epithet_en": "Open Sesame. Please."
   },
   {
    "item_type": 465,
@@ -8276,6 +9417,7 @@
    "fee_dukaten": 1400,
    "fee_gold": 14000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "lore": 2
    }
@@ -8293,6 +9435,7 @@
    "fee_dukaten": 2800,
    "fee_gold": 28000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "stamina": 2,
     "stealth": 2
@@ -8311,10 +9454,14 @@
    "fee_dukaten": 4500,
    "fee_gold": 45000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "perception": 3,
     "lore": 1
-   }
+   },
+   "epithet_key": "g_nftepi_compass_dreams",
+   "epithet_de": "Zeigt dorthin, wo du hinwillst",
+   "epithet_en": "Points Where You Want to Go"
   },
   {
    "item_type": 468,
@@ -8329,10 +9476,14 @@
    "fee_dukaten": 5500,
    "fee_gold": 55000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "stealth": 4,
     "charm": 1
-   }
+   },
+   "epithet_key": "g_nftepi_mask_thousand_faces",
+   "epithet_de": "Heute du, morgen jemand anderes",
+   "epithet_en": "Today You, Tomorrow Someone Else"
   },
   {
    "item_type": 469,
@@ -8347,10 +9498,14 @@
    "fee_dukaten": 5000,
    "fee_gold": 50000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "stamina": 3,
     "climb": 1
-   }
+   },
+   "epithet_key": "g_nftepi_sandals_swift_wind",
+   "epithet_de": "Füße mit Rückenwind",
+   "epithet_en": "Feet with a Tailwind"
   },
   {
    "item_type": 470,
@@ -8365,6 +9520,7 @@
    "fee_dukaten": 2200,
    "fee_gold": 22000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "perception": 2
    }
@@ -8382,9 +9538,13 @@
    "fee_dukaten": 6500,
    "fee_gold": 65000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "climb": 5
-   }
+   },
+   "epithet_key": "g_nftepi_rope_rising",
+   "epithet_de": "Klettert für dich. Du hältst nur fest.",
+   "epithet_en": "Climbs for You. Just Hold On."
   },
   {
    "item_type": 472,
@@ -8399,6 +9559,7 @@
    "fee_dukaten": 3800,
    "fee_gold": 38000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3,
     "lore": 1
@@ -8417,10 +9578,14 @@
    "fee_dukaten": 7000,
    "fee_gold": 70000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "perception": 3,
     "swim": 2
-   }
+   },
+   "epithet_key": "g_nftepi_pearl_moon_glowing",
+   "epithet_de": "Ein Stück Mond für die Hosentasche",
+   "epithet_en": "A Pocket-Sized Piece of Moon"
   },
   {
    "item_type": 474,
@@ -8435,9 +9600,13 @@
    "fee_dukaten": 4500,
    "fee_gold": 45000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "stamina": 4
-   }
+   },
+   "epithet_key": "g_nftepi_chalice_spring_water",
+   "epithet_de": "Nie leer, nie lauwarm",
+   "epithet_en": "Never Empty, Never Lukewarm"
   },
   {
    "item_type": 475,
@@ -8452,10 +9621,14 @@
    "fee_dukaten": 6000,
    "fee_gold": 60000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "lore": 3,
     "stealth": 1
-   }
+   },
+   "epithet_key": "g_nftepi_hourglass_reversing",
+   "epithet_de": "Sand, der bergauf rieselt",
+   "epithet_en": "Sand That Trickles Uphill"
   },
   {
    "item_type": 476,
@@ -8470,6 +9643,7 @@
    "fee_dukaten": 2800,
    "fee_gold": 28000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "trade": 1
@@ -8488,6 +9662,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 3
    }
@@ -8505,9 +9680,13 @@
    "fee_dukaten": 4000,
    "fee_gold": 40000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 3
-   }
+   },
+   "epithet_key": "g_nftepi_goblet_gold",
+   "epithet_de": "Schmeckt nach Sieg",
+   "epithet_en": "Tastes Like Victory"
   },
   {
    "item_type": 479,
@@ -8522,10 +9701,14 @@
    "fee_dukaten": 6500,
    "fee_gold": 65000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 4,
     "lore": 1
-   }
+   },
+   "epithet_key": "g_nftepi_ewer_rock_crystal",
+   "epithet_de": "Wasser im Diamantkleid",
+   "epithet_en": "Water in a Diamond Dress"
   },
   {
    "item_type": 480,
@@ -8540,6 +9723,7 @@
    "fee_dukaten": 1800,
    "fee_gold": 18000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 1,
     "defense": 1
@@ -8558,6 +9742,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "ride": 1
@@ -8576,6 +9761,7 @@
    "fee_dukaten": 2200,
    "fee_gold": 22000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2
    }
@@ -8593,6 +9779,7 @@
    "fee_dukaten": 2600,
    "fee_gold": 26000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2
    }
@@ -8610,6 +9797,7 @@
    "fee_dukaten": 2000,
    "fee_gold": 20000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "lore": 1
@@ -8628,6 +9816,7 @@
    "fee_dukaten": 1600,
    "fee_gold": 16000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "charm": 1
@@ -8646,10 +9835,14 @@
    "fee_dukaten": 5500,
    "fee_gold": 55000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "lore": 4,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_manuscript_illuminated",
+   "epithet_de": "Buchstaben, die leuchten",
+   "epithet_en": "Letters That Glow"
   },
   {
    "item_type": 487,
@@ -8664,6 +9857,7 @@
    "fee_dukaten": 2400,
    "fee_gold": 24000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2
    }
@@ -8681,6 +9875,7 @@
    "fee_dukaten": 3000,
    "fee_gold": 30000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "lore": 2,
     "trade": 2
@@ -8699,6 +9894,7 @@
    "fee_dukaten": 3500,
    "fee_gold": 35000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "trade": 3
    }
@@ -8716,10 +9912,14 @@
    "fee_dukaten": 9000,
    "fee_gold": 90000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "trade": 5,
     "charm": 3
-   }
+   },
+   "epithet_key": "g_nftepi_diamond_great",
+   "epithet_de": "Zu groß für Ringe, zu schön für Truhen",
+   "epithet_en": "Too Big for Rings, Too Pretty for Chests"
   },
   {
    "item_type": 491,
@@ -8734,10 +9934,14 @@
    "fee_dukaten": 7500,
    "fee_gold": 75000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "trade": 4,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_ruby_pigeon_blood",
+   "epithet_de": "Das rote Herz des Basars",
+   "epithet_en": "The Red Heart of the Bazaar"
   },
   {
    "item_type": 492,
@@ -8752,10 +9956,14 @@
    "fee_dukaten": 5000,
    "fee_gold": 50000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "trade": 3,
     "charm": 2
-   }
+   },
+   "epithet_key": "g_nftepi_pearl_black_large",
+   "epithet_de": "Die Perle der Mitternacht",
+   "epithet_en": "The Midnight Pearl"
   },
   {
    "item_type": 493,
@@ -8770,10 +9978,14 @@
    "fee_dukaten": 9500,
    "fee_gold": 95000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "charm": 5,
     "lore": 3
-   }
+   },
+   "epithet_key": "g_nftepi_crown_forgotten_king",
+   "epithet_de": "Er hat sie vergessen. Du nicht.",
+   "epithet_en": "He Forgot It. You Didn't."
   },
   {
    "item_type": 494,
@@ -8788,6 +10000,7 @@
    "fee_dukaten": 3200,
    "fee_gold": 32000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "lore": 1
@@ -8806,6 +10019,7 @@
    "fee_dukaten": 3800,
    "fee_gold": 38000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2,
     "perception": 1
@@ -8824,6 +10038,7 @@
    "fee_dukaten": 2800,
    "fee_gold": 28000,
    "rarity": "rare",
+   "min_level": 10,
    "bonuses": {
     "charm": 2
    }
@@ -8841,6 +10056,7 @@
    "fee_dukaten": 800,
    "fee_gold": 8000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "charm": 1
    }
@@ -8858,6 +10074,7 @@
    "fee_dukaten": 1200,
    "fee_gold": 12000,
    "rarity": "uncommon",
+   "min_level": 5,
    "bonuses": {
     "perception": 2
    }
@@ -8875,9 +10092,13 @@
    "fee_dukaten": 8500,
    "fee_gold": 85000,
    "rarity": "legendary",
+   "min_level": 20,
    "bonuses": {
     "charm": 5
-   }
+   },
+   "epithet_key": "g_nftepi_carpet_ancient_royal",
+   "epithet_de": "Älter als die Wüste, weicher als Wolken",
+   "epithet_en": "Older Than the Desert, Softer Than Clouds"
   },
   {
    "item_type": 500,
@@ -8892,10 +10113,14 @@
    "fee_dukaten": 6000,
    "fee_gold": 60000,
    "rarity": "precious",
+   "min_level": 15,
    "bonuses": {
     "charm": 3,
     "trade": 2
-   }
+   },
+   "epithet_key": "g_nftepi_pomegranate_golden",
+   "epithet_de": "Zu golden zum Essen",
+   "epithet_en": "Too Golden to Eat"
   }
  ]
 }

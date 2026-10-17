@@ -84,6 +84,7 @@ Alle Entscheidungen stehen auch in `docs/02-entscheidungen.md` (Nr. 9 bis 12) un
 | `05-gesamtsystem.md` | geplant: Genesis-Inhalt, Zusammenspiel aller Teile |
 | `06-bridge.md` | geplant: Abläufe, Deckungs-Buchhaltung, Angriffsfälle |
 | `07-toypay.md` | Entwurf, NFT-Regeln entschieden (Nr. 15 bis 27). Offen: Umweg über NFT-Verkäufe, Alter, eine oder zwei Apps |
+| `toypay/docs/07_SPIELDESIGN.md` | Entwurf: Spieldesign mit Klassen, Synergien, Wirtschaft, Lichteffekten. Gang-Regeln und Effekt-Paket gebaut und in Godot 4.4.1 getestet (`nft_items_test`, `vfx_test`: ALL OK) |
 | `toypay/docs/06_NFT_GEGENSTAENDE.md` | Katalog mit 500 Gegenständen, geprüft mit `gen_nft_items.py` und in Godot 4.4.1 (`nft_items_test`: ALL OK) |
 | `08-toyscan.md` | geplant: Datenquellen, Berechnung der Ampel |
 

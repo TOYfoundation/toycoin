@@ -10,7 +10,10 @@ Android-App (Kotlin) für den nativen ToyCoin (TOY), mit eingebautem Light-Knote
 | `docs/06_NFT_GEGENSTAENDE.md` | Katalog der 500 prägbaren Spielgegenstände mit Gebühren, Seltenheit und Boni |
 | `data/nft_items.tsv` | Quelle des Katalogs. `tools/gen_nft_items.py` prüft ihn und erzeugt `data/nft_items.json` und `tools/i18n/master_nftitems.tsv` |
 | `godot3d/scripts/nft_items.gd`, `godot3d/tests/nft_items_test.*` | Ladeskript und Test für TOYQUEST 3D (Godot 4.4) |
-| `install_nft_items.py` | Installiert den Katalog in ein TOYPAY-Projekt, mit Sicherung |
+| `docs/07_SPIELDESIGN.md` | Spieldesign: Spielschleifen, 101-Nächte-Saison, Klassen, Gang-Synergien, Wirtschaft, Lichteffekte, Blitzschutz |
+| `data/nft_epithets.tsv`, `data/gang.json` | Beinamen der 77 kostbaren und legendären Gegenstände; Klassen, Duos, Sets, Gang-Ränge |
+| `godot3d/vfx/` | Effekt-Paket: Seltenheits-Aura, Glitzer, Blitze, Präge-Zeremonie, Blitzschutz. Vorschau: `vfx/preview/vfx_showcase.tscn` |
+| `install_nft_items.py` | Installiert Katalog, Gang-Regeln und Effekt-Paket in ein TOYPAY-Projekt, mit Sicherung |
 | `../docs/07-toypay.md` | Wie TOYPAY ToyChain nutzt, Knotenrollen in der App, offene Grundsatzfragen K1 bis K7 |
 
 ## Bevor der App-Code hierher kommt
