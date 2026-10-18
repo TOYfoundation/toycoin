@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 80). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 81). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -38,8 +38,8 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - Typen, Konstanten (Obergrenze 10^26), sichere Rechenfunktionen (`checked_*`).
 - **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10. In der Startphase geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren und sinkt über 180 Epochen auf 0 %, der Rest in die Arbeits-Lotterie.
 - Epochen-Ende nach mindestens 1.440 Blöcken **und** 86.400 Sekunden.
-- **Vorher festzulegen:** Formel für m und ihr Ganzzahl-Format.
-- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Kürzungen und Spenden erhöhen die Restmenge nie. Genesis-Zustand hat Summe 0. Lohn der Start-Validatoren über alle 180 Epochen zusammen ≈ 2,2 Mio. TOY bei m = 1.
+- Faktor m genau nach Spezifikation 9.1 (Millionstel, Plan nach echter Zeit, Glättung 0,05). Die Rust-Umsetzung muss bei denselben Eingaben exakt dieselben Werte liefern wie `docs/anhang/m-simulation.py`.
+- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Die vier Fälle aus Spezifikation 9.1 ergeben dieselben Zahlen wie die Simulation. m ändert sich nie um mehr als 0,05 je Epoche. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Kürzungen und Spenden erhöhen die Restmenge nie. Genesis-Zustand hat Summe 0. Lohn der Start-Validatoren über alle 180 Epochen zusammen ≈ 2,2 Mio. TOY bei m = 1.
 
 ### M2: Kryptografie und Adressen
 - Schlüssel aus BIP-39, Pfad m/44'/60'/0'/0/n, Adresse wie Ethereum, Signieren mit Chain-ID (EIP-155), BLS12-381, VRF.

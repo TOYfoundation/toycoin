@@ -1,6 +1,6 @@
 # ToyChain – Technische Spezifikation v0.3
 
-Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 80):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
+Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 81):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
 
 ## 1. Zusammenfassung
 
@@ -202,10 +202,42 @@ Ziel: Angriffe, Manipulation und das Ausnutzen der Mechanismen früh stoppen, oh
 - **Basiskurve:** Pro Epoche werden `k × Restmenge` ausgeschüttet, mit `k = k₀ × m`, k₀ = 0,0505 % (genau 505/1.000.000).
 - **Restmenge** = 100.000.000 TOY − Summe aller bisherigen Emissionen. Es wird nie TOY verbrannt (Entscheidung 74). Kürzungen und Spenden bleiben im Umlauf, sie gehen in den Erstattungs-Pool und erhöhen nie die Restmenge.
 - **Zahlen bei m = 1:** erste Epoche **50.500 TOY**, erstes Jahr rund **16,84 Mio. TOY**, Halbwertszeit 1.372 Epochen (**3,76 Jahre**), nach 25 Jahren rund 99,0 Mio. gemintet, rund 1,0 Mio. Rest, der danach asymptotisch ausläuft.
-- **Faktor m** zwischen 0,5 und 2,0: steigt mit **bezahlter oder durch Arbeit gedeckter** Nutzung (kostenlose Transaktionen zählen nicht, sonst ließe sich die Emission mit Spam hochtreiben), mit hoher Beteiligung und wenn die Ausschüttung hinter dem 25-Jahres-Plan liegt. Für den Plan gilt ein Jahr = 365 Epochen. Weil eine Epoche mindestens 24 Stunden dauert, kann die Ausschüttung dem Plan nie davonlaufen. Die genaue Formel für m und ihr Ganzzahl-Format werden vor M1 festgelegt.
+- **Faktor m** zwischen 0,5 und 2,0: steigt mit **bezahlter oder durch Arbeit gedeckter** Nutzung und mit hoher Beteiligung an den Signaturen und hält über einen Zeitplanteil die 25-Jahres-Kurve. Kostenlose Transaktionen zählen nicht, sonst ließe sich die Emission mit Spam hochtreiben. Genaue Formel: Abschnitt 9.1.
 - **Aufteilung:** 50 % Konsens (Stufen 2 bis 4, Wurzel-gewichtet nach Stake, Verfügbarkeit), 40 % Arbeit, 10 % Erstattungs-Pool. **In der Startphase** (Abschnitt 5.3) geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren. Er sinkt über 180 Epochen von 50 % auf 0 %, der Rest geht in die Arbeits-Lotterie.
 - **Arbeits-Lotterie:** Ein ToyWork-Los ist ein Argon2id-Ergebnis (16 MiB Speicher), das unter einer Schwierigkeits-Schwelle liegt und an Adresse und Epoche gebunden ist. Die Schwelle passt sich an, damit je Block etwa gleich viele Lose ankommen. Je Block werden aus den gültigen Losen per VRF Gewinner gezogen. Jeder Gewinn ist mindestens 0,2 TOY. So kann auch ein Gerät ohne Konto sein erstes TOY gewinnen: 0,1 TOY werden zum Aktivierungs-Pfand, der Rest ist frei. Wer mehr rechnet, hat mehr Lose, die erwartete Belohnung ist proportional zur Arbeit. Prüfen kostet eine Argon2id-Berechnung je Los, deshalb gibt es eine Höchstzahl Lose je Block und je Peer.
 - **Regel I0 (Entscheidungen 60, 74):** Die Summe aller Guthaben (freie Guthaben, Aktivierungs-Pfänder, Stake, Erstattungs-Pool, Lotterie-Töpfe, ruhende Konten in den Ruhe-Schnappschüssen) ist **in jedem Block genau** gleich der Summe aller Emissionen. Ein Block, der das verletzt, ist ungültig.
+
+### 9.1 Formel für m (Entscheidung 81)
+
+Alle Werte sind ganze Zahlen in **Millionsteln** (ppm, 1.000.000 = 1,0). Divisionen runden immer zur kleineren Zahl ab, auch bei negativen Werten (in Rust `div_euclid`). Gemessen wird jeweils die **vorige** Epoche. Zu Beginn gilt m = 1.000.000.
+
+| Schritt | Rechnung | Bedeutung |
+|---|---|---|
+| Nutzung `u` | bezahlte oder durch Arbeit gedeckte Transaktionen × 10^6 ÷ (Blöcke × 1.000) | Anteil der Blockkapazität, der echt genutzt wurde |
+| Beteiligung `p` | erhaltene Signaturen × 10^6 ÷ erwartete Signaturen | wie gut das Netz gesichert ist |
+| `n` | min(10^6, 2 × u) | voll ab 50 % Nutzung |
+| `b` | clamp((p − 670.000) × 10^6 ÷ 280.000, 0, 10^6) | 0 unter 67 %, voll ab 95 % |
+| Leistungsteil `L` | (n + b) ÷ 2 − 500.000 | −0,5 bis +0,5, je zur Hälfte Nutzung und Beteiligung |
+| Plan `P(t)` | P(0) = 0, P(i+1) = P(i) + floor((10^26 − P(i)) × 505 ÷ 10^6), `t` = volle Tage seit dem Genesis-Block nach Zeitstempel | Ausgabe bei m = 1 nach **echter Zeit** |
+| Abweichung `d` | (bisher ausgegeben − P(t)) × 10^6 ÷ P(t), bei P(t) = 0 gilt d = 0 | positiv = vor dem Plan |
+| Zeitplanteil `Z` | clamp(−10 × d, −500.000, +750.000) | bremst, wenn die Ausgabe vorausläuft, und gibt Gas, wenn sie zurückliegt |
+| Ziel | clamp(10^6 + L ÷ 2 + Z, 500.000, 2.000.000) | Leistung wirkt höchstens ±0,25 |
+| **m** | m_vorher + clamp(Ziel − m_vorher, −50.000, +50.000) | höchstens ±0,05 je Epoche, gegen Sprünge |
+| Emission | floor(Restmenge × 505 × m ÷ 10^12) | größte Zwischenzahl ca. 10^35, passt sicher in `u128` |
+
+**Eigenschaften (nachgerechnet mit `docs/anhang/m-simulation.py`, erstes Jahr, Plan 16,84 Mio. TOY):**
+
+| Fall | ausgegeben | Abweichung |
+|---|---|---|
+| kaum Nutzung, gute Beteiligung | 16,84 Mio. | ±0 % |
+| hohe Nutzung, gute Beteiligung | 17,21 Mio. | +2,2 % |
+| kaum Nutzung, schwache Beteiligung | 16,50 Mio. | −2,0 % |
+| hohe Nutzung, Epochen dauern 25 Stunden | 17,16 Mio. | +1,9 % |
+
+- Dauerhaft weicht die Ausgabe höchstens etwa ±2,5 % vom Plan ab. m verschiebt nur, **wann** TOY entstehen, nicht wie viele insgesamt.
+- Über 100 Jahre mit dauerhaft hoher Nutzung bleibt die Summe unter 100 Mio. TOY.
+- Weil der Plan nach echter Zeit rechnet, holt der Zeitplanteil auch auf, wenn Epochen wegen langsamer Blöcke länger als 24 Stunden dauern.
+- Wer m mit bezahlten Transaktionen hochtreiben will, zahlt echte Gebühren und bewegt m höchstens um 0,05 je Epoche. Langfristig gleicht der Zeitplanteil das wieder aus.
 
 ## 10. Kryptografie
 
@@ -279,6 +311,4 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst. Die 
 
 ## 16. Offene Punkte
 
-- **Formel für m** mit Ganzzahl-Format (vor M1).
-- (erledigt) Schutz gegen zu großen Vorteil der Start-Validatoren: Entscheidung 78.
 - Aus dem Prüfbericht (`10-pruefbericht-1.md`) für die passenden Meilensteine: Schutz des Zustands vor teurem Auffüllen (P5, M5), Header-Wachstum (P6, M5), Missbrauch des Erstattungs-Pools (P9, M3), Höchstwert der progressiven Gebühr (M3).

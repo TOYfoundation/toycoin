@@ -27,6 +27,7 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 78 | Schutz in der Startphase | (1) Für die Übergabe zählen **nur neue Validatoren** und nur deren Stake. (2) Der Lohn der Start-Validatoren **sinkt über 180 Epochen von 50 % auf 0 %**, der Rest geht in die Arbeits-Lotterie, zusammen höchstens rund 2,2 Mio. TOY. (3) Der Lohn wird sofort **365 Epochen als Stake gebunden** |
 | 79 | Spenden an den Erstattungs-Pool | Jeder kann **jederzeit aus der Wallet** TOY in den Erstattungs-Pool spenden, der die kostenlosen Transaktionen bezahlt. Eigene Transaktionsart, nicht rückholbar, in ToyScan sichtbar |
 | 80 | Doppelsignatur | **Strafe nach Ausmaß:** sofort 7 Epochen Rollensperre, nach 18 Epochen Kürzung `max(1 %, 3 × Anteil der gleichzeitig doppelt signierenden am Stake)`, höchstens 100 %. Pannen kosten wenig, Angriffe alles. **Pflicht-Schutz in der Software:** Signier-Gedächtnis, Doppelgänger-Erkennung (2 Epochen), ein Signier-Gerät je Konto mit eigenem Schlüssel je Gerät |
+| 81 | Formel für m | Leistungsteil aus **Nutzung und Beteiligung je zur Hälfte** (höchstens ±0,25), Zeitplanteil nach **echter Zeit** mit **mittlerer Stärke** (Faktor 10, Ausgabe höchstens ca. ±2,5 % vom Plan), Änderung höchstens 0,05 je Epoche, alles in Millionsteln (Spezifikation 9.1) |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**
@@ -136,6 +137,5 @@ Nur noch Hintergrund: Die Token werden derzeit ignoriert (Nr. 63). Details in `s
 ## Noch offen (Stand 18.10.2026)
 
 - Schutz vor teurem Auffüllen des Speichers (P5, M5): Durch das Auslagern nach Bedarf (Nr. 75) kann niemand den Speicher dauerhaft verstopfen. Massenhaft neue Konten verdrängen nur alte in den Ruhezustand. Die Schutzregel gegen massenhaftes Anlegen bleibt.
-- Formel für den Faktor m mit Ganzzahl-Format, vor M1.
 - Aus dem Prüfbericht für die passenden Meilensteine: P5, P6 (M5), P9 und Höchstwert der progressiven Gebühr (M3).
 - Rechtliche Prüfung vor einem Mainnet (z. B. MiCA, Steuer).
