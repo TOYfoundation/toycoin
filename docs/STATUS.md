@@ -69,6 +69,7 @@ Stand: 18.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M1 fertig** (Grun
 - In der Cloud-Umgebung war **crates.io gesperrt**. Deshalb:
   - Statt `proptest` gibt es einen kleinen eigenen Testgenerator (SplitMix64, nur für Testeingaben). Jeder Fehlerfall nennt seinen Startwert.
   - Die **Kani-Beweise** (`toy-emission/src/verification.rs`: Emission ≤ Restmenge, Summe ≤ 10^26, Block-Mint geht genau auf) und **cargo-deny** (`toychain/deny.toml`) laufen nur auf GitHub (`.github/workflows/ci.yml`). Der Kani-Job ist anfangs nicht blockierend, bis seine Laufzeit bekannt ist.
+  - **Kani, erster Lauf (18.10.2026):** nach 90 Minuten abgebrochen, ohne Ergebnis. Ursache: Die Beweise multiplizierten zwei frei wählbare 128-Bit-Zahlen, das ist für den Beweis-Löser sehr aufwendig. **Änderung:** Jeder Beweis hält jetzt einen Faktor fest und lässt den anderen frei. Die Emission wird bei m = 2,0 für **jede** Restmenge bewiesen, das deckt wegen der Monotonie alle m bis 2,0 ab. Die Block-Aufteilung wird für jede Emission und jeden Block bei den Anteilen 0 %, 12,3457 % und 50 % bewiesen. Jeder der 6 Beweise läuft als eigener CI-Job mit 30 Minuten Zeitlimit.
 - **cargo-vet** und **Fuzzing** beginnen mit M2. M1 hat noch keine fremden Bibliotheken und liest keine fremden Daten.
 - Für M2 werden geprüfte Krypto-Bibliotheken von crates.io gebraucht (z. B. `k256`, `sha3`, `bip39`).
 
