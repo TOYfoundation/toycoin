@@ -1,6 +1,6 @@
 # CLAUDE.md – Projektanweisungen ToyChain
 
-Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen Währung **ToyCoin (TOY)**. Lies vor jeder Arbeit `docs/01-spezifikation.md` (maßgebliche Spezifikation) und `docs/02-entscheidungen.md` (Entscheidungsprotokoll). Bei Widersprüchen gilt die Spezifikation. Bei offenen Punkten nicht raten, sondern den Nutzer fragen.
+Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen Währung **ToyCoin (TOY)**. Lies vor jeder Arbeit `docs/01-spezifikation.md` (maßgebliche Spezifikation) und `docs/02-entscheidungen.md` (Entscheidungsprotokoll, zuerst den Abschnitt „Neuausrichtung vom 18.10.2026“). Bei Widersprüchen gilt die Spezifikation. Bei offenen Punkten nicht raten, sondern den Nutzer fragen.
 
 ## Sprache
 
@@ -10,7 +10,7 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 
 ## Repository-Aufbau (GitHub `Safehaigit/toycoin`)
 
-- `docs/`: Konzept für das Gesamtsystem. `toychain/`: Rust-Workspace des Knotens (alle `cargo`-Befehle dort ausführen). `toyscan/`: Explorer. `toypay/`: TOYPAY-App und Spiele.
+- `docs/`: Konzept. **`docs/spaeter/` ist nur eine Ideensammlung für spätere Phasen und wird jetzt nicht gebaut.** `toychain/`: Rust-Workspace des Knotens (alle `cargo`-Befehle dort ausführen). `toyscan/`: Explorer. `toypay/`: TOYPAY-App und Spiele.
 - Prüfungen: `toychain/scripts/check.sh` (Windows: `toychain\scripts\check.ps1`).
 - **Nie** Geheimnisse committen (siehe `SECURITY.md`), vor allem nicht beim Übernehmen von TOYPAY-Code.
 
@@ -20,13 +20,14 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 - Beträge immer als ganze Zahlen in kleinsten Einheiten (`u128`), **nie Fließkomma**. Rechnen mit `checked_*`, Überläufe sind Fehler.
 - **Kontenmodell** mit Ethereum-kompatiblen Adressen (secp256k1, Adresse = letzte 20 Byte von Keccak-256 des Public Keys, BIP-39, Pfad m/44'/60'/0'/0/n, EIP-155-Chain-ID in Signaturen).
 - Blockzeit 60 s (früher bei vollem Pool, frühestens nach 10 s), Finalität nach 1 Block. **Epoche: mindestens 1.440 Blöcke und mindestens 24 Stunden** (Entscheidung 58).
-- **Datenbudget 256 MB** pro Standard-Knoten (siehe Spezifikation Abschnitt 4). Jede Speicherstruktur braucht einen Größentest.
-- Emission: Pro Epoche `k × Restmenge`, k₀ ≈ 0,0505 %, dynamischer Faktor m ∈ [0,5; 2,0], Restmenge der Emission 99 Mio. (1 Mio. Reserve im Genesis-Block: 900.000 TOY auf der offiziellen Cold-Wallet des Erstellers, 3 Jahre gesperrt, danach je Epoche über 3 Jahre frei; 90.000 TOY Bug-Bounty-Mehrfachsignatur-Konto; 10.000 TOY Deckungsposten). Restmenge = 99 Mio. − Summe aller Emissionen, Verbranntes kommt nie zurück. Die Summe aller Guthaben muss in jedem Block genau stimmen (Regel I0, Entscheidung 60). Die Obergrenze 100 Mio. darf **nie** überschritten werden.
-- Kostenloses Kontingent 10 bis 100 Transaktionen pro Wallet und Epoche, darüber progressive Gebühr oder ToyWork-Share (Argon2id, 16 MiB).
+- **Datenbudget 256 MB** pro Standard-Knoten (siehe Spezifikation Abschnitt 6). Jede Speicherstruktur braucht einen Größentest.
+- **Totaler Fair Launch:** Genesis-Block **ohne Guthaben**, kein Premint, keine Reserve (Entscheidung 62). Emission: Pro Epoche `k × Restmenge`, k₀ = 0,0505 %, dynamischer Faktor m ∈ [0,5; 2,0], Restmenge = 100 Mio. − Summe aller Emissionen, Verbranntes kommt nie zurück. Die Summe aller Guthaben = gemintet − verbrannt, in jedem Block (Regel I0, Entscheidung 60). Startphase ohne Stake: Start-Validatoren bekommen keine Konsens-Belohnung (Spezifikation 5.3). Die Obergrenze 100 Mio. darf **nie** überschritten werden.
+- Kostenloses Kontingent 10 bis 100 Transaktionen pro Wallet und Epoche, darüber progressive Gebühr oder ToyWork-Los (Argon2id, 16 MiB).
 - Lizenz: **MIT** (nur Bibliotheken mit dazu verträglicher Lizenz verwenden, z. B. MIT, Apache-2.0, BSD, CC0).
-- **Nur der native Coin TOY auf ToyChain, für immer:** keine Token, keine NFTs, keine Smart Contracts, keine EVM-Ausführung (Entscheidung 36). Jede Funktion ist eine fest eingebaute Transaktionsart (Spezifikation Abschnitt 6a). Keine Vertrags-Engine einbauen, auch nicht "für später".
-- **Mitbestimmung** über Parameter und Updates ist erlaubt, die **Verfassungsregeln** (`docs/09-mitbestimmung.md`, Abschnitt 2) darf kein Code-Pfad der Abstimmung ändern können. Dafür Tests schreiben.
-- **Nicht in Phase 1:** Bridge, privater Pool, Offline-Schecks.
+- **Nur der native Coin TOY auf ToyChain, für immer:** keine Token, keine NFTs, keine Smart Contracts, keine EVM-Ausführung (Entscheidung 36). Jede Funktion ist eine fest eingebaute Transaktionsart (Spezifikation Abschnitt 7). Keine Vertrags-Engine einbauen, auch nicht "für später".
+- **Verfassung** (Spezifikation Abschnitt 13): Kein Code-Pfad, auch keine spätere Abstimmung, darf sie ändern. Dafür Tests schreiben.
+- **Sperrzeiten entziehen nur Rechte, nie Guthaben** (Spezifikation Abschnitt 8). Automatische Sperren nur nach festen, eindeutig nachweisbaren Regeln. Musterkennung nur in ToyScan als Warnung.
+- **Nicht in Phase 1:** Bridge, Mitbestimmung, privater Pool, Offline-Schecks, Spiel-Anbindung, Hybrid-Signaturen.
 
 ## Regeln für Kryptografie und Sicherheit
 
@@ -50,6 +51,6 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 
 Linux x86_64, Windows x86_64, Linux aarch64 (Raspberry Pi 4/5), Linux armv7 (ältere Pi, optional) und Android (alte Geräte, ab ca. 1 GB RAM, als Bibliothek mit schlanker App). Kern-Code deshalb plattformneutral halten, keine Abhängigkeiten, die nur auf einem System laufen.
 
-## ToyScan (später)
+## ToyScan (M11)
 
-Der Explorer **ToyScan** zeigt Supply-Daten und eine Ampel (grün/gelb/rot) mit den Kriterien A1 bis A12 aus `docs/08-toyscan.md` (Hintergrund in `docs/04-toyscan-und-altbestand.md`). ToyScan hat nie Schlüssel (Entscheidung 56). Der Kern-Node soll dafür Daten offen und maschinenlesbar bereitstellen (Gesamtmenge, gemintet, Reserve, Epoche, Emissionsfaktor).
+Der Explorer **ToyScan** zeigt Supply-Daten, eine Warnampel (grün/gelb/rot) mit den Kriterien A1 bis A9 aus `docs/05-toyscan.md` und Guthaben derselben Adresse auf anderen EVM-Ketten. ToyScan hat nie Schlüssel (Entscheidung 56). Der Kern-Node soll dafür Daten offen und maschinenlesbar bereitstellen (Gesamtmenge, gemintet, verbrannt, Epoche, Emissionsfaktor, Startphase, Sperrzeiten).

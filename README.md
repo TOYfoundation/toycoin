@@ -1,14 +1,14 @@
 # ToyCoin
 
-Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit dem nativen TOY, der Explorer **ToyScan**, die **Bridge** zu den bestehenden ToyCoin-Token auf Polygon und Ethereum und die App **TOYPAY**, die TOY nutzt und selbst als Knoten dient.
+Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit dem nativen TOY als **totaler Fair Launch** (kein Premint, keine Reserve), die **TOYPAY Wallet**, die zugleich Knoten ist und andere EVM-Ketten unterstützt, und der Explorer **ToyScan** mit Warnampel. Zuerst als Testnet.
 
-**Status:** Konzeptphase. Der ToyChain-Workspace steht als leeres Gerüst, gebaut wird erst, wenn das Gesamtkonzept steht. Aktueller Stand: [`docs/STATUS.md`](docs/STATUS.md).
+**Status:** Konzept nach der Neuausrichtung vom 18.10.2026. Der ToyChain-Workspace steht als leeres Gerüst, gebaut wird ab M1. Aktueller Stand: [`docs/STATUS.md`](docs/STATUS.md).
 
 ## Aufbau
 
 | Ordner | Inhalt |
 |---|---|
-| [`docs/`](docs/) | Konzept für das Gesamtsystem (Deutsch): Spezifikation, Entscheidungen, Bauplan, ToyScan und Altbestand, TOYPAY |
+| [`docs/`](docs/) | Konzept (Deutsch): Spezifikation, Entscheidungen, Bauplan, Wallet, ToyScan. `docs/spaeter/`: Ideen für spätere Phasen |
 | [`toychain/`](toychain/) | Rust-Workspace des Knotens (Crates `toy-types` … `toy-cli`), Prüfskripte |
 | [`toyscan/`](toyscan/) | Explorer (noch kein Code) |
 | [`toypay/`](toypay/) | TOYPAY-Unterlagen. Der App-Code folgt |
@@ -19,16 +19,13 @@ Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit 
 
 | Datei | Wofür |
 |---|---|
-| `docs/01-spezifikation.md` | Technische Spezifikation (maßgeblich) |
-| `docs/02-entscheidungen.md` | Entscheidungsprotokoll und offene Punkte |
-| `docs/03-bauplan-phase1.md` | Bauplan Phase 1: 10 Meilensteine mit Fertig-Kriterien und Prompts |
-| `docs/04-toyscan-und-altbestand.md` | ToyScan-Ampel, Prüfung und On-Chain-Befund der Token-Verträge, Tresor-Modell |
-| `docs/05-gesamtsystem.md` | Gesamtbild: alle Teile und Konten, Genesis-Block, Reihenfolge bis zum Start, Deckung über alle Ketten |
-| `docs/06-bridge.md` | Bridge: Abläufe in beide Richtungen, Buchhaltung je Kette, Schutzschichten, Angriffsfälle |
-| `docs/09-mitbestimmung.md` | Mitbestimmung der Community: Verfassung, Stimmgewicht, Ablauf, Einführung |
-| `docs/07-toypay.md` | Wie TOYPAY ToyChain nutzt, Knotenrollen in der App, Grundsatzfragen |
-| `docs/08-toyscan.md` | ToyScan: Aufbau, Datenquellen, Ampel mit allen Formeln, offene API |
-| `docs/10-pruefbericht-1.md` | Unabhängiger Prüfbericht zum Gesamtkonzept, Befunde und Vorschläge P1 bis P12 |
+| `docs/01-spezifikation.md` | Technische Spezifikation v0.3 (maßgeblich) |
+| `docs/02-entscheidungen.md` | Entscheidungsprotokoll, oben die Neuausrichtung vom 18.10.2026 |
+| `docs/03-bauplan-phase1.md` | Bauplan Phase 1 (Testnet): 11 Meilensteine mit Fertig-Kriterien und Prompts |
+| `docs/04-toypay-wallet.md` | TOYPAY Wallet: Clients, Teilnahme-Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
+| `docs/05-toyscan.md` | ToyScan: Warnampel mit allen Formeln, Muster-Warnungen, andere Ketten, offene API |
+| `docs/10-pruefbericht-1.md` | Unabhängiger Prüfbericht vom 17.10.2026 |
+| `docs/spaeter/` | Bridge, Altbestand, Reserve, Mitbestimmung, Spiel-NFTs, alte Spezifikation v0.2 |
 | `docs/STATUS.md` | Aktueller Stand, Prüfergebnisse, offene Fragen |
 
 ## Entwicklung (ToyChain)

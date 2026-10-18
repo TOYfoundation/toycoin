@@ -1,104 +1,104 @@
-# Bauplan Phase 1: Kern-Node und Wallet (Testnet-Prototyp)
+# Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Ziel von Phase 1: ein lauffähiges **lokales Testnet** mit mehreren Knoten, Ethereum-kompatiblen Adressen, Emission, Kontingent und Gebühren, plus einer einfachen Wallet. Beweis-Schicht (Phase 2), Bridge (Phase 3), privater Pool (Phase 4) und Offline-Schecks (Phase 5) kommen später (Entscheidung 39).
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 72). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
-- Phase 1 ist ein **Prototyp**, kein fertiges Netz. Für ein echtes Mainnet braucht es externe Audits, Lasttests und eine rechtliche Prüfung.
-- Die Beweis-Schicht (rekursives Falten der Historie, nötig für 256 MB über lange Zeit) ist Forschungsarbeit. Sie wird in Phase 2 angegangen, wenn Phase 1 stabil ist.
-- Mit einem Pro-Abo gelten Nutzungslimits. Deshalb ist der Plan in kleine Meilensteine geteilt. Pro Sitzung einen Meilenstein bearbeiten und danach mit `/clear` neu beginnen. Der Stand steht in `docs/STATUS.md`.
+- Phase 1 ist ein **Testnet**, kein Mainnet. Für ein Mainnet braucht es externe Audits, Lasttests und eine rechtliche Prüfung.
+- Die Beweis-Schicht (Falten der Historie) ist Forschungsarbeit und kommt in Phase 2.
+- Mit einem Pro-Abo gelten Nutzungslimits. Pro Sitzung ein Meilenstein, danach mit `/clear` neu beginnen. Der Stand steht in `docs/STATUS.md`.
 
-## Ordnerstruktur (Rust-Workspace)
+## Ordnerstruktur
 
-Umgesetzt im Repository `toycoin` im Ordner `toychain/`. Die Dokumentation liegt im Hauptordner unter `docs/`, nicht in `toychain/docs/`.
+Die Dokumentation liegt im Hauptordner unter `docs/`. Der Knoten ist ein Rust-Workspace in `toychain/`, ToyScan ein eigenes Rust-Projekt in `toyscan/`.
 
 ```
 toychain/
   Cargo.toml                 (Workspace)
   crates/
     toy-types/               Konstanten, Amount (u128), Address, Hash, Fehlertypen
-    toy-crypto/              secp256k1, Keccak-256, BLAKE3, BIP-39/32, Argon2id, BLS (Wrapper)
-    toy-emission/            Emissionskurve, Faktor m, Zeitplan-Regler, Obergrenzen-Tests
-    toy-state/               Konten, Merkle-Baum, Zustandsübergänge, Mindestguthaben
-    toy-tx/                  Transaktionsformat, Signaturprüfung, Kontingent, Gebühren, ToyWork
-    toy-consensus/           Komitee, VRF-Auswahl, BFT-Runden, BLS-Sammelsignaturen
-    toy-node/                Speicher (Datenbank), P2P (libp2p), Mempool, Blockproduktion
-    toy-rpc/                 Ethereum-kompatibles JSON-RPC (Teilmenge)
-    toy-wallet/              Schlüssel, verschlüsselter Keystore, Senden/Empfangen
-    toy-cli/                 Kommandozeile: Wallet, Node starten, Testnet starten
+    toy-crypto/              secp256k1, Keccak-256, BLAKE3, BIP-39/32, Argon2id, BLS, VRF (Wrapper)
+    toy-emission/            Emissionskurve, Faktor m, Zeitplan-Regler, Aufteilung, Startphase
+    toy-state/               Konten, Stake, Merkle-Baum, Mindestguthaben, Regel I0, Sperr-Status
+    toy-tx/                  Transaktionsarten, Signaturprüfung, Kontingent, Gebühren, ToyWork-Lose
+    toy-consensus/           Komitee, VRF, BFT, BLS-Sammelsignaturen, Startphase, Strafen
+    toy-node/                Speicher, P2P (libp2p), Mempool, Blockproduktion, Energie-Steuerung
+    toy-rpc/                 Ethereum-kompatibles JSON-RPC (Teilmenge) und toy_-Methoden
+    toy-wallet/              Schlüssel, Keystore, Stufenwahl, andere EVM-Ketten
+    toy-cli/                 Kommandozeile: Wallet, ToyNode, Testnet starten
   tests/                     Integrations- und Simulationstests
+toyscan/                     Explorer und Warnampel (M11)
 ```
 
 ## Meilensteine
 
 Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht es weiter.
 
-### M0: ToyScan Stufe 0, Altbestand-Wächter (vor M1, Entscheidung 57)
-- Kleines eigenes Rust-Programm im Ordner `toyscan/`, unabhängig vom Knoten. Liest nur, hat keine Schlüssel.
-- Kriterien A5, A7, A8 und A12 aus `docs/08-toyscan.md` für Polygon (Chain-ID 137) und Ethereum (Chain-ID 1): Code-Hash und Funktionsliste der Token-Verträge, `totalSupply()`, Bestände von Ersteller-Adresse und offiziellen Cold-Wallets, jede Bewegung dieser Adressen, Fremdbestand, Vergleich von zwei RPC-Quellen.
-- Ausgabe als JSON (`/api/v1/ampel`) und als einfache Webseite. RPC-Schlüssel nur aus Umgebungsvariablen, nie im Repository.
-- Tests mit aufgezeichneten Testdaten, ohne Netz: je Kriterium ein Fall Grün, Gelb und Rot.
-- **Fertig, wenn:** der Wächter gegen die echten Verträge läuft (nur lesend) und das Ergebnis mit dem On-Chain-Befund in `docs/04-toyscan-und-altbestand.md` übereinstimmt.
-
 ### M1: Grundtypen und Emission
-- Typen, Konstanten (10^26 kleinste Einheiten Obergrenze), sichere Rechenfunktionen.
-- Emissionskurve mit k₀, Faktor m ∈ [0,5; 2,0], Zeitplan-Regler. Reserve im Genesis-Block: 900.000 TOY auf der offiziellen Cold-Wallet mit 3 Jahren Sperre und anschließender Freigabe je Epoche über 3 Jahre, 90.000 TOY Bug-Bounty-Topf, 10.000 TOY Deckungsposten (Entscheidungen 41 bis 44). Test: Freigabeplan rundet nie über 900.000 TOY hinaus.
-- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen die Obergrenze **nie** überschreitet (auch bei m = 2,0 über 100 Jahre simuliert). Test für Halbwertszeit ≈ 3,76 Jahre und erste Epoche ≈ 49.995 TOY bei m = 1. Spam darf m nicht erhöhen (Test mit unbezahlten Transaktionen). Epochen-Ende nur nach mindestens 1.440 Blöcken **und** 86.400 Sekunden (Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden, Nr. 58). Restmenge sinkt nie durch Verbrennen wieder auf (Nr. 60).
+- Typen, Konstanten (Obergrenze 10^26), sichere Rechenfunktionen (`checked_*`).
+- **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10, in der Startphase 0/90/10.
+- Epochen-Ende nach mindestens 1.440 Blöcken **und** 86.400 Sekunden.
+- **Vorher festzulegen:** Formel für m und ihr Ganzzahl-Format.
+- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Verbranntes erhöht die Restmenge nie. Genesis-Zustand hat Summe 0.
 
 ### M2: Kryptografie und Adressen
-- Schlüssel aus BIP-39-Phrase, Pfad m/44'/60'/0'/0/n, Adresse wie Ethereum, Signieren und Prüfen mit Chain-ID (EIP-155).
-- **Fertig, wenn:** Bekannte BIP-39- und Ethereum-Testvektoren ergeben exakt die erwarteten Adressen. Signaturen anderer Chain-IDs werden abgelehnt (Replay-Test).
+- Schlüssel aus BIP-39, Pfad m/44'/60'/0'/0/n, Adresse wie Ethereum, Signieren mit Chain-ID (EIP-155), BLS12-381, VRF.
+- **Fertig, wenn:** offizielle BIP-39- und Ethereum-Testvektoren ergeben exakt die erwarteten Adressen. Signaturen anderer Chain-IDs werden abgelehnt.
 
-### M3: Zustand, Transaktionen, Kontingent, Gebühren
-- Konten (Guthaben, Nonce, Arbeitskredit), Merkle-Wurzel, Mindestguthaben 0,1 TOY.
-- Kontingent Q = max(10, 100 × (1 − Auslastung)) pro Epoche, Erstattung aus dem Erstattungs-Pool, progressive Gebühr, ToyWork-Share (Argon2id, 16 MiB), Pflicht für Vielnutzer ab 1.000 pro Epoche.
-- Regel I0: Summe aller Guthaben = gemintet + 1 Mio. − verbrannt in jedem Block. Staub unter dem Mindestguthaben wird verbrannt (Nr. 60).
-- **Fertig, wenn:** Tests für I0 nach jedem Block (auch mit absichtlich fehlerhaftem Block, der abgelehnt werden muss), Nonce-Reihenfolge, Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebührenverdopplung, ungültige und wiederverwendete Shares.
+### M3: Zustand, Transaktionen, Kontingent, Gebühren, Schutzregeln
+- Konten, Stake mit 7 Epochen Lösefrist, Merkle-Wurzel, Mindestguthaben 0,1 TOY (Staub wird verbrannt).
+- **Regel I0:** Summe aller Guthaben = gemintet − verbrannt in jedem Block.
+- Kontingent, Erstattungs-Pool, progressive Gebühr mit Höchstwert, Vielnutzer-Pflicht.
+- **ToyWork-Lose** (Argon2id, 16 MiB) mit Schwierigkeits-Schwelle, Höchstzahl je Block und Peer, Arbeits-Lotterie mit Mindestgewinn 0,1 TOY.
+- **Schutzregeln Ebene A** (Spezifikation Abschnitt 8): Sperrzeiten, Verdopplung, Zurücksetzen nach 30 sauberen Epochen. Kein Code-Pfad sperrt Guthaben.
+- **Fertig, wenn:** Tests für I0 nach jedem Block (auch ein absichtlich fehlerhafter Block wird abgelehnt), Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebühren, ungültige und wiederverwendete Lose, jede Sperrregel mit Fall „greift“ und „greift nicht“, und ein Test, dass ein gesperrtes Konto weiter gegen Gebühr überweisen kann.
 
-### M4: Blöcke, Konsens-Simulation
-- Blockformat, Komitee mit VRF-Auswahl, BFT-Abstimmung, BLS-Sammelsignatur, Finalität nach 1 Block, Slashing bei Doppelsignatur.
-- Simulation mit z. B. 20 virtuellen Validatoren in einem Prozess, inklusive ausfallender Knoten.
-- **Fertig, wenn:** Simulation läuft über 10.000 Blöcke stabil, bei bis zu 1/3 ausfallenden Knoten weiter, Doppelsignaturen werden bestraft.
+### M4: Blöcke, Konsens, Startphase
+- Blockformat mit Zeitstempel-Regeln, Komitee mit VRF, BFT, BLS-Sammelsignatur, Finalität nach 1 Block.
+- **Startphase:** 7 bis 21 Start-Validatoren ohne Stake und ohne Konsens-Belohnung, automatische Übergabe an das Stake-Komitee (Spezifikation 5.3).
+- Strafen: Doppelsignatur (Kürzung, verbrannt), Inaktivität, Sperrzeiten für Rollen.
+- Simulation mit z. B. 20 virtuellen Validatoren, inklusive Ausfällen.
+- **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen bestraft, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten in der Startphase nachweislich 0 Konsens-Belohnung.
 
 ### M5: Speicher und 256-MB-Budget
-- Persistente Datenbank (z. B. eingebettet: LMDB oder redb), Block-Fenster nach Bytes begrenzt, Zustandsablauf nach 1001 Tagen für kleine Konten.
-- **Fertig, wenn:** Ein Messbericht in `docs/STATUS.md` zeigt Speicherverbrauch pro Konto, Konten pro 128 MB und das Verhalten bei vollem Budget. Die Schätzung „ca. 1,3 Mio. Konten“ wird bestätigt oder korrigiert.
+- Persistente Datenbank (z. B. redb), Block-Fenster nach Bytes, Zustandsablauf nach 1001 Tagen mit Einmal-Markierung, Checkpoints.
+- **Fertig, wenn:** Messbericht in `docs/STATUS.md`: Speicher je Konto, Konten je 128 MB, Verhalten bei vollem Budget, Wachstum der Header. Zweite Wiederbelebung wird abgelehnt.
 
 ### M6: Netzwerk
-- libp2p mit QUIC und Noise, Peer-Entdeckung, Transaktions- und Blockverbreitung. Ratenbegrenzung.
-- **Fertig, wenn:** 5 Knoten in getrennten Prozessen finden sich, tauschen Transaktionen aus und erreichen Konsens.
+- libp2p mit QUIC und Noise, Peer-Entdeckung, Verbreitung von Transaktionen, Blöcken und Losen, Ratenbegrenzung, Peer-Reputation (Schutzregeln Ebene B).
+- **Fertig, wenn:** 5 Knoten in getrennten Prozessen finden sich, tauschen Daten aus und erreichen Konsens. Ein Peer, der ungültige Lose flutet, wird gedrosselt.
 
-### M7: JSON-RPC (Ethereum-Teilmenge)
+### M7: JSON-RPC
 - `eth_chainId`, `eth_getBalance`, `eth_getTransactionCount`, `eth_sendRawTransaction`, `eth_blockNumber`, `net_version`.
-- Für ToyScan: `toy_getSupply`, `toy_getEpoch`, `toy_getReserve`, `toy_getConstitution` (Beträge als Dezimaltext in kleinsten Einheiten, mit Blocknummer und Block-Hash, `08-toyscan.md` Abschnitt 3.1). Weitere `toy_`-Methoden folgen mit ihren Phasen.
-- **Fertig, wenn:** MetaMask (oder ein Skript mit einer Ethereum-Bibliothek) kann ToyChain als eigenes Netzwerk einbinden, den Kontostand lesen und TOY senden.
+- Für Wallet und ToyScan: `toy_getSupply`, `toy_getEpoch`, `toy_getBootstrap`, `toy_getValidators`, `toy_getPenalties`, `toy_getConstitution` (`05-toyscan.md`, Abschnitt 3).
+- **Fertig, wenn:** MetaMask oder ein Skript mit einer Ethereum-Bibliothek kann ToyChain einbinden, den Kontostand lesen und TOY senden.
 
 ### M8: Wallet und CLI
-- Wallet erzeugen, Phrase sichern, Keystore mit Argon2id und XChaCha20-Poly1305, Senden, Empfangen, Kontingent anzeigen. Optional: Hybrid-Signatur (ML-DSA) als zusätzlicher Schlüssel.
-- **Fertig, wenn:** Ende-zu-Ende-Test im lokalen Testnet: Wallet A sendet an Wallet B, Kontingent wird erstattet, Kontostände stimmen.
+- Wallet erzeugen, Phrase sichern, Keystore (Argon2id, XChaCha20-Poly1305), Senden, Empfangen, Kontingent anzeigen, Stake binden und lösen, Stufenwahl mit Gerätemessung (`04-toypay-wallet.md`).
+- **Fertig, wenn:** Ende-zu-Ende-Test im lokalen Testnet: Ein Gerät ohne TOY gewinnt in der Arbeits-Lotterie, sendet dann an eine zweite Wallet, Kontingent wird erstattet, Kontostände stimmen.
 
-### M9: Plattformen
-- Cross-Kompilierung für Linux x86_64, Windows x86_64, Linux aarch64 (Raspberry Pi) und Android (Bibliothek plus einfache App).
-- **Fertig, wenn:** Der Node startet und synchronisiert auf mindestens Linux und Raspberry Pi. Android mindestens als Light-Wallet mit Senden und Empfangen.
+### M9: Plattformen und Energie-Modus
+- Builds für Linux x86_64, Windows x86_64, Linux aarch64 (Raspberry Pi), Android (Bibliothek plus App). ToyNode als Dienst.
+- Energie-Modi Sparsam, Ausgewogen, Leistung, Auto (Akku, Ladegerät, Temperatur, Netz, Nutzung).
+- **Fertig, wenn:** Der Knoten läuft auf Linux, Raspberry Pi und Windows, Android mindestens als Stufe 0 mit ToyWork am Ladegerät. Auto-Modus schaltet in Tests richtig um.
 
 ### M10: Testnet und Lasttests
-- Lokales und später öffentliches Testnet, Lasttest mit vielen Wallets, Messung von Transaktionen pro Sekunde, Finalitätszeit, Speicher.
-- **Fertig, wenn:** Messwerte stehen in `docs/STATUS.md`, Parameter aus Abschnitt 14 der Spezifikation sind mit Messwerten abgeglichen.
+- Lokales, dann öffentliches Testnet mit Start-Validatoren. Lasttest mit vielen Wallets und Losen.
+- **Fertig, wenn:** Messwerte (Transaktionen pro Sekunde, Finalität, Speicher, Prüfzeit je Los auf altem Android) stehen in `docs/STATUS.md`, Parameter aus Spezifikation Abschnitt 14 sind abgeglichen.
+
+### M11: ToyScan, andere Ketten, NFT-Prägen
+- ToyScan nach `05-toyscan.md`: Indexer, Warnampel A1 bis A9, Muster-Warnungen, Adress-Ansicht mit anderen EVM-Ketten, offene API, Prüfskript.
+- Wallet: Guthaben und Senden auf anderen EVM-Ketten, Warnung bei gleichnamigen Token, NFT-Prägen auf dem Polygon-Testnet (sobald bestätigt).
+- **Fertig, wenn:** jede Ampel-Regel hat Tests für Grün, Gelb und Rot, ToyScan läuft gegen das Testnet, Rust-Rechner und Prüfskript stimmen überein.
 
 ## So startest du (Claude Code)
 
-1. Ordner entpacken, Terminal öffnen, in den Ordner wechseln.
+1. Repository klonen, Terminal öffnen, in den Ordner wechseln.
 2. `claude` starten. Die Datei `CLAUDE.md` wird automatisch gelesen.
-3. Mit dem Prompt für M0 beginnen, danach M1 (siehe unten).
+3. Mit dem Prompt für M1 beginnen.
 4. Nach jedem Meilenstein: Ergebnis prüfen, `docs/STATUS.md` ansehen, mit `/clear` neu starten, nächster Prompt.
 
 ## Fertige Prompts
-
-**Start (einmalig):**
-> Lies CLAUDE.md, docs/01-spezifikation.md und docs/02-entscheidungen.md. Fasse in 10 Zeilen zusammen, was ToyChain ist und was in Phase 1 gebaut wird. Lege dann den Rust-Workspace gemäß docs/03-bauplan-phase1.md an (leere Crates, CI-Befehle, docs/STATUS.md). Noch keine Logik.
-
-**M0:**
-> Setze M0 aus docs/03-bauplan-phase1.md um (ToyScan Stufe 0, Altbestand-Wächter im Ordner toyscan/). Lies dazu docs/08-toyscan.md und docs/04-toyscan-und-altbestand.md. Zeige zuerst einen Plan, schreibe Tests mit aufgezeichneten Daten, führe fmt, clippy und test aus, aktualisiere docs/STATUS.md. Keine Schlüssel, nur lesen.
 
 **M1:**
 > Setze Meilenstein M1 aus docs/03-bauplan-phase1.md um (toy-types und toy-emission). Zeige zuerst einen kurzen Plan. Schreibe Property-Tests (z. B. mit proptest), die belegen, dass die Obergrenze von 100.000.000 TOY nie überschritten wird. Führe cargo fmt, clippy und test aus und berichte die Ergebnisse. Aktualisiere docs/STATUS.md.
@@ -107,20 +107,20 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 > Setze M2 um (toy-crypto). Nutze nur geprüfte Crates. Teste mit offiziellen BIP-39- und Ethereum-Testvektoren und mit einem Replay-Test für die Chain-ID. Erkläre mir danach in einfachen Worten, was du gebaut hast.
 
 **M3:**
-> Setze M3 um (toy-state und toy-tx). Halte dich genau an Abschnitt 6 und 7 der Spezifikation. Schreibe Tests für Kontingent, Erstattung, progressive Gebühr, ToyWork-Shares und Doppelausgabe.
+> Setze M3 um (toy-state und toy-tx). Halte dich genau an die Abschnitte 6 bis 9 der Spezifikation. Schreibe Tests für Regel I0, Kontingent, Gebühren, ToyWork-Lose und jede Sperrregel.
 
 **M4:**
-> Setze M4 um (toy-consensus): Komitee, VRF, BFT, BLS-Sammelsignatur, Slashing. Baue eine Simulation mit 20 virtuellen Validatoren und lasse sie 10.000 Blöcke laufen, auch mit ausfallenden Knoten. Berichte Messwerte.
+> Setze M4 um (toy-consensus): Komitee, VRF, BFT, BLS-Sammelsignatur, Startphase, Strafen. Simulation mit 20 virtuellen Validatoren über 10.000 Blöcke, auch mit Ausfällen und der Übergabe aus der Startphase. Berichte Messwerte.
 
 **M5:**
-> Setze M5 um: persistenter Speicher, Block-Fenster nach Bytes, Zustandsablauf nach 1001 Tagen mit Einmal-Markierung für Wiederbelebungen (Test: zweite Wiederbelebung wird abgelehnt). Miss den Speicherverbrauch pro Konto und schreibe einen Messbericht in docs/STATUS.md. Prüfe, ob die 256 MB gehalten werden.
+> Setze M5 um: persistenter Speicher, Block-Fenster nach Bytes, Zustandsablauf mit Einmal-Markierung. Miss den Speicherverbrauch je Konto und schreibe einen Messbericht in docs/STATUS.md. Prüfe, ob die 256 MB gehalten werden.
 
-**M6 bis M10:** gleiche Form. „Setze M<Nummer> aus docs/03-bauplan-phase1.md um. Zeige zuerst einen Plan, schreibe Tests, führe fmt, clippy und test aus, aktualisiere docs/STATUS.md.“
+**M6 bis M11:** gleiche Form. „Setze M<Nummer> aus docs/03-bauplan-phase1.md um. Zeige zuerst einen Plan, schreibe Tests, führe fmt, clippy und test aus, aktualisiere docs/STATUS.md.“
 
 ## Ohne Claude Code (nur Chat mit Pro)
 
-Lege ein Claude-Projekt an, lade alle Dateien dieses Ordners als Projektwissen hoch und bearbeite die Meilensteine im Chat. Lass dir den Code als Dateien ausgeben und speichere sie lokal. Bei großen Meilensteinen den Prompt in kleinere Teile teilen (z. B. M3 erst Zustand, dann Gebühren).
+Lege ein Claude-Projekt an, lade die Dateien als Projektwissen hoch und bearbeite die Meilensteine im Chat. Bei großen Meilensteinen den Prompt teilen (z. B. M3 erst Zustand, dann Gebühren, dann Schutzregeln).
 
-## Danach: Phase 2 bis 5
+## Danach
 
-Reihenfolge laut Entscheidung 39: Phase 2 Beweis-Schicht, Phase 3 Bridge, Phase 4 privater Pool, Phase 5 Offline-Schecks. Eine EVM-Ausführung gibt es nicht (Entscheidung 36). Für jede Phase zuerst eine Detailspezifikation mit Claude erarbeiten, dann wieder Meilensteine bilden.
+Phase 2 Beweis-Schicht. Danach, Reihenfolge offen: Mitbestimmung, Mainnet, Bridges, Privatsphäre, Offline-Schecks, Spiel-Anbindung (`docs/spaeter/`). Eine EVM-Ausführung gibt es nie (Entscheidung 36).

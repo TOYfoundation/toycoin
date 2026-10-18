@@ -2,6 +2,9 @@
 
 Stand 17.10.2026 · Geprüft: `CLAUDE.md`, `docs/01` bis `docs/09`, `STATUS.md`, `toypay/docs/06` und `07` · Prüfer: unabhängiger Prüf-Agent ohne Beteiligung an den Texten, nur lesend, Rechnungen mit Python nachgerechnet · Status: **P1 bis P3 entschieden am 18.10.2026 (Nr. 58 bis 60), P4 bis P12 offen**
 
+
+> **Vermerk vom 18.10.2026 (Neuausrichtung):** Durch Fair Launch und den Verzicht auf Bridge und Reserve sind die Befunde 2, 4, 9, 11 (Schlüssel der Ersteller-Adresse) und 12 sowie P2, P4, P10, P11 hinfällig oder verschoben. **Weiter gültig:** P1 und P3 (umgesetzt), Befund 5 (P5), 6 (P6), 7 (P7, umgesetzt als Schwierigkeits-Schwelle der Arbeits-Lotterie), 8 (P8, mit der späteren Mitbestimmung), 10 (P9), Teile von 14 und 16 (progressive Gebühr, MPL-2.0).
+
 ## 1. Was nachgerechnet wurde und stimmt
 
 - Erste Epoche 49.995 TOY. Erstes Jahr bei m = 1: 16,67 Mio. TOY. Halbwertszeit 1.372 Epochen (3,76 Jahre). Nach 25 Jahren 98,01 Mio. gemintet, 0,986 Mio. Rest.

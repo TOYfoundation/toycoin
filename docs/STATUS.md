@@ -1,23 +1,23 @@
 # Projektstatus ToyChain
 
-Stand: 17.10.2026 · Phase 1 · Aktueller Schritt: **Konzeptphase.** Der Bau (M1 ff.) ruht, bis das Gesamtkonzept (ToyChain, ToyScan, Bridge, TOYPAY) ausgearbeitet ist
+Stand: 18.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **Konzept nach der Neuausrichtung.** Gebaut wird ab M1, sobald die Formel für m steht und Nr. 67, 68 und 70 bestätigt sind.
 
 ## Überblick Meilensteine
 
 | Meilenstein | Inhalt | Status |
 |---|---|---|
 | Start | Rust-Workspace, leere Crates, CI, STATUS.md | ✅ fertig |
-| M0 | ToyScan Stufe 0: Altbestand-Wächter (`toyscan/`, Nr. 57) | ⏳ offen, nächster Schritt |
-| M1 | Grundtypen und Emission (`toy-types`, `toy-emission`) | ⏳ offen |
+| M1 | Grundtypen und Emission, Genesis ohne Guthaben (`toy-types`, `toy-emission`) | ⏳ offen, nächster Schritt |
 | M2 | Kryptografie und Adressen (`toy-crypto`) | ⏳ offen |
-| M3 | Zustand, Transaktionen, Kontingent, Gebühren (`toy-state`, `toy-tx`) | ⏳ offen |
-| M4 | Blöcke, Konsens-Simulation (`toy-consensus`) | ⏳ offen |
+| M3 | Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln (`toy-state`, `toy-tx`) | ⏳ offen |
+| M4 | Blöcke, Konsens, Startphase (`toy-consensus`) | ⏳ offen |
 | M5 | Speicher und 256-MB-Budget (`toy-node`) | ⏳ offen |
 | M6 | Netzwerk (`toy-node`) | ⏳ offen |
-| M7 | JSON-RPC, Ethereum-Teilmenge (`toy-rpc`) | ⏳ offen |
-| M8 | Wallet und CLI (`toy-wallet`, `toy-cli`) | ⏳ offen |
-| M9 | Plattformen (Linux, Windows, Raspberry Pi, Android) | ⏳ offen |
+| M7 | JSON-RPC und `toy_`-Methoden (`toy-rpc`) | ⏳ offen |
+| M8 | Wallet und CLI mit Stufenwahl (`toy-wallet`, `toy-cli`) | ⏳ offen |
+| M9 | Plattformen und Energie-Modus | ⏳ offen |
 | M10 | Testnet und Lasttests | ⏳ offen |
+| M11 | ToyScan, andere Ketten, NFT-Prägen (`toyscan/`) | ⏳ offen |
 
 ## Was im Start-Schritt angelegt wurde
 
@@ -68,30 +68,30 @@ Die Skripte führen genau das aus, was `CLAUDE.md` verlangt:
 
 Hinweis zur Bauumgebung: In der Cloud-Sandbox, in der das Gerüst erstellt wurde, konnte `rustup` die Toolchain nicht herunterladen. Die Prüfungen liefen deshalb mit `RUSTUP_TOOLCHAIN=stable`, das dort genau 1.97.0 war. Auf deinem Rechner lädt `rustup` 1.97.0 beim ersten `cargo`-Aufruf automatisch.
 
-## Entscheidungen vom 17.10.2026 (eingearbeitet)
+## Neuausrichtung vom 18.10.2026
 
-1. **Erste Epoche:** k₀ = 0,0505 % gilt, die erste Epoche bringt ca. **49.995 TOY**. Spezifikation und Bauplan sind korrigiert (vorher 49.950). Nachgerechnet: Halbwertszeit 3,76 Jahre, Jahr 1 ≈ 16,67 Mio. TOY, Rest nach 25 Jahren ≈ 0,99 Mio. TOY.
-2. **Zeitsperre der Reserve:** ersetzt durch Entscheidungen 41 und 42: 3 Jahre Sperre, danach je Epoche über 3 Jahre.
-3. **Epochenlänge:** nach Blöcken (1.440). Schnellere Epochen gleicht der Zeitplan-Regler über m aus. 1 Jahr = 365 Epochen.
-4. **Lizenz:** MIT. Datei `LICENSE` liegt im Hauptordner, alle Crates tragen `license = "MIT"`.
+Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 72):
 
-Alle Entscheidungen stehen auch in `docs/02-entscheidungen.md` (Nr. 9 bis 12) und in Abschnitt 16 der Spezifikation.
+- **Totaler Fair Launch:** Genesis ohne Guthaben, keine Reserve, alle 100 Mio. TOY per Emission. Erste Epoche 50.500 TOY, erstes Jahr rund 16,84 Mio., Halbwertszeit 3,76 Jahre (nachgerechnet).
+- **Kern:** ToyChain-Testnet, TOYPAY Wallet als Knoten mit Stufen 0 bis 4, Energie-Modus und Mint-Funktionen, ToyScan mit Warnampel A1 bis A9 und Anzeige anderer EVM-Ketten.
+- **Neu:** Startphase ohne Stake, Arbeits-Lotterie, Schutzregeln mit Sperrzeiten in drei Ebenen.
+- **Verschoben nach `docs/spaeter/`:** Bridge, Altbestand-Token, Reserve, Mitbestimmung, Spiel und Spiel-NFTs, alte Spezifikation v0.2.
 
-## Konzeptphase (seit 17.10.2026)
+## Dokumente
 
 | Dokument | Stand |
 |---|---|
-| `04-toyscan-und-altbestand.md` | On-Chain-Befund ergänzt, Fremdbestand-Regel neu (Entscheidungen 13, 14) |
-| `05-gesamtsystem.md` | v0.3: Teile, Konten, Genesis-Block, Reihenfolge bis zum Start, Deckungs-Buchhaltung (Regeln I1–I6), Schlüssel. E1–E6 entschieden |
-| `06-bridge.md` | v0.3, entschieden (Nr. 48 bis 54): zum Start nur Polygon, Ethereum nach Abstimmung |
-| `09-mitbestimmung.md` | entschieden (Nr. 45, 47) |
-| `07-toypay.md` | Entwurf, entschieden Nr. 15 bis 35. Offen: NFTs vor dem Bridge-Start, vorhandener NFT-Vertrag |
-| `toypay/docs/07_SPIELDESIGN.md` | Entwurf: Spieldesign mit Klassen, Synergien, Wirtschaft, Lichteffekten. Gang-Regeln und Effekt-Paket gebaut und in Godot 4.4.1 getestet (`nft_items_test`, `vfx_test`: ALL OK) |
-| `toypay/docs/06_NFT_GEGENSTAENDE.md` | Katalog mit 500 Gegenständen, geprüft mit `gen_nft_items.py` und in Godot 4.4.1 (`nft_items_test`: ALL OK) |
-| `10-pruefbericht-1.md` | Prüfbericht 1 vom 17.10.2026: 17 Befunde, davon 3 kritisch. Reine Text- und Formelfehler korrigiert. P1 bis P3 entschieden (Nr. 58 bis 60), P4 bis P12 offen. M1 erst nach P4 und der Formel für m |
-| `08-toyscan.md` | v0.1, entschieden (Nr. 55 bis 57): Aufbau, Datenquellen, Messpunkt, Ampel A1 bis A12, API, Stufen 0 bis 3, Pflicht-Tests |
+| `01-spezifikation.md` | v0.3, schlank, mit Verfassung (Abschnitt 13) |
+| `02-entscheidungen.md` | Nr. 1 bis 72, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
+| `03-bauplan-phase1.md` | M1 bis M11 |
+| `04-toypay-wallet.md` | v0.1: Clients, Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
+| `05-toyscan.md` | v0.2: Warnampel A1 bis A9, Muster-Warnungen, andere Ketten, API |
+| `10-pruefbericht-1.md` | Prüfbericht vom 17.10.2026, mit Vermerk, welche Befunde nach der Neuausrichtung noch gelten |
+| `toypay/docs/06_NFT_GEGENSTAENDE.md`, `07_SPIELDESIGN.md` | für später. Katalog und Effekt-Paket bleiben getestet (`nft_items_test`, `vfx_test`: ALL OK) |
 
 ## Noch offen
 
-- Ab M2: Lizenzen und Sicherheitsmeldungen der fremden Bibliotheken automatisch prüfen (`cargo-deny`), sobald die ersten externen Crates dazukommen. Erlaubt sind nur Lizenzen, die zu MIT passen (MIT, Apache-2.0, BSD, ISC, CC0, Zlib, Unicode).
-- Offene Punkte aus `docs/02-entscheidungen.md` (Fremdbestand, Altbestand-Verträge, rechtliche Prüfung) betreffen spätere Phasen.
+- Bestätigung von Nr. 67 (Schutzregeln), 68 (NFT-Prägen) und 70 (Startphase).
+- Formel für m mit Ganzzahl-Format, vor M1.
+- Ab M2: Lizenzen und Sicherheitsmeldungen der fremden Bibliotheken automatisch prüfen (`cargo-deny`). Erlaubt sind Lizenzen, die zu MIT passen (MIT, Apache-2.0, BSD, ISC, CC0, Zlib, Unicode). Offen: MPL-2.0 für UniFFI.
+- Aus dem Prüfbericht: P5, P6 (M5), P9 und Höchstwert der progressiven Gebühr (M3).

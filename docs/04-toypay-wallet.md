@@ -1,0 +1,113 @@
+# TOYPAY Wallet: Wallet und Knoten in einem
+
+Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 72 · Status: **zur Prüfung**, offene Punkte in Abschnitt 9 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
+
+## 1. Ziel
+
+Die TOYPAY Wallet verwaltet TOY, ist zugleich ein **ToyChain-Knoten** und läuft auf möglichst vielen Geräten, vom alten Android-Handy bis zum Server. Jeder kann ohne Guthaben mitmachen und mit gebundenem TOY schrittweise mehr Rechte bekommen. Dazu zeigt und nutzt die Wallet dieselbe Adresse auch auf anderen EVM-Ketten.
+
+## 2. Plattformen und Client-Typen
+
+| Client | Für wen | Plattformen |
+|---|---|---|
+| **TOYPAY App** | alle Nutzer, mit Oberfläche | Android (ab ca. 1 GB RAM, arm64 und armv7), Windows, Linux, Raspberry Pi (Linux arm64) |
+| **ToyNode** | Dauerbetrieb ohne Oberfläche, z. B. Raspberry Pi oder Server | Linux x86_64 und arm64, Windows. Bedienung über Kommandozeile (`toy-cli`) und eine lokale Weboberfläche |
+| **Kern-Bibliothek** | andere Apps, die TOY einbauen wollen | Rust-Kern mit Anbindung für Kotlin (Android und Desktop) |
+
+**Ein gemeinsamer Rust-Kern:** Kryptografie, Transaktionen, Knoten und Wallet stecken in denselben Crates (`toy-crypto`, `toy-tx`, `toy-node`, `toy-wallet`). Nichts davon wird in einer anderen Sprache neu geschrieben. **Vorschlag:** Die Oberfläche läuft mit Compose Multiplatform, dann gibt es **eine** Codebasis für Android und Desktop. Die Rust-Anbindung erzeugt UniFFI (siehe Abschnitt 9).
+
+## 3. Stufen
+
+Die Stufen sind in der Spezifikation (Abschnitt 4) festgelegt. In der App sieht das so aus:
+
+| Stufe | Anzeige in der App | Typisches Gerät |
+|---|---|---|
+| 0 · Leicht | „Mitmachen ohne Guthaben“ | altes Handy, Tablet |
+| 1 · Konto | „Senden mit freiem Kontingent“ | jedes Gerät mit mindestens 0,1 TOY |
+| 2 · Attestierer | „Mitsignieren“, ab 10 TOY Stake | Handy am Ladegerät, PC |
+| 3 · Voll | „Voll-Knoten“, ab 100 TOY Stake | PC, Raspberry Pi 4/5 mit SSD |
+| 4 · Validator | „Validator“, ab 1.000 TOY Stake | ständig laufender PC, Pi oder Server |
+
+- Beim ersten Start misst die App kurz das Gerät (Speicher, Kerne, Akku, Netz) und **schlägt eine Stufe vor**. Der Nutzer entscheidet und kann jederzeit wechseln.
+- Höhere Stufen sind nur wählbar, wenn das Gerät sie schafft. Eine Validator-Rolle auf einem Handy mit 1 GB RAM bietet die App gar nicht an.
+- Die App zeigt offen, was jede Stufe bringt, was sie kostet (Strom, Daten, Speicher) und welche Sperrzeiten bei Verstößen drohen (Spezifikation Abschnitt 8).
+
+## 4. Energie-Modus
+
+Die App passt ihren Aufwand **automatisch** an. Der Nutzer wählt nur die Obergrenze.
+
+| Modus | Verhalten |
+|---|---|
+| **Sparsam** | nur Leicht-Knoten, kein ToyWork, synchronisiert selten. Für alte Geräte und unterwegs |
+| **Ausgewogen** (Standard) | ToyWork nur am Ladegerät, im WLAN und unter einer Temperaturgrenze, mit 1 Kern |
+| **Leistung** | alle freigegebenen Kerne, auch Voll-Knoten und Mitsignieren, solange Strom und Temperatur passen |
+| **Auto** | wechselt selbst zwischen den Modi, je nach Akkustand, Ladegerät, Temperatur, Netz (WLAN oder mobil), Datenvolumen und ob das Gerät gerade benutzt wird |
+
+**Regeln für Auto (Startwerte):**
+- Unter 30 % Akku ohne Ladegerät: Sparsam.
+- Am Ladegerät und im WLAN: bis zur gewählten Obergrenze.
+- Gerätetemperatur über 40 °C: Arbeit pausieren.
+- Mobiles Netz: höchstens 20 MB pro Tag, sonst nur Kopfdaten.
+- Wird das Gerät aktiv benutzt: Arbeit auf niedrigste Priorität.
+
+**Wichtig für höhere Stufen:** Ein Validator, der wegen Akku oder Hitze plötzlich pausiert, gilt als inaktiv (Spezifikation Abschnitt 5.4). Die App warnt deshalb, bevor der Auto-Modus eine Rolle mit Stake herunterstuft, und empfiehlt für Stufe 4 ein dauerhaft versorgtes Gerät.
+
+## 5. Mint-Funktionen
+
+### 5.1 TOY verdienen
+
+| Weg | Stufe | Wie |
+|---|---|---|
+| **Arbeits-Lotterie** | ab 0 | Das Gerät rechnet ToyWork-Lose (Argon2id, 16 MiB) und reicht sie ein. Je Block werden Gewinner gezogen. Jeder Gewinn ist mindestens 0,1 TOY, also kann auch ein Gerät ohne Konto sein erstes TOY gewinnen |
+| **Mitsignieren** | ab 2 | Anteil an der Konsens-Belohnung (nach der Startphase) |
+| **Voll-Knoten** | ab 3 | zusätzliches Gewicht für Verfügbarkeit |
+| **Validator** | 4 | Konsens-Belohnung und 20 % der Gebühren des eigenen Blocks |
+| **Gebühren-Lotterie** | ab 2 | Anteil an 40 % der Gebühren für aktive Teilnehmer |
+
+Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzung. Versprochen wird keine Rendite.
+
+### 5.2 NFTs prägen (Entscheidung 68, zur Bestätigung)
+
+Auf ToyChain gibt es keine NFTs (Spezifikation, Grundregel). NFTs prägt die Wallet deshalb **auf einer anderen EVM-Kette**.
+
+**Vorschlag:**
+- Kette: **Polygon**, im Testnet auf dem Polygon-Testnet (Amoy).
+- Ein eigener, einfacher NFT-Vertrag nach ERC-721, **ohne Admin, der beliebig prägen könnte**. Prägen darf nur der Nutzer selbst für die eigene Adresse.
+- Kosten: nur die Netzgebühr der Kette in POL. **Kein TOY**, weil es keine Verbindung zwischen ToyChain und Polygon gibt.
+- Bild und Beschreibung liegen dauerhaft (z. B. IPFS), im Vertrag steht nur ihr Hash.
+- Die Regeln aus dem Spiel (Mindestbestand, Sperren, Stufe 20, Auflagen) gelten hier **nicht**. Sie kommen erst mit der Spiel-Anbindung (`spaeter/07-toypay-spiel-und-nft.md`).
+
+## 6. Andere Ketten (Entscheidung 69)
+
+- **Dieselbe Adresse** wie auf ToyChain funktioniert auf allen EVM-Ketten. Die Wallet zeigt dort Guthaben, Token und NFTs und kann senden.
+- **Zum Start:** Ethereum, Polygon, Arbitrum, Base, BNB Chain und deren Testnetze. Weitere EVM-Ketten lassen sich mit Chain-ID und RPC-Adresse selbst hinzufügen. Nicht-EVM-Ketten wie Bitcoin oder Solana kommen später, weil sie andere Schlüssel und Ableitungspfade brauchen.
+- **Eigene Schlüssel je Kette (optional):** Wer ToyChain-Guthaben getrennt halten will, wählt einen eigenen Ableitungspfad für ToyChain (Spezifikation Abschnitt 10).
+- **RPC-Zugänge:** Die App nutzt öffentliche Zugänge oder vom Nutzer eingetragene. **Kein API-Schlüssel steckt in der App**, weil jeder ihn aus der Installationsdatei auslesen könnte.
+- **Warnung bei gleichnamigen Token:** Ein Token mit dem Namen ToyCoin oder dem Ticker TOY auf einer anderen Kette bekommt immer den Hinweis „Nicht ToyChain-TOY, nicht eintauschbar“. Natives TOY erscheint nur unter dem Netzwerk ToyChain.
+- **Keine Bridge** im jetzigen Umfang.
+
+## 7. Sicherheit
+
+- Phrase nach BIP-39, verschlüsselt mit Argon2id und XChaCha20-Poly1305, wo möglich im Android Keystore/StrongBox, im TPM oder in der Secure Enclave.
+- Schlüssel und Phrasen werden **nie** geloggt, nie im Klartext gespeichert und nach Gebrauch gelöscht (`zeroize`).
+- Validator-Schlüssel (BLS) sind getrennt vom Geld-Schlüssel. Wer Stufe 4 betreibt, braucht den Geld-Schlüssel dafür nicht auf dem Gerät.
+- Signieren mit Chain-ID, Anzeige von Empfänger, Betrag, Kette und Gebühr vor jeder Unterschrift.
+- Im Testnet: keine echten Schlüssel, keine echten Gelder.
+
+## 8. Bauplan-Bezug
+
+| Funktion | Meilenstein |
+|---|---|
+| Schlüssel, Adressen | M2 |
+| Kontingent, Gebühren, ToyWork-Lose | M3 |
+| Stufen, Startphase, Sperrzeiten | M3, M4 |
+| Ethereum-kompatible Schnittstelle | M7 |
+| Wallet-Kern, Keystore, Stufenwahl | M8 |
+| Plattformen, Energie-Modus | M9 |
+| Andere Ketten, NFT-Prägen | M11 |
+
+## 9. Offene Punkte
+
+1. **NFT-Prägen** wie in Abschnitt 5.2 vorgeschlagen?
+2. **Oberfläche:** Compose Multiplatform für Android und Desktop?
+3. **UniFFI** steht unter der Lizenz MPL-2.0. Sie ist nicht in der Liste in `CLAUDE.md`. Für eine unveränderte Bibliothek ist sie mit MIT vereinbar. Freigeben?

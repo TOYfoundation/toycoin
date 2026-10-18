@@ -1,6 +1,6 @@
 # TOYPAY
 
-Android-App (Kotlin) für den nativen ToyCoin (TOY), mit eingebautem Light-Knoten. Dazu gehören die Spiele TOYQUEST (2D) und TOYQUEST 3D (Godot 4.4).
+TOYPAY Wallet für den nativen ToyCoin (TOY), zugleich ToyChain-Knoten (Konzept: `../docs/04-toypay-wallet.md`). Die Spiele TOYQUEST (2D) und TOYQUEST 3D (Godot 4.4) und ihre NFT-Regeln kommen später (Entscheidung 72).
 
 **Status:** Der App- und Spielcode liegt noch nicht in diesem Repository. Hier stehen die Unterlagen und der NFT-Gegenstandskatalog, der sich ins Spiel installieren lässt.
 
@@ -14,7 +14,8 @@ Android-App (Kotlin) für den nativen ToyCoin (TOY), mit eingebautem Light-Knote
 | `data/nft_epithets.tsv`, `data/gang.json` | Beinamen der 77 kostbaren und legendären Gegenstände; Klassen, Duos, Sets, Gang-Ränge |
 | `godot3d/vfx/` | Effekt-Paket: Seltenheits-Aura, Glitzer, Blitze, Präge-Zeremonie, Blitzschutz. Vorschau: `vfx/preview/vfx_showcase.tscn` |
 | `install_nft_items.py` | Installiert Katalog, Gang-Regeln und Effekt-Paket in ein TOYPAY-Projekt, mit Sicherung |
-| `../docs/07-toypay.md` | Wie TOYPAY ToyChain nutzt, Knotenrollen in der App, offene Grundsatzfragen K1 bis K7 |
+| `../docs/04-toypay-wallet.md` | Wallet und Knoten: Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
+| `../docs/spaeter/07-toypay-spiel-und-nft.md` | Spiel-NFTs, Dukaten und Präge-Regeln (für später) |
 
 ## Bevor der App-Code hierher kommt
 

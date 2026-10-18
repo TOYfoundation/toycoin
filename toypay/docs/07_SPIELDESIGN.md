@@ -1,6 +1,8 @@
 # Spieldesign: „Die Gang der 1001 Nächte“
 
-Stand: 17.10.2026 · Gilt für TOYQUEST 3D und die 2D-Spiele · Baut auf den Entscheidungen 15 bis 32 auf (`docs/02-entscheidungen.md`, `docs/07-toypay.md`) · Status: **Entwurf zur Prüfung**. Alle Zahlen sind Startwerte für das Testspiel.
+Stand: 17.10.2026 · Gilt für TOYQUEST 3D und die 2D-Spiele · Baut auf den Entscheidungen 15 bis 32 auf (`docs/02-entscheidungen.md`, `docs/spaeter/07-toypay-spiel-und-nft.md`) · Status: **Entwurf zur Prüfung**. Alle Zahlen sind Startwerte für das Testspiel.
+
+> **Für später (Entscheidung 72):** Das Spiel und seine NFT-Regeln sind nicht Teil des jetzigen Testnet-Baus. Die Präge-Regeln mit ToyCoin-Token auf Polygon gelten nicht mehr, weil diese Token derzeit ignoriert werden (Nr. 63).
 
 ## 1. Die Idee in drei Sätzen
 

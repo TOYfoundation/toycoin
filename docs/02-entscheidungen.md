@@ -1,6 +1,33 @@
 # Entscheidungsprotokoll ToyChain
 
-Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit „Vorschlag“ markierte Punkte sind Vorschläge von Claude, die noch bestätigt werden müssen.
+Stand: 18.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit „zur Bestätigung“ markierte Punkte sind Vorschläge von Claude, die noch bestätigt werden müssen.
+
+## Neuausrichtung vom 18.10.2026 (gilt vor allen älteren Einträgen)
+
+Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **Testnet** aus ToyChain, TOYPAY Wallet und ToyScan. Die Konzepte, die dadurch wegfallen oder später kommen, liegen in `docs/spaeter/`.
+
+| Nr. | Thema | Entscheidung |
+|---|---|---|
+| 61 | Fokus | Kern sind **ToyChain mit nativem TOY**, die **TOYPAY Wallet** als Knoten mit Mint-Funktionen und Unterstützung anderer Ketten, und **ToyScan** mit Warnampel und Anzeige anderer Ketten. ToyChain läuft zuerst als **Testnet**, Funktionen kommen schrittweise dazu |
+| 62 | Totaler Fair Launch | **Genesis-Block ohne Guthaben.** Kein Premint, keine Reserve, kein Team-Anteil, kein Bug-Bounty-Topf aus der Kette. **Alle 100 Mio. TOY** entstehen per Emission (erste Epoche 50.500 TOY). Steht in der Verfassung |
+| 63 | ToyCoin-Token auf Polygon und Ethereum | Werden **ignoriert**. Keine 1:1-Bridge, keine Deckung, kein Altbestand-Wächter. Wallet und ToyScan kennzeichnen gleichnamige Token als „Nicht ToyChain-TOY, nicht eintauschbar“ |
+| 64 | Mitbestimmung | **Später.** Die Verfassung bleibt und gilt schon jetzt (Spezifikation Abschnitt 13) |
+| 65 | Teilnahme-Stufen | Stufe 0 braucht **kein Guthaben und keinen Stake**. Mehr Rechte gibt es gestaffelt mit Stake: 10 / 100 / 1.000 TOY (Startwerte, Spezifikation Abschnitt 4) |
+| 66 | Energie-Modus | Die Wallet passt ihren Aufwand automatisch an Akku, Ladegerät, Temperatur, Netz und Nutzung an. Der Nutzer wählt die Obergrenze und die Stufe (`04-toypay-wallet.md`) |
+| 67 | Schutzregeln und Sperrzeiten | Im Grundsatz entschieden (Wunsch des Projektinhabers): Verstöße und Manipulationsversuche führen automatisch zu Sperrzeiten. **Ausgestaltung zur Bestätigung:** drei Ebenen (Kette mit festen, nachweisbaren Regeln, Netzwerk lokal, ToyScan nur Warnungen). Sperren entziehen nur Rechte, nie Guthaben (Spezifikation Abschnitt 8) |
+| 68 | Mint-Funktionen | TOY verdienen über Arbeits-Lotterie, Mitsignieren und Validieren. NFTs prägt die Wallet auf einer anderen EVM-Kette. **Ausgestaltung zur Bestätigung:** Polygon, eigener ERC-721-Vertrag ohne Admin, nur Netzgebühr in POL, kein TOY (`04-toypay-wallet.md`, Abschnitt 5.2) |
+| 69 | Andere Ketten | Dieselbe Adresse wird auf EVM-Ketten angezeigt und genutzt (Ethereum, Polygon, Arbitrum, Base, BNB Chain, eigene hinzufügbar). Keine Bridge. Nicht-EVM-Ketten später |
+| 70 | Startphase ohne Stake | **Zur Bestätigung:** 7 bis 21 Start-Validatoren im Genesis-Block, ohne Stake und **ohne Konsens-Belohnung**. Deren Anteil (50 %) geht in die Arbeits-Lotterie. Automatische Übergabe, sobald 21 Validatoren mit je 1.000 TOY Stake zusammen mindestens 1 % der geminteten TOY binden. Ersetzt Nr. 37 |
+| 71 | Arbeits-Lotterie | ToyWork-Lose mit Schwierigkeits-Schwelle. Gewinner je Block per VRF, jeder Gewinn mindestens 0,1 TOY. So kann auch ein Gerät ohne Konto sein erstes TOY verdienen, und es entsteht kein Staub |
+| 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
+
+**Was mit den älteren Entscheidungen passiert:**
+
+| Gilt weiter | Kommt später | Entfällt |
+|---|---|---|
+| 1 Zustandsablauf, 9 k₀ (erste Epoche jetzt 50.500 TOY), 12 MIT-Lizenz, 30 Plattformen, 32 Wallet und Spiele getrennt, 36 nur nativer Coin, 38 Mainnet erst nach Audit, 40 eigene Chain-ID, 56 ToyScan ohne Schlüssel, 58 Epoche nach Blöcken und Zeit, 60 Regel I0 (ohne Reserve: Summe = gemintet − verbrannt) | 2 privater Pool, 5 Bridge-Typ, 6 Hybrid-Signaturen, 15 TOY auf anderen Ketten bridgen, 16 bis 29, 31, 33 bis 35 und 46 Spiel und NFT-Regeln, 39 Bridge-Phase, 45 und 47 Mitbestimmung, 48 bis 54 und 59 Bridge-Details, 55 Bug-Bounty-Prämien | 3, 8, 10, 41 bis 44 Reserve und Cold-Wallets, 4, 7, 13, 14 Bridge-Deckung und Fremdbestand, 11 (ersetzt durch 58), 37 (ersetzt durch 70), 57 Altbestand-Wächter |
+
+**Die folgenden Abschnitte sind das Protokoll bis zum 17.10.2026.** Was dort steht, gilt nur, soweit die Tabelle oben es nicht ändert.
 
 ## Ursprüngliche Vorgaben
 
@@ -92,16 +119,16 @@ Stand: 17.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit
 
 ## Prüfergebnis Altbestand-Verträge (Bytecode ausgewertet)
 
+Nur noch Hintergrund: Die Token werden derzeit ignoriert (Nr. 63). Details in `spaeter/04-toyscan-und-altbestand.md`.
+
 - Ethereum (Chain-ID 1): 0xA5B04ce6eDD139C0e58ccdBc0B75E8C67CDA678A
 - Polygon (Chain-ID 137): 0x1854b69cd1495c9753c5F1590A35e5DdB556A5BF
 - Beide: Standard-ERC-20 mit Permit (14 Funktionen), kein Mint, kein Burn, kein Owner/Admin, kein Pausieren, keine Sperrliste, kein Upgrade, kein Proxy. Details in `04-toyscan-und-altbestand.md`.
 
-## Noch offen
+## Noch offen (Stand 18.10.2026)
 
-
-
-- Quellcode auf Etherscan und Polygonscan verifizieren (am 17.10.2026 auf beiden Ketten noch **nicht verifiziert**). Prägung von je 10^26 Einheiten ist bestätigt.
-- Schlüssel der Contract-Wallet `0x18da…00c2`: Wer hält ihn, wie ist er gesichert? Liegt der ursprüngliche Quellcode der Verträge vor?
-- TOYPAY: Grundsatzfragen K1 bis K7 in `07-toypay.md` (Spielwährung oder Kryptowährung, Poker, Umtausch Dukaten ↔ TOY, Jugendschutz, Verwahrung, Datenschutz, eine oder zwei Apps).
-- Rechtliche Prüfung vor dem Mainnet (MiCA, Steuer, Börsenlistings, 1 % Reserve, Fremdbestand).
-- Technisch: Beweisprüfung auf Ethereum (Kosten, Trusted-Setup-Frage), in Phase 2 klären.
+- Bestätigung von Nr. 67, 68 und 70.
+- Formel für den Faktor m mit Ganzzahl-Format, vor M1.
+- Lizenz von UniFFI (MPL-2.0) für die Wallet-Anbindung freigeben (`04-toypay-wallet.md`, Abschnitt 9).
+- Aus dem Prüfbericht für die passenden Meilensteine: P5, P6 (M5), P9 und Höchstwert der progressiven Gebühr (M3).
+- Rechtliche Prüfung vor einem Mainnet (z. B. MiCA, Steuer).
