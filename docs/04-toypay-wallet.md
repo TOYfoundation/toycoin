@@ -1,6 +1,6 @@
 # TOYPAY Wallet: Wallet und Knoten in einem
 
-Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 94 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
+Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 102 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
 
 ## 1. Ziel
 
@@ -168,6 +168,28 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 
 **Nicht gewählt:** Erweiterungen (Snaps), Tauschen über Börsen-Dienste.
 
+## 7c. Alltag, Bezahlen und Einsteiger (Entscheidungen 97 bis 99)
+
+**Schutz im Alltag**
+- **Zwischenablage-Schutz:** Vor dem Senden vergleicht die App die eingefügte Adresse mit der zuletzt kopierten und warnt, wenn Schadsoftware sie heimlich ausgetauscht hat.
+- **Bildschirmfoto-Sperre:** Seiten mit Phrase, Schlüsseln oder Notfall-Schlüssel lassen sich nicht abfotografieren oder aufnehmen (auf Android per Systemschalter, am PC mit Warnung).
+- **Geräte-Prüfung:** Warnung bei gerootetem oder manipuliertem Gerät und bei veraltetem System. Die App läuft trotzdem, aber große Beträge brauchen eine zusätzliche Bestätigung.
+- **Täuschungs-PIN:** Eine zweite PIN öffnet unter Zwang eine harmlose Wallet mit eigener Phrase und wenig Geld. Von außen ist nicht zu erkennen, dass es eine zweite Wallet gibt.
+
+**Bezahlen**
+- **Kassen-Modus** für Händler: Betrag eintippen, QR-Code zeigen, grüner Haken nach 1 Block. Mit Tagesabschluss als Tabelle.
+- **Offline signieren:** Ein altes Handy ohne Internet dient als Tresor. Transaktionen wandern per QR-Code hin und her (Vorbild: Keystone, AirGap).
+- **Bezahlen per NFC:** Handy an Handy halten, um Adresse und Betrag zu übertragen. Gesendet wird danach normal über das Netz.
+- **Rechnungen mit Status:** Zahlungsanforderung mit Ablauf, Status offen oder bezahlt und Erinnerung.
+
+**Einsteiger**
+- **Sicherheits-Check:** Ampel in der App: Phrase gesichert? Notfall-Schlüssel eingerichtet? Version aktuell? Gerät in Ordnung? Jeder Punkt mit Tipp zum Beheben.
+- **Übungs-Modus:** Geführte Tour mit Testnet-TOY: senden, empfangen, Konto schützen, ohne Risiko.
+- **Einfache Sprache:** Alle Texte in einfacher Sprache, Fachwörter mit Erklär-Symbol.
+- **Barrierefreiheit:** Bildschirmleser, große Schrift, hoher Kontrast, keine Information nur über Farbe.
+
+**Neue Konto-Arten in der App** (Spezifikation 7.4): Delegieren mit Validator-Bewertung aus ToyScan, Mehrfachsignatur-Konten, Sitzungs-Schlüssel für Apps mit Übersicht und Widerruf, Treuhand, Abo-Erlaubnisse mit Widerruf, Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel.
+
 ## 8. Sicherheit
 
 - Phrase nach BIP-39, verschlüsselt mit Argon2id und XChaCha20-Poly1305, wo möglich im Android Keystore/StrongBox, im TPM oder in der Secure Enclave.
@@ -190,7 +212,10 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 | Andere Ketten, WalletConnect, Freigaben, atomarer Tausch | M11, M12 |
 | Vorschau, Adress-Fallen, Adressbuch, Probebetrag, SLIP-39, Nur-Ansehen, QR, Export, Daueraufträge | M8, M9 |
 | Hardware-Wallets, mehrere Konten und Phrasen, Schlüssel-Import, Sicherungs-Quiz, automatische Sperre, Guthaben verbergen, Gebühren-Stufen, Verlauf | M8 |
-| Mitteilungen, Sync, Browser-Erweiterung | M9 |
+| Mitteilungen, Sync, Browser-Erweiterung, Zwischenablage-Schutz, Bildschirmfoto-Sperre, Geräte-Prüfung, Täuschungs-PIN, Sicherheits-Check, Übungs-Modus, einfache Sprache, Barrierefreiheit, Kassen-Modus, Offline signieren, NFC, Rechnungen | M9 |
+| Delegieren | M4, M8 |
+| Mehrfachsignatur, Sitzungs-Schlüssel, Treuhand, Abo-Erlaubnis | M12 |
+| Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel | M13 |
 | Geschützter Sendeweg, Preisabweichung, begrenzte Freigaben, Phishing-Warnliste, Sicherheitswarnungen, Seiten-Berechtigungen, Anmelden mit Adresse, eingebauter Browser, Netzwerk per Klick, Token- und NFT-Erkennung, Gesamtübersicht in Euro, Simulation auf anderen Ketten | M11 |
 | Konto-Schutz, Sammelüberweisung, Gebühr übernehmen | M12 |
 

@@ -13,6 +13,7 @@ Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit 
 | [`toyscan/`](toyscan/) | Explorer (noch kein Code) |
 | [`toypay/`](toypay/) | TOYPAY-Unterlagen. Der App-Code folgt |
 | `CLAUDE.md` | Arbeitsanweisungen für Claude (feste Vorgaben, Sicherheitsregeln, Arbeitsweise) |
+| `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` | Wie man mitmacht, Verhaltensregeln |
 | `SECURITY.md` | Was nie ins Repository darf, wie man Schwachstellen meldet |
 
 ## Dokumente
@@ -21,7 +22,7 @@ Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit 
 |---|---|
 | `docs/01-spezifikation.md` | Technische Spezifikation v0.3 (maßgeblich) |
 | `docs/02-entscheidungen.md` | Entscheidungsprotokoll, oben die Neuausrichtung vom 18.10.2026 |
-| `docs/03-bauplan-phase1.md` | Bauplan Phase 1 (Testnet): 12 Meilensteine mit Fertig-Kriterien und Prompts |
+| `docs/03-bauplan-phase1.md` | Bauplan Phase 1 (Testnet): 13 Meilensteine mit Fertig-Kriterien und Prompts |
 | `docs/04-toypay-wallet.md` | TOYPAY Wallet: Clients, Teilnahme-Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
 | `docs/05-toyscan.md` | ToyScan: Warnampel mit allen Formeln, Muster-Warnungen, andere Ketten, offene API |
 | `docs/10-pruefbericht-1.md` | Unabhängiger Prüfbericht vom 17.10.2026 |

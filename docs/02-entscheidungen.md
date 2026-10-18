@@ -41,6 +41,14 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 92 | Nicht übernommen (MetaMask) | Erweiterungen (Snaps), Tauschen über Börsen-Dienste. Schutz vor Vordrängeln siehe Nr. 93 |
 | 93 | Schutz vor Vordrängeln und Zensur | Auf ToyChain: **feste Reihenfolge** im Block (Gebühr, dann Block-Zufall), **Aufnahme-Pflicht** für Transaktionen, die mindestens ein Drittel des Komitees meldet, **verschlüsselter Wartebereich** in Phase 2. Für andere Ketten siehe Nr. 94 |
 | 94 | Vordrängel-Schutz auf anderen Ketten | **Geschützter Sendeweg standardmäßig an** (abschaltbar, Rückfrage vor dem Ausweichen), **Anbieter wählbar** oder eigener, **Rückerstattungen** an den Nutzer, **Warnung bei Preisabweichung** ab 2 % mit Anzeige des Mindestbetrags, **begrenzte Freigaben** statt unbegrenzter |
+| 95 | Neue Transaktionsarten | **Stake delegieren** (M4, Validator-Anteil höchstens 20 %, anteilige Kürzung, keine Delegation an Start-Validatoren in der Startphase), **Mehrfachsignatur-Konto**, **Sitzungs-Schlüssel**, **Treuhand mit Schiedsstelle** (M12) |
+| 96 | Weitere Konto-Funktionen | **Abo-Erlaubnis** (M12), **Namen** wie anna.toy mit Jahresgebühr in den Erstattungs-Pool, **Einmal-Empfangsadressen** (EIP-5564), **Post-Quanten-Zusatzschlüssel** ML-DSA (M13). Ändert „Hybrid-Signaturen nicht in Phase 1“ |
+| 97 | Schutz im Alltag | Zwischenablage-Schutz, Bildschirmfoto-Sperre, Geräte-Prüfung, Täuschungs-PIN |
+| 98 | Bezahlen | Kassen-Modus für Händler, Offline signieren per QR, Bezahlen per NFC, Rechnungen mit Status |
+| 99 | Einsteiger | Sicherheits-Check in der App, Übungs-Modus mit Testnet-TOY, einfache Sprache, Barrierefreiheit |
+| 100 | ToyScan | Netzwerk-Karte, Validator-Bewertung, Adress-Alarm ohne Anmeldung, offene Daten |
+| 101 | Entwickler und Herkunft | SDKs für JavaScript, Kotlin und Python, Ein-Befehl-Testnetz, Shop-Plugin (später), Abhängigkeits-Prüfung mit cargo-deny und cargo-vet |
+| 102 | Vertrauen | Formale Prüfung (Kani, TLA+), monatlicher Transparenz-Bericht ab Testnet-Start, Verhaltensregeln und Leitfaden für Beiträge, signierte Commits (Pflicht, sobald der Projektinhaber einen Signier-Schlüssel hinterlegt hat) |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**

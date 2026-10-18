@@ -1,6 +1,6 @@
 # ToyScan: Explorer, Warnampel und Anzeige anderer Ketten
 
-Entwurf v0.2 vom 18.10.2026 · Grundlage: Spezifikation v0.3, Entscheidungen 56, 58, 60, 61 bis 94 · Status: **zur Prüfung** · Die frühere Fassung mit Bridge- und Altbestand-Kriterien liegt in `spaeter/08-toyscan-v0.1-mit-bridge.md`
+Entwurf v0.2 vom 18.10.2026 · Grundlage: Spezifikation v0.3, Entscheidungen 56, 58, 60, 61 bis 102 · Status: **zur Prüfung** · Die frühere Fassung mit Bridge- und Altbestand-Kriterien liegt in `spaeter/08-toyscan-v0.1-mit-bridge.md`
 
 ## 1. Ziel und Grundsätze
 
@@ -113,6 +113,8 @@ Jede Warnung nennt die Regel, die Zahlen und die betroffenen Adressen. Die Regel
 | **Epochen** | Emission, Anteile von m, Aufteilung, Lotterie-Gewinner |
 | **Erstattungs-Pool** | Stand, Zuflüsse (Emission, Gebühren, Kürzungen, Spenden), Abflüsse für kostenlose Transaktionen, Liste der Spenden |
 | **Teilnehmer** | Anzahl je Stufe, Validatoren, Stake-Verteilung, Verfügbarkeit |
+| **Validator-Bewertung** | je Validator: Verfügbarkeit, verpasste Signaturen, Strafen, Anteil für den Validator, delegierter Stake. Hilft beim Delegieren (Entscheidung 100) |
+| **Netzwerk-Karte** | Anzahl der Knoten nach Land und Anbieter (grob, ohne IP-Adressen), Versionen, Anteil der größten Anbieter. Gelb, wenn ein Anbieter mehr als 1/3 der Knoten stellt |
 | **Konto-Schutz** | wartende Abhebungen mit Tresor-Verzögerung, aktive Selbst-Sperren, offene Hash-Zeitschlösser mit Ablauf, Erben-Fristen (nur für die eigene Adresse ausführlich, sonst als Zahl) |
 | **Schutz** | aktive Sperrzeiten mit Beweis, Doppelsignaturen mit Anteil am Stake und berechneter Kürzung, Muster-Warnungen |
 | **Ruhende Konten und Checkpoints** | Anzahl aktiver und ruhender Konten, Füllstand des Zustands, Ruhe-Schnappschüsse und Beweise für jedes ruhende Konto zum Herunterladen, Genesis-Hash, Checkpoints |
@@ -133,6 +135,8 @@ JSON, Beträge als Text in kleinsten Einheiten und zusätzlich formatiert, jede 
 | `/api/v1/netzwerk` | Netzwerk-Angaben (Chain-ID, Name, Symbol, RPC-Adressen, Explorer) im Format von EIP-3085 für das Eintragen per Klick |
 | `/api/v1/checkpoints` | Checkpoints mit allen Signaturen der unabhängigen Stellen |
 | `/api/v1/beweis/{adresse}` | Beweis für ein ruhendes Konto (Spezifikation 6.2) |
+| `/api/v1/alarm` | Adress-Alarm abonnieren, ohne Anmeldung: Benachrichtigung per Web-Push, RSS oder Webhook bei jeder Bewegung einer Adresse (Entscheidung 100) |
+| `/api/v1/daten` | offene Daten: tägliche Downloads aller Blöcke, Epochen und Kennzahlen für Forschung und Presse |
 | `/api/v1/supply/circulating.txt` | eine Zahl für Listing-Seiten |
 
 **Umlauf** = gemintet − gebundener Stake − Aktivierungs-Pfänder − Erstattungs-Pool − Lotterie-Töpfe. Der gesamte Bestand (gemintet) wird zusätzlich angezeigt. Auf ToyChain wird nie TOY verbrannt.

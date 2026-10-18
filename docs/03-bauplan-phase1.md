@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 94). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 102). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -35,7 +35,8 @@ toyscan/                     Explorer und Warnampel (M11)
 Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht es weiter.
 
 ### M1: Grundtypen und Emission
-- **Ab M1 in jedem Meilenstein:** Fuzz-Tests für alle Funktionen, die fremde Daten lesen, laufen dauerhaft in der CI (Entscheidung 88).
+- **Ab M1 in jedem Meilenstein:** Fuzz-Tests für alle Funktionen, die fremde Daten lesen, laufen dauerhaft in der CI (Entscheidung 88). Fremde Bibliotheken werden mit `cargo-deny` und `cargo-vet` auf Lücken, Lizenzen und Herkunft geprüft (Entscheidung 101).
+- **Formale Prüfung** der Obergrenze und der Emission mit einem Beweis-Werkzeug für Rust (z. B. Kani, Entscheidung 102).
 - Typen, Konstanten (Obergrenze 10^26), sichere Rechenfunktionen (`checked_*`).
 - **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10. In der Startphase geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren und sinkt über 180 Epochen auf 0 %, der Rest in die Arbeits-Lotterie.
 - Epochen-Ende nach mindestens 1.440 Blöcken **und** 86.400 Sekunden.
@@ -60,6 +61,8 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Startphase:** 7 bis 21 Start-Validatoren ohne Stake, mit sinkendem und 365 Epochen gebundenem Lohn, Übergabe nur durch neue Validatoren, automatische Übergabe an das Stake-Komitee (Spezifikation 5.3).
 - Strafen: Doppelsignatur mit Kürzung nach Ausmaß (Spezifikation 5.4), Inaktivität, Sperrzeiten für Rollen.
 - Feste Reihenfolge im Block und Aufnahme-Pflicht mit Listen des Komitees (Spezifikation 5.1a).
+- **Stake delegieren** mit Validator-Anteil, anteiliger Kürzung und ohne Delegation an Start-Validatoren (Spezifikation 7.4).
+- Konsens zusätzlich als formales Modell prüfen (z. B. TLA+, Entscheidung 102).
 - Pannenschutz (Spezifikation 5.5): Signier-Gedächtnis, Doppelgänger-Erkennung, ein Signier-Gerät je Konto.
 - Simulation mit z. B. 20 virtuellen Validatoren, inklusive Ausfällen.
 - **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen nach Ausmaß bestraft (Einzelfall 1 %, ein Drittel gleichzeitig 100 %), Signier-Gedächtnis verhindert eine zweite Unterschrift auch nach Neustart und nach Zurückspielen einer alten Sicherung, ein Doppelgänger bleibt stumm, ein falsch sortierter Block und ein Block ohne gemeldete Transaktion (bei freiem Platz) werden abgelehnt, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten genau gleiche, sinkende Anteile (nach 180 Epochen 0), ihr Lohn ist gebunden, und Stake von Start-Validatoren löst die Übergabe nicht aus.
@@ -87,23 +90,30 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - Builds für Linux x86_64, Windows x86_64, Linux aarch64 (Raspberry Pi), Android (Bibliothek plus App). ToyNode als Dienst.
 - Energie-Modi Sparsam, Ausgewogen, Leistung, Auto (Akku, Ladegerät, Temperatur, Netz, Nutzung).
 - Mitteilungen, Ende-zu-Ende verschlüsselter Sync ohne Schlüssel, Browser-Erweiterung für Chrome und Firefox (Entscheidungen 90, 91).
+- Zwischenablage-Schutz, Bildschirmfoto-Sperre, Geräte-Prüfung, Täuschungs-PIN, Sicherheits-Check, Übungs-Modus, einfache Sprache, Barrierefreiheit, Kassen-Modus, Offline signieren per QR, NFC, Rechnungen (Entscheidungen 97 bis 99).
 - **Fertig, wenn:** Der Knoten läuft auf Linux, Raspberry Pi und Windows, Android mindestens als Stufe 0 mit ToyWork am Ladegerät. Auto-Modus schaltet in Tests richtig um.
 
 ### M10: Testnet und Lasttests
 - Lokales, dann öffentliches Testnet mit Start-Validatoren. Lasttest mit vielen Wallets und Losen.
 - **Testnet-Kran:** gibt Testnet-TOY zum Ausprobieren aus, gefüllt aus Lotteriegewinnen eigener Knoten (Genesis bleibt leer), mit Begrenzung je Adresse und Tag und ToyWork-Los gegen Abräumen.
+- **Ein-Befehl-Testnetz:** `toy-cli devnet` startet ein lokales Mini-Netz mit mehreren Knoten (Entscheidung 101).
 - **Reproduzierbare, mehrfach signierte Builds**, Prüfung vor jedem Update in Wallet und Knoten. **Notfall-Plan** als `docs/06-notfallplan.md`. **Bug-Bounty-Programm** in `SECURITY.md` (außerhalb der Kette, Entscheidung 88).
 - **Fertig, wenn:** Messwerte (Transaktionen pro Sekunde, Finalität, Speicher, Prüfzeit je Los auf altem Android) stehen in `docs/STATUS.md`, Parameter aus Spezifikation Abschnitt 14 sind abgeglichen.
 
 ### M11: ToyScan und andere Ketten
-- ToyScan nach `05-toyscan.md`: Indexer, Warnampel A1 bis A9, Muster-Warnungen, Adress-Ansicht mit anderen EVM-Ketten, offene API, Prüfskript.
+- ToyScan nach `05-toyscan.md`: Indexer, Warnampel A1 bis A9, Muster-Warnungen, Adress-Ansicht mit anderen EVM-Ketten, offene API, Prüfskript, Netzwerk-Karte, Validator-Bewertung, Adress-Alarm, offene Daten.
+- **Programm-Bibliotheken (SDKs)** für JavaScript/TypeScript, Kotlin und Python mit Beispielen (Entscheidung 101).
 - Wallet: Guthaben und Senden auf anderen EVM-Ketten, Warnung bei gleichnamigen Token, Phishing-Warnliste, Sicherheitswarnungen, Seiten-Berechtigungen, Anmelden mit Adresse, eingebauter Browser, Netzwerk per Klick, Token- und NFT-Erkennung, Gesamtübersicht in Euro, Simulation vor dem Senden, geschützter Sendeweg mit wählbarem Anbieter und Rückerstattung, Warnung bei Preisabweichung, begrenzte Freigaben (Entscheidungen 89 bis 94). NFT-Prägen kommt später mit dem Spiel (Entscheidung 68).
 - **Fertig, wenn:** jede Ampel-Regel hat Tests für Grün, Gelb und Rot, ToyScan läuft gegen das Testnet, Rust-Rechner und Prüfskript stimmen überein.
 
 ### M12: Konto-Schutz, Zusatz-Transaktionen und Tausch
-- Transaktionsarten Sammelüberweisung, Gebühr übernehmen, Schutzeinstellungen (Tresor-Verzögerung, Notfall-Schlüssel, Sicherheitsadresse, Selbst-Sperre, Erben-Adresse) und Hash-Zeitschloss (Spezifikation 7.1 bis 7.3, 11).
+- Transaktionsarten Mehrfachsignatur-Konto, Sitzungs-Schlüssel, Treuhand, Abo-Erlaubnis (Spezifikation 7.4), Sammelüberweisung, Gebühr übernehmen, Schutzeinstellungen (Tresor-Verzögerung, Notfall-Schlüssel, Sicherheitsadresse, Selbst-Sperre, Erben-Adresse) und Hash-Zeitschloss (Spezifikation 7.1 bis 7.3, 11).
 - Wallet: Assistent für Konto-Schutz, geführter atomarer Tausch mit Bitcoin oder einer EVM-Kette im Testnet, WalletConnect, Anzeige von Freigaben auf anderen Ketten.
-- **Fertig, wenn:** Tests zeigen, dass eine verzögerte Abhebung abgebrochen werden kann, ein Dieb ohne Notfall-Schlüssel nichts an fremde Adressen senden kann, solange das Konto gesperrt ist, das Ändern des Schutzes selbst verzögert wirkt, die Erben-Adresse erst nach Ablauf übernehmen kann, ein Hash-Zeitschloss genau einmal abgeholt oder nach Ablauf zurückgeholt wird, und Regel I0 überall hält. Ein atomarer Tausch im Testnet gelingt in beide Richtungen, und bei Abbruch bekommen beide ihr Geld zurück.
+- **Fertig, wenn:** Tests zeigen, dass eine verzögerte Abhebung abgebrochen werden kann, ein Dieb ohne Notfall-Schlüssel nichts an fremde Adressen senden kann, solange das Konto gesperrt ist, das Ändern des Schutzes selbst verzögert wirkt, die Erben-Adresse erst nach Ablauf übernehmen kann, ein Hash-Zeitschloss genau einmal abgeholt oder nach Ablauf zurückgeholt wird, und Regel I0 überall hält. Mehrfachsignatur braucht genau m Unterschriften, ein widerrufener Sitzungs-Schlüssel und eine widerrufene Abo-Erlaubnis wirken sofort nicht mehr, ein Sitzungs-Schlüssel kann seine Grenze nie überschreiten, eine Treuhand ohne Entscheidung geht nach der Frist an den Käufer zurück. Ein atomarer Tausch im Testnet gelingt in beide Richtungen, und bei Abbruch bekommen beide ihr Geld zurück.
+
+### M13: Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel
+- Namen mit Jahresgebühr und Schonfrist, Einmal-Empfangsadressen nach dem Vorbild von EIP-5564, Post-Quanten-Zusatzschlüssel nach ML-DSA (Spezifikation 7.4). Nur mit geprüften Bibliotheken.
+- **Fertig, wenn:** Namen sind eindeutig, nur ASCII, laufen ab und lassen sich danach neu vergeben. Eine Zahlung an eine Einmal-Adresse kommt nur beim richtigen Empfänger an und ist für andere nicht zuzuordnen. Ein Konto mit Post-Quanten-Schlüssel lehnt jede Ausgabe ohne beide Signaturen ab. Offizielle NIST-Testvektoren für ML-DSA bestehen. Speicherbedarf aller drei ist gemessen.
 
 ## So startest du (Claude Code)
 
@@ -129,7 +139,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 **M5:**
 > Setze M5 um: persistenter Speicher, Block-Fenster nach Bytes, aktive und ruhende Konten nach Spezifikation 6.2. Simuliere 100 Mio. Konten, miss den Speicher und schreibe einen Messbericht in docs/STATUS.md. Prüfe, ob die 256 MB gehalten werden.
 
-**M6 bis M12:** gleiche Form. „Setze M<Nummer> aus docs/03-bauplan-phase1.md um. Zeige zuerst einen Plan, schreibe Tests, führe fmt, clippy und test aus, aktualisiere docs/STATUS.md.“
+**M6 bis M13:** gleiche Form. „Setze M<Nummer> aus docs/03-bauplan-phase1.md um. Zeige zuerst einen Plan, schreibe Tests, führe fmt, clippy und test aus, aktualisiere docs/STATUS.md.“
 
 ## Ohne Claude Code (nur Chat mit Pro)
 
@@ -137,4 +147,4 @@ Lege ein Claude-Projekt an, lade die Dateien als Projektwissen hoch und bearbeit
 
 ## Danach
 
-Phase 2 Beweis-Schicht. Danach, Reihenfolge offen: Mitbestimmung, Mainnet, Bridges, Privatsphäre, Offline-Schecks, Spiel-Anbindung (`docs/spaeter/`). Eine EVM-Ausführung gibt es nie (Entscheidung 36).
+Phase 2 Beweis-Schicht. Danach, Reihenfolge offen: Shop-Plugin für Online-Shops (Entscheidung 101), Mitbestimmung, Mainnet, Bridges, Privatsphäre, Offline-Schecks, Spiel-Anbindung (`docs/spaeter/`). Eine EVM-Ausführung gibt es nie (Entscheidung 36).

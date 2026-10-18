@@ -1,6 +1,6 @@
 # ToyChain – Technische Spezifikation v0.3
 
-Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 94):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
+Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 102):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
 
 ## 1. Zusammenfassung
 
@@ -173,7 +173,7 @@ Kein Konto geht verloren. Nur die zuletzt genutzten Konten liegen im Speicher je
 | **Hash-Zeitschloss** | Betrag sperren, den der Empfänger nur mit einem geheimen Wert abholen kann. Nach Ablauf holt ihn der Absender zurück. Grundlage für den atomaren Tausch mit anderen Ketten (Abschnitt 11) |
 | **Belohnung, Lotterie, Strafe** | vom Protokoll selbst ausgelöst, keine Nutzer-Transaktion |
 
-Später, jeweils als eigenes Protokoll-Update: Stake delegieren, Mehrfachsignatur-Konto, Vorschlag und Abstimmung, Hybrid-Signatur, Bridge, abgeschirmter Pool, Offline-Schecks (`docs/spaeter/`).
+Dazu kommen in M12 und M13 die Arten aus Abschnitt 7.4: Stake delegieren, Mehrfachsignatur-Konto, Sitzungs-Schlüssel, Treuhand, Abo-Erlaubnis, Namen, Einmal-Empfangsadressen und Post-Quanten-Schlüssel. Später, jeweils als eigenes Protokoll-Update: Vorschlag und Abstimmung, Bridge, abgeschirmter Pool, Offline-Schecks (`docs/spaeter/`).
 
 ### 7.2 Kontingent, Gebühren, Arbeit
 
@@ -203,6 +203,21 @@ Jeder kann sein **eigenes** Konto freiwillig zusätzlich schützen. Die Einstell
 - **Ehrlich:** Ohne Notfall-Schlüssel hat ein Dieb mit dem Handy denselben Schlüssel wie der Eigentümer. Die Selbst-Sperre verhindert dann nur, dass er TOY an eine fremde Adresse schickt. Am wirksamsten ist es, sofort alles an die Sicherheitsadresse zu retten. Die Wallet empfiehlt deshalb einen Notfall-Schlüssel auf einem zweiten Gerät oder auf Papier.
 - Ein Konto mit Schutzeinstellungen wird nie ausgelagert, solange eine Abhebung wartet.
 - Größe: höchstens rund 80 Byte zusätzlich je geschütztem Konto. M5 misst das mit.
+
+### 7.4 Weitere Transaktionsarten (Entscheidungen 95, 96)
+
+Alle sind fest eingebaut, keine ist ein Smart Contract. Jede gilt nur, weil der Eigentümer sie selbst eingerichtet hat.
+
+| Art | Regel | Meilenstein |
+|---|---|---|
+| **Stake delegieren** | Ein Konto bindet TOY bei einem Validator seiner Wahl, ohne es abzugeben. Es erhält seinen Anteil an der Belohnung, abzüglich eines Anteils für den Validator (höchstens 20 %, vom Validator öffentlich festgelegt). Bei einer Kürzung des Validators wird delegierter Stake im gleichen Verhältnis mitgekürzt, damit man gute Validatoren wählt. Lösen dauert 7 Epochen. Der Stake-Deckel von 1 % gilt für eigenen und delegierten Stake zusammen. **In der Startphase** nehmen Start-Validatoren keine Delegationen an | M4 |
+| **Mehrfachsignatur-Konto** | Konto, das nur mit m von n Unterschriften (n höchstens 10) bewegt werden kann, z. B. für Vereine, Familien oder Firmen | M12 |
+| **Sitzungs-Schlüssel** | Unterschlüssel für eine App mit Obergrenze (gesamt und je Transaktion), Ablauf (höchstens 30 Epochen) und optional erlaubten Empfängern. Der Hauptschlüssel kann ihn jederzeit sofort widerrufen | M12 |
+| **Treuhand** | Käufer zahlt ein. Freigabe an den Verkäufer mit 2 von 3 Unterschriften von Käufer, Verkäufer und vorher gewählter Schiedsstelle. Ohne Entscheidung bis zur vereinbarten Frist geht das Geld an den Käufer zurück | M12 |
+| **Abo-Erlaubnis** | Erlaubt einer Adresse, höchstens einen festen Betrag je Zeitraum (in Epochen) abzubuchen. Jederzeit sofort widerrufbar. Die Wallet zeigt alle laufenden Erlaubnisse | M12 |
+| **Namen** | Lesbare Namen wie `anna.toy`: 3 bis 32 Zeichen, nur a–z, 0–9 und Bindestrich (gegen täuschend ähnliche Schriftzeichen). Wer zuerst kommt, bekommt den Namen. Jahresgebühr gegen Namensspam, sie geht in den Erstattungs-Pool. Nach Ablauf 30 Epochen Schonfrist. Ein Eintrag braucht ca. 64 Byte, M5 misst das mit | M13 |
+| **Einmal-Empfangsadressen** | Nach dem Vorbild von EIP-5564: Der Empfänger veröffentlicht eine Meta-Adresse, der Absender errechnet daraus per ECDH eine neue Einmal-Adresse. Außenstehende sehen nicht, wer bezahlt wurde. Die Hinweise zum Finden liegen nur im Block-Fenster. **Nachteil:** Jede neue Adresse braucht ein eigenes Aktivierungs-Pfand. Sinnvoll eher für größere Beträge | M13 |
+| **Post-Quanten-Schlüssel** | Freiwilliger Zusatzschlüssel nach NIST ML-DSA (FIPS 204) für hohe Beträge. Im Konto steht nur sein Fingerabdruck (32 Byte), der volle Schlüssel und die Signatur (ca. 2,4 KB) reisen mit der Transaktion. Dafür ist die Gebühr höher. Ist er eingerichtet, braucht jede Ausgabe beide Signaturen | M13 |
 
 ## 8. Schutzregeln und Sperrzeiten (Entscheidung 67)
 
@@ -282,6 +297,8 @@ Keine selbst erfundenen Algorithmen. Geprüfte Verfahren hinter Schnittstellen, 
 - **Validatoren:** BLS12-381 mit Sammelsignaturen. **VRF** für Komitee und Lotterien.
 - **Hashes:** BLAKE3 für Merkle-Bäume, Keccak-256 für Ethereum-Kompatibilität.
 - **Arbeit:** Argon2id.
+- **Optional ab M13:** ML-DSA (NIST FIPS 204) als Post-Quanten-Zusatzschlüssel, ECDH auf secp256k1 für Einmal-Empfangsadressen. Beides nur mit geprüften Bibliotheken.
+- **Formale Prüfung (Entscheidung 102):** Die Regeln für Obergrenze, Emission und I0 werden im Rust-Code mit einem Beweis-Werkzeug (z. B. Kani) geprüft, der Konsens zusätzlich als Modell (z. B. TLA+).
 - **Wallet auf dem Gerät:** Argon2id plus XChaCha20-Poly1305, wo möglich Android Keystore/StrongBox, TPM oder Secure Enclave.
 
 ## 11. Andere Ketten (Entscheidung 69)
@@ -320,7 +337,7 @@ Diese Regeln stehen fest im Code. Für spätere Mitbestimmung gilt: Kein Code-Pf
 5. Epoche mindestens 1.440 Blöcke **und** mindestens 24 Stunden.
 6. Nur der native Coin TOY, keine Token, keine NFTs, keine Smart Contracts.
 7. Adressen und Signaturen wie Ethereum, Chain-ID in jeder Signatur.
-8. **Kein Zugriff auf fremde Guthaben:** Keine Regel und keine Abstimmung kann TOY von einem Konto nehmen, einfrieren oder umverteilen. Ausnahme sind nur Einstellungen, die der Eigentümer selbst gesetzt hat (Tresor-Verzögerung, Selbst-Sperre, Erben-Adresse, Hash-Zeitschloss, Abschnitt 7.3). Sperrzeiten entziehen nur Rechte. Gekürzt wird nur freiwillig für eine Rolle gebundener Stake bei Doppelsignatur. Konten gehen nie verloren: Sie ruhen höchstens und lassen sich jederzeit aufwecken.
+8. **Kein Zugriff auf fremde Guthaben:** Keine Regel und keine Abstimmung kann TOY von einem Konto nehmen, einfrieren oder umverteilen. Ausnahme sind nur Einstellungen, die der Eigentümer selbst gesetzt hat (Tresor-Verzögerung, Selbst-Sperre, Erben-Adresse, Hash-Zeitschloss, Delegation, Mehrfachsignatur, Sitzungs-Schlüssel, Treuhand, Abo-Erlaubnis, Abschnitte 7.3 und 7.4). Sperrzeiten entziehen nur Rechte. Gekürzt wird nur freiwillig für eine Rolle gebundener Stake bei Doppelsignatur. Konten gehen nie verloren: Sie ruhen höchstens und lassen sich jederzeit aufwecken.
 9. Diese Liste selbst.
 
 Ehrlich gesagt: Wer eine eigene Software verbreitet, kann jede Kette abspalten. Dagegen hilft Transparenz: ToyScan und die Wallet prüfen die Verfassung selbst und warnen bei einer Abspaltung, die sie bricht.
@@ -343,7 +360,7 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst. Die 
 
 ## 15. Fahrplan
 
-1. **Phase 1 · Testnet:** Rust-Knoten mit Konsens, Startphase, Emission, Kontingent, Gebühren, Schutzregeln. TOYPAY Wallet als Knoten auf Android, Windows, Linux und Raspberry Pi mit Stufen und Energie-Modi. ToyScan mit Ampel und Anzeige anderer Ketten. Lokales, dann öffentliches Testnet (`03-bauplan-phase1.md`).
+1. **Phase 1 · Testnet:** Rust-Knoten mit Konsens, Startphase, Emission, Kontingent, Gebühren, Schutzregeln. TOYPAY Wallet als Knoten auf Android, Windows, Linux und Raspberry Pi mit Stufen und Energie-Modi. ToyScan mit Ampel und Anzeige anderer Ketten. Lokales, dann öffentliches Testnet, danach Erweiterungen in M12 und M13 (`03-bauplan-phase1.md`). Ab Testnet-Start erscheint monatlich ein öffentlicher Transparenz-Bericht in `docs/berichte/` (Entscheidung 102).
 2. **Phase 2 · Beweise:** Falten der Historie, Prover-Rolle, Light-Clients ohne Vertrauen in Checkpoints, verschlüsselter Wartebereich (Abschnitt 5.1a).
 3. **Danach, Reihenfolge offen:** Mitbestimmung, Mainnet (nur nach Audit, Lasttests und rechtlicher Prüfung, Startzeitpunkt vorher öffentlich angekündigt), Bridges, Privatsphäre, Offline-Schecks, Spiel-Anbindung. Ideen dazu in `docs/spaeter/`.
 

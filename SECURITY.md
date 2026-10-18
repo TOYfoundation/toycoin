@@ -2,4 +2,6 @@
 
 - **Keine Geheimnisse ins Repository:** keine Seed-Phrasen, privaten Schlüssel, Keystore-Dateien, API-Keys (z. B. Alchemy) oder Tokens. Die `.gitignore` schließt die üblichen Dateien aus (`local.properties`, `toypay/**/gradle.properties`, `*.jks`, `*.keystore`, `.env` …). Vor jedem Hochladen von App-Code trotzdem prüfen.
 - **Kein Mainnet:** Alles in diesem Repository ist Testnet-Prototyp. Keine echten Schlüssel, keine echten Gelder.
-- **Schwachstellen melden:** bitte nicht öffentlich, sondern direkt an den Projektinhaber. Ein Bug-Bounty-Programm ist vorgesehen (aus der Reserve, siehe `docs/01-spezifikation.md`, Abschnitt 10).
+- **Schwachstellen melden:** bitte nicht öffentlich, sondern über die private Sicherheitsmeldung von GitHub („Report a vulnerability“ im Reiter Security) oder direkt an den Projektinhaber. Wir bestätigen den Eingang, beheben die Lücke und nennen den Melder auf Wunsch öffentlich.
+- **Bug-Bounty-Programm (Entscheidung 88):** Belohnungen für gemeldete Lücken, außerhalb der Kette und aus Spenden. Es gibt keine Reserve und kein Premint, aus dem Belohnungen kämen. Höhe und Regeln werden vor dem öffentlichen Testnet veröffentlicht.
+- **Herkunft des Codes (Entscheidungen 101, 102):** Fremde Bibliotheken werden mit `cargo-deny` und `cargo-vet` geprüft. Code-Änderungen sollen signiert sein, sobald Signier-Schlüssel eingerichtet sind. Releases gelten erst, wenn mindestens 3 Personen unabhängig dieselbe Datei gebaut und signiert haben.

@@ -26,8 +26,8 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 - Lizenz: **MIT** (nur Bibliotheken mit dazu verträglicher Lizenz verwenden, z. B. MIT, Apache-2.0, BSD, CC0; MPL-2.0 nur für unverändert genutzte Bibliotheken wie UniFFI, Entscheidung 77).
 - **Nur der native Coin TOY auf ToyChain, für immer:** keine Token, keine NFTs, keine Smart Contracts, keine EVM-Ausführung (Entscheidung 36). Jede Funktion ist eine fest eingebaute Transaktionsart (Spezifikation Abschnitt 7). Keine Vertrags-Engine einbauen, auch nicht "für später".
 - **Verfassung** (Spezifikation Abschnitt 13): Kein Code-Pfad, auch keine spätere Abstimmung, darf sie ändern. Dafür Tests schreiben.
-- **Sperrzeiten entziehen nur Rechte, nie Guthaben** (Spezifikation Abschnitt 8). Eingriffe in ein Konto nur durch Einstellungen, die der Eigentümer selbst gesetzt hat (Konto-Schutz, Spezifikation 7.3). Automatische Sperren nur nach festen, eindeutig nachweisbaren Regeln. Musterkennung nur in ToyScan als Warnung.
-- **Nicht in Phase 1:** Bridge, Mitbestimmung, privater Pool, Offline-Schecks, Spiel-Anbindung, NFT-Prägen, Hybrid-Signaturen.
+- **Sperrzeiten entziehen nur Rechte, nie Guthaben** (Spezifikation Abschnitt 8). Eingriffe in ein Konto nur durch Einstellungen, die der Eigentümer selbst gesetzt hat (Konto-Schutz und weitere Arten, Spezifikation 7.3 und 7.4). Automatische Sperren nur nach festen, eindeutig nachweisbaren Regeln. Musterkennung nur in ToyScan als Warnung.
+- **Nicht in Phase 1:** Bridge, Mitbestimmung, abgeschirmter Pool, Offline-Schecks, Spiel-Anbindung, NFT-Prägen. Post-Quanten-Schlüssel, Namen und Einmal-Adressen erst in M13 (Entscheidung 96).
 
 ## Regeln für Kryptografie und Sicherheit
 
@@ -42,7 +42,7 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 1. **Ein Meilenstein pro Sitzung** (siehe `docs/03-bauplan-phase1.md`). Erst kurzen Plan zeigen, dann umsetzen.
 2. **Tests zuerst** oder zusammen mit dem Code. Pflicht-Tests je Meilenstein stehen im Bauplan.
 3. Vor jedem Abschluss ausführen: `cargo fmt`, `cargo clippy --all-targets -- -D warnings`, `cargo test`. Ergebnisse berichten.
-4. Kleine, nachvollziehbare Git-Commits. Kein Commit mit fehlschlagenden Tests.
+4. Kleine, nachvollziehbare Git-Commits. Kein Commit mit fehlschlagenden Tests. Fremde Bibliotheken nur nach Prüfung mit `cargo-deny` und `cargo-vet` (Entscheidung 101).
 5. Nach jedem Meilenstein `docs/STATUS.md` aktualisieren (was fertig ist, was offen ist, Messwerte).
 6. Wenn eine Vorgabe der Spezifikation technisch nicht haltbar ist (z. B. Speicherbudget): nicht still abweichen, sondern das Problem mit Zahlen erklären und Optionen vorschlagen.
 7. Nur Bibliotheken verwenden, die es wirklich gibt. Versionen in `Cargo.toml` festnageln und im Zweifel prüfen, statt zu raten.
