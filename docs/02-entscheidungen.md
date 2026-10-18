@@ -58,6 +58,7 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 109 | Umfang des ersten Testnets | **Mittelweg:** Testnet 1 enthält den Kern (M1 bis M11 in schlanker Form), dazu **Konto-Schutz** (Tresor, Notfall-Schlüssel, Selbst-Sperre, Erben-Adresse), **45 Sprachen** und **vier Modi**. Alles andere folgt in späteren Testnet-Versionen, nichts wird gestrichen (Liste in `03-bauplan-phase1.md`) |
 | 110 | Lohn der Start-Validatoren | Lohn sinkt **nach Tagen Planzeit**, nicht nach Epochen. Deckel: höchstens Lohn-Anteil × Plan-Emission der vergangenen Tage. **Planzeit** zählt jeden Blockabstand höchstens 600 Sekunden. Genesis-Zeitstempel wird beim Start geprüft. Höchstens 2.217.786,59 TOY |
 | 111 | Übergabe aus der Startphase | **21 Start-Validatoren.** Übergabe frühestens nach 90 Tagen, wenn 21 neue Validatoren mit je 1.000 TOY, die seit 30 Epochen gebunden sind, zwei Drittel des wirksamen Stakes halten. Deckel je Teilnehmer 5 % unter 100 Validatoren, danach 1 % |
+| 112 | Belohnung nach Stake | **Linear + Grundbetrag:** 20 % des Konsens-Anteils zu gleichen Teilen an jedes Komitee-Mitglied, 80 % linear nach wirksamem Stake. Beide Teile mal Verfügbarkeit. Nicht Verdientes geht in die Arbeits-Lotterie. Die Wurzel entfällt, weil sie das Aufteilen auf viele Konten belohnt (Prüfbericht 2, H8) |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**
@@ -165,8 +166,6 @@ Nur noch Hintergrund: Die Token werden derzeit ignoriert (Nr. 63). Details in `s
 - Beide: Standard-ERC-20 mit Permit (14 Funktionen), kein Mint, kein Burn, kein Owner/Admin, kein Pausieren, keine Sperrliste, kein Upgrade, kein Proxy. Details in `spaeter/04-toyscan-und-altbestand.md`.
 
 ## Noch offen (Stand 18.10.2026)
-
-- Belohnung nach Stake: Wurzel oder linear (Prüfbericht 2, H8).
 
 - Schutz vor teurem Auffüllen des Speichers (P5, M5): Durch das Auslagern nach Bedarf (Nr. 75) kann niemand den Speicher dauerhaft verstopfen. Massenhaft neue Konten verdrängen nur alte in den Ruhezustand. Die Schutzregel gegen massenhaftes Anlegen bleibt.
 - Aus dem Prüfbericht für die passenden Meilensteine: P5, P6 (M5), P9 und Höchstwert der progressiven Gebühr (M3).

@@ -1,6 +1,6 @@
 # ToyChain – Technische Spezifikation v0.3
 
-Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 111):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
+Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 112):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
 
 ## 1. Zusammenfassung
 
@@ -53,7 +53,7 @@ Jede Stufe ist freiwillig. Die TOYPAY Wallet schlägt je nach Gerät eine Stufe 
 
 - **Kein Guthaben nötig, um mitzumachen:** Stufe 0 braucht nichts. Das Aktivierungs-Pfand gilt nur für Konten, die im Zustand gespeichert werden. Es schützt das 256-MB-Budget vor Millionen leerer Konten, bleibt Eigentum des Nutzers und ist keine Teilnahme-Hürde.
 - **Gebundenes TOY (Stake)** bleibt Eigentum des Nutzers. Lösen dauert **21 Epochen** (Startwert), länger als die 18 Epochen, nach denen eine Kürzung feststeht. So kann sich niemand einer Strafe entziehen (Entscheidung 106).
-- **Gegen Übermacht:** Der wirksame Stake je Teilnehmer ist gedeckelt (5 % des gesamten Stakes unter 100 Validatoren, danach 1 %, Entscheidung 111). Ob Belohnungen mit der Wurzel des Stakes oder linear steigen, ist offen (Prüfbericht 2, H8: die Wurzel lohnt das Aufteilen auf viele Konten).
+- **Gegen Übermacht:** Der wirksame Stake je Teilnehmer ist gedeckelt (5 % des gesamten Stakes unter 100 Validatoren, danach 1 %, Entscheidung 111). Belohnungen steigen **linear** mit dem wirksamen Stake, dazu kommt ein gleicher Grundbetrag je Komitee-Mitglied (Abschnitt 9, Entscheidung 112). Aufteilen auf viele Konten bringt beim linearen Teil nichts.
 - **Prover** (Phase 2) und **Archiv-Knoten** (ohne 256-MB-Grenze, freiwillig) kommen als weitere Rollen hinzu.
 
 ## 5. Konsens
@@ -268,7 +268,13 @@ Ziel: Angriffe, Manipulation und das Ausnutzen der Mechanismen früh stoppen, oh
 - **Restmenge** = 100.000.000 TOY − Summe aller bisherigen Emissionen. Es wird nie TOY verbrannt (Entscheidung 74). Kürzungen und Spenden bleiben im Umlauf, sie gehen in den Erstattungs-Pool und erhöhen nie die Restmenge.
 - **Zahlen bei m = 1:** erste Epoche **50.500 TOY**, erstes Jahr rund **16,84 Mio. TOY**, Halbwertszeit 1.372 Epochen (**3,76 Jahre**), nach 25 Jahren rund 99,0 Mio. gemintet, rund 1,0 Mio. Rest, der danach asymptotisch ausläuft.
 - **Faktor m** zwischen 0,5 und 2,0: steigt mit **bezahlter oder durch Arbeit gedeckter** Nutzung und mit hoher Beteiligung an den Signaturen und hält über einen Zeitplanteil die 25-Jahres-Kurve. Kostenlose Transaktionen zählen nicht, sonst ließe sich die Emission mit Spam hochtreiben. Genaue Formel: Abschnitt 9.1.
-- **Aufteilung:** 50 % Konsens (Stufen 2 bis 4, Wurzel-gewichtet nach Stake, Verfügbarkeit), 40 % Arbeit, 10 % Erstattungs-Pool. **In der Startphase** (Abschnitt 5.3) geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren. Er sinkt über 180 Epochen von 50 % auf 0 %, der Rest geht in die Arbeits-Lotterie.
+- **Aufteilung:** 50 % Konsens (Stufen 2 bis 4), 40 % Arbeit, 10 % Erstattungs-Pool. **In der Startphase** (Abschnitt 5.3) geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren. Er sinkt über 180 Tage Planzeit von 50 % auf 0 %, der Rest geht in die Arbeits-Lotterie.
+- **Konsens-Anteil nach der Startphase (Entscheidung 112):**
+  - **Grundbetrag (20 %):** zu gleichen Teilen an jedes Mitglied des Komitees der Epoche (Stufe 4, höchstens 128), jeweils mal seiner Verfügbarkeit.
+  - **Linearer Teil (80 %):** an alle Teilnehmer der Stufen 2 bis 4 im Verhältnis ihres **wirksamen** Stakes (mit Deckel, Abschnitt 5.3), jeweils mal ihrer Verfügbarkeit.
+  - **Verfügbarkeit** ist eine ganze Zahl in ppm: im Komitee erhaltene ÷ erwartete Signaturen, in den Stufen 2 und 3 beantwortete ÷ gestellte Erreichbarkeits-Proben der Epoche.
+  - Rechnung mit ganzen Zahlen, abgerundet. Alles, was wegen fehlender Verfügbarkeit oder durch Rundung nicht verteilt wird, geht in die Arbeits-Lotterie. Nichts wird verbrannt, Regel I0 gilt.
+  - **Ehrliche Einschränkung:** Wer viele Validatoren mit je 1.000 TOY betreibt, bekommt mehrere Grundbeträge. Dafür braucht er je Validator einen eigenen laufenden Knoten, und der Deckel je Teilnehmer gilt weiter. ToyScan zeigt auffällige Validator-Gruppen nur als Warnung.
 - **Arbeits-Lotterie:** Ein ToyWork-Los ist ein Argon2id-Ergebnis (16 MiB Speicher), das unter einer Schwierigkeits-Schwelle liegt, an Adresse, Epoche und **die Zufallszahl des letzten Blocks der Vorepoche** gebunden ist (so lässt es sich nicht im Voraus rechnen) und mit dem Schlüssel der Adresse **signiert** ist (so kann niemand mit fremden, ungültigen Losen eine Adresse belasten). **Ziehung erst später (Entscheidung 106):** Lose werden in Block N festgeschrieben, die Gewinner aber erst mit der Zufallszahl aus Block N+2 gezogen. Wer Block N baut, kennt diese Zahl noch nicht und kann die Ziehung nicht steuern. Die Schwelle passt sich an, damit je Block etwa gleich viele Lose ankommen. Je Block werden aus den gültigen Losen per VRF Gewinner gezogen. Jeder Gewinn ist mindestens 0,2 TOY. Die Zahl der Gewinner je Block ist `min(Zahl der Lose, Topf ÷ 0,2 TOY, 64)`. Was übrig bleibt, wandert in den Topf des nächsten Blocks, so passt der Mindestgewinn auch in vielen Jahren noch. So kann auch ein Gerät ohne Konto sein erstes TOY gewinnen: 0,1 TOY werden zum Aktivierungs-Pfand, der Rest ist frei. Wer mehr rechnet, hat mehr Lose, die erwartete Belohnung ist proportional zur Arbeit. Prüfen kostet eine Argon2id-Berechnung je Los, deshalb gibt es eine Höchstzahl Lose je Block und je Peer.
 - **Regel I0 (Entscheidungen 60, 74, 106):** Die Summe aller Guthaben ist **in jedem Block genau** gleich der Summe aller Emissionen. Ein Block, der das verletzt, ist ungültig. Dazu zählen **alle Töpfe**: freie Guthaben, Aktivierungs-Pfänder, eigener und delegierter Stake, Stake im Lösen, wegen Doppelsignatur festgehaltener Stake, Lohn der Start-Validatoren, Erstattungs-Pool, Lotterie-Töpfe, wartende Tresor-Abhebungen, Hash-Zeitschlösser, Treuhand-Beträge und ruhende Konten in den Ruhe-Schnappschüssen. Im Code führt eine einzige Liste alle Töpfe. Jede neue Transaktionsart muss ihren Topf dort eintragen und einen Test für I0 mitbringen.
 
@@ -351,7 +357,7 @@ Keine selbst erfundenen Algorithmen. Geprüfte Verfahren hinter Schnittstellen, 
 | Fehler im Code | Regel I0 in jedem Block, Dauer-Fuzzing, Property-Tests, Audits, Bug-Bounty-Programm (Entscheidung 88) |
 | Manipulierte Software | Reproduzierbare Builds: Eine Version gilt erst, wenn mindestens 3 Entwickler unabhängig dieselbe Datei gebaut und signiert haben (sobald es so viele Mitwirkende gibt, bis dahin öffentlich nachbaubar). Wallet und Knoten prüfen das vor jedem Update (Entscheidung 87) |
 | Kettenstopp | öffentlicher Notfall-Plan mit Ablauf für Prüfung, Neustart und Information (Entscheidung 88) |
-| GPU-Farmen in der Arbeits-Lotterie | speicherharte Funktion, Wurzel-Gewichtung im Konsens. Ob 16 MiB reichen, wird im Testnet gemessen |
+| GPU-Farmen in der Arbeits-Lotterie | speicherharte Funktion. Rechenleistung bringt im Konsens nichts, dort zählen Stake mit Deckel und Verfügbarkeit. Ob 16 MiB reichen, wird im Testnet gemessen |
 
 ## 13. Verfassung: was kein Update und keine Abstimmung ändern darf
 

@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 111). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 112). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -82,7 +82,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - Konsens zusätzlich als formales Modell prüfen (z. B. TLA+, Entscheidung 102).
 - Pannenschutz (Spezifikation 5.5): Signier-Gedächtnis, Doppelgänger-Erkennung, ein Signier-Gerät je Konto.
 - Simulation mit z. B. 20 virtuellen Validatoren, inklusive Ausfällen.
-- **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen nach Ausmaß bestraft (Einzelfall 1 %, ein Drittel gleichzeitig 100 %), Signier-Gedächtnis verhindert eine zweite Unterschrift auch nach Neustart und nach Zurückspielen einer alten Sicherung, ein Doppelgänger bleibt stumm, ein falsch sortierter Block und ein Block ohne gemeldete Transaktion (bei freiem Platz) werden abgelehnt, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten genau gleiche, sinkende Anteile (nach 180 Epochen 0), ihr Lohn ist gebunden, und Stake von Start-Validatoren löst die Übergabe nicht aus.
+- **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen nach Ausmaß bestraft (Einzelfall 1 %, ein Drittel gleichzeitig 100 %), Signier-Gedächtnis verhindert eine zweite Unterschrift auch nach Neustart und nach Zurückspielen einer alten Sicherung, ein Doppelgänger bleibt stumm, ein falsch sortierter Block und ein Block ohne gemeldete Transaktion (bei freiem Platz) werden abgelehnt, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten genau gleiche, sinkende Anteile (nach 180 Tagen Planzeit 0), ihr Lohn ist gebunden, und Stake von Start-Validatoren löst die Übergabe nicht aus. **Belohnung nach der Startphase** (Entscheidung 112): 100 Konten mit je 10 TOY bekommen aus dem linearen Teil genau so viel wie 1 Konto mit 1.000 TOY (bis auf Rundung), Stake über dem Deckel bringt nichts, jedes Komitee-Mitglied mit voller Verfügbarkeit bekommt den gleichen Grundbetrag, und verteilter Lohn plus Rest in der Arbeits-Lotterie ergibt genau den Konsens-Anteil.
 
 ### M5: Speicher und 256-MB-Budget
 - Persistente Datenbank (z. B. redb), Block-Fenster nach Bytes, Checkpoints mit Signaturen von mindestens 3 unabhängigen Stellen (Entscheidung 87).
