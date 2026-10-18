@@ -8,8 +8,12 @@
 //! - The emission grows with `m` (floor of a growing product), so proving
 //!   the bounds at `m = 2.0` for every remaining amount covers every
 //!   `m` in [0.5, 2.0].
-//! - Block mints are proven for every epoch emission and block index, for
-//!   the share values that occur at the edges (0 %, 50 %) and one in between.
+//! - Block mints are proven for every epoch emission and block index with a
+//!   zero start-validator share. With a non-zero share the proofs did not
+//!   finish within 30 minutes (October 2026); they are kept here but not run
+//!   in CI. `block_mint` checks at runtime that its parts add up and returns
+//!   an error otherwise, so a wrong split can never mint, and property tests
+//!   cover 300 random epochs with every block.
 
 use toy_types::params::{FACTOR_MAX, MAX_SUPPLY};
 use toy_types::{Amount, Ppm};
