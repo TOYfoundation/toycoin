@@ -1,6 +1,6 @@
 # ToyChain – Technische Spezifikation v0.3
 
-Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 92):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
+Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 93):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
 
 ## 1. Zusammenfassung
 
@@ -64,6 +64,15 @@ Jede Stufe ist freiwillig. Die TOYPAY Wallet schlägt je nach Gerät eine Stufe 
 2. Das Komitee (Startwert 128 Mitglieder, rotiert je Epoche) stimmt per BFT ab.
 3. Alle Stimmen werden zu **einer** BLS-Signatur (96 Byte) zusammengefasst. Ab 2/3 gilt der Block als endgültig.
 4. Rotierende Attestierungs-Gruppen (Stufe 2) signieren zusätzlich mit. Leicht-Knoten prüfen das in Millisekunden.
+
+### 5.1a Faire Reihenfolge und Schutz vor Zensur (Entscheidung 93)
+
+Auf ToyChain gibt es keine Tauschbörsen und keine Smart Contracts, deshalb kein „Sandwich“-Vordrängeln. Damit ein Blockbauer trotzdem nicht sortieren, verzögern oder weglassen kann, gilt:
+
+- **Feste Reihenfolge:** Die Transaktionen im Block sind nach Gebühr je Byte absteigend sortiert. Bei Gleichstand entscheidet `BLAKE3(Transaktions-Hash ‖ Zufallszahl des Blocks)`. Die Zufallszahl kommt aus dem VRF des Vorschlagenden und steht erst fest, wenn der Block vorgeschlagen wird. Transaktionen desselben Absenders bleiben in der Reihenfolge ihrer Nonce. Jeder Knoten prüft die Reihenfolge, ein falsch sortierter Block ist ungültig.
+- **Aufnahme-Pflicht:** Jedes Komitee-Mitglied hängt an seine Stimme eine kurze Liste (Hashes) gültiger Transaktionen, die es seit mindestens 2 Blöcken im Wartebereich sieht. Steht eine Transaktion auf den Listen von mindestens einem Drittel des Komitees, **muss** sie in den nächsten Block. Fehlt sie, ist der Block nur gültig, wenn er voll ist und jede enthaltene Transaktion eine höhere Gebühr hat. Ein Blockbauer kann also nur durch Bezahlen verdrängen, nicht durch Willkür.
+- **Später (Phase 2): verschlüsselter Wartebereich.** Transaktionen werden mit einem gemeinsamen Schlüssel des Komitees verschlüsselt (Schwellen-Verschlüsselung mit geprüften Verfahren) und erst geöffnet, wenn ihre Reihenfolge feststeht. Dann kann niemand vorher sehen, was im Wartebereich steht. Das ist aufwendig und wird mit der Beweis-Schicht untersucht.
+- ToyScan zeigt je Block, ob die Reihenfolge stimmt und wie viele gemeldete Transaktionen aufgenommen wurden.
 
 ### 5.2 Zeit (Entscheidung 58)
 
@@ -334,7 +343,7 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst. Die 
 ## 15. Fahrplan
 
 1. **Phase 1 · Testnet:** Rust-Knoten mit Konsens, Startphase, Emission, Kontingent, Gebühren, Schutzregeln. TOYPAY Wallet als Knoten auf Android, Windows, Linux und Raspberry Pi mit Stufen und Energie-Modi. ToyScan mit Ampel und Anzeige anderer Ketten. Lokales, dann öffentliches Testnet (`03-bauplan-phase1.md`).
-2. **Phase 2 · Beweise:** Falten der Historie, Prover-Rolle, Light-Clients ohne Vertrauen in Checkpoints.
+2. **Phase 2 · Beweise:** Falten der Historie, Prover-Rolle, Light-Clients ohne Vertrauen in Checkpoints, verschlüsselter Wartebereich (Abschnitt 5.1a).
 3. **Danach, Reihenfolge offen:** Mitbestimmung, Mainnet (nur nach Audit, Lasttests und rechtlicher Prüfung, Startzeitpunkt vorher öffentlich angekündigt), Bridges, Privatsphäre, Offline-Schecks, Spiel-Anbindung. Ideen dazu in `docs/spaeter/`.
 
 ## 16. Offene Punkte

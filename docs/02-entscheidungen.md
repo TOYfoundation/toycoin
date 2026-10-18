@@ -38,7 +38,8 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 89 | Konten und App-Schutz (MetaMask) | Mehrere Konten und mehrere Phrasen, Schlüssel-Import und -Anzeige nur mit Passwort, Sicherungs-Quiz, Phishing-Warnliste (öffentlich), Sicherheitswarnungen auf dem Gerät, automatische Sperre, Guthaben verbergen |
 | 90 | Web-Apps (MetaMask) | Seiten-Berechtigungen, Anmelden mit Adresse (EIP-4361), Browser-Erweiterung für Chrome und Firefox, eingebauter Browser in der Handy-App |
 | 91 | Netzwerke, Gebühren, Überblick (MetaMask) | Netzwerk per Klick (EIP-3085, Eintrag in Chainlist), Token- und NFT-Erkennung, eigener Knoten wählbar, Gebühren-Stufen, Simulation vor dem Senden auf anderen Ketten, Gesamtübersicht in Euro (abschaltbar), Mitteilungen, verständlicher Verlauf, Ende-zu-Ende verschlüsselter Sync ohne Schlüssel |
-| 92 | Nicht übernommen (MetaMask) | Schutz vor Vordrängeln (MEV), Erweiterungen (Snaps), Tauschen über Börsen-Dienste |
+| 92 | Nicht übernommen (MetaMask) | Erweiterungen (Snaps), Tauschen über Börsen-Dienste. Schutz vor Vordrängeln siehe Nr. 93 |
+| 93 | Schutz vor Vordrängeln und Zensur | Auf ToyChain: **feste Reihenfolge** im Block (Gebühr, dann Block-Zufall), **Aufnahme-Pflicht** für Transaktionen, die mindestens ein Drittel des Komitees meldet, **verschlüsselter Wartebereich** in Phase 2. Für andere Ketten vorerst keine zusätzlichen Maßnahmen (geschützter Sendeweg und Warnung bei Tausch-Apps bleiben als Option offen) |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**

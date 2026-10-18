@@ -1,6 +1,6 @@
 # ToyScan: Explorer, Warnampel und Anzeige anderer Ketten
 
-Entwurf v0.2 vom 18.10.2026 · Grundlage: Spezifikation v0.3, Entscheidungen 56, 58, 60, 61 bis 92 · Status: **zur Prüfung** · Die frühere Fassung mit Bridge- und Altbestand-Kriterien liegt in `spaeter/08-toyscan-v0.1-mit-bridge.md`
+Entwurf v0.2 vom 18.10.2026 · Grundlage: Spezifikation v0.3, Entscheidungen 56, 58, 60, 61 bis 93 · Status: **zur Prüfung** · Die frühere Fassung mit Bridge- und Altbestand-Kriterien liegt in `spaeter/08-toyscan-v0.1-mit-bridge.md`
 
 ## 1. Ziel und Grundsätze
 
@@ -71,7 +71,7 @@ Der Knoten liefert über `toy_`-Methoden (M7). Beträge kommen als **Dezimalzahl
 | **A3** | Emission nach Formel | Emission und m genau nach Spezifikation 9.1 nachgerechnet, `0,5 ≤ m ≤ 2,0`, Restmenge = 10^26 − Summe der Emissionen, Aufteilung 50/40/10 (in der Startphase sinkender Anteil der Start-Validatoren) | Summe der Emission mehr als 3 % vor oder hinter dem Plan nach echter Zeit | Abweichung von der Formel oder m außerhalb |
 | **A4** | Epochen und Zeit | jede Epoche mindestens 1.440 Blöcke und mindestens 86.400 Sekunden, Zeitstempel steigen um mindestens 10 Sekunden | Zeitstempel weichen dauerhaft mehr als 5 Sekunden von unabhängigen Zeitquellen ab | Epoche zu kurz |
 | **A5** | Verfassung | `toy_getConstitution` liefert den veröffentlichten Hash, alle Parameter im erlaubten Bereich | — | verletzt, dazu große rote Lampe |
-| **A6** | Konsens-Gesundheit | Blöcke werden endgültig, Komitee vollständig | eine Adresse hält mehr als 1/10 des gebundenen Stakes (vor dem Deckel), die größten 3 zusammen mehr als 1/3, weniger als 21 aktive Validatoren nach der Startphase, Finalität stockt | ein Validator mit mehr als 1/3 des wirksamen Stakes |
+| **A6** | Konsens-Gesundheit | Blöcke werden endgültig, Komitee vollständig, Reihenfolge im Block korrekt, gemeldete Transaktionen aufgenommen (Spezifikation 5.1a) | eine Adresse hält mehr als 1/10 des gebundenen Stakes (vor dem Deckel), die größten 3 zusammen mehr als 1/3, weniger als 21 aktive Validatoren nach der Startphase, Finalität stockt | ein Validator mit mehr als 1/3 des wirksamen Stakes |
 | **A7** | Startphase | Lohn zu genau gleichen Teilen, sinkt jede Epoche nach Plan (nach 180 Epochen 0), ist 365 Epochen gebunden. Übergabe zählt nur neue Validatoren. Einnahmen jedes Start-Validators öffentlich | Startphase dauert länger als 365 Epochen, oder Start-Validatoren halten zusammen mehr als 1/3 des gebundenen Stakes | ungleiche Verteilung, Lohn über dem Plan, ungebundener Lohn oder Übergabe durch Stake von Start-Validatoren |
 | **A8** | Schutzregeln | jede Sperre hat einen gültigen Beweis und eine Dauer nach Spezifikation Abschnitt 8. Kein Guthaben wurde eingefroren | Muster-Warnungen (Abschnitt 5) | Sperre ohne Beweis, falsche Dauer oder Zugriff auf Guthaben |
 | **A9** | Datenlage | beide Quellen einig, ToyChain-Daten jünger als 10 Minuten, andere Ketten jünger als 30 Minuten | Quellen uneinig oder Daten veraltet | — |
