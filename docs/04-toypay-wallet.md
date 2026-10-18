@@ -1,6 +1,6 @@
 # TOYPAY Wallet: Wallet und Knoten in einem
 
-Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 76 · Status: **zur Prüfung**, offene Punkte in Abschnitt 9 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
+Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 77 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
 
 ## 1. Ziel
 
@@ -14,7 +14,7 @@ Die TOYPAY Wallet verwaltet TOY, ist zugleich ein **ToyChain-Knoten** und läuft
 | **ToyNode** | Dauerbetrieb ohne Oberfläche, z. B. Raspberry Pi oder Server | Linux x86_64 und arm64, Windows. Bedienung über Kommandozeile (`toy-cli`) und eine lokale Weboberfläche |
 | **Kern-Bibliothek** | andere Apps, die TOY einbauen wollen | Rust-Kern mit Anbindung für Kotlin (Android und Desktop) |
 
-**Ein gemeinsamer Rust-Kern:** Kryptografie, Transaktionen, Knoten und Wallet stecken in denselben Crates (`toy-crypto`, `toy-tx`, `toy-node`, `toy-wallet`). Nichts davon wird in einer anderen Sprache neu geschrieben. **Vorschlag:** Die Oberfläche läuft mit Compose Multiplatform, dann gibt es **eine** Codebasis für Android und Desktop. Die Rust-Anbindung erzeugt UniFFI (siehe Abschnitt 9).
+**Ein gemeinsamer Rust-Kern:** Kryptografie, Transaktionen, Knoten und Wallet stecken in denselben Crates (`toy-crypto`, `toy-tx`, `toy-node`, `toy-wallet`). Nichts davon wird in einer anderen Sprache neu geschrieben. **Vorschlag:** Die Oberfläche läuft mit Compose Multiplatform, dann gibt es **eine** Codebasis für Android und Desktop. Die Rust-Anbindung erzeugt UniFFI (Lizenz MPL-2.0, für unveränderte Nutzung freigegeben, Entscheidung 77).
 
 ## 3. Stufen
 
@@ -59,23 +59,16 @@ Die App passt ihren Aufwand **automatisch** an. Der Nutzer wählt nur die Obergr
 | Weg | Stufe | Wie |
 |---|---|---|
 | **Arbeits-Lotterie** | ab 0 | Das Gerät rechnet ToyWork-Lose (Argon2id, 16 MiB) und reicht sie ein. Je Block werden Gewinner gezogen. Jeder Gewinn ist mindestens 0,2 TOY. Beim ersten Gewinn werden 0,1 TOY zum Aktivierungs-Pfand, der Rest ist frei |
-| **Mitsignieren** | ab 2 | Anteil an der Konsens-Belohnung (nach der Startphase) |
+| **Mitsignieren** | ab 2 | Anteil an der Konsens-Belohnung (nach der Startphase, vorher geht er an die Start-Validatoren) |
 | **Voll-Knoten** | ab 3 | zusätzliches Gewicht für Verfügbarkeit |
 | **Validator** | 4 | Konsens-Belohnung und 20 % der Gebühren des eigenen Blocks |
 | **Gebühren-Lotterie** | ab 2 | Anteil an 40 % der Gebühren für aktive Teilnehmer |
 
 Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzung. Versprochen wird keine Rendite.
 
-### 5.2 NFTs prägen (Entscheidung 68, zur Bestätigung)
+### 5.2 NFTs prägen
 
-Auf ToyChain gibt es keine NFTs (Spezifikation, Grundregel). NFTs prägt die Wallet deshalb **auf einer anderen EVM-Kette**.
-
-**Vorschlag:**
-- Kette: **Polygon**, im Testnet auf dem Polygon-Testnet (Amoy).
-- Ein eigener, einfacher NFT-Vertrag nach ERC-721, **ohne Admin, der beliebig prägen könnte**. Prägen darf nur der Nutzer selbst für die eigene Adresse.
-- Kosten: nur die Netzgebühr der Kette in POL. **Kein TOY**, weil es keine Verbindung zwischen ToyChain und Polygon gibt.
-- Bild und Beschreibung liegen dauerhaft (z. B. IPFS), im Vertrag steht nur ihr Hash.
-- Die Regeln aus dem Spiel (Mindestbestand, Sperren, Stufe 20, Auflagen) gelten hier **nicht**. Sie kommen erst mit der Spiel-Anbindung (`spaeter/07-toypay-spiel-und-nft.md`).
+**Später** mit der Spiel-Anbindung (Entscheidung 68). Die Testnet-Wallet prägt keine NFTs. Sie **zeigt** aber NFTs, die eine Adresse auf anderen EVM-Ketten besitzt (Abschnitt 6). Ideen für später: `spaeter/07-toypay-spiel-und-nft.md`.
 
 ## 6. Andere Ketten (Entscheidung 69)
 
@@ -111,10 +104,8 @@ Auf ToyChain gibt es keine NFTs (Spezifikation, Grundregel). NFTs prägt die Wal
 | Ethereum-kompatible Schnittstelle | M7 |
 | Wallet-Kern, Keystore, Stufenwahl | M8 |
 | Plattformen, Energie-Modus | M9 |
-| Andere Ketten, NFT-Prägen | M11 |
+| Andere Ketten | M11 |
 
 ## 10. Offene Punkte
 
-1. **NFT-Prägen** wie in Abschnitt 5.2 vorgeschlagen?
-2. **Oberfläche:** Compose Multiplatform für Android und Desktop?
-3. **UniFFI** steht unter der Lizenz MPL-2.0. Sie ist nicht in der Liste in `CLAUDE.md`. Für eine unveränderte Bibliothek ist sie mit MIT vereinbar. Freigeben?
+1. **Oberfläche:** Compose Multiplatform für Android und Desktop? (Wird im Plan zu M9 vorgeschlagen.)

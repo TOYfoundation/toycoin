@@ -14,15 +14,16 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 64 | Mitbestimmung | **Später.** Die Verfassung bleibt und gilt schon jetzt (Spezifikation Abschnitt 13) |
 | 65 | Teilnahme-Stufen | Stufe 0 braucht **kein Guthaben und keinen Stake**. Mehr Rechte gibt es gestaffelt mit Stake: 10 / 100 / 1.000 TOY (Startwerte, Spezifikation Abschnitt 4) |
 | 66 | Energie-Modus | Die Wallet passt ihren Aufwand automatisch an Akku, Ladegerät, Temperatur, Netz und Nutzung an. Der Nutzer wählt die Obergrenze und die Stufe (`04-toypay-wallet.md`) |
-| 67 | Schutzregeln und Sperrzeiten | Im Grundsatz entschieden (Wunsch des Projektinhabers): Verstöße und Manipulationsversuche führen automatisch zu Sperrzeiten. **Ausgestaltung zur Bestätigung:** drei Ebenen (Kette mit festen, nachweisbaren Regeln, Netzwerk lokal, ToyScan nur Warnungen). Sperren entziehen nur Rechte, nie Guthaben (Spezifikation Abschnitt 8) |
-| 68 | Mint-Funktionen | TOY verdienen über Arbeits-Lotterie, Mitsignieren und Validieren. NFTs prägt die Wallet auf einer anderen EVM-Kette. **Ausgestaltung zur Bestätigung:** Polygon, eigener ERC-721-Vertrag ohne Admin, nur Netzgebühr in POL, kein TOY (`04-toypay-wallet.md`, Abschnitt 5.2) |
+| 67 | Schutzregeln und Sperrzeiten | **Bestätigt am 18.10.2026:** drei Ebenen. Die Kette sperrt nur bei festen, eindeutig nachweisbaren Verstößen, und zwar nur Rechte, nie Guthaben. Das Netzwerk drosselt lokal. ToyScan erkennt Muster und warnt nur (Spezifikation Abschnitt 8) |
+| 68 | Mint-Funktionen | TOY verdienen über Arbeits-Lotterie, Mitsignieren und Validieren. **NFT-Prägen kommt später mit der Spiel-Anbindung** (bestätigt am 18.10.2026, siehe Nr. 72). Die Testnet-Wallet prägt keine NFTs |
 | 69 | Andere Ketten | Dieselbe Adresse wird auf EVM-Ketten angezeigt und genutzt (Ethereum, Polygon, Arbitrum, Base, BNB Chain, eigene hinzufügbar). Keine Bridge. Nicht-EVM-Ketten später |
-| 70 | Startphase ohne Stake | **Zur Bestätigung:** 7 bis 21 Start-Validatoren im Genesis-Block, ohne Stake und **ohne Konsens-Belohnung**. Deren Anteil (50 %) geht in die Arbeits-Lotterie. Automatische Übergabe, sobald 21 Validatoren mit je 1.000 TOY Stake zusammen mindestens 1 % der geminteten TOY binden. Ersetzt Nr. 37 |
+| 70 | Startphase ohne Stake | **Bestätigt am 18.10.2026:** 7 bis 21 Start-Validatoren im Genesis-Block, ohne Stake, **mit dem normalen Konsens-Anteil** (50 % der Emission zu gleichen Teilen). Automatische Übergabe, sobald 21 Validatoren mit je 1.000 TOY Stake zusammen mindestens 1 % der geminteten TOY binden. Ersetzt Nr. 37 |
 | 71 | Arbeits-Lotterie | ToyWork-Lose mit Schwierigkeits-Schwelle. Gewinner je Block per VRF, jeder Gewinn mindestens 0,2 TOY (geändert durch Nr. 73). So kann auch ein Gerät ohne Konto sein erstes TOY verdienen, und es entsteht kein Staub |
 | 73 | Konten aktivieren und auflösen | Konten gehen **nie verloren**. Beim ersten Eingang werden **0,1 TOY als Aktivierungs-Pfand** gebunden, der Rest ist frei. Eingang an eine neue Adresse mindestens 0,1 TOY, Lotterie-Gewinn mindestens 0,2 TOY. Auflösen nur auf Wunsch: alles samt Pfand an eine Zieladresse oder als Spende in den Erstattungs-Pool. Rechte (Kontingent, Stufe) sind nicht übertragbar. Ersetzt das Mindestguthaben mit Entfernen |
 | 74 | Nichts wird verbrannt | Auf ToyChain wird **nie TOY verbrannt**. Gekürzter Stake bei Doppelsignatur geht in den Erstattungs-Pool. Regel I0: Summe aller Guthaben = Summe aller Emissionen. Ändert Nr. 60 |
 | 75 | 100 Mio. Konten | **Aktive und ruhende Konten:** Nur die zuletzt genutzten Konten (ca. 2 Mio.) liegen im 256-MB-Speicher. Ab 90 % Füllung werden die am längsten unbenutzten ausgelagert, aber nie gelöscht. Ruhe-Schnappschuss je Epoche, Beweis je Konto knapp 1 KB, automatisches Aufwecken. Ersetzt den festen Ablauf nach 1001 Tagen (Nr. 1). Phase 2: Umstieg auf Betrieb ganz ohne Kontenspeicher prüfen. Notfallplan: größerer SSD-Speicher für Voll-Knoten |
 | 76 | Pfand senkbar | Das Aktivierungs-Pfand ist ein Parameter zwischen 0,01 und 0,1 TOY und darf nur sinken. Bestehende Konten können den Unterschied dann freigeben |
+| 77 | Lizenz MPL-2.0 | Für **unverändert** genutzte Bibliotheken ist MPL-2.0 erlaubt, z. B. UniFFI für die Anbindung der Wallet an den Rust-Kern. Eigener Code bleibt MIT |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**
@@ -131,9 +132,8 @@ Nur noch Hintergrund: Die Token werden derzeit ignoriert (Nr. 63). Details in `s
 
 ## Noch offen (Stand 18.10.2026)
 
-- Bestätigung von Nr. 67, 68 und 70.
+- Schutz gegen einen zu großen Vorteil der Start-Validatoren (Nr. 70).
 - Schutz vor teurem Auffüllen des Speichers (P5, M5): Durch das Auslagern nach Bedarf (Nr. 75) kann niemand den Speicher dauerhaft verstopfen. Massenhaft neue Konten verdrängen nur alte in den Ruhezustand. Die Schutzregel gegen massenhaftes Anlegen bleibt.
 - Formel für den Faktor m mit Ganzzahl-Format, vor M1.
-- Lizenz von UniFFI (MPL-2.0) für die Wallet-Anbindung freigeben (`04-toypay-wallet.md`, Abschnitt 9).
 - Aus dem Prüfbericht für die passenden Meilensteine: P5, P6 (M5), P9 und Höchstwert der progressiven Gebühr (M3).
 - Rechtliche Prüfung vor einem Mainnet (z. B. MiCA, Steuer).

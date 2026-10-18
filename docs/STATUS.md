@@ -1,6 +1,6 @@
 # Projektstatus ToyChain
 
-Stand: 18.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **Konzept nach der Neuausrichtung.** Gebaut wird ab M1, sobald die Formel für m steht und Nr. 67, 68 und 70 bestätigt sind.
+Stand: 18.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **Konzept nach der Neuausrichtung.** Gebaut wird ab M1, sobald die Formel für m steht.
 
 ## Überblick Meilensteine
 
@@ -17,7 +17,7 @@ Stand: 18.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **Konzept nach der 
 | M8 | Wallet und CLI mit Stufenwahl (`toy-wallet`, `toy-cli`) | ⏳ offen |
 | M9 | Plattformen und Energie-Modus | ⏳ offen |
 | M10 | Testnet und Lasttests | ⏳ offen |
-| M11 | ToyScan, andere Ketten, NFT-Prägen (`toyscan/`) | ⏳ offen |
+| M11 | ToyScan und andere Ketten (`toyscan/`) | ⏳ offen |
 
 ## Was im Start-Schritt angelegt wurde
 
@@ -70,7 +70,7 @@ Hinweis zur Bauumgebung: In der Cloud-Sandbox, in der das Gerüst erstellt wurde
 
 ## Neuausrichtung vom 18.10.2026
 
-Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 76):
+Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 77):
 
 - **Totaler Fair Launch:** Genesis ohne Guthaben, keine Reserve, alle 100 Mio. TOY per Emission. Erste Epoche 50.500 TOY, erstes Jahr rund 16,84 Mio., Halbwertszeit 3,76 Jahre (nachgerechnet).
 - **Kern:** ToyChain-Testnet, TOYPAY Wallet als Knoten mit Stufen 0 bis 4, Energie-Modus und Mint-Funktionen, ToyScan mit Warnampel A1 bis A9 und Anzeige anderer EVM-Ketten.
@@ -82,7 +82,7 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 76):
 | Dokument | Stand |
 |---|---|
 | `01-spezifikation.md` | v0.3, schlank, mit Verfassung (Abschnitt 13) |
-| `02-entscheidungen.md` | Nr. 1 bis 76, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
+| `02-entscheidungen.md` | Nr. 1 bis 77, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
 | `03-bauplan-phase1.md` | M1 bis M11 |
 | `04-toypay-wallet.md` | v0.1: Clients, Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
 | `05-toyscan.md` | v0.2: Warnampel A1 bis A9, Muster-Warnungen, andere Ketten, API |
@@ -91,7 +91,7 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 76):
 
 ## Noch offen
 
-- Bestätigung von Nr. 67 (Schutzregeln), 68 (NFT-Prägen) und 70 (Startphase).
+- Bestätigt am 18.10.2026: Nr. 67 (drei Ebenen), 68 (NFT-Prägen später), 70 (Start-Validatoren mit Lohn), 77 (MPL-2.0 für UniFFI). Offen: Schutz gegen zu großen Vorteil der Start-Validatoren.
 - Formel für m mit Ganzzahl-Format, vor M1.
-- Ab M2: Lizenzen und Sicherheitsmeldungen der fremden Bibliotheken automatisch prüfen (`cargo-deny`). Erlaubt sind Lizenzen, die zu MIT passen (MIT, Apache-2.0, BSD, ISC, CC0, Zlib, Unicode). Offen: MPL-2.0 für UniFFI.
+- Ab M2: Lizenzen und Sicherheitsmeldungen der fremden Bibliotheken automatisch prüfen (`cargo-deny`). Erlaubt sind Lizenzen, die zu MIT passen (MIT, Apache-2.0, BSD, ISC, CC0, Zlib, Unicode). Dazu MPL-2.0 für unverändert genutzte Bibliotheken (Nr. 77).
 - Aus dem Prüfbericht: P5, P6 (M5), P9 und Höchstwert der progressiven Gebühr (M3).

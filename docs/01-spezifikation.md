@@ -1,6 +1,6 @@
 # ToyChain – Technische Spezifikation v0.3
 
-Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 76):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
+Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 77):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
 
 ## 1. Zusammenfassung
 
@@ -22,7 +22,7 @@ Die Kernideen:
 ## 2. Ehrliche Einordnung
 
 - **Sicherheit** entsteht durch viele unabhängige Teilnehmer, nicht durch Design allein. Eine neue Kette ist anfangs verwundbar. Testnet, Audits und ein vorsichtiger Start gehören deshalb fest zum Plan.
-- **Fair Launch und Proof-of-Stake** passen am Anfang nicht von selbst zusammen: Ohne Premint hat beim Start niemand Stake. Die Lösung ist eine offengelegte Startphase (Abschnitt 5.3), in der die Start-Validatoren **keine** Belohnung für das Signieren bekommen.
+- **Fair Launch und Proof-of-Stake** passen am Anfang nicht von selbst zusammen: Ohne Premint hat beim Start niemand Stake. Die Lösung ist eine offengelegte Startphase (Abschnitt 5.3) mit 7 bis 21 Start-Validatoren. Sie bekommen für ihre Arbeit den normalen Konsens-Anteil, das ist ein offen sichtbarer früher Vorteil.
 - **Keine eigene Kryptografie:** nur geprüfte Verfahren und Bibliotheken (Abschnitt 10).
 - **256 MB** über viele Jahre halten sich nur mit dem Falten der Historie (Phase 2). Im Testnet ist das noch kein Problem.
 - **Automatische Sperren** dürfen nur auf Regeln beruhen, die jeder Knoten gleich und eindeutig prüfen kann. Musterkennung mit Schätzungen gehört in ToyScan und in die Netzwerkschicht, nicht in den Konsens (Abschnitt 8).
@@ -71,15 +71,15 @@ Jede Stufe ist freiwillig. Die TOYPAY Wallet schlägt je nach Gerät eine Stufe 
 - Jeder Block trägt einen Zeitstempel in Sekunden. Er muss mindestens 10 Sekunden nach dem Vorgänger liegen und darf höchstens 15 Sekunden vor der Uhr des prüfenden Validators liegen.
 - **Eine Epoche endet mit dem ersten Block, der beide Bedingungen erfüllt: mindestens 1.440 Blöcke in dieser Epoche und Zeitstempel mindestens 86.400 Sekunden nach ihrem ersten Block.** Eine Epoche ist also nie kürzer als 24 Stunden. Damit gelten Kontingent, Sperrzeiten und Emission in echter Zeit.
 
-### 5.3 Startphase ohne Stake (Entscheidung 70, zur Bestätigung)
+### 5.3 Startphase ohne Stake (Entscheidung 70)
 
 Beim Start gibt es kein TOY und damit keinen Stake. Deshalb:
 
 - Der Genesis-Block nennt **7 bis 21 Start-Validatoren** mit ihren öffentlichen BLS-Schlüsseln, betrieben von Freiwilligen mit möglichst verschiedenen Betreibern und Standorten. Alle haben gleiches Gewicht.
-- **Sie bekommen keine Konsens-Belohnung.** Solange die Startphase läuft, fließt der Konsens-Anteil der Emission (50 %) zusätzlich in die Arbeits-Lotterie. Die Start-Validatoren können wie alle anderen ToyWork rechnen, haben aber keinen Vorteil.
+- **Sie bekommen den normalen Konsens-Anteil** (50 % der Emission), zu gleichen Teilen. Bei 7 Start-Validatoren sind das in der ersten Epoche je rund 3.600 TOY, bei 21 je rund 1.200 TOY (50.500 TOY × 50 % ÷ Anzahl). Das ist ihr Lohn für Betrieb und Sicherheit der Kette in der verwundbarsten Zeit. Ihre Namen, Adressen und Einnahmen zeigt ToyScan öffentlich.
 - **Die Startphase endet automatisch** zu Beginn der Epoche, in der mindestens **21 Validatoren** mit je mindestens 1.000 TOY Stake angemeldet sind **und** ihr Stake zusammen mindestens **1 % aller gemintete TOY** beträgt. Ab dann wählt das Protokoll das Komitee nach Stake, und die Emission wird normal aufgeteilt. Die Start-Validatoren verlieren ihren Sonderstatus, können aber mit eigenem Stake weitermachen.
 - ToyScan zeigt den Fortschritt der Startphase öffentlich.
-- **Ehrlicher Haken:** Wer schon in der Startphase TOY bindet, verliert nichts, verdient damit aber erst nach der Übergabe. Die Übergabe kann deshalb dauern. ToyScan färbt sich gelb, wenn die Startphase länger als 365 Epochen läuft. Die Grenzen (21 Validatoren, 1 %) werden im Testnet überprüft.
+- **Ehrlicher Haken:** Der Lohn ist ein früher Vorteil für wenige. Dauert die Startphase lange, sammeln die Start-Validatoren einen großen Anteil der ersten TOY (bei einem Jahr rund 8,4 Mio. TOY zusammen) und könnten danach selbst die 21 Validatoren der Übergabe stellen. ToyScan färbt sich gelb, wenn die Startphase länger als 365 Epochen läuft. Schutzmaßnahmen dagegen: offener Punkt in Abschnitt 16. Die Grenzen (21 Validatoren, 1 %) werden im Testnet überprüft.
 
 ### 5.4 Strafen im Konsens
 
@@ -154,7 +154,7 @@ Später, jeweils als eigenes Protokoll-Update: Stake delegieren, Mehrfachsignatu
 - **Vielnutzer:** Ab 1.000 Transaktionen je Epoche muss mindestens die Hälfte der Überschreitung durch Arbeit gedeckt sein.
 - **Verteilung der Gebühren (Startwerte):** 40 % Gebühren-Lotterie unter aktiven Teilnehmern, 40 % Erstattungs-Pool, 20 % Vorschlagender.
 
-## 8. Schutzregeln und Sperrzeiten (Entscheidung 67, Ausgestaltung zur Bestätigung)
+## 8. Schutzregeln und Sperrzeiten (Entscheidung 67)
 
 Ziel: Angriffe, Manipulation und das Ausnutzen der Mechanismen früh stoppen, ohne ehrliche Nutzer zu treffen. Dafür gibt es drei Ebenen:
 
@@ -187,7 +187,7 @@ Ziel: Angriffe, Manipulation und das Ausnutzen der Mechanismen früh stoppen, oh
 - **Restmenge** = 100.000.000 TOY − Summe aller bisherigen Emissionen. Es wird nie TOY verbrannt (Entscheidung 74). Kürzungen und Spenden bleiben im Umlauf, sie gehen in den Erstattungs-Pool und erhöhen nie die Restmenge.
 - **Zahlen bei m = 1:** erste Epoche **50.500 TOY**, erstes Jahr rund **16,84 Mio. TOY**, Halbwertszeit 1.372 Epochen (**3,76 Jahre**), nach 25 Jahren rund 99,0 Mio. gemintet, rund 1,0 Mio. Rest, der danach asymptotisch ausläuft.
 - **Faktor m** zwischen 0,5 und 2,0: steigt mit **bezahlter oder durch Arbeit gedeckter** Nutzung (kostenlose Transaktionen zählen nicht, sonst ließe sich die Emission mit Spam hochtreiben), mit hoher Beteiligung und wenn die Ausschüttung hinter dem 25-Jahres-Plan liegt. Für den Plan gilt ein Jahr = 365 Epochen. Weil eine Epoche mindestens 24 Stunden dauert, kann die Ausschüttung dem Plan nie davonlaufen. Die genaue Formel für m und ihr Ganzzahl-Format werden vor M1 festgelegt.
-- **Aufteilung:** 50 % Konsens (Stufen 2 bis 4, Wurzel-gewichtet nach Stake, Verfügbarkeit), 40 % Arbeit, 10 % Erstattungs-Pool. **In der Startphase** (Abschnitt 5.3): 0 % Konsens, 90 % Arbeit, 10 % Erstattungs-Pool.
+- **Aufteilung:** 50 % Konsens (Stufen 2 bis 4, Wurzel-gewichtet nach Stake, Verfügbarkeit), 40 % Arbeit, 10 % Erstattungs-Pool. **In der Startphase** (Abschnitt 5.3) gilt dieselbe Aufteilung, der Konsens-Anteil geht zu gleichen Teilen an die Start-Validatoren.
 - **Arbeits-Lotterie:** Ein ToyWork-Los ist ein Argon2id-Ergebnis (16 MiB Speicher), das unter einer Schwierigkeits-Schwelle liegt und an Adresse und Epoche gebunden ist. Die Schwelle passt sich an, damit je Block etwa gleich viele Lose ankommen. Je Block werden aus den gültigen Losen per VRF Gewinner gezogen. Jeder Gewinn ist mindestens 0,2 TOY. So kann auch ein Gerät ohne Konto sein erstes TOY gewinnen: 0,1 TOY werden zum Aktivierungs-Pfand, der Rest ist frei. Wer mehr rechnet, hat mehr Lose, die erwartete Belohnung ist proportional zur Arbeit. Prüfen kostet eine Argon2id-Berechnung je Los, deshalb gibt es eine Höchstzahl Lose je Block und je Peer.
 - **Regel I0 (Entscheidungen 60, 74):** Die Summe aller Guthaben (freie Guthaben, Aktivierungs-Pfänder, Stake, Erstattungs-Pool, Lotterie-Töpfe, ruhende Konten in den Ruhe-Schnappschüssen) ist **in jedem Block genau** gleich der Summe aller Emissionen. Ein Block, der das verletzt, ist ungültig.
 
@@ -264,5 +264,5 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst. Die 
 ## 16. Offene Punkte
 
 - **Formel für m** mit Ganzzahl-Format (vor M1).
-- **Bestätigung** der Vorschläge zu Startphase (5.3), Schutzregeln (8) und NFT-Prägen in der Wallet (`04-toypay-wallet.md`).
+- **Schutz gegen zu großen Vorteil der Start-Validatoren** (Abschnitt 5.3): Entscheidung offen.
 - Aus dem Prüfbericht (`10-pruefbericht-1.md`) für die passenden Meilensteine: Schutz des Zustands vor teurem Auffüllen (P5, M5), Header-Wachstum (P6, M5), Missbrauch des Erstattungs-Pools (P9, M3), Höchstwert der progressiven Gebühr (M3).

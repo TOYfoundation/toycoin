@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 76). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 77). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -36,7 +36,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 
 ### M1: Grundtypen und Emission
 - Typen, Konstanten (Obergrenze 10^26), sichere Rechenfunktionen (`checked_*`).
-- **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10, in der Startphase 0/90/10.
+- **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10, in der Startphase geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren.
 - Epochen-Ende nach mindestens 1.440 Blöcken **und** 86.400 Sekunden.
 - **Vorher festzulegen:** Formel für m und ihr Ganzzahl-Format.
 - **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Kürzungen und Spenden erhöhen die Restmenge nie. Genesis-Zustand hat Summe 0.
@@ -55,10 +55,10 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 
 ### M4: Blöcke, Konsens, Startphase
 - Blockformat mit Zeitstempel-Regeln, Komitee mit VRF, BFT, BLS-Sammelsignatur, Finalität nach 1 Block.
-- **Startphase:** 7 bis 21 Start-Validatoren ohne Stake und ohne Konsens-Belohnung, automatische Übergabe an das Stake-Komitee (Spezifikation 5.3).
+- **Startphase:** 7 bis 21 Start-Validatoren ohne Stake, mit dem Konsens-Anteil zu gleichen Teilen, automatische Übergabe an das Stake-Komitee (Spezifikation 5.3).
 - Strafen: Doppelsignatur (Kürzung in den Erstattungs-Pool), Inaktivität, Sperrzeiten für Rollen.
 - Simulation mit z. B. 20 virtuellen Validatoren, inklusive Ausfällen.
-- **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen bestraft, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten in der Startphase nachweislich 0 Konsens-Belohnung.
+- **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen bestraft, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten in der Startphase genau gleiche Anteile, nach der Übergabe nur noch nach Stake.
 
 ### M5: Speicher und 256-MB-Budget
 - Persistente Datenbank (z. B. redb), Block-Fenster nach Bytes, Checkpoints.
@@ -87,9 +87,9 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - Lokales, dann öffentliches Testnet mit Start-Validatoren. Lasttest mit vielen Wallets und Losen.
 - **Fertig, wenn:** Messwerte (Transaktionen pro Sekunde, Finalität, Speicher, Prüfzeit je Los auf altem Android) stehen in `docs/STATUS.md`, Parameter aus Spezifikation Abschnitt 14 sind abgeglichen.
 
-### M11: ToyScan, andere Ketten, NFT-Prägen
+### M11: ToyScan und andere Ketten
 - ToyScan nach `05-toyscan.md`: Indexer, Warnampel A1 bis A9, Muster-Warnungen, Adress-Ansicht mit anderen EVM-Ketten, offene API, Prüfskript.
-- Wallet: Guthaben und Senden auf anderen EVM-Ketten, Warnung bei gleichnamigen Token, NFT-Prägen auf dem Polygon-Testnet (sobald bestätigt).
+- Wallet: Guthaben und Senden auf anderen EVM-Ketten, Warnung bei gleichnamigen Token. NFT-Prägen kommt später mit dem Spiel (Entscheidung 68).
 - **Fertig, wenn:** jede Ampel-Regel hat Tests für Grün, Gelb und Rot, ToyScan läuft gegen das Testnet, Rust-Rechner und Prüfskript stimmen überein.
 
 ## So startest du (Claude Code)
