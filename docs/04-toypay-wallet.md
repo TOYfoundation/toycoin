@@ -1,6 +1,6 @@
 # TOYPAY Wallet: Wallet und Knoten in einem
 
-Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 104 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
+Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 105 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
 
 ## 1. Ziel
 
@@ -198,7 +198,7 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 - **Eine gemeinsame Begriffsliste** (`i18n/begriffe.tsv`) sorgt dafür, dass Wörter wie „Phrase“, „Aktivierungs-Pfand“ oder „Erstattungs-Pool“ in allen Apps und im Spiel gleich übersetzt sind.
 - **Sprachauswahl mit Eigennamen** (z. B. „isiZulu“, „አማርኛ“), automatisch nach der Gerätesprache. Wechsel jederzeit ohne Neustart.
 - **Rechts-nach-links-Schrift** für Arabisch, Urdu und Persisch: Die Oberfläche wird gespiegelt, Adressen und Beträge bleiben links-nach-rechts.
-- **Schriften** für alle Schriftsysteme (z. B. Ge'ez, Devanagari, Tamil, Thai, Han, Hangul) werden mitgeliefert, damit auch alte Geräte alles anzeigen. Vorschlag: Noto-Schriften unter der SIL Open Font License (siehe Abschnitt 10).
+- **Schriften** für alle Schriftsysteme (z. B. Ge'ez, Devanagari, Tamil, Thai, Han, Hangul) werden mitgeliefert, damit auch alte Geräte alles anzeigen. Dafür werden die Noto-Schriften unter der SIL Open Font License 1.1 genutzt (Entscheidung 105). Ihre Lizenzdatei wird mit ausgeliefert.
 - **Zahlen und Daten** im Format der Sprache, aber Beträge immer mit allen nötigen Nachkommastellen und dem Kürzel TOY. Adressen werden nie übersetzt oder umgeschrieben.
 - **Technik:** Keine festen Texte im Code, nur Schlüssel. Quelle sind Deutsch und Englisch. Fehlt ein Text, erscheint Englisch. Ein automatischer Test prüft für alle 45 Sprachen: kein Schlüssel fehlt, Platzhalter `{0}`, `{1}` stimmen, Texte passen in die Felder, alle Zeichen sind darstellbar.
 - **Ehrlich zur Qualität:** Die Übersetzungen entstehen zunächst ohne Muttersprachler. **Sicherheitswichtige Texte** (Phrase, Warnungen, Notfall-Schlüssel, Täuschungs-PIN, Sperren) müssen vor einem Mainnet von Muttersprachlern geprüft sein. Bis dahin zeigt die App bei ungeprüften Sprachen einen kleinen Hinweis und einen Schalter, mit dem man den Originaltext auf Englisch sieht.
@@ -252,4 +252,3 @@ Der Nutzer wählt beim ersten Start einen Modus und kann jederzeit wechseln.
 ## 10. Offene Punkte
 
 1. **Oberfläche:** Compose Multiplatform für Android und Desktop? (Wird im Plan zu M9 vorgeschlagen.)
-2. **Schriften:** Noto-Schriften stehen unter der SIL Open Font License 1.1. Sie ist für mitgelieferte Schriften üblich und mit MIT-Code vereinbar, steht aber nicht in der Liste in `CLAUDE.md`. Freigeben?
