@@ -79,6 +79,7 @@ Beim Start gibt es kein TOY und damit keinen Stake. Deshalb:
 - **Sie bekommen keine Konsens-Belohnung.** Solange die Startphase läuft, fließt der Konsens-Anteil der Emission (50 %) zusätzlich in die Arbeits-Lotterie. Die Start-Validatoren können wie alle anderen ToyWork rechnen, haben aber keinen Vorteil.
 - **Die Startphase endet automatisch** zu Beginn der Epoche, in der mindestens **21 Validatoren** mit je mindestens 1.000 TOY Stake angemeldet sind **und** ihr Stake zusammen mindestens **1 % aller gemintete TOY** beträgt. Ab dann wählt das Protokoll das Komitee nach Stake, und die Emission wird normal aufgeteilt. Die Start-Validatoren verlieren ihren Sonderstatus, können aber mit eigenem Stake weitermachen.
 - ToyScan zeigt den Fortschritt der Startphase öffentlich.
+- **Ehrlicher Haken:** Wer schon in der Startphase TOY bindet, verliert nichts, verdient damit aber erst nach der Übergabe. Die Übergabe kann deshalb dauern. ToyScan färbt sich gelb, wenn die Startphase länger als 365 Epochen läuft. Die Grenzen (21 Validatoren, 1 %) werden im Testnet überprüft.
 
 ### 5.4 Strafen im Konsens
 
