@@ -113,7 +113,7 @@ Jede Warnung nennt die Regel, die Zahlen und die betroffenen Adressen. Die Regel
 | **Epochen** | Emission, Anteile von m, Aufteilung, Lotterie-Gewinner |
 | **Erstattungs-Pool** | Stand, Zuflüsse (Emission, Gebühren, Kürzungen, Spenden), Abflüsse für kostenlose Transaktionen, Liste der Spenden |
 | **Teilnehmer** | Anzahl je Stufe, Validatoren, Stake-Verteilung, Verfügbarkeit |
-| **Schutz** | aktive Sperrzeiten mit Beweis, Muster-Warnungen |
+| **Schutz** | aktive Sperrzeiten mit Beweis, Doppelsignaturen mit Anteil am Stake und berechneter Kürzung, Muster-Warnungen |
 | **Ruhende Konten und Checkpoints** | Anzahl aktiver und ruhender Konten, Füllstand des Zustands, Ruhe-Schnappschüsse und Beweise für jedes ruhende Konto zum Herunterladen, Genesis-Hash, Checkpoints |
 | **Regeln** | alle Formeln in einfacher Sprache mit Rechenbeispiel |
 

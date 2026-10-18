@@ -1,6 +1,6 @@
 # TOYPAY Wallet: Wallet und Knoten in einem
 
-Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 79 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
+Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 80 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
 
 ## 1. Ziel
 
@@ -96,6 +96,7 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 
 - Phrase nach BIP-39, verschlüsselt mit Argon2id und XChaCha20-Poly1305, wo möglich im Android Keystore/StrongBox, im TPM oder in der Secure Enclave.
 - Schlüssel und Phrasen werden **nie** geloggt, nie im Klartext gespeichert und nach Gebrauch gelöscht (`zeroize`).
+- **Mitsignieren nur auf einem Gerät** (Entscheidung 80): Wer dieselbe Phrase auf Handy und PC nutzt, kann das Mitsignieren nur auf einem Gerät einschalten. Der Signier-Schlüssel wird auf diesem Gerät neu erzeugt. Beim Gerätewechsel führt die App durch den Umzug, nimmt das Signier-Gedächtnis mit und wartet 2 Epochen, bevor das neue Gerät signiert. Erkennt sie, dass derselbe Schlüssel schon woanders signiert, bleibt sie stumm und warnt.
 - Validator-Schlüssel (BLS) sind getrennt vom Geld-Schlüssel. Wer Stufe 4 betreibt, braucht den Geld-Schlüssel dafür nicht auf dem Gerät.
 - Signieren mit Chain-ID, Anzeige von Empfänger, Betrag, Kette und Gebühr vor jeder Unterschrift.
 - Im Testnet: keine echten Schlüssel, keine echten Gelder.

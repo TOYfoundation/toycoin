@@ -1,6 +1,6 @@
 # ToyChain – Technische Spezifikation v0.3
 
-Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 79):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
+Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 80):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
 
 ## 1. Zusammenfassung
 
@@ -85,9 +85,21 @@ Beim Start gibt es kein TOY und damit keinen Stake. Deshalb:
 
 ### 5.4 Strafen im Konsens
 
-- **Doppelsignatur:** 5 % des Stakes gehen in den Erstattungs-Pool (Startwert), Rolle 30 Epochen gesperrt (Abschnitt 8). Auf ToyChain wird **nie TOY verbrannt** (Entscheidung 74).
+- **Doppelsignatur, Strafe nach Ausmaß (Entscheidung 80):** Doppelt signieren passiert meist aus Versehen (gleicher Schlüssel auf zwei Geräten, Umzug, Ersatzsystem, alte Sicherung). Gefährlich für die Kette wird es erst, wenn mehr als ein Drittel des Stakes es gleichzeitig tut. Deshalb hängt die Strafe davon ab, wie viele es zur selben Zeit tun:
+  - Sofort: Rolle **7 Epochen** gesperrt (Steigerung bei Wiederholung wie in Abschnitt 8). Der Stake bleibt bis zur endgültigen Berechnung gebunden.
+  - Nach **18 Epochen** wird die Kürzung festgelegt: `Anteil = max(1 %, 3 × S ÷ T)`, höchstens 100 %. Dabei ist `S` der Stake aller, die in den 18 Epochen vor und nach dem Verstoß doppelt signiert haben, und `T` der gesamte gebundene Stake. Gerechnet wird mit ganzen Zahlen in Basispunkten.
+  - Beispiele: Ein einzelner Ausrutscher kostet **1 %**, bei einem sehr großen Validator mit 1 % des gesamten Stakes 3 %. Signieren 10 % des Stakes gleichzeitig doppelt, kostet es 30 %. Ab einem Drittel sind es **100 %**.
+  - Gekürzter Stake geht in den Erstattungs-Pool. Auf ToyChain wird **nie TOY verbrannt** (Entscheidung 74).
 - **Inaktivität:** Wer im Komitee fehlt, verliert allmählich Belohnung und Gewicht, damit die Kette bei Ausfällen weiterläuft.
 - **Long-Range-Schutz:** veröffentlichte Checkpoints, ab Phase 2 der Beweis als Anker.
+
+### 5.5 Schutz vor Pannen in der Software (Entscheidung 80)
+
+Pflicht für jeden Knoten, der signiert (Stufen 2 bis 4):
+
+1. **Signier-Gedächtnis:** Der Knoten speichert vor jeder Unterschrift dauerhaft, welche Höhe er signiert hat, und verweigert eine zweite, abweichende Unterschrift für dieselbe Höhe. Das Gedächtnis übersteht Neustarts und wird beim Umzug mitgenommen. Beim Zurückspielen einer alten Sicherung signiert der Knoten erst ab einer Höhe weiter, die sicher nach dem letzten Stand im Netz liegt.
+2. **Doppelgänger-Erkennung:** Bevor ein Knoten nach Start oder Umzug mitsigniert, beobachtet er **2 Epochen** lang das Netz. Taucht sein Signier-Schlüssel dort schon auf, bleibt er stumm und warnt den Nutzer.
+3. **Ein Signier-Gerät je Konto:** Der Signier-Schlüssel (BLS) wird **je Gerät neu erzeugt** und nicht aus der Phrase abgeleitet. Mitsignieren lässt sich je Konto nur auf **einem** Gerät einschalten. Ein Gerätewechsel meldet den neuen Schlüssel an, der alte wird erst nach Ablauf der 2 Epochen abgelöst. Alle anderen Geräte mit derselben Phrase senden und empfangen normal.
 
 ## 6. Zustand und das 256-MB-Budget
 
@@ -172,7 +184,7 @@ Ziel: Angriffe, Manipulation und das Ausnutzen der Mechanismen früh stoppen, oh
 
 | Verstoß | Nachweis | Sperrzeit |
 |---|---|---|
-| Doppelsignatur | zwei Signaturen für dieselbe Höhe | 5 % Stake in den Erstattungs-Pool, Validator- und Attestierer-Rolle 30 Epochen gesperrt |
+| Doppelsignatur | zwei Signaturen für dieselbe Höhe | Rolle 7 Epochen gesperrt, Kürzung nach Ausmaß: einzeln 1 %, ab einem Drittel des Stakes 100 % (Abschnitt 5.4), in den Erstattungs-Pool |
 | Ungültiger Block vorgeschlagen (z. B. falscher Zeitstempel) | signierter, ungültiger Block | Vorschlagsrecht 7 Epochen gesperrt |
 | Ungültige ToyWork-Lose | Prüfung schlägt fehl | Lose dieser Adresse 1 Epoche nicht angenommen |
 | Massenhaftes Anlegen von Konten | mehr als 20 neue Konten je Epoche aus einem Absender (Startwert) | kostenloses Kontingent des Absenders 7 Epochen gesperrt |

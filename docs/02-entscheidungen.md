@@ -26,6 +26,7 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 77 | Lizenz MPL-2.0 | Für **unverändert** genutzte Bibliotheken ist MPL-2.0 erlaubt, z. B. UniFFI für die Anbindung der Wallet an den Rust-Kern. Eigener Code bleibt MIT |
 | 78 | Schutz in der Startphase | (1) Für die Übergabe zählen **nur neue Validatoren** und nur deren Stake. (2) Der Lohn der Start-Validatoren **sinkt über 180 Epochen von 50 % auf 0 %**, der Rest geht in die Arbeits-Lotterie, zusammen höchstens rund 2,2 Mio. TOY. (3) Der Lohn wird sofort **365 Epochen als Stake gebunden** |
 | 79 | Spenden an den Erstattungs-Pool | Jeder kann **jederzeit aus der Wallet** TOY in den Erstattungs-Pool spenden, der die kostenlosen Transaktionen bezahlt. Eigene Transaktionsart, nicht rückholbar, in ToyScan sichtbar |
+| 80 | Doppelsignatur | **Strafe nach Ausmaß:** sofort 7 Epochen Rollensperre, nach 18 Epochen Kürzung `max(1 %, 3 × Anteil der gleichzeitig doppelt signierenden am Stake)`, höchstens 100 %. Pannen kosten wenig, Angriffe alles. **Pflicht-Schutz in der Software:** Signier-Gedächtnis, Doppelgänger-Erkennung (2 Epochen), ein Signier-Gerät je Konto mit eigenem Schlüssel je Gerät |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**
