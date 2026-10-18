@@ -13,6 +13,7 @@ Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit 
 | [`toyscan/`](toyscan/) | Explorer (noch kein Code) |
 | [`toypay/`](toypay/) | TOYPAY-Unterlagen. Der App-Code folgt |
 | `CLAUDE.md` | Arbeitsanweisungen für Claude (feste Vorgaben, Sicherheitsregeln, Arbeitsweise) |
+| `i18n/` | Gemeinsame Liste der 45 Sprachen und Begriffsliste für alle Oberflächen |
 | `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` | Wie man mitmacht, Verhaltensregeln |
 | `SECURITY.md` | Was nie ins Repository darf, wie man Schwachstellen meldet |
 

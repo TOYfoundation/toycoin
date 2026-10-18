@@ -1,6 +1,6 @@
 # TOYPAY Wallet: Wallet und Knoten in einem
 
-Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 102 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
+Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 104 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
 
 ## 1. Ziel
 
@@ -190,6 +190,35 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 
 **Neue Konto-Arten in der App** (Spezifikation 7.4): Delegieren mit Validator-Bewertung aus ToyScan, Mehrfachsignatur-Konten, Sitzungs-Schlüssel für Apps mit Übersicht und Widerruf, Treuhand, Abo-Erlaubnisse mit Widerruf, Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel.
 
+## 7d. 45 Sprachen und vier Modi (Entscheidungen 103, 104)
+
+### Sprachen
+
+- **Wallet, TOYPAY-App und ToyScan** gibt es in **denselben 45 Sprachen wie TOYQUEST 3D**, mit allen Erklärungen: de en es fr pt ar zh ja hi sw bn id ur mr te tr ta wuu it ko nl pl vi fa no sv th yo ha am ig zu af om sn wo ln tn ny ti rw ee ak st xh. Die gemeinsame Liste steht in `i18n/sprachen.tsv`.
+- **Eine gemeinsame Begriffsliste** (`i18n/begriffe.tsv`) sorgt dafür, dass Wörter wie „Phrase“, „Aktivierungs-Pfand“ oder „Erstattungs-Pool“ in allen Apps und im Spiel gleich übersetzt sind.
+- **Sprachauswahl mit Eigennamen** (z. B. „isiZulu“, „አማርኛ“), automatisch nach der Gerätesprache. Wechsel jederzeit ohne Neustart.
+- **Rechts-nach-links-Schrift** für Arabisch, Urdu und Persisch: Die Oberfläche wird gespiegelt, Adressen und Beträge bleiben links-nach-rechts.
+- **Schriften** für alle Schriftsysteme (z. B. Ge'ez, Devanagari, Tamil, Thai, Han, Hangul) werden mitgeliefert, damit auch alte Geräte alles anzeigen. Vorschlag: Noto-Schriften unter der SIL Open Font License (siehe Abschnitt 10).
+- **Zahlen und Daten** im Format der Sprache, aber Beträge immer mit allen nötigen Nachkommastellen und dem Kürzel TOY. Adressen werden nie übersetzt oder umgeschrieben.
+- **Technik:** Keine festen Texte im Code, nur Schlüssel. Quelle sind Deutsch und Englisch. Fehlt ein Text, erscheint Englisch. Ein automatischer Test prüft für alle 45 Sprachen: kein Schlüssel fehlt, Platzhalter `{0}`, `{1}` stimmen, Texte passen in die Felder, alle Zeichen sind darstellbar.
+- **Ehrlich zur Qualität:** Die Übersetzungen entstehen zunächst ohne Muttersprachler. **Sicherheitswichtige Texte** (Phrase, Warnungen, Notfall-Schlüssel, Täuschungs-PIN, Sperren) müssen vor einem Mainnet von Muttersprachlern geprüft sein. Bis dahin zeigt die App bei ungeprüften Sprachen einen kleinen Hinweis und einen Schalter, mit dem man den Originaltext auf Englisch sieht.
+
+### Vier Modi
+
+Der Nutzer wählt beim ersten Start einen Modus und kann jederzeit wechseln.
+
+| Modus | Erklärungen | Sichtbare Funktionen | Bestätigungen |
+|---|---|---|---|
+| **1 · Einsteiger** | ausführlich bei jedem Schritt, mit Beispielen und Assistenten, Übungs-Modus wird angeboten | Senden, Empfangen, Spenden, Sicherheits-Check, Konto-Schutz-Assistent. Stufen 0 und 1 | alle, dazu Probebetrag immer und Rückfrage bei jeder neuen Adresse |
+| **2 · Fortgeschritten** | ein kurzer Satz, Details per „Mehr erfahren“ | dazu Mitsignieren, Delegieren, andere Ketten, Rechnungen, Daueraufträge | alle wichtigen |
+| **3 · Profi** | nur auf Abruf über ein ⓘ-Symbol | alle Funktionen, auch Mehrfachsignatur, Hash-Zeitschloss, Sitzungs-Schlüssel, Validator, Gebühren-Stufen | nur bei Beträgen über einer selbst gewählten Grenze |
+| **4 · Vollprofi** | keine | kompakte Ansicht mit Rohdaten (Nonce, Gebühr je Byte, Hex, Ablaufblock), eigener Knoten, Offline-Signieren, Export für die Kommandozeile | keine zusätzlichen |
+
+- **Sicherheit bleibt in jedem Modus gleich.** Phishing-Warnung, Schutz vor Adress-Fallen, Zwischenablage-Schutz, Warnungen bei Tresor-Abhebungen und alle roten Warnungen erscheinen **immer**, auch im Vollprofi-Modus. Die Modi ändern nur, wie viel erklärt und wie viel angezeigt wird.
+- **Wechsel nach oben** in Profi oder Vollprofi verlangt eine kurze Bestätigung, dass man die Risiken kennt. Wechsel nach unten geht sofort.
+- **ToyScan** hat einen einfachen Schalter „Erklärungen an/aus“. Für Einsteiger ist er an: Jede Zahl und jede Ampel hat dann einen Satz in einfacher Sprache.
+- **Die TOYPAY-App** übernimmt den Modus aus der Wallet, wenn beide auf demselben Gerät laufen.
+
 ## 8. Sicherheit
 
 - Phrase nach BIP-39, verschlüsselt mit Argon2id und XChaCha20-Poly1305, wo möglich im Android Keystore/StrongBox, im TPM oder in der Secure Enclave.
@@ -212,6 +241,7 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 | Andere Ketten, WalletConnect, Freigaben, atomarer Tausch | M11, M12 |
 | Vorschau, Adress-Fallen, Adressbuch, Probebetrag, SLIP-39, Nur-Ansehen, QR, Export, Daueraufträge | M8, M9 |
 | Hardware-Wallets, mehrere Konten und Phrasen, Schlüssel-Import, Sicherungs-Quiz, automatische Sperre, Guthaben verbergen, Gebühren-Stufen, Verlauf | M8 |
+| 45 Sprachen, vier Modi | M8 (Textschlüssel und Modus-Logik), M9 (Oberfläche, Schriften, Rechts-nach-links) |
 | Mitteilungen, Sync, Browser-Erweiterung, Zwischenablage-Schutz, Bildschirmfoto-Sperre, Geräte-Prüfung, Täuschungs-PIN, Sicherheits-Check, Übungs-Modus, einfache Sprache, Barrierefreiheit, Kassen-Modus, Offline signieren, NFC, Rechnungen | M9 |
 | Delegieren | M4, M8 |
 | Mehrfachsignatur, Sitzungs-Schlüssel, Treuhand, Abo-Erlaubnis | M12 |
@@ -222,3 +252,4 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 ## 10. Offene Punkte
 
 1. **Oberfläche:** Compose Multiplatform für Android und Desktop? (Wird im Plan zu M9 vorgeschlagen.)
+2. **Schriften:** Noto-Schriften stehen unter der SIL Open Font License 1.1. Sie ist für mitgelieferte Schriften üblich und mit MIT-Code vereinbar, steht aber nicht in der Liste in `CLAUDE.md`. Freigeben?

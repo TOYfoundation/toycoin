@@ -72,10 +72,11 @@ Hinweis zur Bauumgebung: In der Cloud-Sandbox, in der das Gerüst erstellt wurde
 
 ## Neuausrichtung vom 18.10.2026
 
-Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 102):
+Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 104):
 
 - **Totaler Fair Launch:** Genesis ohne Guthaben, keine Reserve, alle 100 Mio. TOY per Emission. Erste Epoche 50.500 TOY, erstes Jahr rund 16,84 Mio., Halbwertszeit 3,76 Jahre (nachgerechnet).
 - **Kern:** ToyChain-Testnet, TOYPAY Wallet als Knoten mit Stufen 0 bis 4, Energie-Modus und Mint-Funktionen, ToyScan mit Warnampel A1 bis A9 und Anzeige anderer EVM-Ketten.
+- **Neu (18.10.2026):** 45 Sprachen für Wallet, TOYPAY-App und ToyScan, gemeinsame Sprachliste und Begriffsliste in `i18n/` (Nr. 103), vier Modi in der Wallet von Einsteiger bis Vollprofi (Nr. 104).
 - **Neu (18.10.2026 abends, Runde 3):** 32 weitere Funktionen (Nr. 95 bis 102): Delegieren, Mehrfachsignatur, Sitzungs-Schlüssel, Treuhand, Abo-Erlaubnis, Namen, Einmal-Adressen, Post-Quanten-Schlüssel, Alltagsschutz, Kassen-Modus, Offline-Signieren, Einsteiger-Hilfen, Netzwerk-Karte, SDKs, formale Prüfung, Transparenz-Bericht.
 - **Neu (18.10.2026 abends, MetaMask):** 22 Wallet-Funktionen nach dem Vorbild von MetaMask (Nr. 89 bis 91), darunter mehrere Konten, Phishing-Warnliste, Browser-Erweiterung, Netzwerk per Klick, Mitteilungen und verschlüsselter Sync.
 - **Neu (18.10.2026 abends):** 30 Funktionen aus anderen Projekten übernommen (Nr. 82 bis 88): Wallet-Schutz, Konto-Schutz mit Tresor, Notfall-Schlüssel und Erben-Adresse, Zahlungsfunktionen, atomarer Tausch, Dandelion++, Tor, mehrfach signierte Checkpoints und Builds, Testnet-Kran, Fuzzing, Bug-Bounty, Notfall-Plan.
@@ -87,7 +88,7 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 102):
 | Dokument | Stand |
 |---|---|
 | `01-spezifikation.md` | v0.3, schlank, mit Verfassung (Abschnitt 13) |
-| `02-entscheidungen.md` | Nr. 1 bis 102, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
+| `02-entscheidungen.md` | Nr. 1 bis 104, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
 | `03-bauplan-phase1.md` | M1 bis M13 |
 | `04-toypay-wallet.md` | v0.1: Clients, Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
 | `05-toyscan.md` | v0.2: Warnampel A1 bis A9, Muster-Warnungen, andere Ketten, API |

@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 102). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 104). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -83,12 +83,14 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Fertig, wenn:** MetaMask oder ein Skript mit einer Ethereum-Bibliothek kann ToyChain einbinden, den Kontostand lesen und TOY senden.
 
 ### M8: Wallet und CLI
+- **Alle Texte nur über Schlüssel** aus `i18n/` (45 Sprachen, Entscheidung 103) und **vier Modi** Einsteiger, Fortgeschritten, Profi, Vollprofi (Entscheidung 104).
 - Wallet erzeugen, Phrase sichern (auch als SLIP-39-Teile), Vorschau vor jeder Signatur, Schutz vor Adress-Fallen, Adressbuch, Probebetrag, Nur-Ansehen-Konten, Hardware-Wallets für Überweisungen, QR-Zahlungen, CSV-Export, Daueraufträge, mehrere Konten und Phrasen, Schlüssel-Import mit Passwort, Sicherungs-Quiz, automatische Sperre, Guthaben verbergen, Gebühren-Stufen, verständlicher Verlauf, Keystore (Argon2id, XChaCha20-Poly1305), Senden, Empfangen, Kontingent anzeigen, Stake binden und lösen, Stufenwahl mit Gerätemessung (`04-toypay-wallet.md`).
 - **Fertig, wenn:** Ende-zu-Ende-Test im lokalen Testnet: Ein Gerät ohne TOY gewinnt in der Arbeits-Lotterie, sendet dann an eine zweite Wallet, Kontingent wird erstattet, Kontostände stimmen.
 
 ### M9: Plattformen und Energie-Modus
 - Builds für Linux x86_64, Windows x86_64, Linux aarch64 (Raspberry Pi), Android (Bibliothek plus App). ToyNode als Dienst.
 - Energie-Modi Sparsam, Ausgewogen, Leistung, Auto (Akku, Ladegerät, Temperatur, Netz, Nutzung).
+- Oberfläche in 45 Sprachen mit mitgelieferten Schriften und Rechts-nach-links, Sprachtest für alle Sprachen (kein Schlüssel fehlt, Platzhalter stimmen, alle Zeichen darstellbar). Die vier Modi in der Oberfläche, Sicherheitswarnungen in jedem Modus.
 - Mitteilungen, Ende-zu-Ende verschlüsselter Sync ohne Schlüssel, Browser-Erweiterung für Chrome und Firefox (Entscheidungen 90, 91).
 - Zwischenablage-Schutz, Bildschirmfoto-Sperre, Geräte-Prüfung, Täuschungs-PIN, Sicherheits-Check, Übungs-Modus, einfache Sprache, Barrierefreiheit, Kassen-Modus, Offline signieren per QR, NFC, Rechnungen (Entscheidungen 97 bis 99).
 - **Fertig, wenn:** Der Knoten läuft auf Linux, Raspberry Pi und Windows, Android mindestens als Stufe 0 mit ToyWork am Ladegerät. Auto-Modus schaltet in Tests richtig um.
@@ -101,7 +103,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Fertig, wenn:** Messwerte (Transaktionen pro Sekunde, Finalität, Speicher, Prüfzeit je Los auf altem Android) stehen in `docs/STATUS.md`, Parameter aus Spezifikation Abschnitt 14 sind abgeglichen.
 
 ### M11: ToyScan und andere Ketten
-- ToyScan nach `05-toyscan.md`: Indexer, Warnampel A1 bis A9, Muster-Warnungen, Adress-Ansicht mit anderen EVM-Ketten, offene API, Prüfskript, Netzwerk-Karte, Validator-Bewertung, Adress-Alarm, offene Daten.
+- ToyScan nach `05-toyscan.md` in 45 Sprachen mit Schalter für Erklärungen: Indexer, Warnampel A1 bis A9, Muster-Warnungen, Adress-Ansicht mit anderen EVM-Ketten, offene API, Prüfskript, Netzwerk-Karte, Validator-Bewertung, Adress-Alarm, offene Daten.
 - **Programm-Bibliotheken (SDKs)** für JavaScript/TypeScript, Kotlin und Python mit Beispielen (Entscheidung 101).
 - Wallet: Guthaben und Senden auf anderen EVM-Ketten, Warnung bei gleichnamigen Token, Phishing-Warnliste, Sicherheitswarnungen, Seiten-Berechtigungen, Anmelden mit Adresse, eingebauter Browser, Netzwerk per Klick, Token- und NFT-Erkennung, Gesamtübersicht in Euro, Simulation vor dem Senden, geschützter Sendeweg mit wählbarem Anbieter und Rückerstattung, Warnung bei Preisabweichung, begrenzte Freigaben (Entscheidungen 89 bis 94). NFT-Prägen kommt später mit dem Spiel (Entscheidung 68).
 - **Fertig, wenn:** jede Ampel-Regel hat Tests für Grün, Gelb und Rot, ToyScan läuft gegen das Testnet, Rust-Rechner und Prüfskript stimmen überein.

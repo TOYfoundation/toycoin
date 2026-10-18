@@ -1,0 +1,21 @@
+schluessel|de|en|erklaerung_de
+phrase|Wiederherstellungsphrase|recovery phrase|Die 12 oder 24 Wörter, mit denen sich die Wallet wiederherstellen lässt. Niemals weitergeben
+activation_deposit|Aktivierungs-Pfand|activation deposit|0,1 TOY, die beim ersten Eingang gebunden werden und dem Nutzer gehören
+refund_pool|Erstattungs-Pool|refund pool|Topf, der die kostenlosen Transaktionen bezahlt
+free_quota|kostenloses Kontingent|free quota|Zahl der kostenlosen Transaktionen je Epoche
+epoch|Epoche|epoch|Mindestens 1.440 Blöcke und mindestens 24 Stunden
+stake|Stake (gebundenes TOY)|stake (bound TOY)|TOY, das für eine Rolle gebunden ist und bei Fehlverhalten gekürzt werden kann
+delegate|delegieren|delegate|TOY bei einem Validator binden, ohne es abzugeben
+validator|Validator|validator|Knoten, der Blöcke vorschlägt und signiert
+work_lottery|Arbeits-Lotterie|work lottery|Belohnung für ToyWork-Lose
+dormant_account|ruhendes Konto|dormant account|Ausgelagertes Konto, das sich jederzeit aufwecken lässt
+vault_delay|Tresor-Verzögerung|vault delay|Wartezeit für große Abhebungen, in der man abbrechen kann
+emergency_key|Notfall-Schlüssel|emergency key|Zweiter Schlüssel zum Abbrechen, Sperren und Retten
+safety_address|Sicherheitsadresse|safety address|Vorher festgelegte Adresse für die Rettung
+heir_address|Erben-Adresse|heir address|Adresse, die nach langer Inaktivität übernehmen darf
+hash_timelock|Hash-Zeitschloss|hash time lock|Sperre für den atomaren Tausch mit anderen Ketten
+session_key|Sitzungs-Schlüssel|session key|Begrenzter Unterschlüssel für eine App
+network_fee|Gebühr|fee|Betrag für die Verarbeitung einer Transaktion
+testnet|Testnet|testnet|Übungsnetz ohne echten Wert
+traffic_light|Warnampel|warning light|Ampel in ToyScan, ob die Regeln der Kette eingehalten werden
+constitution|Verfassung|constitution|Regeln, die kein Update und keine Abstimmung ändern darf

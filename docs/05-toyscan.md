@@ -1,6 +1,6 @@
 # ToyScan: Explorer, Warnampel und Anzeige anderer Ketten
 
-Entwurf v0.2 vom 18.10.2026 · Grundlage: Spezifikation v0.3, Entscheidungen 56, 58, 60, 61 bis 102 · Status: **zur Prüfung** · Die frühere Fassung mit Bridge- und Altbestand-Kriterien liegt in `spaeter/08-toyscan-v0.1-mit-bridge.md`
+Entwurf v0.2 vom 18.10.2026 · Grundlage: Spezifikation v0.3, Entscheidungen 56, 58, 60, 61 bis 104 · Status: **zur Prüfung** · Die frühere Fassung mit Bridge- und Altbestand-Kriterien liegt in `spaeter/08-toyscan-v0.1-mit-bridge.md`
 
 ## 1. Ziel und Grundsätze
 
@@ -34,7 +34,7 @@ flowchart LR
 | **RPC-Quellen anderer Ketten** | je Kette zwei unabhängige Quellen. API-Schlüssel nur auf dem Server, nie im Repository |
 | **Ampel-Rechner** | prüft nach jedem endgültigen Block die Kriterien aus Abschnitt 4 |
 | **Muster-Auswertung** | sucht auffälliges Verhalten (Ebene C der Schutzregeln, Spezifikation Abschnitt 8) und erzeugt Warnungen |
-| **Offene API und Webseite** | Deutsch und Englisch, Grundansicht auch ohne JavaScript und auf alten Handys |
+| **Offene API und Webseite** | in den **45 Sprachen** von TOYQUEST 3D mit allen Erklärungen (`i18n/sprachen.tsv`, Entscheidung 103), Schalter „Erklärungen an/aus“, Rechts-nach-links für Arabisch, Urdu und Persisch, Grundansicht auch ohne JavaScript und auf alten Handys |
 
 ## 3. Daten vom Knoten
 

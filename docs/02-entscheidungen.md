@@ -49,6 +49,8 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 100 | ToyScan | Netzwerk-Karte, Validator-Bewertung, Adress-Alarm ohne Anmeldung, offene Daten |
 | 101 | Entwickler und Herkunft | SDKs für JavaScript, Kotlin und Python, Ein-Befehl-Testnetz, Shop-Plugin (später), Abhängigkeits-Prüfung mit cargo-deny und cargo-vet |
 | 102 | Vertrauen | Formale Prüfung (Kani, TLA+), monatlicher Transparenz-Bericht ab Testnet-Start, Verhaltensregeln und Leitfaden für Beiträge, signierte Commits (Pflicht, sobald der Projektinhaber einen Signier-Schlüssel hinterlegt hat) |
+| 103 | 45 Sprachen | Wallet, TOYPAY-App und ToyScan in **denselben 45 Sprachen wie TOYQUEST 3D**, mit allen Erklärungen. Gemeinsame Liste und Begriffsliste in `i18n/`. Rechts-nach-links für ar, ur, fa. Sicherheitswichtige Texte vor einem Mainnet von Muttersprachlern geprüft |
+| 104 | Vier Modi in der Wallet | **Einsteiger** (ausführlich), **Fortgeschritten** (kurz), **Profi** (auf Abruf), **Vollprofi** (keine Erklärungen, Rohdaten). Sicherheitswarnungen in jedem Modus gleich. ToyScan mit Schalter „Erklärungen an/aus“ |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**

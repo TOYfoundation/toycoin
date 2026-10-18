@@ -7,6 +7,7 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 - Gespräch mit dem Nutzer: Deutsch, einfach und Schritt für Schritt erklärt (der Nutzer ist kein Blockchain-Entwickler).
 - Code, Bezeichner, Commit-Nachrichten, Code-Kommentare: Englisch.
 - Dokumentation im Ordner `docs/`: Deutsch.
+- **Oberflächen** (Wallet, TOYPAY-App, ToyScan): 45 Sprachen wie TOYQUEST 3D (`i18n/sprachen.tsv`, Entscheidung 103). Keine festen Texte im Code, nur Schlüssel. Begriffe nach `i18n/begriffe.tsv`. Die Wallet hat vier Modi (Einsteiger bis Vollprofi, Entscheidung 104), Sicherheitswarnungen erscheinen in jedem Modus.
 
 ## Repository-Aufbau (GitHub `Safehaigit/toycoin`)
 
