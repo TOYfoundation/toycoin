@@ -39,7 +39,8 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 90 | Web-Apps (MetaMask) | Seiten-Berechtigungen, Anmelden mit Adresse (EIP-4361), Browser-Erweiterung für Chrome und Firefox, eingebauter Browser in der Handy-App |
 | 91 | Netzwerke, Gebühren, Überblick (MetaMask) | Netzwerk per Klick (EIP-3085, Eintrag in Chainlist), Token- und NFT-Erkennung, eigener Knoten wählbar, Gebühren-Stufen, Simulation vor dem Senden auf anderen Ketten, Gesamtübersicht in Euro (abschaltbar), Mitteilungen, verständlicher Verlauf, Ende-zu-Ende verschlüsselter Sync ohne Schlüssel |
 | 92 | Nicht übernommen (MetaMask) | Erweiterungen (Snaps), Tauschen über Börsen-Dienste. Schutz vor Vordrängeln siehe Nr. 93 |
-| 93 | Schutz vor Vordrängeln und Zensur | Auf ToyChain: **feste Reihenfolge** im Block (Gebühr, dann Block-Zufall), **Aufnahme-Pflicht** für Transaktionen, die mindestens ein Drittel des Komitees meldet, **verschlüsselter Wartebereich** in Phase 2. Für andere Ketten vorerst keine zusätzlichen Maßnahmen (geschützter Sendeweg und Warnung bei Tausch-Apps bleiben als Option offen) |
+| 93 | Schutz vor Vordrängeln und Zensur | Auf ToyChain: **feste Reihenfolge** im Block (Gebühr, dann Block-Zufall), **Aufnahme-Pflicht** für Transaktionen, die mindestens ein Drittel des Komitees meldet, **verschlüsselter Wartebereich** in Phase 2. Für andere Ketten siehe Nr. 94 |
+| 94 | Vordrängel-Schutz auf anderen Ketten | **Geschützter Sendeweg standardmäßig an** (abschaltbar, Rückfrage vor dem Ausweichen), **Anbieter wählbar** oder eigener, **Rückerstattungen** an den Nutzer, **Warnung bei Preisabweichung** ab 2 % mit Anzeige des Mindestbetrags, **begrenzte Freigaben** statt unbegrenzter |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**

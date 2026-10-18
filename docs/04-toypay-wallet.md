@@ -1,6 +1,6 @@
 # TOYPAY Wallet: Wallet und Knoten in einem
 
-Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 93 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
+Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 94 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
 
 ## 1. Ziel
 
@@ -159,7 +159,14 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 
 **Sync zwischen Geräten:** Kontonamen, Adressbuch, Daueraufträge und Einstellungen werden **Ende-zu-Ende verschlüsselt** abgeglichen. Der Schlüssel dafür wird aus der Phrase abgeleitet. Phrase, private Schlüssel und Signier-Schlüssel werden **nie** synchronisiert. Als Speicher dient ein frei wählbarer Dienst oder der eigene ToyNode.
 
-**Nicht gewählt:** Erweiterungen (Snaps), Tauschen über Börsen-Dienste. Schutz vor Vordrängeln auf ToyChain regelt das Protokoll (Spezifikation 5.1a). Für andere Ketten bleiben ein geschützter Sendeweg und eine Warnung bei Tausch-Apps als spätere Option.
+**Schutz vor Vordrängeln auf anderen Ketten (Entscheidung 94)** (auf ToyChain regelt das Protokoll, Spezifikation 5.1a)
+- **Geschützter Sendeweg, standardmäßig an:** Auf Ethereum schickt die App Transaktionen nicht in den öffentlichen Wartebereich, sondern über einen Schutzdienst direkt an Blockbauer (z. B. Flashbots Protect oder MEV Blocker). Kein Sandwich, und fehlgeschlagene Transaktionen kosten keine Gebühr. Der Nutzer kann den Schutz abschalten. Ist der Dienst nicht erreichbar, fragt die App, bevor sie auf den normalen Weg ausweicht. Auf Ketten ohne öffentlichen Wartebereich (z. B. viele Layer-2-Ketten) ist der Schutz nicht nötig.
+- **Anbieter wählbar:** Mehrere Schutzdienste stehen zur Wahl, oder der Nutzer trägt einen eigenen ein. Die App zeigt, welcher Dienst die Transaktion vorher sieht.
+- **Rückerstattung annehmen:** Zahlt der Dienst einen Teil des Gewinns zurück, den die Transaktion anderen ermöglicht hat, geht das an die Adresse des Nutzers.
+- **Warnung bei Preisabweichung:** Bei Tausch-Anfragen bekannter Tausch-Apps zeigt die App den **Mindestbetrag**, den man sicher erhält, und warnt ab 2 % erlaubter Abweichung.
+- **Begrenzte Freigaben:** Verlangt eine App eine unbegrenzte Erlaubnis für Token, schlägt die Wallet genau den benötigten Betrag vor.
+
+**Nicht gewählt:** Erweiterungen (Snaps), Tauschen über Börsen-Dienste.
 
 ## 8. Sicherheit
 
@@ -184,7 +191,7 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 | Vorschau, Adress-Fallen, Adressbuch, Probebetrag, SLIP-39, Nur-Ansehen, QR, Export, Daueraufträge | M8, M9 |
 | Hardware-Wallets, mehrere Konten und Phrasen, Schlüssel-Import, Sicherungs-Quiz, automatische Sperre, Guthaben verbergen, Gebühren-Stufen, Verlauf | M8 |
 | Mitteilungen, Sync, Browser-Erweiterung | M9 |
-| Phishing-Warnliste, Sicherheitswarnungen, Seiten-Berechtigungen, Anmelden mit Adresse, eingebauter Browser, Netzwerk per Klick, Token- und NFT-Erkennung, Gesamtübersicht in Euro, Simulation auf anderen Ketten | M11 |
+| Geschützter Sendeweg, Preisabweichung, begrenzte Freigaben, Phishing-Warnliste, Sicherheitswarnungen, Seiten-Berechtigungen, Anmelden mit Adresse, eingebauter Browser, Netzwerk per Klick, Token- und NFT-Erkennung, Gesamtübersicht in Euro, Simulation auf anderen Ketten | M11 |
 | Konto-Schutz, Sammelüberweisung, Gebühr übernehmen | M12 |
 
 ## 10. Offene Punkte
