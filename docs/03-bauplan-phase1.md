@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 77). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 78). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -36,10 +36,10 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 
 ### M1: Grundtypen und Emission
 - Typen, Konstanten (Obergrenze 10^26), sichere Rechenfunktionen (`checked_*`).
-- **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10, in der Startphase geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren.
+- **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10. In der Startphase geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren und sinkt über 180 Epochen auf 0 %, der Rest in die Arbeits-Lotterie.
 - Epochen-Ende nach mindestens 1.440 Blöcken **und** 86.400 Sekunden.
 - **Vorher festzulegen:** Formel für m und ihr Ganzzahl-Format.
-- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Kürzungen und Spenden erhöhen die Restmenge nie. Genesis-Zustand hat Summe 0.
+- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Kürzungen und Spenden erhöhen die Restmenge nie. Genesis-Zustand hat Summe 0. Lohn der Start-Validatoren über alle 180 Epochen zusammen ≈ 2,2 Mio. TOY bei m = 1.
 
 ### M2: Kryptografie und Adressen
 - Schlüssel aus BIP-39, Pfad m/44'/60'/0'/0/n, Adresse wie Ethereum, Signieren mit Chain-ID (EIP-155), BLS12-381, VRF.
@@ -55,10 +55,10 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 
 ### M4: Blöcke, Konsens, Startphase
 - Blockformat mit Zeitstempel-Regeln, Komitee mit VRF, BFT, BLS-Sammelsignatur, Finalität nach 1 Block.
-- **Startphase:** 7 bis 21 Start-Validatoren ohne Stake, mit dem Konsens-Anteil zu gleichen Teilen, automatische Übergabe an das Stake-Komitee (Spezifikation 5.3).
+- **Startphase:** 7 bis 21 Start-Validatoren ohne Stake, mit sinkendem und 365 Epochen gebundenem Lohn, Übergabe nur durch neue Validatoren, automatische Übergabe an das Stake-Komitee (Spezifikation 5.3).
 - Strafen: Doppelsignatur (Kürzung in den Erstattungs-Pool), Inaktivität, Sperrzeiten für Rollen.
 - Simulation mit z. B. 20 virtuellen Validatoren, inklusive Ausfällen.
-- **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen bestraft, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten in der Startphase genau gleiche Anteile, nach der Übergabe nur noch nach Stake.
+- **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen bestraft, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten genau gleiche, sinkende Anteile (nach 180 Epochen 0), ihr Lohn ist gebunden, und Stake von Start-Validatoren löst die Übergabe nicht aus.
 
 ### M5: Speicher und 256-MB-Budget
 - Persistente Datenbank (z. B. redb), Block-Fenster nach Bytes, Checkpoints.

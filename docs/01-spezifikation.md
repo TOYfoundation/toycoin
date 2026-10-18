@@ -1,6 +1,6 @@
 # ToyChain – Technische Spezifikation v0.3
 
-Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 77):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
+Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 78):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
 
 ## 1. Zusammenfassung
 
@@ -22,7 +22,7 @@ Die Kernideen:
 ## 2. Ehrliche Einordnung
 
 - **Sicherheit** entsteht durch viele unabhängige Teilnehmer, nicht durch Design allein. Eine neue Kette ist anfangs verwundbar. Testnet, Audits und ein vorsichtiger Start gehören deshalb fest zum Plan.
-- **Fair Launch und Proof-of-Stake** passen am Anfang nicht von selbst zusammen: Ohne Premint hat beim Start niemand Stake. Die Lösung ist eine offengelegte Startphase (Abschnitt 5.3) mit 7 bis 21 Start-Validatoren. Sie bekommen für ihre Arbeit den normalen Konsens-Anteil, das ist ein offen sichtbarer früher Vorteil.
+- **Fair Launch und Proof-of-Stake** passen am Anfang nicht von selbst zusammen: Ohne Premint hat beim Start niemand Stake. Die Lösung ist eine offengelegte Startphase (Abschnitt 5.3) mit 7 bis 21 Start-Validatoren. Sie bekommen für ihre Arbeit einen sinkenden, gebundenen Lohn, das ist ein offen sichtbarer, begrenzter Vorteil.
 - **Keine eigene Kryptografie:** nur geprüfte Verfahren und Bibliotheken (Abschnitt 10).
 - **256 MB** über viele Jahre halten sich nur mit dem Falten der Historie (Phase 2). Im Testnet ist das noch kein Problem.
 - **Automatische Sperren** dürfen nur auf Regeln beruhen, die jeder Knoten gleich und eindeutig prüfen kann. Musterkennung mit Schätzungen gehört in ToyScan und in die Netzwerkschicht, nicht in den Konsens (Abschnitt 8).
@@ -76,10 +76,12 @@ Jede Stufe ist freiwillig. Die TOYPAY Wallet schlägt je nach Gerät eine Stufe 
 Beim Start gibt es kein TOY und damit keinen Stake. Deshalb:
 
 - Der Genesis-Block nennt **7 bis 21 Start-Validatoren** mit ihren öffentlichen BLS-Schlüsseln, betrieben von Freiwilligen mit möglichst verschiedenen Betreibern und Standorten. Alle haben gleiches Gewicht.
-- **Sie bekommen den normalen Konsens-Anteil** (50 % der Emission), zu gleichen Teilen. Bei 7 Start-Validatoren sind das in der ersten Epoche je rund 3.600 TOY, bei 21 je rund 1.200 TOY (50.500 TOY × 50 % ÷ Anzahl). Das ist ihr Lohn für Betrieb und Sicherheit der Kette in der verwundbarsten Zeit. Ihre Namen, Adressen und Einnahmen zeigt ToyScan öffentlich.
-- **Die Startphase endet automatisch** zu Beginn der Epoche, in der mindestens **21 Validatoren** mit je mindestens 1.000 TOY Stake angemeldet sind **und** ihr Stake zusammen mindestens **1 % aller gemintete TOY** beträgt. Ab dann wählt das Protokoll das Komitee nach Stake, und die Emission wird normal aufgeteilt. Die Start-Validatoren verlieren ihren Sonderstatus, können aber mit eigenem Stake weitermachen.
-- ToyScan zeigt den Fortschritt der Startphase öffentlich.
-- **Ehrlicher Haken:** Der Lohn ist ein früher Vorteil für wenige. Dauert die Startphase lange, sammeln die Start-Validatoren einen großen Anteil der ersten TOY (bei einem Jahr rund 8,4 Mio. TOY zusammen) und könnten danach selbst die 21 Validatoren der Übergabe stellen. ToyScan färbt sich gelb, wenn die Startphase länger als 365 Epochen läuft. Schutzmaßnahmen dagegen: offener Punkt in Abschnitt 16. Die Grenzen (21 Validatoren, 1 %) werden im Testnet überprüft.
+- **Lohn (Entscheidung 70):** Die Start-Validatoren teilen sich den Konsens-Anteil der Emission zu gleichen Teilen. Er beginnt bei 50 % der Emission und **sinkt jede Epoche gleichmäßig**, bis er nach **180 Epochen 0 %** erreicht (Entscheidung 78). Was er weniger wird, geht in die Arbeits-Lotterie. In der ersten Epoche sind das zusammen 25.250 TOY (bei 7 Start-Validatoren je rund 3.600, bei 21 je rund 1.200), über alle 180 Epochen zusammen rund **2,2 Mio. TOY**, danach nichts mehr.
+- **Lohn wird gebunden (Entscheidung 78):** Jeder Lohn wird sofort als Stake gebunden und bleibt **365 Epochen** gesperrt. Er kann in dieser Zeit weder verkauft noch übertragen werden und haftet bei Doppelsignatur mit.
+- **Die Startphase endet automatisch** zu Beginn der Epoche, in der mindestens **21 neue Validatoren** mit je mindestens 1.000 TOY Stake angemeldet sind **und** ihr Stake zusammen mindestens **1 % aller gemintete TOY** beträgt. **Neu** heißt: Die Adresse gehört keinem Start-Validator, und Stake von Start-Validatoren zählt für diese Bedingung nicht (Entscheidung 78). Ab dann wählt das Protokoll das Komitee nach Stake, und die Emission wird normal aufgeteilt. Die Start-Validatoren verlieren ihren Sonderstatus, können aber mit ihrem Stake wie alle anderen weitermachen, im Rahmen des Stake-Deckels.
+- **Nach 180 Epochen ohne Übergabe** signieren die Start-Validatoren weiter, bekommen aber keinen Lohn mehr. Der gesamte Konsens-Anteil geht dann in die Arbeits-Lotterie, bis die Übergabe erfolgt.
+- ToyScan zeigt Namen, Adressen, Einnahmen und gebundenen Lohn jedes Start-Validators und den Fortschritt der Übergabe öffentlich.
+- **Ehrliche Einordnung:** Der Lohn bleibt ein offen sichtbarer, begrenzter Vorteil für die Betreiber der ersten Monate (höchstens rund 2,2 % der Gesamtmenge). Durch die Bindung können sie ihn nicht schnell verkaufen, und weil nur neue Validatoren die Übergabe auslösen, geht die Kette tatsächlich in andere Hände über. ToyScan färbt sich gelb, wenn die Startphase länger als 365 Epochen läuft. Die Grenzen (21 Validatoren, 1 %, 180 Epochen) werden im Testnet überprüft.
 
 ### 5.4 Strafen im Konsens
 
@@ -187,7 +189,7 @@ Ziel: Angriffe, Manipulation und das Ausnutzen der Mechanismen früh stoppen, oh
 - **Restmenge** = 100.000.000 TOY − Summe aller bisherigen Emissionen. Es wird nie TOY verbrannt (Entscheidung 74). Kürzungen und Spenden bleiben im Umlauf, sie gehen in den Erstattungs-Pool und erhöhen nie die Restmenge.
 - **Zahlen bei m = 1:** erste Epoche **50.500 TOY**, erstes Jahr rund **16,84 Mio. TOY**, Halbwertszeit 1.372 Epochen (**3,76 Jahre**), nach 25 Jahren rund 99,0 Mio. gemintet, rund 1,0 Mio. Rest, der danach asymptotisch ausläuft.
 - **Faktor m** zwischen 0,5 und 2,0: steigt mit **bezahlter oder durch Arbeit gedeckter** Nutzung (kostenlose Transaktionen zählen nicht, sonst ließe sich die Emission mit Spam hochtreiben), mit hoher Beteiligung und wenn die Ausschüttung hinter dem 25-Jahres-Plan liegt. Für den Plan gilt ein Jahr = 365 Epochen. Weil eine Epoche mindestens 24 Stunden dauert, kann die Ausschüttung dem Plan nie davonlaufen. Die genaue Formel für m und ihr Ganzzahl-Format werden vor M1 festgelegt.
-- **Aufteilung:** 50 % Konsens (Stufen 2 bis 4, Wurzel-gewichtet nach Stake, Verfügbarkeit), 40 % Arbeit, 10 % Erstattungs-Pool. **In der Startphase** (Abschnitt 5.3) gilt dieselbe Aufteilung, der Konsens-Anteil geht zu gleichen Teilen an die Start-Validatoren.
+- **Aufteilung:** 50 % Konsens (Stufen 2 bis 4, Wurzel-gewichtet nach Stake, Verfügbarkeit), 40 % Arbeit, 10 % Erstattungs-Pool. **In der Startphase** (Abschnitt 5.3) geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren. Er sinkt über 180 Epochen von 50 % auf 0 %, der Rest geht in die Arbeits-Lotterie.
 - **Arbeits-Lotterie:** Ein ToyWork-Los ist ein Argon2id-Ergebnis (16 MiB Speicher), das unter einer Schwierigkeits-Schwelle liegt und an Adresse und Epoche gebunden ist. Die Schwelle passt sich an, damit je Block etwa gleich viele Lose ankommen. Je Block werden aus den gültigen Losen per VRF Gewinner gezogen. Jeder Gewinn ist mindestens 0,2 TOY. So kann auch ein Gerät ohne Konto sein erstes TOY gewinnen: 0,1 TOY werden zum Aktivierungs-Pfand, der Rest ist frei. Wer mehr rechnet, hat mehr Lose, die erwartete Belohnung ist proportional zur Arbeit. Prüfen kostet eine Argon2id-Berechnung je Los, deshalb gibt es eine Höchstzahl Lose je Block und je Peer.
 - **Regel I0 (Entscheidungen 60, 74):** Die Summe aller Guthaben (freie Guthaben, Aktivierungs-Pfänder, Stake, Erstattungs-Pool, Lotterie-Töpfe, ruhende Konten in den Ruhe-Schnappschüssen) ist **in jedem Block genau** gleich der Summe aller Emissionen. Ein Block, der das verletzt, ist ungültig.
 
@@ -244,7 +246,7 @@ Ehrlich gesagt: Wer eine eigene Software verbreitet, kann jede Kette abspalten. 
 - Ticker TOY, 18 Dezimalstellen, Gesamtmenge 10^26 kleinste Einheiten
 - Blockzeit 60 s, frühester Block nach 10 s, Epoche mindestens 1.440 Blöcke und mindestens 24 Stunden
 - Blockgröße höchstens 128 KB, Komitee 128, endgültig nach 1 Block
-- Start-Validatoren 7 bis 21, Ende der Startphase bei 21 Validatoren mit je 1.000 TOY und zusammen mindestens 1 % der geminteten TOY
+- Start-Validatoren 7 bis 21, Lohn sinkt über 180 Epochen von 50 % auf 0 %, Lohn 365 Epochen gebunden, Ende der Startphase bei 21 neuen Validatoren mit je 1.000 TOY und zusammen mindestens 1 % der geminteten TOY
 - Stake-Stufen 10 / 100 / 1.000 TOY, Lösen nach 7 Epochen, Deckel 1 % des gesamten Stakes
 - Kontingent 10 bis 100 je Epoche, Kontoalter 100 Blöcke, Vielnutzer ab 1.000 je Epoche
 - Aktivierungs-Pfand 0,1 TOY (darf bis 0,01 TOY sinken), Mindestgewinn der Arbeits-Lotterie 0,2 TOY
@@ -264,5 +266,5 @@ Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst. Die 
 ## 16. Offene Punkte
 
 - **Formel für m** mit Ganzzahl-Format (vor M1).
-- **Schutz gegen zu großen Vorteil der Start-Validatoren** (Abschnitt 5.3): Entscheidung offen.
+- (erledigt) Schutz gegen zu großen Vorteil der Start-Validatoren: Entscheidung 78.
 - Aus dem Prüfbericht (`10-pruefbericht-1.md`) für die passenden Meilensteine: Schutz des Zustands vor teurem Auffüllen (P5, M5), Header-Wachstum (P6, M5), Missbrauch des Erstattungs-Pools (P9, M3), Höchstwert der progressiven Gebühr (M3).
