@@ -1,6 +1,6 @@
 # ToyScan: Explorer, Warnampel und Anzeige anderer Ketten
 
-Entwurf v0.2 vom 18.10.2026 · Grundlage: Spezifikation v0.3, Entscheidungen 56, 58, 60, 61 bis 74 · Status: **zur Prüfung** · Die frühere Fassung mit Bridge- und Altbestand-Kriterien liegt in `spaeter/08-toyscan-v0.1-mit-bridge.md`
+Entwurf v0.2 vom 18.10.2026 · Grundlage: Spezifikation v0.3, Entscheidungen 56, 58, 60, 61 bis 76 · Status: **zur Prüfung** · Die frühere Fassung mit Bridge- und Altbestand-Kriterien liegt in `spaeter/08-toyscan-v0.1-mit-bridge.md`
 
 ## 1. Ziel und Grundsätze
 
@@ -66,7 +66,7 @@ Der Knoten liefert über `toy_`-Methoden (M7). Beträge kommen als **Dezimalzahl
 
 | Nr. | Kriterium | Rechnung | Gelb | Rot |
 |---|---|---|---|---|
-| **A1** | Obergrenze und Summe aller Guthaben (I0) | gemintet ≤ 10^26. **Summe aller Guthaben**, aus dem Archiv-Knoten selbst aufsummiert, = gemintet. Keine Wiederbelebung doppelt, nirgends wurde TOY vernichtet | — | verletzt, dazu große rote Lampe |
+| **A1** | Obergrenze und Summe aller Guthaben (I0) | gemintet ≤ 10^26. **Summe aller Guthaben**, aus dem Archiv-Knoten selbst aufsummiert, = gemintet. Kein Ruhe-Eintrag doppelt aufgeweckt, Summen der Ruhe-Schnappschüsse mitgezählt, nirgends wurde TOY vernichtet | — | verletzt, dazu große rote Lampe |
 | **A2** | Fair Launch | Genesis-Block enthält **0 TOY**. Jedes TOY lässt sich auf eine Emission zurückführen | — | Guthaben ohne Emission gefunden, dazu große rote Lampe |
 | **A3** | Emission nach Formel | Emission der Epoche = `floor(Restmenge × k₀ × m)` im Ganzzahl-Format des Knotens, `0,5 ≤ m ≤ 2,0`, Restmenge = 10^26 − Summe der Emissionen, Aufteilung 50/40/10 (Startphase 0/90/10) | Summe der Emission mehr als 2 % vor dem Plan | Abweichung von der Formel oder m außerhalb |
 | **A4** | Epochen und Zeit | jede Epoche mindestens 1.440 Blöcke und mindestens 86.400 Sekunden, Zeitstempel steigen um mindestens 10 Sekunden | Zeitstempel weichen dauerhaft mehr als 5 Sekunden von unabhängigen Zeitquellen ab | Epoche zu kurz |
@@ -113,7 +113,7 @@ Jede Warnung nennt die Regel, die Zahlen und die betroffenen Adressen. Die Regel
 | **Epochen** | Emission, Anteile von m, Aufteilung, Lotterie-Gewinner |
 | **Teilnehmer** | Anzahl je Stufe, Validatoren, Stake-Verteilung, Verfügbarkeit |
 | **Schutz** | aktive Sperrzeiten mit Beweis, Muster-Warnungen |
-| **Ablauf und Checkpoints** | Genesis-Hash, Checkpoints, Ablauf-Snapshots zum Herunterladen |
+| **Ruhende Konten und Checkpoints** | Anzahl aktiver und ruhender Konten, Füllstand des Zustands, Ruhe-Schnappschüsse und Beweise für jedes ruhende Konto zum Herunterladen, Genesis-Hash, Checkpoints |
 | **Regeln** | alle Formeln in einfacher Sprache mit Rechenbeispiel |
 
 ## 8. Offene API
@@ -128,6 +128,7 @@ JSON, Beträge als Text in kleinsten Einheiten und zusätzlich formatiert, jede 
 | `/api/v1/epoch/{n}` | Daten einer Epoche |
 | `/api/v1/address/{adresse}` | ToyChain-Konto und andere Ketten |
 | `/api/v1/warnungen` | aktuelle Muster-Warnungen |
+| `/api/v1/beweis/{adresse}` | Beweis für ein ruhendes Konto (Spezifikation 6.2) |
 | `/api/v1/supply/circulating.txt` | eine Zahl für Listing-Seiten |
 
 **Umlauf** = gemintet − gebundener Stake − Aktivierungs-Pfänder − Erstattungs-Pool − Lotterie-Töpfe. Der gesamte Bestand (gemintet) wird zusätzlich angezeigt. Auf ToyChain wird nie TOY verbrannt.

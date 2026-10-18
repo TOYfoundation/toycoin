@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 74). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 76). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -51,7 +51,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - Kontingent, Erstattungs-Pool, progressive Gebühr mit Höchstwert, Vielnutzer-Pflicht.
 - **ToyWork-Lose** (Argon2id, 16 MiB) mit Schwierigkeits-Schwelle, Höchstzahl je Block und Peer, Arbeits-Lotterie mit Mindestgewinn 0,2 TOY.
 - **Schutzregeln Ebene A** (Spezifikation Abschnitt 8): Sperrzeiten, Verdopplung, Zurücksetzen nach 30 sauberen Epochen. Kein Code-Pfad sperrt Guthaben.
-- **Fertig, wenn:** Tests für I0 nach jedem Block (auch ein absichtlich fehlerhafter Block wird abgelehnt), Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebühren, ungültige und wiederverwendete Lose, jede Sperrregel mit Fall „greift“ und „greift nicht“, ein Test, dass ein gesperrtes Konto weiter gegen Gebühr überweisen kann, Tests für Aktivierung (Eingang unter 0,1 TOY an neue Adresse wird abgelehnt), Auflösen mit und ohne Spende und dass eine alte Transaktion nach erneuter Aktivierung ungültig bleibt.
+- **Fertig, wenn:** Tests für I0 nach jedem Block (auch ein absichtlich fehlerhafter Block wird abgelehnt), Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebühren, ungültige und wiederverwendete Lose, jede Sperrregel mit Fall „greift“ und „greift nicht“, ein Test, dass ein gesperrtes Konto weiter gegen Gebühr überweisen kann, Tests für Aktivierung (Eingang unter dem Pfand an neue Adresse wird abgelehnt, Senken des Pfands gibt den Unterschied frei), Auflösen mit und ohne Spende und dass eine alte Transaktion nach erneuter Aktivierung ungültig bleibt.
 
 ### M4: Blöcke, Konsens, Startphase
 - Blockformat mit Zeitstempel-Regeln, Komitee mit VRF, BFT, BLS-Sammelsignatur, Finalität nach 1 Block.
@@ -61,8 +61,9 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen bestraft, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten in der Startphase nachweislich 0 Konsens-Belohnung.
 
 ### M5: Speicher und 256-MB-Budget
-- Persistente Datenbank (z. B. redb), Block-Fenster nach Bytes, Zustandsablauf nach 1001 Tagen mit Einmal-Markierung, Checkpoints.
-- **Fertig, wenn:** Messbericht in `docs/STATUS.md`: Speicher je Konto, Konten je 128 MB, Verhalten bei vollem Budget, Wachstum der Header. Zweite Wiederbelebung wird abgelehnt.
+- Persistente Datenbank (z. B. redb), Block-Fenster nach Bytes, Checkpoints.
+- **Aktive und ruhende Konten** (Spezifikation 6.2): Auslagern nach Bedarf ab 90 % Füllung, Ruhe-Schnappschuss je Epoche mit Wurzel, Summe und Aufweck-Merkliste, Beweise für ruhende Konten, Aufwecken und Zusammenführen.
+- **Fertig, wenn:** Messbericht in `docs/STATUS.md`: Speicher je aktivem Konto, aktive Konten je 160 MB, Größe der Beweise und der Merkliste. **Simulation mit 100 Mio. Konten**, davon 2 Mio. aktiv: Budget wird gehalten, jedes ruhende Konto lässt sich mit seinem Beweis aufwecken, ein zweites Aufwecken wird abgelehnt, Zusammenführen hält Regel I0. Reicht das Budget nicht, wird der Notfallplan mit Zahlen vorgelegt.
 
 ### M6: Netzwerk
 - libp2p mit QUIC und Noise, Peer-Entdeckung, Verbreitung von Transaktionen, Blöcken und Losen, Ratenbegrenzung, Peer-Reputation (Schutzregeln Ebene B).
@@ -113,7 +114,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 > Setze M4 um (toy-consensus): Komitee, VRF, BFT, BLS-Sammelsignatur, Startphase, Strafen. Simulation mit 20 virtuellen Validatoren über 10.000 Blöcke, auch mit Ausfällen und der Übergabe aus der Startphase. Berichte Messwerte.
 
 **M5:**
-> Setze M5 um: persistenter Speicher, Block-Fenster nach Bytes, Zustandsablauf mit Einmal-Markierung. Miss den Speicherverbrauch je Konto und schreibe einen Messbericht in docs/STATUS.md. Prüfe, ob die 256 MB gehalten werden.
+> Setze M5 um: persistenter Speicher, Block-Fenster nach Bytes, aktive und ruhende Konten nach Spezifikation 6.2. Simuliere 100 Mio. Konten, miss den Speicher und schreibe einen Messbericht in docs/STATUS.md. Prüfe, ob die 256 MB gehalten werden.
 
 **M6 bis M11:** gleiche Form. „Setze M<Nummer> aus docs/03-bauplan-phase1.md um. Zeige zuerst einen Plan, schreibe Tests, führe fmt, clippy und test aus, aktualisiere docs/STATUS.md.“
 
