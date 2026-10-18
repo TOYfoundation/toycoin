@@ -1,6 +1,6 @@
 # ToyScan: Explorer, Warnampel und Anzeige anderer Ketten
 
-Entwurf v0.2 vom 18.10.2026 · Grundlage: Spezifikation v0.3, Entscheidungen 56, 58, 60, 61 bis 76 · Status: **zur Prüfung** · Die frühere Fassung mit Bridge- und Altbestand-Kriterien liegt in `spaeter/08-toyscan-v0.1-mit-bridge.md`
+Entwurf v0.2 vom 18.10.2026 · Grundlage: Spezifikation v0.3, Entscheidungen 56, 58, 60, 61 bis 88 · Status: **zur Prüfung** · Die frühere Fassung mit Bridge- und Altbestand-Kriterien liegt in `spaeter/08-toyscan-v0.1-mit-bridge.md`
 
 ## 1. Ziel und Grundsätze
 
@@ -113,6 +113,7 @@ Jede Warnung nennt die Regel, die Zahlen und die betroffenen Adressen. Die Regel
 | **Epochen** | Emission, Anteile von m, Aufteilung, Lotterie-Gewinner |
 | **Erstattungs-Pool** | Stand, Zuflüsse (Emission, Gebühren, Kürzungen, Spenden), Abflüsse für kostenlose Transaktionen, Liste der Spenden |
 | **Teilnehmer** | Anzahl je Stufe, Validatoren, Stake-Verteilung, Verfügbarkeit |
+| **Konto-Schutz** | wartende Abhebungen mit Tresor-Verzögerung, aktive Selbst-Sperren, offene Hash-Zeitschlösser mit Ablauf, Erben-Fristen (nur für die eigene Adresse ausführlich, sonst als Zahl) |
 | **Schutz** | aktive Sperrzeiten mit Beweis, Doppelsignaturen mit Anteil am Stake und berechneter Kürzung, Muster-Warnungen |
 | **Ruhende Konten und Checkpoints** | Anzahl aktiver und ruhender Konten, Füllstand des Zustands, Ruhe-Schnappschüsse und Beweise für jedes ruhende Konto zum Herunterladen, Genesis-Hash, Checkpoints |
 | **Regeln** | alle Formeln in einfacher Sprache mit Rechenbeispiel |
@@ -129,6 +130,7 @@ JSON, Beträge als Text in kleinsten Einheiten und zusätzlich formatiert, jede 
 | `/api/v1/epoch/{n}` | Daten einer Epoche |
 | `/api/v1/address/{adresse}` | ToyChain-Konto und andere Ketten |
 | `/api/v1/warnungen` | aktuelle Muster-Warnungen |
+| `/api/v1/checkpoints` | Checkpoints mit allen Signaturen der unabhängigen Stellen |
 | `/api/v1/beweis/{adresse}` | Beweis für ein ruhendes Konto (Spezifikation 6.2) |
 | `/api/v1/supply/circulating.txt` | eine Zahl für Listing-Seiten |
 

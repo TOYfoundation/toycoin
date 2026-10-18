@@ -1,6 +1,6 @@
 # TOYPAY Wallet: Wallet und Knoten in einem
 
-Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 81 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
+Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 88 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
 
 ## 1. Ziel
 
@@ -92,6 +92,36 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 - **Ruhende Konten:** Wird das eigene Konto ausgelagert, speichert die App den Beweis (knapp 1 KB) selbst. Beim nächsten Senden oder Empfangen weckt sie das Konto automatisch auf. Geht die App verloren, holt sie den Beweis nach der Wiederherstellung mit der Phrase von Archiv-Knoten oder ToyScan. Vor einer Zahlung an eine ruhende Adresse holt die App deren Beweis ebenfalls automatisch.
 - **Konto auflösen** in den Einstellungen: Die App löst zuerst gebundenen Stake (7 Epochen), dann schickt sie alles samt Pfand an eine Zieladresse. Wahlweise spendet der Nutzer den Rest in den Erstattungs-Pool. Kontingent und Stufe lassen sich nicht übertragen.
 
+## 7a. Sicherheit und Komfort beim Bedienen (Entscheidungen 82 bis 86)
+
+**Beim Senden**
+- **Vorschau vor jeder Signatur:** Guthaben vorher und nachher, Gebühr, Ablaufzeit, ob der Empfänger neu ist, ob eine Tresor-Verzögerung greift. Weil ToyChain nur fest eingebaute Transaktionsarten hat, kann die Wallet das Ergebnis genau vorausberechnen (Vorbild: Rabby, Safe).
+- **Schutz vor Adress-Fallen:** Ähnelt eine Adresse einer bekannten (gleicher Anfang und gleiches Ende), oder kam sie nur über eine winzige Lockzahlung in die Historie, warnt die App deutlich und blendet solche Mini-Eingänge standardmäßig aus (Vorbild: Trust Wallet).
+- **Adressbuch** mit Namen, farbigem Erkennungsbild aus der Adresse und Prüfanzeige. Kopieren aus der Historie ist nur über das Adressbuch möglich.
+- **Probebetrag:** Bei der ersten Zahlung über 10 TOY an eine neue Adresse schlägt die App zuerst einen kleinen Testbetrag vor.
+
+**Zugang und Wiederherstellung**
+- **Hardware-Wallets** (z. B. Ledger, Trezor): Überweisungen lassen sich im Ethereum-Format mit der ToyChain-Chain-ID auf dem Gerät signieren (Schnittstelle aus M7). Für Sonderarten wie Stake oder Schutzeinstellungen braucht es später eine eigene App auf dem Gerät.
+- **Phrase in Teile** nach SLIP-39 (Shamir): z. B. 5 Teile, 3 reichen zum Wiederherstellen. Die Teile kann man an verschiedenen Orten aufbewahren.
+- **Nur-Ansehen-Konten:** Adressen beobachten ohne Schlüssel auf dem Gerät.
+
+**Konto-Schutz** (Spezifikation 7.3): Einrichtungs-Assistent für Tresor-Verzögerung, Notfall-Schlüssel mit Sicherheitsadresse, Selbst-Sperre und Erben-Adresse. Mehrere Erinnerungen, bevor eine Erben-Frist abläuft.
+
+**Zahlungen**
+- **Verwendungszweck** (höchstens 32 Byte) und **Zahlung per QR-Code oder Link** (nach dem Vorbild von BIP-21 und EIP-681: `toychain:<adresse>?betrag=…&zweck=…`).
+- **Sammelüberweisung** an bis zu 32 Empfänger, auch aus einer Tabelle.
+- **Ablaufzeit:** Standard 100 Blöcke. Die App zeigt, bis wann eine Transaktion gilt.
+- **Hängende Transaktion ersetzen oder abbrechen** mit einem Tipp.
+- **Gebühr übernehmen:** Eine App oder ein Freund kann die Gebühr für den Nutzer mitzahlen. Beide bestätigen.
+- **Daueraufträge:** Die Wallet löst wiederkehrende Zahlungen selbst aus, wenn sie fällig sind. Das Gerät muss dazu online sein. Auf der Kette wird nichts vorab gespeichert, und der Nutzer kann jeden Auftrag jederzeit stoppen.
+- **Export** der Historie als Tabelle (CSV) mit Datum, Betrag, Gebühr, Gegenadresse und Verwendungszweck.
+
+**Andere Ketten**
+- **Atomarer Tausch** von TOY gegen Coins anderer Ketten mit Hash-Zeitschloss, Schritt für Schritt geführt (Spezifikation 11).
+- **WalletConnect** für Web-Apps auf anderen EVM-Ketten. Die nötige Projekt-ID steckt nicht im Code, sondern in der Konfiguration (`SECURITY.md`).
+- **Lesbare Signier-Anfragen** nach EIP-712: Die App zeigt im Klartext, was unterschrieben werden soll, und warnt bei unbekannten Anfragen.
+- **Warnung bei Freigaben:** Die App zeigt auf anderen Ketten erteilte Token-Freigaben an Verträge und hilft, sie zurückzunehmen (Vorbild: Revoke.cash).
+
 ## 8. Sicherheit
 
 - Phrase nach BIP-39, verschlüsselt mit Argon2id und XChaCha20-Poly1305, wo möglich im Android Keystore/StrongBox, im TPM oder in der Secure Enclave.
@@ -111,7 +141,10 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 | Ethereum-kompatible Schnittstelle | M7 |
 | Wallet-Kern, Keystore, Stufenwahl | M8 |
 | Plattformen, Energie-Modus | M9 |
-| Andere Ketten | M11 |
+| Andere Ketten, WalletConnect, Freigaben, atomarer Tausch | M11, M12 |
+| Vorschau, Adress-Fallen, Adressbuch, Probebetrag, SLIP-39, Nur-Ansehen, QR, Export, Daueraufträge | M8, M9 |
+| Hardware-Wallets | M8 |
+| Konto-Schutz, Sammelüberweisung, Gebühr übernehmen | M12 |
 
 ## 10. Offene Punkte
 

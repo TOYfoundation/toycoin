@@ -26,7 +26,7 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 - Lizenz: **MIT** (nur Bibliotheken mit dazu verträglicher Lizenz verwenden, z. B. MIT, Apache-2.0, BSD, CC0; MPL-2.0 nur für unverändert genutzte Bibliotheken wie UniFFI, Entscheidung 77).
 - **Nur der native Coin TOY auf ToyChain, für immer:** keine Token, keine NFTs, keine Smart Contracts, keine EVM-Ausführung (Entscheidung 36). Jede Funktion ist eine fest eingebaute Transaktionsart (Spezifikation Abschnitt 7). Keine Vertrags-Engine einbauen, auch nicht "für später".
 - **Verfassung** (Spezifikation Abschnitt 13): Kein Code-Pfad, auch keine spätere Abstimmung, darf sie ändern. Dafür Tests schreiben.
-- **Sperrzeiten entziehen nur Rechte, nie Guthaben** (Spezifikation Abschnitt 8). Automatische Sperren nur nach festen, eindeutig nachweisbaren Regeln. Musterkennung nur in ToyScan als Warnung.
+- **Sperrzeiten entziehen nur Rechte, nie Guthaben** (Spezifikation Abschnitt 8). Eingriffe in ein Konto nur durch Einstellungen, die der Eigentümer selbst gesetzt hat (Konto-Schutz, Spezifikation 7.3). Automatische Sperren nur nach festen, eindeutig nachweisbaren Regeln. Musterkennung nur in ToyScan als Warnung.
 - **Nicht in Phase 1:** Bridge, Mitbestimmung, privater Pool, Offline-Schecks, Spiel-Anbindung, NFT-Prägen, Hybrid-Signaturen.
 
 ## Regeln für Kryptografie und Sicherheit

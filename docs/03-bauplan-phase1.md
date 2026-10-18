@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 81). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 88). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -35,6 +35,7 @@ toyscan/                     Explorer und Warnampel (M11)
 Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht es weiter.
 
 ### M1: Grundtypen und Emission
+- **Ab M1 in jedem Meilenstein:** Fuzz-Tests für alle Funktionen, die fremde Daten lesen, laufen dauerhaft in der CI (Entscheidung 88).
 - Typen, Konstanten (Obergrenze 10^26), sichere Rechenfunktionen (`checked_*`).
 - **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10. In der Startphase geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren und sinkt über 180 Epochen auf 0 %, der Rest in die Arbeits-Lotterie.
 - Epochen-Ende nach mindestens 1.440 Blöcken **und** 86.400 Sekunden.
@@ -49,6 +50,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - Konten mit **Aktivierungs-Pfand 0,1 TOY** beim ersten Eingang, Transaktion „Konto auflösen“ (an Zieladresse oder als Spende in den Erstattungs-Pool), neue Nonce-Basis bei erneuter Aktivierung. Stake mit 7 Epochen Lösefrist, Merkle-Wurzel. Es wird nie TOY verbrannt.
 - **Regel I0:** Summe aller Guthaben = Summe aller Emissionen in jedem Block.
 - Kontingent, Erstattungs-Pool, progressive Gebühr mit Höchstwert, Vielnutzer-Pflicht.
+- Transaktionsfelder Verwendungszweck (32 Byte) und Ablaufzeit (Entscheidung 84).
 - **ToyWork-Lose** (Argon2id, 16 MiB) mit Schwierigkeits-Schwelle, Höchstzahl je Block und Peer, Arbeits-Lotterie mit Mindestgewinn 0,2 TOY.
 - **Schutzregeln Ebene A** (Spezifikation Abschnitt 8): Sperrzeiten, Verdopplung, Zurücksetzen nach 30 sauberen Epochen. Kein Code-Pfad sperrt Guthaben.
 - **Fertig, wenn:** Tests für I0 nach jedem Block (auch ein absichtlich fehlerhafter Block wird abgelehnt), Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebühren, ungültige und wiederverwendete Lose, jede Sperrregel mit Fall „greift“ und „greift nicht“, ein Test, dass ein gesperrtes Konto weiter gegen Gebühr überweisen kann, Tests für Spenden an den Erstattungs-Pool (Betrag landet genau im Pool, Regel I0 hält, nicht rückholbar), Aktivierung (Eingang unter dem Pfand an neue Adresse wird abgelehnt, Senken des Pfands gibt den Unterschied frei), Auflösen mit und ohne Spende und dass eine alte Transaktion nach erneuter Aktivierung ungültig bleibt.
@@ -62,12 +64,13 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen nach Ausmaß bestraft (Einzelfall 1 %, ein Drittel gleichzeitig 100 %), Signier-Gedächtnis verhindert eine zweite Unterschrift auch nach Neustart und nach Zurückspielen einer alten Sicherung, ein Doppelgänger bleibt stumm, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten genau gleiche, sinkende Anteile (nach 180 Epochen 0), ihr Lohn ist gebunden, und Stake von Start-Validatoren löst die Übergabe nicht aus.
 
 ### M5: Speicher und 256-MB-Budget
-- Persistente Datenbank (z. B. redb), Block-Fenster nach Bytes, Checkpoints.
+- Persistente Datenbank (z. B. redb), Block-Fenster nach Bytes, Checkpoints mit Signaturen von mindestens 3 unabhängigen Stellen (Entscheidung 87).
 - **Aktive und ruhende Konten** (Spezifikation 6.2): Auslagern nach Bedarf ab 90 % Füllung, Ruhe-Schnappschuss je Epoche mit Wurzel, Summe und Aufweck-Merkliste, Beweise für ruhende Konten, Aufwecken und Zusammenführen.
 - **Fertig, wenn:** Messbericht in `docs/STATUS.md`: Speicher je aktivem Konto, aktive Konten je 160 MB, Größe der Beweise und der Merkliste. **Simulation mit 100 Mio. Konten**, davon 2 Mio. aktiv: Budget wird gehalten, jedes ruhende Konto lässt sich mit seinem Beweis aufwecken, ein zweites Aufwecken wird abgelehnt, Zusammenführen hält Regel I0. Reicht das Budget nicht, wird der Notfallplan mit Zahlen vorgelegt.
 
 ### M6: Netzwerk
 - libp2p mit QUIC und Noise, Peer-Entdeckung, Verbreitung von Transaktionen, Blöcken und Losen, Ratenbegrenzung, Peer-Reputation (Schutzregeln Ebene B).
+- Dandelion++, optional Tor (z. B. mit der Rust-Bibliothek Arti, Lizenz prüfen), Ersetzen hängender Transaktionen mit höherer Gebühr (Entscheidungen 85, 87).
 - **Fertig, wenn:** 5 Knoten in getrennten Prozessen finden sich, tauschen Daten aus und erreichen Konsens. Ein Peer, der ungültige Lose flutet, wird gedrosselt.
 
 ### M7: JSON-RPC
@@ -76,7 +79,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Fertig, wenn:** MetaMask oder ein Skript mit einer Ethereum-Bibliothek kann ToyChain einbinden, den Kontostand lesen und TOY senden.
 
 ### M8: Wallet und CLI
-- Wallet erzeugen, Phrase sichern, Keystore (Argon2id, XChaCha20-Poly1305), Senden, Empfangen, Kontingent anzeigen, Stake binden und lösen, Stufenwahl mit Gerätemessung (`04-toypay-wallet.md`).
+- Wallet erzeugen, Phrase sichern (auch als SLIP-39-Teile), Vorschau vor jeder Signatur, Schutz vor Adress-Fallen, Adressbuch, Probebetrag, Nur-Ansehen-Konten, Hardware-Wallets für Überweisungen, QR-Zahlungen, CSV-Export, Daueraufträge, Keystore (Argon2id, XChaCha20-Poly1305), Senden, Empfangen, Kontingent anzeigen, Stake binden und lösen, Stufenwahl mit Gerätemessung (`04-toypay-wallet.md`).
 - **Fertig, wenn:** Ende-zu-Ende-Test im lokalen Testnet: Ein Gerät ohne TOY gewinnt in der Arbeits-Lotterie, sendet dann an eine zweite Wallet, Kontingent wird erstattet, Kontostände stimmen.
 
 ### M9: Plattformen und Energie-Modus
@@ -86,12 +89,19 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 
 ### M10: Testnet und Lasttests
 - Lokales, dann öffentliches Testnet mit Start-Validatoren. Lasttest mit vielen Wallets und Losen.
+- **Testnet-Kran:** gibt Testnet-TOY zum Ausprobieren aus, gefüllt aus Lotteriegewinnen eigener Knoten (Genesis bleibt leer), mit Begrenzung je Adresse und Tag und ToyWork-Los gegen Abräumen.
+- **Reproduzierbare, mehrfach signierte Builds**, Prüfung vor jedem Update in Wallet und Knoten. **Notfall-Plan** als `docs/06-notfallplan.md`. **Bug-Bounty-Programm** in `SECURITY.md` (außerhalb der Kette, Entscheidung 88).
 - **Fertig, wenn:** Messwerte (Transaktionen pro Sekunde, Finalität, Speicher, Prüfzeit je Los auf altem Android) stehen in `docs/STATUS.md`, Parameter aus Spezifikation Abschnitt 14 sind abgeglichen.
 
 ### M11: ToyScan und andere Ketten
 - ToyScan nach `05-toyscan.md`: Indexer, Warnampel A1 bis A9, Muster-Warnungen, Adress-Ansicht mit anderen EVM-Ketten, offene API, Prüfskript.
 - Wallet: Guthaben und Senden auf anderen EVM-Ketten, Warnung bei gleichnamigen Token. NFT-Prägen kommt später mit dem Spiel (Entscheidung 68).
 - **Fertig, wenn:** jede Ampel-Regel hat Tests für Grün, Gelb und Rot, ToyScan läuft gegen das Testnet, Rust-Rechner und Prüfskript stimmen überein.
+
+### M12: Konto-Schutz, Zusatz-Transaktionen und Tausch
+- Transaktionsarten Sammelüberweisung, Gebühr übernehmen, Schutzeinstellungen (Tresor-Verzögerung, Notfall-Schlüssel, Sicherheitsadresse, Selbst-Sperre, Erben-Adresse) und Hash-Zeitschloss (Spezifikation 7.1 bis 7.3, 11).
+- Wallet: Assistent für Konto-Schutz, geführter atomarer Tausch mit Bitcoin oder einer EVM-Kette im Testnet, WalletConnect, Anzeige von Freigaben auf anderen Ketten.
+- **Fertig, wenn:** Tests zeigen, dass eine verzögerte Abhebung abgebrochen werden kann, ein Dieb ohne Notfall-Schlüssel nichts an fremde Adressen senden kann, solange das Konto gesperrt ist, das Ändern des Schutzes selbst verzögert wirkt, die Erben-Adresse erst nach Ablauf übernehmen kann, ein Hash-Zeitschloss genau einmal abgeholt oder nach Ablauf zurückgeholt wird, und Regel I0 überall hält. Ein atomarer Tausch im Testnet gelingt in beide Richtungen, und bei Abbruch bekommen beide ihr Geld zurück.
 
 ## So startest du (Claude Code)
 
@@ -117,7 +127,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 **M5:**
 > Setze M5 um: persistenter Speicher, Block-Fenster nach Bytes, aktive und ruhende Konten nach Spezifikation 6.2. Simuliere 100 Mio. Konten, miss den Speicher und schreibe einen Messbericht in docs/STATUS.md. Prüfe, ob die 256 MB gehalten werden.
 
-**M6 bis M11:** gleiche Form. „Setze M<Nummer> aus docs/03-bauplan-phase1.md um. Zeige zuerst einen Plan, schreibe Tests, führe fmt, clippy und test aus, aktualisiere docs/STATUS.md.“
+**M6 bis M12:** gleiche Form. „Setze M<Nummer> aus docs/03-bauplan-phase1.md um. Zeige zuerst einen Plan, schreibe Tests, führe fmt, clippy und test aus, aktualisiere docs/STATUS.md.“
 
 ## Ohne Claude Code (nur Chat mit Pro)
 
