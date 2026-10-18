@@ -25,12 +25,16 @@ def plan_after_days(days, cache={0: 0}):
 
 
 def next_m(m_prev, paid_tx, blocks, sigs_got, sigs_expected, issued, seconds_since_genesis):
+    plan = plan_after_days(seconds_since_genesis // DAY)
+    return next_m_with_plan(m_prev, paid_tx, blocks, sigs_got, sigs_expected, issued, plan)
+
+
+def next_m_with_plan(m_prev, paid_tx, blocks, sigs_got, sigs_expected, issued, plan):
     u = paid_tx * PPM // (blocks * 1_000)
     p = sigs_got * PPM // sigs_expected
     n = min(PPM, 2 * u)                                   # full at 50 % paid load
     b = clamp((p - 670_000) * PPM // 280_000, 0, PPM)     # 0 below 67 %, full from 95 %
     perf = (n + b) // 2 - 500_000                         # -0.5 .. +0.5
-    plan = plan_after_days(seconds_since_genesis // DAY)
     d = (issued - plan) * PPM // plan if plan > 0 else 0  # deviation from plan, ppm
     sched = clamp(-10 * d, -500_000, 750_000)
     target = clamp(PPM + perf // 2 + sched, 500_000, 2_000_000)

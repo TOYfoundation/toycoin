@@ -40,6 +40,8 @@ toy-wallet = { path = "crates/toy-wallet" }
 [workspace.lints.rust]
 unsafe_code = "forbid"
 missing_docs = "warn"
+# Kani proof harnesses are compiled only by `cargo kani` (CI job).
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(kani)"] }
 
 [workspace.lints.clippy]
 # Amounts are integers in smallest units; floating point is not allowed

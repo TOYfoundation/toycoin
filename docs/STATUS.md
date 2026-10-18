@@ -1,14 +1,14 @@
 # Projektstatus ToyChain
 
-Stand: 18.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **Konzept nach der Neuausrichtung.** Prüfbericht 2 liegt vor (`11-pruefbericht-2.md`). Eindeutige Fehler sind korrigiert, Umfang (Mittelweg), Lohn, Übergabe und Belohnung nach Stake entschieden (Nr. 109 bis 112). Danach: **M1**.
+Stand: 18.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M1 fertig** (Grundtypen und Emission). Nächster Schritt: **M2** (Kryptografie und Adressen).
 
 ## Überblick Meilensteine
 
 | Meilenstein | Inhalt | Status |
 |---|---|---|
 | Start | Rust-Workspace, leere Crates, CI, STATUS.md | ✅ fertig |
-| M1 | Grundtypen und Emission, Genesis ohne Guthaben (`toy-types`, `toy-emission`) | ⏳ offen, nächster Schritt |
-| M2 | Kryptografie und Adressen (`toy-crypto`) | ⏳ offen |
+| M1 | Grundtypen und Emission, Genesis ohne Guthaben (`toy-types`, `toy-emission`) | ✅ fertig (18.10.2026) |
+| M2 | Kryptografie und Adressen (`toy-crypto`) | ⏳ offen, nächster Schritt |
 | M3 | Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln (`toy-state`, `toy-tx`) | ⏳ offen |
 | M4 | Blöcke, Konsens, Startphase (`toy-consensus`) | ⏳ offen |
 | M5 | Speicher und 256-MB-Budget (`toy-node`) | ⏳ offen |
@@ -20,6 +20,57 @@ Stand: 18.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **Konzept nach der 
 | M11 | ToyScan und andere Ketten (`toyscan/`) | ⏳ offen |
 | M12 | Konto-Schutz, Zusatz-Transaktionen, atomarer Tausch | ⏳ offen |
 | M13 | Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel | ⏳ offen |
+
+## M1: Grundtypen und Emission (18.10.2026)
+
+**Gebaut** (ohne fremde Bibliotheken):
+
+- `toy-types`: `Amount` (u128 in kleinsten Einheiten, nur geprüfte Rechnung, Abrunden), `Ppm` (Millionstel), alle Parameter aus Spezifikation 14 in `params.rs` (Obergrenze 10^26 als Verfassungswert), `Address` und `Hash` als Grundgerüst für M2.
+- `toy-emission`:
+  - Plan-Kurve P(t) und Faktor m genau nach 9.1.
+  - Emission je Epoche, Verteilung auf die ersten 1.440 Blöcke, Aufteilung 50/40/10 mit Rundungsrest in den Erstattungs-Pool.
+  - Lohn der 21 Start-Validatoren nach Planzeit-Tagen mit Deckel.
+  - Planzeit (Blockabstand höchstens 600 s zählt) und Epochen-Ende (1.440 Blöcke **und** 24 Stunden).
+  - `EmissionEngine` verarbeitet Block für Block. Jeder Fehler lässt den Zustand unverändert.
+
+**Ergebnisse der Prüfungen:**
+
+- `cargo fmt --check`: ✅ ohne Abweichungen
+- `cargo clippy --all-targets -D warnings`: ✅ ohne Warnungen
+- `cargo test`: ✅ **45 Tests**, alle bestanden, Laufzeit rund 5 Sekunden
+
+| Pflicht-Test aus dem Bauplan | Ergebnis |
+|---|---|
+| Summe nie über 10^26, auch m = 2,0 über 100 Jahre | ✅ dazu 12 Zufalls-Verläufe, 2 davon über 100 Jahre |
+| Erste Epoche 50.500 TOY | ✅ genau |
+| Halbwertszeit ≈ 1.372 Epochen | ✅ rechnerisch 1.372,25, die Hälfte ist in Epoche 1.373 erreicht |
+| Spam erhöht m nicht | ✅ 2.000 Zufallsfälle, kostenlose Transaktionen ändern m nie |
+| Vier Fälle aus 9.1 wie die Simulation | ✅ **auf die kleinste Einheit genau**, dazu 100 Jahre und 64 Prüfvektoren aus `docs/anhang/factor-vectors.py` |
+| m ändert sich höchstens um 0,05 je Epoche | ✅ |
+| 10-s-Blöcke: Epoche dauert 24 Stunden | ✅ 8.640 Blöcke, 86.400 s, nur die ersten 1.440 Blöcke minten |
+| Kürzungen und Spenden erhöhen die Restmenge nie | ✅ ausgegebene Summe sinkt nie, Restmenge + Summe = 10^26. Es gibt keine Funktion, die die Summe senkt |
+| Genesis-Zustand hat Summe 0 | ✅ gemintet und ausgegeben 0 |
+| Lohn der Start-Validatoren | ✅ genau 2.217.786,5926 TOY bei m = 1, mit m bis 2,0 oder Epochen von 2, 3, 7 Tagen nie mehr |
+
+**Messwerte:**
+
+| Größe | Wert |
+|---|---|
+| Ausgegeben im 1. Jahr (Plan, m = 1) | 16.837.325,09 TOY |
+| Ausgegeben im 1. Jahr bei hoher Nutzung | 17.213.576,05 TOY (+2,23 %) |
+| Rest nach 100 Jahren hoher Nutzung | 0,0195 TOY bis zur Obergrenze |
+| Größte Zwischenzahl der Emission | ca. 10^35 (u128 reicht bis 3,4 × 10^38) |
+| Lohn je Start-Validator im 1. Block | ca. 0,835 TOY |
+
+**Präzisierungen** (Entscheidung 113, in der Spezifikation nachgetragen): Genesis zählt nicht zu den 1.440 Blöcken von Epoche 0, die Emission von Epoche 0 wird mit Block 1 festgelegt, der Deckel ist genau `a(t) × (P(t + 1) − P(t' + 1))`, und die Summe des Lohns war in der Spezifikation um 0,0026 TOY zu knapp gerundet.
+
+**Einschränkungen dieser Sitzung (ehrlich):**
+
+- In der Cloud-Umgebung war **crates.io gesperrt**. Deshalb:
+  - Statt `proptest` gibt es einen kleinen eigenen Testgenerator (SplitMix64, nur für Testeingaben). Jeder Fehlerfall nennt seinen Startwert.
+  - Die **Kani-Beweise** (`toy-emission/src/verification.rs`: Emission ≤ Restmenge, Summe ≤ 10^26, Block-Mint geht genau auf) und **cargo-deny** (`toychain/deny.toml`) laufen nur auf GitHub (`.github/workflows/ci.yml`). Der Kani-Job ist anfangs nicht blockierend, bis seine Laufzeit bekannt ist.
+- **cargo-vet** und **Fuzzing** beginnen mit M2. M1 hat noch keine fremden Bibliotheken und liest keine fremden Daten.
+- Für M2 werden geprüfte Krypto-Bibliotheken von crates.io gebraucht (z. B. `k256`, `sha3`, `bip39`).
 
 ## Was im Start-Schritt angelegt wurde
 
@@ -72,7 +123,7 @@ Hinweis zur Bauumgebung: In der Cloud-Sandbox, in der das Gerüst erstellt wurde
 
 ## Neuausrichtung vom 18.10.2026
 
-Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 112):
+Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 113):
 
 - **Totaler Fair Launch:** Genesis ohne Guthaben, keine Reserve, alle 100 Mio. TOY per Emission. Erste Epoche 50.500 TOY, erstes Jahr rund 16,84 Mio., Halbwertszeit 3,76 Jahre (nachgerechnet).
 - **Kern:** ToyChain-Testnet, TOYPAY Wallet als Knoten mit Stufen 0 bis 4, Energie-Modus und Mint-Funktionen, ToyScan mit Warnampel A1 bis A9 und Anzeige anderer EVM-Ketten.
@@ -88,7 +139,7 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 112):
 | Dokument | Stand |
 |---|---|
 | `01-spezifikation.md` | v0.3, schlank, mit Verfassung (Abschnitt 13) |
-| `02-entscheidungen.md` | Nr. 1 bis 112, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
+| `02-entscheidungen.md` | Nr. 1 bis 113, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
 | `03-bauplan-phase1.md` | M1 bis M13 |
 | `04-toypay-wallet.md` | v0.1: Clients, Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
 | `05-toyscan.md` | v0.2: Warnampel A1 bis A9, Muster-Warnungen, andere Ketten, API |

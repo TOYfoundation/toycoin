@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 112). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 113). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -54,10 +54,10 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Ab M1 in jedem Meilenstein:** Fuzz-Tests für alle Funktionen, die fremde Daten lesen, laufen dauerhaft in der CI (Entscheidung 88). Fremde Bibliotheken werden mit `cargo-deny` und `cargo-vet` auf Lücken, Lizenzen und Herkunft geprüft (Entscheidung 101).
 - **Formale Prüfung** der Obergrenze und der Emission mit einem Beweis-Werkzeug für Rust (z. B. Kani, Entscheidung 102).
 - Typen, Konstanten (Obergrenze 10^26), sichere Rechenfunktionen (`checked_*`).
-- **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10. In der Startphase geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren und sinkt über 180 Epochen auf 0 %, der Rest in die Arbeits-Lotterie.
+- **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10. In der Startphase geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren und sinkt über 180 Tage Planzeit auf 0 %, mit Deckel, der Rest in die Arbeits-Lotterie.
 - Epochen-Ende nach mindestens 1.440 Blöcken **und** 86.400 Sekunden.
 - Faktor m genau nach Spezifikation 9.1 (Millionstel, Plan nach echter Zeit, Glättung 0,05). Die Rust-Umsetzung muss bei denselben Eingaben exakt dieselben Werte liefern wie `docs/anhang/m-simulation.py`.
-- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Die vier Fälle aus Spezifikation 9.1 ergeben dieselben Zahlen wie die Simulation. m ändert sich nie um mehr als 0,05 je Epoche. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Kürzungen und Spenden erhöhen die Restmenge nie. Genesis-Zustand hat Summe 0. Lohn der Start-Validatoren über alle 180 Tage zusammen höchstens 2.217.786,59 TOY bei m = 1 und einer Epoche je Tag, und mit 3-Tage-Epochen nicht mehr (Deckel und Planzeit, Entscheidung 110).
+- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Die vier Fälle aus Spezifikation 9.1 ergeben dieselben Zahlen wie die Simulation. m ändert sich nie um mehr als 0,05 je Epoche. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Kürzungen und Spenden erhöhen die Restmenge nie. Genesis-Zustand hat Summe 0. Lohn der Start-Validatoren über alle 180 Tage zusammen genau 2.217.786,5926 TOY bei m = 1 und einer Epoche je Tag, und mit schnellerer Emission oder 3-Tage-Epochen nicht mehr (Deckel und Planzeit, Entscheidung 110).
 
 ### M2: Kryptografie und Adressen
 - Schlüssel aus BIP-39, Pfad m/44'/60'/0'/0/n, Adresse wie Ethereum, Signieren mit Chain-ID (EIP-155), BLS12-381, VRF.
