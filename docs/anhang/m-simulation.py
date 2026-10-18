@@ -66,4 +66,4 @@ if __name__ == "__main__":
         print(f"{name:36s} Jahr 1: {issued / 1e24:6.2f} Mio  Plan {plan / 1e24:6.2f} Mio  "
               f"Abw. {(issued - plan) * 100 / plan:+5.2f} %  m {lo / 1e6:.3f}..{hi / 1e6:.3f}")
     issued, plan, lo, hi = simulate(100 * 365, 500_000, 990_000)
-    print(f"100 Jahre, hohe Nutzung: {issued / 1e24:.4f} Mio (Obergrenze 100 Mio. gehalten)")
+    print(f"100 Jahre, hohe Nutzung: Rest bis zur Obergrenze {SUPPLY - issued} kleinste Einheiten (Obergrenze nie erreicht)")

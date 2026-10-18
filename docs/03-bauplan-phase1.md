@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 105). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 108). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -48,6 +48,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Fertig, wenn:** offizielle BIP-39- und Ethereum-Testvektoren ergeben exakt die erwarteten Adressen. Signaturen anderer Chain-IDs werden abgelehnt.
 
 ### M3: Zustand, Transaktionen, Kontingent, Gebühren, Schutzregeln
+- Beide Transaktionsformate (ToyChain nach EIP-2718, Ethereum für MetaMask). Grenzen für kostenlose Transaktionen (höchstens 50 % je Block, Erstattung höchstens 1/30 des Pools je Epoche). Signierte Lotterie-Lose mit späterer Ziehung (Entscheidungen 106, 107).
 - Konten mit **Aktivierungs-Pfand 0,1 TOY** beim ersten Eingang, Transaktion „Konto auflösen“ (an Zieladresse oder als Spende in den Erstattungs-Pool), neue Nonce-Basis bei erneuter Aktivierung. Stake mit 7 Epochen Lösefrist, Merkle-Wurzel. Es wird nie TOY verbrannt.
 - **Regel I0:** Summe aller Guthaben = Summe aller Emissionen in jedem Block.
 - Kontingent, Erstattungs-Pool, progressive Gebühr mit Höchstwert, Vielnutzer-Pflicht.
@@ -57,7 +58,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Fertig, wenn:** Tests für I0 nach jedem Block (auch ein absichtlich fehlerhafter Block wird abgelehnt), Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebühren, ungültige und wiederverwendete Lose, jede Sperrregel mit Fall „greift“ und „greift nicht“, ein Test, dass ein gesperrtes Konto weiter gegen Gebühr überweisen kann, Tests für Spenden an den Erstattungs-Pool (Betrag landet genau im Pool, Regel I0 hält, nicht rückholbar), Aktivierung (Eingang unter dem Pfand an neue Adresse wird abgelehnt, Senken des Pfands gibt den Unterschied frei), Auflösen mit und ohne Spende und dass eine alte Transaktion nach erneuter Aktivierung ungültig bleibt.
 
 ### M4: Blöcke, Konsens, Startphase
-- Blockformat mit Zeitstempel-Regeln, Komitee mit VRF, BFT, BLS-Sammelsignatur, Finalität nach 1 Block.
+- Blockformat mit Zeitstempel-Regeln, Komitee mit VRF, BFT im Stil von Tendermint (zwei Abstimmungsphasen je Höhe, Runden bei Zeitüberschreitung), BLS-Sammelsignatur, Finalität nach 1 Block (Entscheidung 106).
 - **Startphase:** 7 bis 21 Start-Validatoren ohne Stake, mit sinkendem und 365 Epochen gebundenem Lohn, Übergabe nur durch neue Validatoren, automatische Übergabe an das Stake-Komitee (Spezifikation 5.3).
 - Strafen: Doppelsignatur mit Kürzung nach Ausmaß (Spezifikation 5.4), Inaktivität, Sperrzeiten für Rollen.
 - Feste Reihenfolge im Block und Aufnahme-Pflicht mit Listen des Komitees (Spezifikation 5.1a).

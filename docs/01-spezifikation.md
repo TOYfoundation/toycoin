@@ -1,6 +1,6 @@
 # ToyChain – Technische Spezifikation v0.3
 
-Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 105):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
+Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 108):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
 
 ## 1. Zusammenfassung
 
@@ -26,7 +26,7 @@ Die Kernideen:
 - **Keine eigene Kryptografie:** nur geprüfte Verfahren und Bibliotheken (Abschnitt 10).
 - **256 MB** über viele Jahre halten sich nur mit dem Falten der Historie (Phase 2). Im Testnet ist das noch kein Problem.
 - **Automatische Sperren** dürfen nur auf Regeln beruhen, die jeder Knoten gleich und eindeutig prüfen kann. Musterkennung mit Schätzungen gehört in ToyScan und in die Netzwerkschicht, nicht in den Konsens (Abschnitt 8).
-- **Recht:** Eine eigene Kryptowährung berührt Regulierung (z. B. MiCA, Steuer). Vor einem Mainnet ist eine rechtliche Prüfung Pflicht.
+- **Recht:** Eine eigene Kryptowährung berührt Regulierung (z. B. MiCA, Steuer). Vor einem Mainnet ist eine rechtliche Prüfung Pflicht. Zu prüfen sind unter anderem: der Begriff „Lotterie“ (Glücksspielrecht), Einmal-Adressen und Tor (EU-Geldwäscheverordnung), der Lohn der Start-Validatoren, Namen (Datenschutz, Markenrecht), Erben-Adresse (ersetzt kein Erbrecht), Treuhand und Kassen-Modus (mögliche Erlaubnispflicht), Verwechslung mit älteren ToyCoin-Token. Testnet-Guthaben werden **nie** in ein Mainnet übernommen.
 
 ## 3. Architektur
 
@@ -52,7 +52,7 @@ Jede Stufe ist freiwillig. Die TOYPAY Wallet schlägt je nach Gerät eine Stufe 
 | **4 · Validator** | **1.000 TOY** Stake, BLS-Schlüssel, hohe Verfügbarkeit | kann ins Komitee gewählt werden, schlägt Blöcke vor | größter Anteil an der Konsens-Belohnung und 20 % der Gebühren des eigenen Blocks |
 
 - **Kein Guthaben nötig, um mitzumachen:** Stufe 0 braucht nichts. Das Aktivierungs-Pfand gilt nur für Konten, die im Zustand gespeichert werden. Es schützt das 256-MB-Budget vor Millionen leerer Konten, bleibt Eigentum des Nutzers und ist keine Teilnahme-Hürde.
-- **Gebundenes TOY (Stake)** bleibt Eigentum des Nutzers. Lösen dauert **7 Epochen** (Startwert), damit Verstöße in dieser Zeit noch geahndet werden können.
+- **Gebundenes TOY (Stake)** bleibt Eigentum des Nutzers. Lösen dauert **21 Epochen** (Startwert), länger als die 18 Epochen, nach denen eine Kürzung feststeht. So kann sich niemand einer Strafe entziehen (Entscheidung 106).
 - **Gegen Übermacht:** Der wirksame Stake je Teilnehmer ist gedeckelt (Startwert 1 % des gesamten Stakes), Belohnungen steigen mit der Wurzel des Stakes.
 - **Prover** (Phase 2) und **Archiv-Knoten** (ohne 256-MB-Grenze, freiwillig) kommen als weitere Rollen hinzu.
 
@@ -61,7 +61,7 @@ Jede Stufe ist freiwillig. Die TOYPAY Wallet schlägt je nach Gerät eine Stufe 
 ### 5.1 Ablauf je Block
 
 1. Ein Vorschlagender wird per VRF aus dem Komitee gewählt.
-2. Das Komitee (Startwert 128 Mitglieder, rotiert je Epoche) stimmt per BFT ab.
+2. Das Komitee (alle Validatoren, höchstens 128, rotiert je Epoche) stimmt per BFT ab. Für das Testnet gilt ein Verfahren im Stil von Tendermint mit zwei Abstimmungsphasen je Höhe, damit ein Block wirklich nach einem Block endgültig ist (Entscheidung 106).
 3. Alle Stimmen werden zu **einer** BLS-Signatur (96 Byte) zusammengefasst. Ab 2/3 gilt der Block als endgültig.
 4. Rotierende Attestierungs-Gruppen (Stufe 2) signieren zusätzlich mit. Leicht-Knoten prüfen das in Millisekunden.
 
@@ -98,6 +98,8 @@ Beim Start gibt es kein TOY und damit keinen Stake. Deshalb:
   - Sofort: Rolle **7 Epochen** gesperrt (Steigerung bei Wiederholung wie in Abschnitt 8). Der Stake bleibt bis zur endgültigen Berechnung gebunden.
   - Nach **18 Epochen** wird die Kürzung festgelegt: `Anteil = max(1 %, 3 × S ÷ T)`, höchstens 100 %. Dabei ist `S` der Stake aller, die in den 18 Epochen vor und nach dem Verstoß doppelt signiert haben, und `T` der gesamte gebundene Stake. Gerechnet wird mit ganzen Zahlen in Basispunkten.
   - Beispiele: Ein einzelner Ausrutscher kostet **1 %**, bei einem sehr großen Validator mit 1 % des gesamten Stakes 3 %. Signieren 10 % des Stakes gleichzeitig doppelt, kostet es 30 %. Ab einem Drittel sind es **100 %**.
+  - **In der Startphase** ist die Kürzung höchstens 5 %, und keine Sperre darf die Zahl der aktiven Start-Validatoren unter zwei Drittel drücken. Sonst stünde die Kette still (Entscheidung 106).
+  - Delegierter Stake wird im gleichen Verhältnis mitgekürzt, wenn er zur Zeit des Verstoßes gebunden war.
   - Gekürzter Stake geht in den Erstattungs-Pool. Auf ToyChain wird **nie TOY verbrannt** (Entscheidung 74).
 - **Inaktivität:** Wer im Komitee fehlt, verliert allmählich Belohnung und Gewicht, damit die Kette bei Ausfällen weiterläuft.
 - **Long-Range-Schutz:** veröffentlichte Checkpoints, ab Phase 2 der Beweis als Anker. Ein Checkpoint gilt erst, wenn ihn **mindestens 3 voneinander unabhängige Stellen** signiert haben, z. B. ToyScan-Betreiber, Archiv-Knoten und Validatoren (Entscheidung 87).
@@ -106,8 +108,8 @@ Beim Start gibt es kein TOY und damit keinen Stake. Deshalb:
 
 Pflicht für jeden Knoten, der signiert (Stufen 2 bis 4):
 
-1. **Signier-Gedächtnis:** Der Knoten speichert vor jeder Unterschrift dauerhaft, welche Höhe er signiert hat, und verweigert eine zweite, abweichende Unterschrift für dieselbe Höhe. Das Gedächtnis übersteht Neustarts und wird beim Umzug mitgenommen. Beim Zurückspielen einer alten Sicherung signiert der Knoten erst ab einer Höhe weiter, die sicher nach dem letzten Stand im Netz liegt.
-2. **Doppelgänger-Erkennung:** Bevor ein Knoten nach Start oder Umzug mitsigniert, beobachtet er **2 Epochen** lang das Netz. Taucht sein Signier-Schlüssel dort schon auf, bleibt er stumm und warnt den Nutzer.
+1. **Signier-Gedächtnis:** Der Knoten speichert vor jeder Unterschrift dauerhaft, welche Höhe er signiert hat, und verweigert eine zweite, abweichende Unterschrift für dieselbe Höhe, Runde und Phase. Neue Runden auf derselben Höhe signiert er normal. Das Gedächtnis übersteht Neustarts und wird beim Umzug mitgenommen. Beim Zurückspielen einer alten Sicherung signiert der Knoten erst ab einer Höhe weiter, die sicher nach dem letzten Stand im Netz liegt.
+2. **Doppelgänger-Erkennung:** Bevor ein Knoten nach einem **Umzug, einem Gerätewechsel oder dem Zurückspielen einer Sicherung** mitsigniert, beobachtet er **2 Epochen** lang das Netz. Nach einem normalen Neustart mit intaktem Signier-Gedächtnis signiert er sofort weiter, damit ein gemeinsames Update die Kette nicht anhält (Entscheidung 106). Taucht sein Signier-Schlüssel dort schon auf, bleibt er stumm und warnt den Nutzer.
 3. **Ein Signier-Gerät je Konto:** Der Signier-Schlüssel (BLS) wird **je Gerät neu erzeugt** und nicht aus der Phrase abgeleitet. Mitsignieren lässt sich je Konto nur auf **einem** Gerät einschalten. Ein Gerätewechsel meldet den neuen Schlüssel an, der alte wird erst nach Ablauf der 2 Epochen abgelöst. Alle anderen Geräte mit derselben Phrase senden und empfangen normal.
 
 ## 6. Zustand und das 256-MB-Budget
@@ -120,10 +122,10 @@ Pflicht für jeden Knoten, der signiert (Stufen 2 bis 4):
 | frei für spätere Funktionen (bis dahin dem Zustand zugeschlagen) | 32 MB |
 | Indizes, Mempool, Puffer | 40 MB |
 
-- **Kapazität:** Bei ca. 60 bis 100 Byte je Konto passen rund 1,6 bis 2,5 Mio. **aktive** Konten in den Zustand (128 MB plus die bis Phase 4 freien 32 MB). Das ist eine Schätzung, M5 misst sie nach.
+- **Kapazität:** Bei ca. 100 bis 200 Byte je Konto (mit Merkle-Baum) passen rund 0,8 bis 1,6 Mio. **aktive** Konten in den Zustand (128 MB plus die noch freien 32 MB). Das ist eine Schätzung, M5 misst sie nach.
 - **Ziel: 100 Mio. Konten und mehr** (Entscheidung 75). Alle Konten im Speicher jedes Knotens wären rund 10 GB, also 40-mal das Budget. Deshalb gibt es aktive und ruhende Konten (Abschnitt 6.2).
 - **Ruhende Konten:** Konten, die lange nicht benutzt wurden, werden nach Bedarf aus dem Speicher ausgelagert, aber **nie gelöscht** (Abschnitt 6.2, ersetzt den festen Ablauf nach 1001 Tagen).
-- **Block-Fenster:** 48 MB fassen bei normaler Last etwa einen Tag, bei vollen Blöcken einige Stunden. Ältere Blöcke und Header bleiben auf Archiv-Knoten. Neue Knoten starten bis Phase 2 von veröffentlichten Checkpoints.
+- **Block-Fenster:** 48 MB fassen bei normaler Last etwa einen Tag, bei vollen 60-s-Blöcken etwa 6 Stunden, bei vollen 10-s-Blöcken nur etwa 1 Stunde. Ältere Blöcke und Header bleiben auf Archiv-Knoten. Neue Knoten starten bis Phase 2 von veröffentlichten Checkpoints.
 
 ### 6.1 Konten: aktivieren und auflösen (Entscheidungen 73, 74)
 
@@ -132,8 +134,8 @@ Konten gehen **nie verloren**, und es wird **nie TOY verbrannt**.
 - **Aktivieren:** Ein Konto entsteht mit seinem ersten Eingang. Davon werden **0,1 TOY als Aktivierungs-Pfand** gebunden (Startwert), der Rest ist frei verfügbar. Das Pfand gehört weiter dem Nutzer. Es bringt keine Belohnung, wird nie gekürzt und dient nur dazu, dass jedes gespeicherte Konto einen kleinen Gegenwert hat. So bleibt das 256-MB-Budget vor Millionen leerer Konten geschützt.
 - **Erster Eingang:** Eine Überweisung an eine noch nicht aktivierte Adresse muss mindestens das Aktivierungs-Pfand betragen (Startwert 0,1 TOY), sonst ist sie ungültig. Die Wallet prüft das vor dem Absenden. Ein Gewinn in der Arbeits-Lotterie ist mindestens 0,2 TOY, damit nach dem Pfand 0,1 TOY frei bleiben.
 - **Kein Unterschreiten:** Das Pfand ist gebunden, deshalb kann das freie Guthaben auf 0 sinken, ohne dass das Konto verschwindet. Es bleibt ein ganz normales Konto.
-- **Auflösen:** Wer sein Konto beenden will, nutzt die Transaktion **„Konto auflösen“**. Vorher muss gebundener Stake gelöst sein (7 Epochen). Dann gehen das gesamte freie Guthaben **und** das Pfand an eine Zieladresse. Wahlweise kann der Nutzer den Rest ganz oder teilweise **in den Erstattungs-Pool spenden**, der die kostenlosen Transaktionen aller bezahlt. Danach wird das Konto aus dem Zustand gelöscht und gibt seinen Speicher frei.
-- **Rechte:** Kontingent, Stufe, Lose und Sperr-Verlauf hängen an der Adresse. Sie lassen sich **nicht** auf andere übertragen, sonst könnte man sie handeln und die Schutzregeln umgehen. Sie erlöschen mit dem Auflösen.
+- **Auflösen:** Wer sein Konto beenden will, nutzt die Transaktion **„Konto auflösen“**. Vorher muss gebundener Stake gelöst sein (21 Epochen), und es darf nichts mehr offen sein: kein Hash-Zeitschloss, keine Treuhand, keine Abo-Erlaubnis, kein Name, keine wartende Abhebung, keine Rolle als Erben- oder Sicherheitsadresse für ein anderes Konto (Entscheidung 106). Dann gehen das gesamte freie Guthaben **und** das Pfand an eine Zieladresse. Wahlweise kann der Nutzer den Rest ganz oder teilweise **in den Erstattungs-Pool spenden**, der die kostenlosen Transaktionen aller bezahlt. Danach wird das Konto aus dem Zustand gelöscht und gibt seinen Speicher frei.
+- **Rechte:** Kontingent, Stufe und Lose hängen an der Adresse. Sie lassen sich **nicht** auf andere übertragen, sonst könnte man sie handeln und die Schutzregeln umgehen. Sie erlöschen mit dem Auflösen. Der **Sperr-Verlauf** bleibt nach dem Auflösen noch 64 Epochen als kleiner Eintrag erhalten, damit Auflösen und Neu-Aktivieren keine saubere Weste ergibt.
 - **Pfand später kleiner (Entscheidung 76):** Das Pfand ist ein Parameter zwischen 0,01 und 0,1 TOY und darf nur **sinken**. Sinkt es, kann jedes bestehende Konto den Unterschied freigeben. Bei 100 Mio. Konten wären mit 0,1 TOY rund 10 Mio. TOY gebunden, mit 0,01 TOY rund 1 Mio. TOY.
 - **Wieder aktivieren:** Erhält eine aufgelöste Adresse später wieder TOY, wird sie neu aktiviert. Ihre Nonce beginnt dann bei `Blockhöhe × 2^16`, damit alte, schon einmal signierte Transaktionen nicht noch einmal gültig werden.
 
@@ -142,11 +144,13 @@ Konten gehen **nie verloren**, und es wird **nie TOY verbrannt**.
 Kein Konto geht verloren. Nur die zuletzt genutzten Konten liegen im Speicher jedes Knotens, alle anderen **ruhen**.
 
 - **Auslagern nach Bedarf:** Ist der Zustand am Ende einer Epoche zu mehr als **90 %** gefüllt, lagert das Protokoll die Konten aus, die **am längsten nicht benutzt** wurden, bis die Füllung bei 80 % liegt. Bei gleichem Alter entscheidet die Reihenfolge der Adressen. Die Regel ist für alle Knoten gleich und eindeutig.
-- **Nie ausgelagert** werden Konten mit Stake für eine Rolle (Stufen 2 bis 4) und Konten, die in den letzten 7 Epochen aktiv waren.
-- **Ruhe-Schnappschuss je Epoche:** Die in einer Epoche ausgelagerten Konten bilden einen festen Merkle-Baum. Jeder Knoten speichert davon nur die Wurzel (32 Byte je Epoche, rund 12 KB pro Jahr), die Summe der darin ruhenden Guthaben und eine Merkliste aufgeweckter Einträge (1 Bit je ausgelagertem Konto, bei 100 Mio. Konten rund 12,5 MB). Der Baum ändert sich danach nie mehr. Ein einmal erhaltener Beweis bleibt deshalb **für immer gültig**.
+- **Nie ausgelagert** werden Konten mit Stake für eine Rolle (Stufen 2 bis 4), Konten mit Schutzeinstellungen, Mehrfachsignatur, Post-Quanten-Schlüssel, offenen Zeitschlössern, Treuhand oder Abo-Erlaubnissen, und Konten mit einer **bezahlten** eigenen Transaktion in den letzten 7 Epochen. Kostenlose Transaktionen zählen dafür nicht, sonst ließe sich der Speicher billig dauerhaft füllen (Entscheidung 106).
+- **Höchstens so viel auslagern wie nötig:** je Epoche nur bis zur 80-%-Marke. Ein aufgewecktes Konto kann frühestens nach 30 Epochen wieder ausgelagert werden.
+- **Wenn es trotzdem voll ist:** Liegt die Füllung nach dem Auslagern noch über 95 %, werden neue Konten in dieser Epoche nicht angenommen (die Überweisung an eine neue Adresse ist ungültig, die Wallet sagt es vorher). ToyScan zeigt das gelb. M5 misst, ob das je vorkommt.
+- **Ruhe-Schnappschuss je Epoche:** Die in einer Epoche ausgelagerten Konten bilden einen festen Merkle-Baum. Jeder Knoten speichert davon nur die Wurzel (32 Byte je Epoche, rund 12 KB pro Jahr), die Summe der darin ruhenden Guthaben und eine Merkliste aufgeweckter Einträge (1 Bit je **Auslagerung**). Weil je Epoche höchstens rund 10 % der aktiven Konten ausgelagert werden, wächst sie um höchstens etwa 25 KB je Epoche, rund 9 MB pro Jahr. Sie zählt zum Posten „Indizes“ im Budget und wird in Phase 2 in den Beweis gefaltet. Der Baum ändert sich danach nie mehr. Ein einmal erhaltener Beweis bleibt deshalb **für immer gültig**.
 - **Beweise:** Ein Beweis für ein ruhendes Konto ist knapp 1 KB groß. Die Wallet speichert ihn selbst, sobald ihr Konto ausgelagert wird. Archiv-Knoten und ToyScan stellen alle Beweise zusätzlich öffentlich bereit.
 - **Aufwecken:** Eine Transaktion, die ein ruhendes Konto berührt (Senden **oder** Empfangen), bringt dessen Beweis mit. Das Konto kehrt mit Guthaben, Pfand und Nonce in den aktiven Zustand zurück, sein Eintrag wird als aufgeweckt markiert und kann nie ein zweites Mal aufgeweckt werden. Die Wallet erledigt das automatisch, der Nutzer merkt davon nichts.
-- **Zusammenführen:** Ein Knoten kann ohne Beweis nicht wissen, ob eine unbekannte Adresse ruht oder neu ist. Kommt TOY an eine ruhende Adresse ohne Beweis, entsteht dort deshalb ein neues aktives Konto (mit neuer Nonce-Basis, Abschnitt 6.1). Wird das ruhende Konto später aufgeweckt, werden beide **zusammengeführt**: Die Guthaben werden addiert, das doppelte Pfand wird frei, es gilt die höhere Nonce. Es geht nichts verloren und nichts entsteht doppelt.
+- **Zusammenführen:** Ein Knoten kann ohne Beweis nicht wissen, ob eine unbekannte Adresse ruht oder neu ist. Kommt TOY an eine ruhende Adresse ohne Beweis, entsteht dort deshalb ein neues aktives Konto (mit neuer Nonce-Basis, Abschnitt 6.1). Wird das ruhende Konto später aufgeweckt, werden beide **zusammengeführt**: Die Guthaben werden addiert, das doppelte Pfand wird frei, es gilt die höhere Nonce. Es geht nichts verloren und nichts entsteht doppelt. **Für Einstellungen gilt immer die ältere:** Schutzeinstellungen, Erben-Adresse, Sitzungs-Schlüssel und Abo-Erlaubnisse des neuen Kontos verfallen beim Zusammenführen, die des ruhenden Kontos bleiben. Sicherheitswichtige Einstellungen lassen sich auf einem neuen Konto ohnehin erst nach 2 Epochen setzen (Entscheidung 106).
 - **Regel I0** zählt die Summen der Ruhe-Schnappschüsse mit.
 - **Später (Phase 2):** Mit der Beweis-Schicht kann ToyChain ganz ohne Kontenspeicher auskommen. Dann bringt jede Transaktion die Beweise für ihre Konten mit, und die Zahl der Konten ist praktisch unbegrenzt. Das kostet größere Transaktionen und wird in Phase 2 untersucht.
 - **Notfallplan:** Zeigt M5, dass die aktiven Konten trotzdem nicht in das Budget passen, bekommen Voll-Knoten und Validatoren einen größeren Speicher auf SSD (6 bis 10 GB). Leicht-Knoten bleiben klein. Das wäre eine Abweichung vom 256-MB-Ziel und wird vorher mit Zahlen vorgelegt.
@@ -158,7 +162,7 @@ Kein Konto geht verloren. Nur die zuletzt genutzten Konten liegen im Speicher je
 | Art | Zweck |
 |---|---|
 | **Überweisung** | TOY von Konto zu Konto |
-| **Stake / Unstake** | TOY binden (Stufen 2 bis 4) oder nach 7 Epochen lösen |
+| **Stake / Unstake** | TOY binden (Stufen 2 bis 4) oder nach 21 Epochen lösen |
 | **Validator anmelden / abmelden** | BLS-Schlüssel registrieren |
 | **Attestierung** | Mitsignieren in Komitee oder Attestierungs-Gruppe |
 | **ToyWork-Los einreichen** | Arbeitsnachweis für die Arbeits-Lotterie oder als Gebührenersatz |
@@ -173,16 +177,20 @@ Kein Konto geht verloren. Nur die zuletzt genutzten Konten liegen im Speicher je
 | **Hash-Zeitschloss** | Betrag sperren, den der Empfänger nur mit einem geheimen Wert abholen kann. Nach Ablauf holt ihn der Absender zurück. Grundlage für den atomaren Tausch mit anderen Ketten (Abschnitt 11) |
 | **Belohnung, Lotterie, Strafe** | vom Protokoll selbst ausgelöst, keine Nutzer-Transaktion |
 
-Dazu kommen in M12 und M13 die Arten aus Abschnitt 7.4: Stake delegieren, Mehrfachsignatur-Konto, Sitzungs-Schlüssel, Treuhand, Abo-Erlaubnis, Namen, Einmal-Empfangsadressen und Post-Quanten-Schlüssel. Später, jeweils als eigenes Protokoll-Update: Vorschlag und Abstimmung, Bridge, abgeschirmter Pool, Offline-Schecks (`docs/spaeter/`).
+Dazu kommen die Arten aus Abschnitt 7.4: Stake delegieren (M4), Mehrfachsignatur-Konto, Sitzungs-Schlüssel, Treuhand, Abo-Erlaubnis, Namen, Einmal-Empfangsadressen und Post-Quanten-Schlüssel. Später, jeweils als eigenes Protokoll-Update: Vorschlag und Abstimmung, Bridge, abgeschirmter Pool, Offline-Schecks (`docs/spaeter/`).
 
 ### 7.2 Kontingent, Gebühren, Arbeit
 
-- **Felder jeder Transaktion (Entscheidung 84):** neben Empfänger, Betrag, Nonce und Signatur ein optionaler **Verwendungszweck** (höchstens 32 Byte, liegt nur im Block-Fenster, nicht im Zustand) und eine **Ablaufzeit**: Jede Transaktion nennt die letzte Blockhöhe, bis zu der sie gültig ist (höchstens 1.440 Blöcke nach dem Absenden, Standard 100). Danach kann sie nie mehr verbucht werden.
+- **Felder jeder Transaktion (Entscheidung 84):** neben Empfänger, Betrag, Nonce und Signatur ein optionaler **Verwendungszweck** (höchstens 32 Byte, liegt nur im Block-Fenster, nicht im Zustand) und eine **Ablaufzeit**: Jede Transaktion nennt die letzte Blockhöhe, bis zu der sie gültig ist. Sie darf höchstens 1.440 Blöcke über der Höhe liegen, in der die Transaktion aufgenommen wird (Standard in der Wallet: 100 Blöcke). Danach kann sie nie mehr verbucht werden.
 - **Ersetzen (Entscheidung 85):** Eine noch nicht verbuchte Transaktion lässt sich durch eine neue mit derselben Nonce und mindestens 10 % höherer Gebühr ersetzen oder mit einer leeren Überweisung an sich selbst abbrechen.
 - **Gebühr übernehmen (Entscheidung 85):** Eine Transaktion kann einen zweiten Unterzeichner als **Gebührenzahler** nennen. Er zahlt die Gebühr, der Absender nur den Betrag. Beide signieren. Das kostenlose Kontingent zählt beim Absender, nicht beim Zahler.
 
-- **Format:** kompakte Transaktion (ca. 110 Byte) mit Ethereum-kompatibler Signatur (secp256k1, EIP-155-Chain-ID). Blockgröße höchstens 128 KB.
+- **Zwei Formate (Entscheidung 106):**
+  - **ToyChain-Format:** eigene, typisierte Transaktion nach EIP-2718 (ein Typ-Byte vorneweg) mit allen Feldern dieses Abschnitts. Kompakt (ca. 110 bis 150 Byte), Signatur mit secp256k1 und EIP-155-Chain-ID, eigene Signaturbereiche je Typ, damit eine Signatur nie für eine andere Art gilt.
+  - **Ethereum-Format:** normale Ethereum-Überweisungen (Legacy und EIP-1559), damit MetaMask, Hardware-Wallets und Skripte TOY senden können. Sie haben keinen Verwendungszweck, keinen Gebührenzahler und keine Ablaufzeit, wie bei Ethereum.
+  - Blockgröße höchstens 128 KB.
 - **Kostenloses Kontingent:** Jedes Konto (Stufe 1) hat je Epoche Q = max(10, 100 × (1 − Auslastung)) kostenlose Transaktionen. Die kleine Gebühr wird aus dem Erstattungs-Pool erstattet. Voraussetzung: Kontoalter mindestens 100 Blöcke.
+- **Grenzen gegen Fluten (Entscheidung 106):** Kostenlose Transaktionen stehen im Block immer hinter den bezahlten und belegen höchstens **50 %** eines Blocks. Je Epoche wird höchstens ein Dreißigstel des Pool-Bestands erstattet. Ist das aufgebraucht, sind weitere Transaktionen in dieser Epoche nicht mehr kostenlos. Erstattete Gebühren werden **nicht** weiterverteilt, der Vorschlagende und die Lotterie bekommen davon nichts.
 - **Über dem Kontingent:** Gebühr oder ToyWork-Los. Die Gebühr eines Absenders verdoppelt sich je 10 weiteren Transaktionen im selben Block, dazu eine Grundgebühr, die bei hoher Last steigt (EIP-1559-Prinzip). Ein ToyWork-Los gibt bis zu 100 % Rabatt.
 - **Vielnutzer:** Ab 1.000 Transaktionen je Epoche muss mindestens die Hälfte der Überschreitung durch Arbeit gedeckt sein.
 - **Spenden (Entscheidung 79):** Jeder kann jederzeit TOY in den Erstattungs-Pool spenden. Die Spende ist eine normale, signierte Transaktion, zählt selbst zum kostenlosen Kontingent und lässt sich nicht zurückholen. Der Pool ist ein protokolleigenes Konto ohne Schlüssel, nur die Erstattungsregeln bewegen ihn.
@@ -194,12 +202,13 @@ Jeder kann sein **eigenes** Konto freiwillig zusätzlich schützen. Die Einstell
 
 | Schutz | Wie er wirkt | Vorbild |
 |---|---|---|
-| **Tresor-Verzögerung** | Abhebungen über einer selbst gewählten Grenze werden erst nach einer Wartezeit (z. B. 24 Stunden, höchstens 30 Epochen) wirksam. In dieser Zeit kann der Eigentümer oder der Notfall-Schlüssel sie abbrechen. ToyScan und die Wallet zeigen wartende Abhebungen an | Bitcoin-Vaults |
+| **Tresor-Verzögerung** | Alles, was das freie Guthaben verringert (Überweisung, Sammelüberweisung, Auflösen, Spende, Zeitschloss, Treuhand, Delegation, Namensgebühr, Einrichten von Abo-Erlaubnis oder Sitzungs-Schlüssel), wird erst nach einer Wartezeit (z. B. 24 Stunden, höchstens 30 Epochen) wirksam, sobald die **Summe** in den letzten 24 Stunden eine selbst gewählte Grenze übersteigt. Aufteilen in kleine Beträge hilft also nicht. In dieser Zeit kann der Eigentümer oder der Notfall-Schlüssel sie abbrechen. ToyScan und die Wallet zeigen wartende Abhebungen an | Bitcoin-Vaults |
 | **Notfall-Schlüssel und Sicherheitsadresse** | Ein zweiter, getrennt aufbewahrter Schlüssel (z. B. Hardware-Wallet oder Papier). Er kann nichts ausgeben, aber wartende Abhebungen abbrechen, das Konto sperren und alles an die vorher festgelegte Sicherheitsadresse retten | Argent, Bitcoin-Vaults |
-| **Selbst-Sperre** | Handy verloren? Mit dem Notfall-Schlüssel oder einem zweiten Gerät sperrt man das eigene Konto für bis zu 30 Epochen. Gesperrt sind dann alle Ausgänge außer an die Sicherheitsadresse. Entsperren wirkt erst nach einer Wartezeit von 2 Epochen, damit ein Dieb es nicht sofort aufheben kann | Argent |
-| **Erben-Adresse (Totmannschalter)** | Ist das Konto eine selbst gewählte Zeit lang (mindestens 180, Standard 365 Epochen) ohne jede eigene Transaktion, kann die Erben-Adresse es übernehmen. Die Wallet erinnert vorher mehrfach. Jede eigene Transaktion setzt die Uhr zurück, auch bei ruhenden Konten (Abschnitt 6.2) | Casa, Bitcoin-Zeitschlösser |
+| **Selbst-Sperre** | Handy verloren? Mit dem Notfall-Schlüssel oder einem zweiten Gerät sperrt man das eigene Konto für bis zu 30 Epochen. Gesperrt sind dann alle Ausgänge außer an die Sicherheitsadresse. Entsperren wirkt erst nach einer Wartezeit von 2 Epochen, damit ein Dieb es nicht sofort aufheben kann. In dieser Wartezeit kann der Notfall-Schlüssel das Entsperren abbrechen | Argent |
+| **Erben-Adresse (Totmannschalter)** | Ist das Konto eine selbst gewählte Zeit lang (mindestens 180, Standard 365 Epochen) ohne jede eigene Transaktion, kann die Erben-Adresse es übernehmen. Die Wallet erinnert vorher mehrfach. Jede eigene Transaktion setzt die Uhr zurück, auch bei ruhenden Konten (Abschnitt 6.2). Mitsignieren als Validator zählt ebenfalls als Aktivität. Meldet die Erben-Adresse den Anspruch an, hat der Eigentümer noch **30 Epochen**, um mit einer eigenen Transaktion abzubrechen | Casa, Bitcoin-Zeitschlösser |
 
-- Ändern oder Entfernen der Schutzeinstellungen wirkt selbst erst nach der Tresor-Verzögerung, sonst könnte ein Dieb sie einfach abschalten.
+- Ändern oder Entfernen der Schutzeinstellungen wirkt selbst erst nach der Tresor-Verzögerung, **mindestens aber nach 2 Epochen**, auch wenn keine Tresor-Verzögerung gesetzt ist. Sonst könnte ein Dieb die Sicherheitsadresse sofort auf sich ändern (Entscheidung 106).
+- Die Sicherheitsadresse darf nicht aus derselben Phrase stammen wie das Konto. Die Wallet prüft das für alle ihr bekannten Konten.
 - **Ehrlich:** Ohne Notfall-Schlüssel hat ein Dieb mit dem Handy denselben Schlüssel wie der Eigentümer. Die Selbst-Sperre verhindert dann nur, dass er TOY an eine fremde Adresse schickt. Am wirksamsten ist es, sofort alles an die Sicherheitsadresse zu retten. Die Wallet empfiehlt deshalb einen Notfall-Schlüssel auf einem zweiten Gerät oder auf Papier.
 - Ein Konto mit Schutzeinstellungen wird nie ausgelagert, solange eine Abhebung wartet.
 - Größe: höchstens rund 80 Byte zusätzlich je geschütztem Konto. M5 misst das mit.
@@ -210,7 +219,7 @@ Alle sind fest eingebaut, keine ist ein Smart Contract. Jede gilt nur, weil der 
 
 | Art | Regel | Meilenstein |
 |---|---|---|
-| **Stake delegieren** | Ein Konto bindet TOY bei einem Validator seiner Wahl, ohne es abzugeben. Es erhält seinen Anteil an der Belohnung, abzüglich eines Anteils für den Validator (höchstens 20 %, vom Validator öffentlich festgelegt). Bei einer Kürzung des Validators wird delegierter Stake im gleichen Verhältnis mitgekürzt, damit man gute Validatoren wählt. Lösen dauert 7 Epochen. Der Stake-Deckel von 1 % gilt für eigenen und delegierten Stake zusammen. **In der Startphase** nehmen Start-Validatoren keine Delegationen an | M4 |
+| **Stake delegieren** | Ein Konto bindet TOY bei einem Validator seiner Wahl, ohne es abzugeben. Es erhält seinen Anteil an der Belohnung, abzüglich eines Anteils für den Validator (höchstens 20 %, vom Validator öffentlich festgelegt). Bei einer Kürzung des Validators wird delegierter Stake im gleichen Verhältnis mitgekürzt, damit man gute Validatoren wählt. Lösen dauert 21 Epochen. Der Stake-Deckel von 1 % gilt für eigenen und delegierten Stake zusammen. **In der Startphase** nehmen Start-Validatoren keine Delegationen an | M4 |
 | **Mehrfachsignatur-Konto** | Konto, das nur mit m von n Unterschriften (n höchstens 10) bewegt werden kann, z. B. für Vereine, Familien oder Firmen | M12 |
 | **Sitzungs-Schlüssel** | Unterschlüssel für eine App mit Obergrenze (gesamt und je Transaktion), Ablauf (höchstens 30 Epochen) und optional erlaubten Empfängern. Der Hauptschlüssel kann ihn jederzeit sofort widerrufen | M12 |
 | **Treuhand** | Käufer zahlt ein. Freigabe an den Verkäufer mit 2 von 3 Unterschriften von Käufer, Verkäufer und vorher gewählter Schiedsstelle. Ohne Entscheidung bis zur vereinbarten Frist geht das Geld an den Käufer zurück | M12 |
@@ -233,7 +242,7 @@ Ziel: Angriffe, Manipulation und das Ausnutzen der Mechanismen früh stoppen, oh
 
 | Verstoß | Nachweis | Sperrzeit |
 |---|---|---|
-| Doppelsignatur | zwei Signaturen für dieselbe Höhe | Rolle 7 Epochen gesperrt, Kürzung nach Ausmaß: einzeln 1 %, ab einem Drittel des Stakes 100 % (Abschnitt 5.4), in den Erstattungs-Pool |
+| Doppelsignatur | zwei **widersprüchliche** Stimmen desselben Schlüssels für dieselbe Höhe, dieselbe Runde und dieselbe Abstimmungsphase. Eine neue Abstimmung nach einer Zeitüberschreitung (neue Runde) ist **keine** Doppelsignatur | Rolle 7 Epochen gesperrt, Kürzung nach Ausmaß: einzeln 1 %, ab einem Drittel des Stakes 100 % (Abschnitt 5.4), in den Erstattungs-Pool |
 | Ungültiger Block vorgeschlagen (z. B. falscher Zeitstempel) | signierter, ungültiger Block | Vorschlagsrecht 7 Epochen gesperrt |
 | Ungültige ToyWork-Lose | Prüfung schlägt fehl | Lose dieser Adresse 1 Epoche nicht angenommen |
 | Massenhaftes Anlegen von Konten | mehr als 20 neue Konten je Epoche aus einem Absender (Startwert) | kostenloses Kontingent des Absenders 7 Epochen gesperrt |
@@ -253,8 +262,18 @@ Ziel: Angriffe, Manipulation und das Ausnutzen der Mechanismen früh stoppen, oh
 - **Zahlen bei m = 1:** erste Epoche **50.500 TOY**, erstes Jahr rund **16,84 Mio. TOY**, Halbwertszeit 1.372 Epochen (**3,76 Jahre**), nach 25 Jahren rund 99,0 Mio. gemintet, rund 1,0 Mio. Rest, der danach asymptotisch ausläuft.
 - **Faktor m** zwischen 0,5 und 2,0: steigt mit **bezahlter oder durch Arbeit gedeckter** Nutzung und mit hoher Beteiligung an den Signaturen und hält über einen Zeitplanteil die 25-Jahres-Kurve. Kostenlose Transaktionen zählen nicht, sonst ließe sich die Emission mit Spam hochtreiben. Genaue Formel: Abschnitt 9.1.
 - **Aufteilung:** 50 % Konsens (Stufen 2 bis 4, Wurzel-gewichtet nach Stake, Verfügbarkeit), 40 % Arbeit, 10 % Erstattungs-Pool. **In der Startphase** (Abschnitt 5.3) geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren. Er sinkt über 180 Epochen von 50 % auf 0 %, der Rest geht in die Arbeits-Lotterie.
-- **Arbeits-Lotterie:** Ein ToyWork-Los ist ein Argon2id-Ergebnis (16 MiB Speicher), das unter einer Schwierigkeits-Schwelle liegt und an Adresse und Epoche gebunden ist. Die Schwelle passt sich an, damit je Block etwa gleich viele Lose ankommen. Je Block werden aus den gültigen Losen per VRF Gewinner gezogen. Jeder Gewinn ist mindestens 0,2 TOY. So kann auch ein Gerät ohne Konto sein erstes TOY gewinnen: 0,1 TOY werden zum Aktivierungs-Pfand, der Rest ist frei. Wer mehr rechnet, hat mehr Lose, die erwartete Belohnung ist proportional zur Arbeit. Prüfen kostet eine Argon2id-Berechnung je Los, deshalb gibt es eine Höchstzahl Lose je Block und je Peer.
-- **Regel I0 (Entscheidungen 60, 74):** Die Summe aller Guthaben (freie Guthaben, Aktivierungs-Pfänder, Stake, Erstattungs-Pool, Lotterie-Töpfe, ruhende Konten in den Ruhe-Schnappschüssen) ist **in jedem Block genau** gleich der Summe aller Emissionen. Ein Block, der das verletzt, ist ungültig.
+- **Arbeits-Lotterie:** Ein ToyWork-Los ist ein Argon2id-Ergebnis (16 MiB Speicher), das unter einer Schwierigkeits-Schwelle liegt, an Adresse, Epoche und **die Zufallszahl des letzten Blocks der Vorepoche** gebunden ist (so lässt es sich nicht im Voraus rechnen) und mit dem Schlüssel der Adresse **signiert** ist (so kann niemand mit fremden, ungültigen Losen eine Adresse belasten). **Ziehung erst später (Entscheidung 106):** Lose werden in Block N festgeschrieben, die Gewinner aber erst mit der Zufallszahl aus Block N+2 gezogen. Wer Block N baut, kennt diese Zahl noch nicht und kann die Ziehung nicht steuern. Die Schwelle passt sich an, damit je Block etwa gleich viele Lose ankommen. Je Block werden aus den gültigen Losen per VRF Gewinner gezogen. Jeder Gewinn ist mindestens 0,2 TOY. Die Zahl der Gewinner je Block ist `min(Zahl der Lose, Topf ÷ 0,2 TOY, 64)`. Was übrig bleibt, wandert in den Topf des nächsten Blocks, so passt der Mindestgewinn auch in vielen Jahren noch. So kann auch ein Gerät ohne Konto sein erstes TOY gewinnen: 0,1 TOY werden zum Aktivierungs-Pfand, der Rest ist frei. Wer mehr rechnet, hat mehr Lose, die erwartete Belohnung ist proportional zur Arbeit. Prüfen kostet eine Argon2id-Berechnung je Los, deshalb gibt es eine Höchstzahl Lose je Block und je Peer.
+- **Regel I0 (Entscheidungen 60, 74, 106):** Die Summe aller Guthaben ist **in jedem Block genau** gleich der Summe aller Emissionen. Ein Block, der das verletzt, ist ungültig. Dazu zählen **alle Töpfe**: freie Guthaben, Aktivierungs-Pfänder, eigener und delegierter Stake, Stake im Lösen, wegen Doppelsignatur festgehaltener Stake, Lohn der Start-Validatoren, Erstattungs-Pool, Lotterie-Töpfe, wartende Tresor-Abhebungen, Hash-Zeitschlösser, Treuhand-Beträge und ruhende Konten in den Ruhe-Schnappschüssen. Im Code führt eine einzige Liste alle Töpfe. Jede neue Transaktionsart muss ihren Topf dort eintragen und einen Test für I0 mitbringen.
+
+### 9.0 Wann und wie gemintet wird (Entscheidung 107)
+
+- **Zählung:** Der Genesis-Block hat die Höhe 0 und gehört zu Epoche 0. Er enthält keine Transaktionen und keine Emission. Der Block, der die Bedingungen für das Epochen-Ende erfüllt, gehört noch zur alten Epoche. Der nächste Block beginnt die neue.
+- **Berechnung:** Die Emission `E` einer Epoche wird mit ihrem ersten Block festgelegt (Formel in 9.1). Sie wird auf die **ersten 1.440 Blöcke** der Epoche verteilt: jeder Block `floor(E ÷ 1.440)`, der 1.440. Block zusätzlich den Rest. Weitere Blöcke derselben Epoche bringen keine Emission, nur Gebühren. In Epoche 0 beginnt die Verteilung mit Block 1.
+- **Aufteilung je Block:** Konsens-, Arbeits- und Pool-Anteil werden mit `floor` berechnet. Der Rundungsrest geht in den Erstattungs-Pool. Teilt sich ein Anteil auf mehrere Empfänger auf (z. B. Start-Validatoren), geht der Rest ebenfalls in den Erstattungs-Pool. Damit wird immer genau `E` gemintet, nicht mehr und nicht weniger.
+- **Zeit für den Plan:** `t` = Zeitstempel des letzten Blocks der Vorepoche minus Zeitstempel des Genesis-Blocks, in vollen Tagen.
+- **Datentypen:** Beträge `u128`. Die Zwischenwerte `d`, `L`, `Z` und das Ziel in 9.1 sind vorzeichenbehaftet (`i128`).
+- **Eingaben für m:** `u` zählt Transaktionen, eine Sammelüberweisung zählt als 1. `p` = erhaltene ÷ erwartete Signaturen, erwartet sind Komitee-Größe × Blöcke der Vorepoche (in der Startphase: Zahl der Start-Validatoren × Blöcke).
+- **Formale Prüfung:** Bewiesen wird je Schritt: Emission ≤ Restmenge, Summe ≤ 10^26, kein Überlauf. Lange Zeiträume decken Property-Tests ab.
 
 ### 9.1 Formel für m (Entscheidung 81)
 
@@ -295,7 +314,8 @@ Keine selbst erfundenen Algorithmen. Geprüfte Verfahren hinter Schnittstellen, 
 - **Konten:** secp256k1, Adresse = letzte 20 Byte von Keccak-256 des öffentlichen Schlüssels, BIP-39 (12 oder 24 Wörter), Pfad m/44'/60'/0'/0/n.
 - **Replay-Schutz:** eigene ToyChain-Chain-ID in jeder Signatur (EIP-155). Wer dieselbe Phrase auf anderen Ketten nutzt, teilt den Schlüssel. Die Wallet bietet deshalb optional einen eigenen Ableitungspfad für ToyChain an.
 - **Validatoren:** BLS12-381 mit Sammelsignaturen. **VRF** für Komitee und Lotterien.
-- **Hashes:** BLAKE3 für Merkle-Bäume, Keccak-256 für Ethereum-Kompatibilität.
+- **Hashes:** BLAKE3 für Merkle-Bäume, Keccak-256 für Ethereum-Kompatibilität, SHA-256 für Hash-Zeitschlösser.
+- **Ehrlich zu den Bibliotheken:** Für VRF (RFC 9381), ML-DSA, den Konsens im Tendermint-Stil und Dandelion++ gibt es in Rust weniger weit verbreitete, geprüfte Bibliotheken als für die übrigen Verfahren. Vor dem Einsatz werden Kandidaten mit Lizenz und Prüfstand bewertet. Wo nötig, wird streng nach Standard mit offiziellen Testvektoren umgesetzt und extern geprüft. Eigene Kryptografie wird nicht erfunden.
 - **Arbeit:** Argon2id.
 - **Optional ab M13:** ML-DSA (NIST FIPS 204) als Post-Quanten-Zusatzschlüssel, ECDH auf secp256k1 für Einmal-Empfangsadressen. Beides nur mit geprüften Bibliotheken.
 - **Formale Prüfung (Entscheidung 102):** Die Regeln für Obergrenze, Emission und I0 werden im Rust-Code mit einem Beweis-Werkzeug (z. B. Kani) geprüft, der Konsens zusätzlich als Modell (z. B. TLA+).
@@ -305,7 +325,7 @@ Keine selbst erfundenen Algorithmen. Geprüfte Verfahren hinter Schnittstellen, 
 
 - **Auf ToyChain:** Ethereum-Adressen, Signaturformat und JSON-RPC-Teilmenge. MetaMask und ähnliche Wallets können ToyChain als eigenes Netzwerk einbinden.
 - **In Wallet und ToyScan:** Weil die Adresse auf allen EVM-Ketten gleich ist, zeigen beide für dieselbe Adresse auch Guthaben auf anderen EVM-Ketten (z. B. Ethereum, Polygon). Die Wallet kann dort auch senden. Das ist reine **Anzeige und Nutzung der jeweiligen Kette**, keine Verbindung zwischen den Ketten.
-- **Atomarer Tausch ohne Bridge (Entscheidung 86):** Mit dem Hash-Zeitschloss (Abschnitt 7.1) können zwei Menschen TOY gegen Coins einer anderen Kette tauschen, ohne Vermittler: Beide sperren ihren Betrag mit demselben Hash. Holt einer seinen Teil mit dem geheimen Wert ab, wird dieser Wert öffentlich und der andere kann seinen Teil ebenfalls abholen. Läuft die Zeit ab, bekommen beide ihr Geld zurück. Auf ToyChain ist das eine fest eingebaute Transaktionsart (Hash: SHA-256, wie bei Bitcoin und Lightning). Auf der anderen Kette nutzt man dort übliche Verfahren (z. B. Bitcoin-Skript). Die Wallet führt Schritt für Schritt durch den Tausch. Die Zeitschranke auf ToyChain muss mindestens 1 Epoche länger sein als auf der anderen Kette.
+- **Atomarer Tausch ohne Bridge (Entscheidung 86):** Mit dem Hash-Zeitschloss (Abschnitt 7.1) können zwei Menschen TOY gegen Coins einer anderen Kette tauschen, ohne Vermittler: Beide sperren ihren Betrag mit demselben Hash. Holt einer seinen Teil mit dem geheimen Wert ab, wird dieser Wert öffentlich und der andere kann seinen Teil ebenfalls abholen. Läuft die Zeit ab, bekommen beide ihr Geld zurück. Auf ToyChain ist das eine fest eingebaute Transaktionsart (Hash: SHA-256, wie bei Bitcoin und Lightning). Auf der anderen Kette nutzt man dort übliche Verfahren (z. B. Bitcoin-Skript). Die Wallet führt Schritt für Schritt durch den Tausch. Die Zeitschranke muss auf der Kette **länger** sein, auf der derjenige sperrt, der den geheimen Wert erzeugt hat, und zwar um mindestens 24 Stunden. Die Wallet stellt das automatisch richtig ein (Entscheidung 106).
 - **Schutz vor Vordrängeln auf anderen Ketten:** Die Wallet sendet auf Ethereum standardmäßig über einen geschützten Weg und warnt bei Tausch-Apps (Entscheidung 94, `04-toypay-wallet.md`).
 - **Keine Bridge** im jetzigen Umfang. Das Konzept liegt in `docs/spaeter/06-bridge.md`.
 - **Klarstellung zu gleichnamigen Token:** Auf Polygon und Ethereum gibt es ältere ERC-20-Token mit dem Namen ToyCoin und dem Ticker TOY. Sie sind **nicht** mit dem nativen TOY verbunden und nicht 1:1 eintauschbar. Wallet und ToyScan kennzeichnen das deutlich (Entscheidung 63).
@@ -322,7 +342,7 @@ Keine selbst erfundenen Algorithmen. Geprüfte Verfahren hinter Schnittstellen, 
 | Schlüsseldiebstahl | Hardware-Keystore, verschlüsselter Speicher |
 | Replay | Chain-ID in jeder Signatur |
 | Fehler im Code | Regel I0 in jedem Block, Dauer-Fuzzing, Property-Tests, Audits, Bug-Bounty-Programm (Entscheidung 88) |
-| Manipulierte Software | Reproduzierbare Builds: Eine Version gilt erst, wenn mindestens 3 Entwickler unabhängig dieselbe Datei gebaut und signiert haben. Wallet und Knoten prüfen das vor jedem Update (Entscheidung 87) |
+| Manipulierte Software | Reproduzierbare Builds: Eine Version gilt erst, wenn mindestens 3 Entwickler unabhängig dieselbe Datei gebaut und signiert haben (sobald es so viele Mitwirkende gibt, bis dahin öffentlich nachbaubar). Wallet und Knoten prüfen das vor jedem Update (Entscheidung 87) |
 | Kettenstopp | öffentlicher Notfall-Plan mit Ablauf für Prüfung, Neustart und Information (Entscheidung 88) |
 | GPU-Farmen in der Arbeits-Lotterie | speicherharte Funktion, Wurzel-Gewichtung im Konsens. Ob 16 MiB reichen, wird im Testnet gemessen |
 
@@ -337,7 +357,7 @@ Diese Regeln stehen fest im Code. Für spätere Mitbestimmung gilt: Kein Code-Pf
 5. Epoche mindestens 1.440 Blöcke **und** mindestens 24 Stunden.
 6. Nur der native Coin TOY, keine Token, keine NFTs, keine Smart Contracts.
 7. Adressen und Signaturen wie Ethereum, Chain-ID in jeder Signatur.
-8. **Kein Zugriff auf fremde Guthaben:** Keine Regel und keine Abstimmung kann TOY von einem Konto nehmen, einfrieren oder umverteilen. Ausnahme sind nur Einstellungen, die der Eigentümer selbst gesetzt hat (Tresor-Verzögerung, Selbst-Sperre, Erben-Adresse, Hash-Zeitschloss, Delegation, Mehrfachsignatur, Sitzungs-Schlüssel, Treuhand, Abo-Erlaubnis, Abschnitte 7.3 und 7.4). Sperrzeiten entziehen nur Rechte. Gekürzt wird nur freiwillig für eine Rolle gebundener Stake bei Doppelsignatur. Konten gehen nie verloren: Sie ruhen höchstens und lassen sich jederzeit aufwecken.
+8. **Kein Zugriff auf fremde Guthaben:** Keine Regel und keine Abstimmung kann TOY von einem Konto nehmen, einfrieren oder umverteilen. Ausnahme sind nur Einstellungen, die der Eigentümer selbst gesetzt hat (Tresor-Verzögerung, Selbst-Sperre, Erben-Adresse, Hash-Zeitschloss, Delegation, Mehrfachsignatur, Sitzungs-Schlüssel, Treuhand, Abo-Erlaubnis, Abschnitte 7.3 und 7.4) und die festen Bindungen des Protokolls, die vorher bekannt sind: das Aktivierungs-Pfand, die Lösefrist des Stakes und das Festhalten von Stake bis zur Berechnung einer Kürzung. Sperrzeiten entziehen nur Rechte. Gekürzt wird nur freiwillig für eine Rolle gebundener Stake bei Doppelsignatur. Konten gehen nie verloren: Sie ruhen höchstens und lassen sich jederzeit aufwecken.
 9. Diese Liste selbst.
 
 Ehrlich gesagt: Wer eine eigene Software verbreitet, kann jede Kette abspalten. Dagegen hilft Transparenz: ToyScan und die Wallet prüfen die Verfassung selbst und warnen bei einer Abspaltung, die sie bricht.
@@ -348,7 +368,7 @@ Ehrlich gesagt: Wer eine eigene Software verbreitet, kann jede Kette abspalten. 
 - Blockzeit 60 s, frühester Block nach 10 s, Epoche mindestens 1.440 Blöcke und mindestens 24 Stunden
 - Blockgröße höchstens 128 KB, Komitee 128, endgültig nach 1 Block
 - Start-Validatoren 7 bis 21, Lohn sinkt über 180 Epochen von 50 % auf 0 %, Lohn 365 Epochen gebunden, Ende der Startphase bei 21 neuen Validatoren mit je 1.000 TOY und zusammen mindestens 1 % der geminteten TOY
-- Stake-Stufen 10 / 100 / 1.000 TOY, Lösen nach 7 Epochen, Deckel 1 % des gesamten Stakes
+- Stake-Stufen 10 / 100 / 1.000 TOY, Lösen nach 21 Epochen, Deckel 1 % des gesamten Stakes
 - Kontingent 10 bis 100 je Epoche, Kontoalter 100 Blöcke, Vielnutzer ab 1.000 je Epoche
 - Aktivierungs-Pfand 0,1 TOY (darf bis 0,01 TOY sinken), Mindestgewinn der Arbeits-Lotterie 0,2 TOY
 - Auslagern ab 90 % Füllung bis 80 %, Schonfrist 7 Epochen, Konten mit Rollen-Stake nie

@@ -1,6 +1,6 @@
 # TOYPAY Wallet: Wallet und Knoten in einem
 
-Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 105 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
+Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 108 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
 
 ## 1. Ziel
 
@@ -60,7 +60,7 @@ Die App passt ihren Aufwand **automatisch** an. Der Nutzer wählt nur die Obergr
 | Weg | Stufe | Wie |
 |---|---|---|
 | **Arbeits-Lotterie** | ab 0 | Das Gerät rechnet ToyWork-Lose (Argon2id, 16 MiB) und reicht sie ein. Je Block werden Gewinner gezogen. Jeder Gewinn ist mindestens 0,2 TOY. Beim ersten Gewinn werden 0,1 TOY zum Aktivierungs-Pfand, der Rest ist frei |
-| **Mitsignieren** | ab 2 | Anteil an der Konsens-Belohnung (nach der Startphase, vorher geht er an die Start-Validatoren) |
+| **Mitsignieren** | ab 2 | Anteil an der Konsens-Belohnung (nach der Startphase. Vorher geht der Konsens-Anteil an die Start-Validatoren und, sinkend, in die Arbeits-Lotterie) |
 | **Voll-Knoten** | ab 3 | zusätzliches Gewicht für Verfügbarkeit |
 | **Validator** | 4 | Konsens-Belohnung und 20 % der Gebühren des eigenen Blocks |
 | **Gebühren-Lotterie** | ab 2 | Anteil an 40 % der Gebühren für aktive Teilnehmer |
@@ -91,7 +91,7 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 - Die App erklärt beim ersten Eingang: „0,1 TOY sind als Aktivierungs-Pfand gebunden. Sie gehören weiter dir und kommen beim Auflösen zurück.“
 - Vor einer Überweisung an eine neue Adresse prüft die App, ob sie mindestens 0,1 TOY beträgt.
 - **Ruhende Konten:** Wird das eigene Konto ausgelagert, speichert die App den Beweis (knapp 1 KB) selbst. Beim nächsten Senden oder Empfangen weckt sie das Konto automatisch auf. Geht die App verloren, holt sie den Beweis nach der Wiederherstellung mit der Phrase von Archiv-Knoten oder ToyScan. Vor einer Zahlung an eine ruhende Adresse holt die App deren Beweis ebenfalls automatisch.
-- **Konto auflösen** in den Einstellungen: Die App löst zuerst gebundenen Stake (7 Epochen), dann schickt sie alles samt Pfand an eine Zieladresse. Wahlweise spendet der Nutzer den Rest in den Erstattungs-Pool. Kontingent und Stufe lassen sich nicht übertragen.
+- **Konto auflösen** in den Einstellungen: Die App löst zuerst gebundenen Stake (21 Epochen) und zeigt alles, was noch offen ist (Zeitschlösser, Treuhand, Abos, Namen), dann schickt sie alles samt Pfand an eine Zieladresse. Wahlweise spendet der Nutzer den Rest in den Erstattungs-Pool. Kontingent und Stufe lassen sich nicht übertragen.
 
 ## 7a. Sicherheit und Komfort beim Bedienen (Entscheidungen 82 bis 86)
 
@@ -154,7 +154,7 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 
 **Überblick**
 - **Gesamtübersicht in Euro** über alle Konten und Ketten. Die Kurse kommen aus öffentlichen Quellen, die Funktion lässt sich ausschalten. Kurse werden abgefragt, ohne die eigenen Adressen mitzuschicken.
-- **Mitteilungen** bei Eingang, Abschluss, wartender Tresor-Abhebung, ablaufender Erben-Frist und Sicherheitswarnungen.
+- **Mitteilungen** bei Eingang, Abschluss, wartender Tresor-Abhebung, ablaufender Erben-Frist und Sicherheitswarnungen. Zugestellt wird über offene Wege (z. B. UnifiedPush oder den eigenen Knoten), nicht über proprietäre Push-Dienste.
 - **Verständlicher Verlauf** mit Filter und Klartext, z. B. „5 TOY an Anna gesendet“.
 
 **Sync zwischen Geräten:** Kontonamen, Adressbuch, Daueraufträge und Einstellungen werden **Ende-zu-Ende verschlüsselt** abgeglichen. Der Schlüssel dafür wird aus der Phrase abgeleitet. Phrase, private Schlüssel und Signier-Schlüssel werden **nie** synchronisiert. Als Speicher dient ein frei wählbarer Dienst oder der eigene ToyNode.
@@ -173,8 +173,8 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 **Schutz im Alltag**
 - **Zwischenablage-Schutz:** Vor dem Senden vergleicht die App die eingefügte Adresse mit der zuletzt kopierten und warnt, wenn Schadsoftware sie heimlich ausgetauscht hat.
 - **Bildschirmfoto-Sperre:** Seiten mit Phrase, Schlüsseln oder Notfall-Schlüssel lassen sich nicht abfotografieren oder aufnehmen (auf Android per Systemschalter, am PC mit Warnung).
-- **Geräte-Prüfung:** Warnung bei gerootetem oder manipuliertem Gerät und bei veraltetem System. Die App läuft trotzdem, aber große Beträge brauchen eine zusätzliche Bestätigung.
-- **Täuschungs-PIN:** Eine zweite PIN öffnet unter Zwang eine harmlose Wallet mit eigener Phrase und wenig Geld. Von außen ist nicht zu erkennen, dass es eine zweite Wallet gibt.
+- **Geräte-Prüfung:** Warnung bei gerootetem oder manipuliertem Gerät und bei veraltetem System, mit eigenen, offenen Prüfungen auf dem Gerät. Proprietäre Prüfdienste großer Anbieter werden nicht eingebaut (MIT-Regel). Die App läuft trotzdem, aber große Beträge brauchen eine zusätzliche Bestätigung.
+- **Täuschungs-PIN:** Eine zweite PIN öffnet unter Zwang eine harmlose Wallet mit eigener Phrase und wenig Geld. Solange sie offen ist, pausieren Knoten, Mitteilungen und Sync der echten Wallet. **Ehrlich:** Wer das Gerät gründlich untersucht, kann die zweite Wallet finden. Die Täuschungs-PIN schützt in der akuten Lage, nicht gegen eine technische Untersuchung.
 
 **Bezahlen**
 - **Kassen-Modus** für Händler: Betrag eintippen, QR-Code zeigen, grüner Haken nach 1 Block. Mit Tagesabschluss als Tabelle.
@@ -189,6 +189,14 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 - **Barrierefreiheit:** Bildschirmleser, große Schrift, hoher Kontrast, keine Information nur über Farbe.
 
 **Neue Konto-Arten in der App** (Spezifikation 7.4): Delegieren mit Validator-Bewertung aus ToyScan, Mehrfachsignatur-Konten, Sitzungs-Schlüssel für Apps mit Übersicht und Widerruf, Treuhand, Abo-Erlaubnisse mit Widerruf, Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel.
+
+## 7e. Datenschutz (Entscheidung 108)
+
+- **Andere Ketten** werden nur abgefragt, wenn der Nutzer sie eingeschaltet hat, und auf Wunsch über Tor oder einen eigenen Zugang. Sonst verraten öffentliche Zugänge Adresse und IP-Adresse zusammen.
+- **Kurse** werden für eine feste, allgemeine Liste geholt, nicht für die eigenen Token, damit die Abfrage kein Fingerabdruck ist.
+- **Beweise für ruhende Konten** holt die Wallet von mehreren Quellen abwechselnd, auf Wunsch über Tor.
+- **Adress-Alarm in ToyScan** verknüpft die eigene Benachrichtigungsadresse mit dem Konto. Die Wallet empfiehlt stattdessen ihre eigenen Mitteilungen.
+- **Sync** überträgt so wenig Metadaten wie möglich und zeigt an, welcher Dienst genutzt wird.
 
 ## 7d. 45 Sprachen und vier Modi (Entscheidungen 103, 104)
 

@@ -26,6 +26,7 @@ Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit 
 | `docs/03-bauplan-phase1.md` | Bauplan Phase 1 (Testnet): 13 Meilensteine mit Fertig-Kriterien und Prompts |
 | `docs/04-toypay-wallet.md` | TOYPAY Wallet: Clients, Teilnahme-Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
 | `docs/05-toyscan.md` | ToyScan: Warnampel mit allen Formeln, Muster-Warnungen, andere Ketten, offene API |
+| `docs/11-pruefbericht-2.md` | Zweiter unabhängiger Prüfbericht vom 18.10.2026 |
 | `docs/10-pruefbericht-1.md` | Unabhängiger Prüfbericht vom 17.10.2026 |
 | `docs/spaeter/` | Bridge, Altbestand, Reserve, Mitbestimmung, Spiel-NFTs, alte Spezifikation v0.2 |
 | `docs/STATUS.md` | Aktueller Stand, Prüfergebnisse, offene Fragen |
