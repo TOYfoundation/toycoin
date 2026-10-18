@@ -1,6 +1,6 @@
 # ToyChain – Technische Spezifikation v0.3
 
-Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 108):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
+Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 111):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
 
 ## 1. Zusammenfassung
 
@@ -53,7 +53,7 @@ Jede Stufe ist freiwillig. Die TOYPAY Wallet schlägt je nach Gerät eine Stufe 
 
 - **Kein Guthaben nötig, um mitzumachen:** Stufe 0 braucht nichts. Das Aktivierungs-Pfand gilt nur für Konten, die im Zustand gespeichert werden. Es schützt das 256-MB-Budget vor Millionen leerer Konten, bleibt Eigentum des Nutzers und ist keine Teilnahme-Hürde.
 - **Gebundenes TOY (Stake)** bleibt Eigentum des Nutzers. Lösen dauert **21 Epochen** (Startwert), länger als die 18 Epochen, nach denen eine Kürzung feststeht. So kann sich niemand einer Strafe entziehen (Entscheidung 106).
-- **Gegen Übermacht:** Der wirksame Stake je Teilnehmer ist gedeckelt (Startwert 1 % des gesamten Stakes), Belohnungen steigen mit der Wurzel des Stakes.
+- **Gegen Übermacht:** Der wirksame Stake je Teilnehmer ist gedeckelt (5 % des gesamten Stakes unter 100 Validatoren, danach 1 %, Entscheidung 111). Ob Belohnungen mit der Wurzel des Stakes oder linear steigen, ist offen (Prüfbericht 2, H8: die Wurzel lohnt das Aufteilen auf viele Konten).
 - **Prover** (Phase 2) und **Archiv-Knoten** (ohne 256-MB-Grenze, freiwillig) kommen als weitere Rollen hinzu.
 
 ## 5. Konsens
@@ -84,13 +84,20 @@ Auf ToyChain gibt es keine Tauschbörsen und keine Smart Contracts, deshalb kein
 
 Beim Start gibt es kein TOY und damit keinen Stake. Deshalb:
 
-- Der Genesis-Block nennt **7 bis 21 Start-Validatoren** mit ihren öffentlichen BLS-Schlüsseln, betrieben von Freiwilligen mit möglichst verschiedenen Betreibern und Standorten. Alle haben gleiches Gewicht.
-- **Lohn (Entscheidung 70):** Die Start-Validatoren teilen sich den Konsens-Anteil der Emission zu gleichen Teilen. Er beginnt bei 50 % der Emission und **sinkt jede Epoche gleichmäßig**, bis er nach **180 Epochen 0 %** erreicht (Entscheidung 78). Was er weniger wird, geht in die Arbeits-Lotterie. In der ersten Epoche sind das zusammen 25.250 TOY (bei 7 Start-Validatoren je rund 3.600, bei 21 je rund 1.200), über alle 180 Epochen zusammen rund **2,2 Mio. TOY**, danach nichts mehr.
+- Der Genesis-Block nennt **21 Start-Validatoren** mit ihren öffentlichen BLS-Schlüsseln, betrieben von Freiwilligen mit möglichst verschiedenen Betreibern und Standorten. Alle haben gleiches Gewicht (Entscheidung 111). Ihr Zeitstempel muss beim Start auf 15 Sekunden genau zur Uhr jedes Start-Validators passen, ToyScan prüft ihn gegen unabhängige Zeitquellen.
+- **Planzeit (Entscheidung 110):** Für Lohn und Zeitplan zählt die **Planzeit**: die Summe aller Blockabstände, wobei jeder Abstand höchstens 600 Sekunden zählt. Lange Pausen oder absichtlich langsame Blöcke lassen die Planzeit also nicht davonlaufen. `d` sind die vollen Tage Planzeit.
+- **Lohn (Entscheidungen 70, 78, 110):** Die Start-Validatoren teilen sich den Konsens-Anteil der Emission zu gleichen Teilen. Sein Anteil an der Emission ist `a(d) = 500.000 × max(0, 180 − d) ÷ 180` ppm, er sinkt also **nach Tagen**, nicht nach Epochen, von 50 % auf 0 % nach 180 Tagen. Zusätzlich gilt ein **Deckel:** Der Lohn einer Epoche ist höchstens `a(d)` mal die Plan-Emission (m = 1) der Tage, die seit der vorigen Epoche vergangen sind. Was er weniger wird, geht in die Arbeits-Lotterie. Bei m = 1 und einer Epoche je Tag sind das in der ersten Epoche zusammen 25.250 TOY (je rund 1.200 TOY) und über alle 180 Tage zusammen höchstens **2.217.786,59 TOY**, danach nichts mehr. Durch Tag-Zählung und Deckel bringt auch eine Verlangsamung der Blöcke keinen höheren Lohn.
 - **Lohn wird gebunden (Entscheidung 78):** Jeder Lohn wird sofort als Stake gebunden und bleibt **365 Epochen** gesperrt. Er kann in dieser Zeit weder verkauft noch übertragen werden und haftet bei Doppelsignatur mit.
-- **Die Startphase endet automatisch** zu Beginn der Epoche, in der mindestens **21 neue Validatoren** mit je mindestens 1.000 TOY Stake angemeldet sind **und** ihr Stake zusammen mindestens **1 % aller gemintete TOY** beträgt. **Neu** heißt: Die Adresse gehört keinem Start-Validator, und Stake von Start-Validatoren zählt für diese Bedingung nicht (Entscheidung 78). Ab dann wählt das Protokoll das Komitee nach Stake, und die Emission wird normal aufgeteilt. Die Start-Validatoren verlieren ihren Sonderstatus, können aber mit ihrem Stake wie alle anderen weitermachen, im Rahmen des Stake-Deckels.
-- **Nach 180 Epochen ohne Übergabe** signieren die Start-Validatoren weiter, bekommen aber keinen Lohn mehr. Der gesamte Konsens-Anteil geht dann in die Arbeits-Lotterie, bis die Übergabe erfolgt.
-- ToyScan zeigt Namen, Adressen, Einnahmen und gebundenen Lohn jedes Start-Validators und den Fortschritt der Übergabe öffentlich.
-- **Ehrliche Einordnung:** Der Lohn bleibt ein offen sichtbarer, begrenzter Vorteil für die Betreiber der ersten Monate (höchstens rund 2,2 % der Gesamtmenge). Durch die Bindung können sie ihn nicht schnell verkaufen, und weil nur neue Validatoren die Übergabe auslösen, geht die Kette tatsächlich in andere Hände über. ToyScan färbt sich gelb, wenn die Startphase länger als 365 Epochen läuft. Die Grenzen (21 Validatoren, 1 %, 180 Epochen) werden im Testnet überprüft.
+- **Übergabe (Entscheidung 111):** Die Startphase endet zu Beginn der ersten Epoche, in der **alle** Bedingungen erfüllt sind:
+  1. seit dem Start sind mindestens **90 Tage** Planzeit vergangen,
+  2. mindestens **21 neue Validatoren** (Adressen, die keinem Start-Validator gehören) mit je mindestens 1.000 TOY,
+  3. gezählt wird nur Stake, der seit mindestens **30 Epochen** gebunden ist,
+  4. der wirksame Stake der neuen Validatoren beträgt mindestens **zwei Drittel** des gesamten wirksamen Stakes, einschließlich des gebundenen Lohns der Start-Validatoren.
+  Ab dann wählt das Protokoll das Komitee nach Stake, und die Emission wird normal aufgeteilt. Die Start-Validatoren verlieren ihren Sonderstatus und machen mit ihrem Stake wie alle anderen weiter.
+- **Wirksamer Stake (Entscheidung 111):** Stake je Teilnehmer zählt höchstens bis zum Deckel: **5 %** des gesamten gebundenen Stakes, solange weniger als 100 Validatoren aktiv sind, danach **1 %**.
+- **Nach 180 Tagen ohne Übergabe** signieren die Start-Validatoren weiter, bekommen aber keinen Lohn mehr. Der gesamte Konsens-Anteil geht dann in die Arbeits-Lotterie, bis die Übergabe erfolgt.
+- ToyScan zeigt Namen, Adressen, Einnahmen und gebundenen Lohn jedes Start-Validators und den Fortschritt jeder Übergabe-Bedingung öffentlich.
+- **Ehrliche Einordnung:** Der Lohn bleibt ein offen sichtbarer, begrenzter Vorteil für die Betreiber der ersten Monate (höchstens rund 2,2 % der Gesamtmenge). Ob „neue“ Validatoren wirklich andere Menschen sind, kann kein Protokoll beweisen. Die Zwei-Drittel-Regel, die Bindezeit und die Mindestdauer machen eine Übernahme aber teuer: Wer kapern will, muss selbst zwei Drittel des Stakes aufbringen und 30 Epochen binden. Weil die Start-Validatoren in 90 Tagen viel Lohn ansammeln, kann die Übergabe dauern. M4 simuliert das mit echten Zahlen. ToyScan färbt sich gelb, wenn die Startphase länger als 365 Epochen läuft.
 
 ### 5.4 Strafen im Konsens
 
@@ -270,7 +277,7 @@ Ziel: Angriffe, Manipulation und das Ausnutzen der Mechanismen früh stoppen, oh
 - **Zählung:** Der Genesis-Block hat die Höhe 0 und gehört zu Epoche 0. Er enthält keine Transaktionen und keine Emission. Der Block, der die Bedingungen für das Epochen-Ende erfüllt, gehört noch zur alten Epoche. Der nächste Block beginnt die neue.
 - **Berechnung:** Die Emission `E` einer Epoche wird mit ihrem ersten Block festgelegt (Formel in 9.1). Sie wird auf die **ersten 1.440 Blöcke** der Epoche verteilt: jeder Block `floor(E ÷ 1.440)`, der 1.440. Block zusätzlich den Rest. Weitere Blöcke derselben Epoche bringen keine Emission, nur Gebühren. In Epoche 0 beginnt die Verteilung mit Block 1.
 - **Aufteilung je Block:** Konsens-, Arbeits- und Pool-Anteil werden mit `floor` berechnet. Der Rundungsrest geht in den Erstattungs-Pool. Teilt sich ein Anteil auf mehrere Empfänger auf (z. B. Start-Validatoren), geht der Rest ebenfalls in den Erstattungs-Pool. Damit wird immer genau `E` gemintet, nicht mehr und nicht weniger.
-- **Zeit für den Plan:** `t` = Zeitstempel des letzten Blocks der Vorepoche minus Zeitstempel des Genesis-Blocks, in vollen Tagen.
+- **Zeit für den Plan:** `t` = **Planzeit** (Abschnitt 5.3) bis zum letzten Block der Vorepoche, in vollen Tagen. Jeder Blockabstand zählt höchstens 600 Sekunden, ein Stillstand treibt m also nicht hoch.
 - **Datentypen:** Beträge `u128`. Die Zwischenwerte `d`, `L`, `Z` und das Ziel in 9.1 sind vorzeichenbehaftet (`i128`).
 - **Eingaben für m:** `u` zählt Transaktionen, eine Sammelüberweisung zählt als 1. `p` = erhaltene ÷ erwartete Signaturen, erwartet sind Komitee-Größe × Blöcke der Vorepoche (in der Startphase: Zahl der Start-Validatoren × Blöcke).
 - **Formale Prüfung:** Bewiesen wird je Schritt: Emission ≤ Restmenge, Summe ≤ 10^26, kein Überlauf. Lange Zeiträume decken Property-Tests ab.
@@ -286,7 +293,7 @@ Alle Werte sind ganze Zahlen in **Millionsteln** (ppm, 1.000.000 = 1,0). Divisio
 | `n` | min(10^6, 2 × u) | voll ab 50 % Nutzung |
 | `b` | clamp((p − 670.000) × 10^6 ÷ 280.000, 0, 10^6) | 0 unter 67 %, voll ab 95 % |
 | Leistungsteil `L` | (n + b) ÷ 2 − 500.000 | −0,5 bis +0,5, je zur Hälfte Nutzung und Beteiligung |
-| Plan `P(t)` | P(0) = 0, P(i+1) = P(i) + floor((10^26 − P(i)) × 505 ÷ 10^6), `t` = volle Tage seit dem Genesis-Block nach Zeitstempel | Ausgabe bei m = 1 nach **echter Zeit** |
+| Plan `P(t)` | P(0) = 0, P(i+1) = P(i) + floor((10^26 − P(i)) × 505 ÷ 10^6), `t` = volle Tage Planzeit (Blockabstände je höchstens 600 s) | Ausgabe bei m = 1 nach **echter Zeit** |
 | Abweichung `d` | (bisher ausgegeben − P(t)) × 10^6 ÷ P(t), bei P(t) = 0 gilt d = 0 | positiv = vor dem Plan |
 | Zeitplanteil `Z` | clamp(−10 × d, −500.000, +750.000) | bremst, wenn die Ausgabe vorausläuft, und gibt Gas, wenn sie zurückliegt |
 | Ziel | clamp(10^6 + L ÷ 2 + Z, 500.000, 2.000.000) | Leistung wirkt höchstens ±0,25 |
@@ -367,8 +374,9 @@ Ehrlich gesagt: Wer eine eigene Software verbreitet, kann jede Kette abspalten. 
 - Ticker TOY, 18 Dezimalstellen, Gesamtmenge 10^26 kleinste Einheiten
 - Blockzeit 60 s, frühester Block nach 10 s, Epoche mindestens 1.440 Blöcke und mindestens 24 Stunden
 - Blockgröße höchstens 128 KB, Komitee 128, endgültig nach 1 Block
-- Start-Validatoren 7 bis 21, Lohn sinkt über 180 Epochen von 50 % auf 0 %, Lohn 365 Epochen gebunden, Ende der Startphase bei 21 neuen Validatoren mit je 1.000 TOY und zusammen mindestens 1 % der geminteten TOY
-- Stake-Stufen 10 / 100 / 1.000 TOY, Lösen nach 21 Epochen, Deckel 1 % des gesamten Stakes
+- 21 Start-Validatoren, Lohn sinkt über 180 Tage Planzeit von 50 % auf 0 % mit Deckel, Lohn 365 Epochen gebunden. Übergabe frühestens nach 90 Tagen, wenn 21 neue Validatoren mit je 1.000 TOY (30 Epochen gebunden) zwei Drittel des wirksamen Stakes halten
+- Planzeit: Blockabstände zählen je höchstens 600 Sekunden
+- Stake-Stufen 10 / 100 / 1.000 TOY, Lösen nach 21 Epochen, Deckel 5 % des gesamten Stakes unter 100 Validatoren, danach 1 %
 - Kontingent 10 bis 100 je Epoche, Kontoalter 100 Blöcke, Vielnutzer ab 1.000 je Epoche
 - Aktivierungs-Pfand 0,1 TOY (darf bis 0,01 TOY sinken), Mindestgewinn der Arbeits-Lotterie 0,2 TOY
 - Auslagern ab 90 % Füllung bis 80 %, Schonfrist 7 Epochen, Konten mit Rollen-Stake nie

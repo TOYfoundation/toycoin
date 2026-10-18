@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 108). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 111). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -30,6 +30,22 @@ toychain/
 toyscan/                     Explorer und Warnampel (M11)
 ```
 
+## Umfang von Testnet 1 (Entscheidung 109, Mittelweg)
+
+| In Testnet 1 | Danach (spätere Testnet-Versionen) |
+|---|---|
+| M1 bis M3: Emission, Konten mit Pfand, Kontingent mit Grenzen, Gebühren, Arbeits-Lotterie, Schutzregeln | Aufnahme-Pflicht (feste Reihenfolge bleibt in Testnet 1), Strafe nach Ausmaß über den einfachen Fall hinaus |
+| M4: Konsens im Stil von Tendermint, 21 Start-Validatoren, Lohn, Übergabe | Stake delegieren |
+| M5: Speicher, Messbericht. Ruhende Konten nur, wenn die Messung sie nötig macht | Ruhende Konten mit Zusammenführen, falls nicht schon nötig |
+| M6: Netzwerk mit libp2p | Dandelion++, Tor |
+| M7: JSON-RPC und `toy_`-Methoden | SDKs |
+| M8, M9: Wallet und App mit **45 Sprachen**, **vier Modi**, Schutz beim Senden, Sicherungs-Quiz, automatischer Sperre, mehreren Konten, Mitteilungen | Browser-Erweiterung, eingebauter Browser, Täuschungs-PIN, NFC, Kassen-Modus, Offline-Signieren, Sync |
+| **Konto-Schutz** aus M12: Tresor-Verzögerung, Notfall-Schlüssel, Sicherheitsadresse, Selbst-Sperre, Erben-Adresse | übrige Teile von M12 (Mehrfachsignatur, Sitzungs-Schlüssel, Treuhand, Abo-Erlaubnis, Sammelüberweisung, Gebühr übernehmen, Hash-Zeitschloss) und M13 |
+| M10: lokales und öffentliches Testnet, Testnet-Kran, `toy-cli devnet` | dreifach signierte Builds (sobald es 3 Mitwirkende gibt) |
+| M11: ToyScan mit Warnampel und Erklärungen in 45 Sprachen, Anzeige anderer Ketten | Senden auf anderen Ketten, WalletConnect, Schutz vor Vordrängeln auf anderen Ketten, Netzwerk-Karte, offene Daten |
+
+Ein Meilenstein kann für eine Sitzung zu groß sein. Dann wird er im Plan in Teilschritte (z. B. M8a, M8b) geteilt.
+
 ## Meilensteine
 
 Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht es weiter.
@@ -41,7 +57,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10. In der Startphase geht der Konsens-Anteil zu gleichen Teilen an die Start-Validatoren und sinkt über 180 Epochen auf 0 %, der Rest in die Arbeits-Lotterie.
 - Epochen-Ende nach mindestens 1.440 Blöcken **und** 86.400 Sekunden.
 - Faktor m genau nach Spezifikation 9.1 (Millionstel, Plan nach echter Zeit, Glättung 0,05). Die Rust-Umsetzung muss bei denselben Eingaben exakt dieselben Werte liefern wie `docs/anhang/m-simulation.py`.
-- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Die vier Fälle aus Spezifikation 9.1 ergeben dieselben Zahlen wie die Simulation. m ändert sich nie um mehr als 0,05 je Epoche. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Kürzungen und Spenden erhöhen die Restmenge nie. Genesis-Zustand hat Summe 0. Lohn der Start-Validatoren über alle 180 Epochen zusammen ≈ 2,2 Mio. TOY bei m = 1.
+- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Die vier Fälle aus Spezifikation 9.1 ergeben dieselben Zahlen wie die Simulation. m ändert sich nie um mehr als 0,05 je Epoche. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Kürzungen und Spenden erhöhen die Restmenge nie. Genesis-Zustand hat Summe 0. Lohn der Start-Validatoren über alle 180 Tage zusammen höchstens 2.217.786,59 TOY bei m = 1 und einer Epoche je Tag, und mit 3-Tage-Epochen nicht mehr (Deckel und Planzeit, Entscheidung 110).
 
 ### M2: Kryptografie und Adressen
 - Schlüssel aus BIP-39, Pfad m/44'/60'/0'/0/n, Adresse wie Ethereum, Signieren mit Chain-ID (EIP-155), BLS12-381, VRF.
@@ -59,7 +75,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 
 ### M4: Blöcke, Konsens, Startphase
 - Blockformat mit Zeitstempel-Regeln, Komitee mit VRF, BFT im Stil von Tendermint (zwei Abstimmungsphasen je Höhe, Runden bei Zeitüberschreitung), BLS-Sammelsignatur, Finalität nach 1 Block (Entscheidung 106).
-- **Startphase:** 7 bis 21 Start-Validatoren ohne Stake, mit sinkendem und 365 Epochen gebundenem Lohn, Übergabe nur durch neue Validatoren, automatische Übergabe an das Stake-Komitee (Spezifikation 5.3).
+- **Startphase:** 21 Start-Validatoren ohne Stake, mit sinkendem, gedeckeltem und 365 Epochen gebundenem Lohn, strenge Übergabe (Entscheidungen 110, 111), automatische Übergabe an das Stake-Komitee (Spezifikation 5.3).
 - Strafen: Doppelsignatur mit Kürzung nach Ausmaß (Spezifikation 5.4), Inaktivität, Sperrzeiten für Rollen.
 - Feste Reihenfolge im Block und Aufnahme-Pflicht mit Listen des Komitees (Spezifikation 5.1a).
 - **Stake delegieren** mit Validator-Anteil, anteiliger Kürzung und ohne Delegation an Start-Validatoren (Spezifikation 7.4).
