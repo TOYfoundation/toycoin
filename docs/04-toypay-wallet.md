@@ -1,6 +1,6 @@
 # TOYPAY Wallet: Wallet und Knoten in einem
 
-Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 78 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
+Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 79 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
 
 ## 1. Ziel
 
@@ -78,6 +78,12 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 - **RPC-Zugänge:** Die App nutzt öffentliche Zugänge oder vom Nutzer eingetragene. **Kein API-Schlüssel steckt in der App**, weil jeder ihn aus der Installationsdatei auslesen könnte.
 - **Warnung bei gleichnamigen Token:** Ein Token mit dem Namen ToyCoin oder dem Ticker TOY auf einer anderen Kette bekommt immer den Hinweis „Nicht ToyChain-TOY, nicht eintauschbar“. Natives TOY erscheint nur unter dem Netzwerk ToyChain.
 - **Keine Bridge** im jetzigen Umfang.
+
+## 6a. Spenden an den Erstattungs-Pool (Entscheidung 79)
+
+- Menüpunkt **„Spenden“**: Der Nutzer gibt einen Betrag ein, die App zeigt den aktuellen Stand des Erstattungs-Pools und wie viele kostenlose Transaktionen die Spende ungefähr bezahlt.
+- Vor dem Absenden weist die App deutlich darauf hin: Eine Spende lässt sich nicht zurückholen.
+- Spenden sind öffentlich. ToyScan zeigt sie mit Adresse und Betrag.
 
 ## 7. Konto aktivieren und auflösen
 

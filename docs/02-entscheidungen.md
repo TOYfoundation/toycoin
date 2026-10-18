@@ -25,6 +25,7 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 76 | Pfand senkbar | Das Aktivierungs-Pfand ist ein Parameter zwischen 0,01 und 0,1 TOY und darf nur sinken. Bestehende Konten können den Unterschied dann freigeben |
 | 77 | Lizenz MPL-2.0 | Für **unverändert** genutzte Bibliotheken ist MPL-2.0 erlaubt, z. B. UniFFI für die Anbindung der Wallet an den Rust-Kern. Eigener Code bleibt MIT |
 | 78 | Schutz in der Startphase | (1) Für die Übergabe zählen **nur neue Validatoren** und nur deren Stake. (2) Der Lohn der Start-Validatoren **sinkt über 180 Epochen von 50 % auf 0 %**, der Rest geht in die Arbeits-Lotterie, zusammen höchstens rund 2,2 Mio. TOY. (3) Der Lohn wird sofort **365 Epochen als Stake gebunden** |
+| 79 | Spenden an den Erstattungs-Pool | Jeder kann **jederzeit aus der Wallet** TOY in den Erstattungs-Pool spenden, der die kostenlosen Transaktionen bezahlt. Eigene Transaktionsart, nicht rückholbar, in ToyScan sichtbar |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**

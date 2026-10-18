@@ -111,6 +111,7 @@ Jede Warnung nennt die Regel, die Zahlen und die betroffenen Adressen. Die Regel
 | **Start** | Gesamtampel, Obergrenze, gemintet, Epoche, m, Emission dieser Epoche, Ist im Vergleich zum Plan, Stand der Startphase |
 | **Blöcke, Transaktionen, Adressen** | Suche, jede Transaktionsart verständlich beschrieben, Adressen mit anderen Ketten |
 | **Epochen** | Emission, Anteile von m, Aufteilung, Lotterie-Gewinner |
+| **Erstattungs-Pool** | Stand, Zuflüsse (Emission, Gebühren, Kürzungen, Spenden), Abflüsse für kostenlose Transaktionen, Liste der Spenden |
 | **Teilnehmer** | Anzahl je Stufe, Validatoren, Stake-Verteilung, Verfügbarkeit |
 | **Schutz** | aktive Sperrzeiten mit Beweis, Muster-Warnungen |
 | **Ruhende Konten und Checkpoints** | Anzahl aktiver und ruhender Konten, Füllstand des Zustands, Ruhe-Schnappschüsse und Beweise für jedes ruhende Konto zum Herunterladen, Genesis-Hash, Checkpoints |

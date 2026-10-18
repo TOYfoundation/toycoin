@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 78). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 79). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -51,7 +51,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - Kontingent, Erstattungs-Pool, progressive Gebühr mit Höchstwert, Vielnutzer-Pflicht.
 - **ToyWork-Lose** (Argon2id, 16 MiB) mit Schwierigkeits-Schwelle, Höchstzahl je Block und Peer, Arbeits-Lotterie mit Mindestgewinn 0,2 TOY.
 - **Schutzregeln Ebene A** (Spezifikation Abschnitt 8): Sperrzeiten, Verdopplung, Zurücksetzen nach 30 sauberen Epochen. Kein Code-Pfad sperrt Guthaben.
-- **Fertig, wenn:** Tests für I0 nach jedem Block (auch ein absichtlich fehlerhafter Block wird abgelehnt), Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebühren, ungültige und wiederverwendete Lose, jede Sperrregel mit Fall „greift“ und „greift nicht“, ein Test, dass ein gesperrtes Konto weiter gegen Gebühr überweisen kann, Tests für Aktivierung (Eingang unter dem Pfand an neue Adresse wird abgelehnt, Senken des Pfands gibt den Unterschied frei), Auflösen mit und ohne Spende und dass eine alte Transaktion nach erneuter Aktivierung ungültig bleibt.
+- **Fertig, wenn:** Tests für I0 nach jedem Block (auch ein absichtlich fehlerhafter Block wird abgelehnt), Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebühren, ungültige und wiederverwendete Lose, jede Sperrregel mit Fall „greift“ und „greift nicht“, ein Test, dass ein gesperrtes Konto weiter gegen Gebühr überweisen kann, Tests für Spenden an den Erstattungs-Pool (Betrag landet genau im Pool, Regel I0 hält, nicht rückholbar), Aktivierung (Eingang unter dem Pfand an neue Adresse wird abgelehnt, Senken des Pfands gibt den Unterschied frei), Auflösen mit und ohne Spende und dass eine alte Transaktion nach erneuter Aktivierung ungültig bleibt.
 
 ### M4: Blöcke, Konsens, Startphase
 - Blockformat mit Zeitstempel-Regeln, Komitee mit VRF, BFT, BLS-Sammelsignatur, Finalität nach 1 Block.

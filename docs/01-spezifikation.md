@@ -1,6 +1,6 @@
 # ToyChain – Technische Spezifikation v0.3
 
-Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 78):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
+Stand 18.10.2026 · Kryptowährung ToyCoin (TOY) · **Neuausrichtung (Entscheidungen 61 bis 79):** totaler Fair Launch, Testnet zuerst, Kern aus ToyChain, TOYPAY Wallet und ToyScan · Die frühere Fassung v0.2 mit Reserve, Bridge und Altbestand liegt in `spaeter/01-spezifikation-v0.2.md`.
 
 ## 1. Zusammenfassung
 
@@ -142,6 +142,7 @@ Kein Konto geht verloren. Nur die zuletzt genutzten Konten liegen im Speicher je
 | **Attestierung** | Mitsignieren in Komitee oder Attestierungs-Gruppe |
 | **ToyWork-Los einreichen** | Arbeitsnachweis für die Arbeits-Lotterie oder als Gebührenersatz |
 | **Verstoß melden** | Beweis für einen Verstoß aus Abschnitt 8 einreichen, z. B. zwei Signaturen derselben Höhe |
+| **Spende an den Erstattungs-Pool** | beliebigen Betrag aus dem freien Guthaben in den Erstattungs-Pool geben, der die kostenlosen Transaktionen aller bezahlt. Jederzeit möglich, nicht rückholbar (Entscheidung 79) |
 | **Konto auflösen** | freies Guthaben und Aktivierungs-Pfand an eine Zieladresse senden oder in den Erstattungs-Pool spenden, Konto aus dem Zustand löschen (Abschnitt 6.1) |
 | **Konto aufwecken** | ruhendes Konto mit Merkle-Beweis zurückholen. Geschieht auch automatisch mit jeder Transaktion, die ein ruhendes Konto berührt (Abschnitt 6.2) |
 | **Belohnung, Lotterie, Strafe** | vom Protokoll selbst ausgelöst, keine Nutzer-Transaktion |
@@ -154,6 +155,7 @@ Später, jeweils als eigenes Protokoll-Update: Stake delegieren, Mehrfachsignatu
 - **Kostenloses Kontingent:** Jedes Konto (Stufe 1) hat je Epoche Q = max(10, 100 × (1 − Auslastung)) kostenlose Transaktionen. Die kleine Gebühr wird aus dem Erstattungs-Pool erstattet. Voraussetzung: Kontoalter mindestens 100 Blöcke.
 - **Über dem Kontingent:** Gebühr oder ToyWork-Los. Die Gebühr eines Absenders verdoppelt sich je 10 weiteren Transaktionen im selben Block, dazu eine Grundgebühr, die bei hoher Last steigt (EIP-1559-Prinzip). Ein ToyWork-Los gibt bis zu 100 % Rabatt.
 - **Vielnutzer:** Ab 1.000 Transaktionen je Epoche muss mindestens die Hälfte der Überschreitung durch Arbeit gedeckt sein.
+- **Spenden (Entscheidung 79):** Jeder kann jederzeit TOY in den Erstattungs-Pool spenden. Die Spende ist eine normale, signierte Transaktion, zählt selbst zum kostenlosen Kontingent und lässt sich nicht zurückholen. Der Pool ist ein protokolleigenes Konto ohne Schlüssel, nur die Erstattungsregeln bewegen ihn.
 - **Verteilung der Gebühren (Startwerte):** 40 % Gebühren-Lotterie unter aktiven Teilnehmern, 40 % Erstattungs-Pool, 20 % Vorschlagender.
 
 ## 8. Schutzregeln und Sperrzeiten (Entscheidung 67)
