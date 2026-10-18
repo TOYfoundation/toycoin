@@ -35,6 +35,10 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 86 | Andere Ketten | Atomarer Tausch per Hash-Zeitschloss (SHA-256) ohne Bridge, WalletConnect, lesbare Signier-Anfragen (EIP-712), Warnung bei Token-Freigaben |
 | 87 | Netzwerk und Software | Dandelion++ schon im Testnet, optional Tor (später I2P), Checkpoints mit Signaturen von mindestens 3 unabhängigen Stellen, reproduzierbare Builds mit mindestens 3 unabhängigen Signaturen vor jedem Update |
 | 88 | Projekt-Sicherheit | Testnet-Kran aus Lotteriegewinnen eigener Knoten, Dauer-Fuzzing ab M1, Bug-Bounty-Programm außerhalb der Kette, öffentlicher Notfall-Plan |
+| 89 | Konten und App-Schutz (MetaMask) | Mehrere Konten und mehrere Phrasen, Schlüssel-Import und -Anzeige nur mit Passwort, Sicherungs-Quiz, Phishing-Warnliste (öffentlich), Sicherheitswarnungen auf dem Gerät, automatische Sperre, Guthaben verbergen |
+| 90 | Web-Apps (MetaMask) | Seiten-Berechtigungen, Anmelden mit Adresse (EIP-4361), Browser-Erweiterung für Chrome und Firefox, eingebauter Browser in der Handy-App |
+| 91 | Netzwerke, Gebühren, Überblick (MetaMask) | Netzwerk per Klick (EIP-3085, Eintrag in Chainlist), Token- und NFT-Erkennung, eigener Knoten wählbar, Gebühren-Stufen, Simulation vor dem Senden auf anderen Ketten, Gesamtübersicht in Euro (abschaltbar), Mitteilungen, verständlicher Verlauf, Ende-zu-Ende verschlüsselter Sync ohne Schlüssel |
+| 92 | Nicht übernommen (MetaMask) | Schutz vor Vordrängeln (MEV), Erweiterungen (Snaps), Tauschen über Börsen-Dienste |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**

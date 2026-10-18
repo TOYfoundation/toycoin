@@ -1,6 +1,6 @@
 # TOYPAY Wallet: Wallet und Knoten in einem
 
-Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 88 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
+Entwurf v0.1 vom 18.10.2026 · Grundlage: Spezifikation v0.3 (Abschnitte 4, 8, 9, 11), Entscheidungen 61 bis 92 · Status: **entschieden** bis auf Abschnitt 10 · Spiel, Spiel-NFTs und Dukaten: `spaeter/07-toypay-spiel-und-nft.md`
 
 ## 1. Ziel
 
@@ -11,6 +11,7 @@ Die TOYPAY Wallet verwaltet TOY, ist zugleich ein **ToyChain-Knoten** und läuft
 | Client | Für wen | Plattformen |
 |---|---|---|
 | **TOYPAY App** | alle Nutzer, mit Oberfläche | Android (ab ca. 1 GB RAM, arm64 und armv7), Windows, Linux, Raspberry Pi (Linux arm64) |
+| **TOYPAY Browser-Erweiterung** | Nutzung von Web-Apps am PC | Chrome und Firefox (Entscheidung 90) |
 | **ToyNode** | Dauerbetrieb ohne Oberfläche, z. B. Raspberry Pi oder Server | Linux x86_64 und arm64, Windows. Bedienung über Kommandozeile (`toy-cli`) und eine lokale Weboberfläche |
 | **Kern-Bibliothek** | andere Apps, die TOY einbauen wollen | Rust-Kern mit Anbindung für Kotlin (Android und Desktop) |
 
@@ -122,6 +123,44 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 - **Lesbare Signier-Anfragen** nach EIP-712: Die App zeigt im Klartext, was unterschrieben werden soll, und warnt bei unbekannten Anfragen.
 - **Warnung bei Freigaben:** Die App zeigt auf anderen Ketten erteilte Token-Freigaben an Verträge und hilft, sie zurückzunehmen (Vorbild: Revoke.cash).
 
+## 7b. Funktionen nach dem Vorbild von MetaMask (Entscheidungen 89 bis 92)
+
+**Konten und Schlüssel**
+- **Mehrere Konten** aus einer Phrase (Pfad m/44'/60'/0'/0/n), jedes mit eigenem Namen.
+- **Mehrere Phrasen** in einer App, klar getrennt angezeigt.
+- **Privaten Schlüssel importieren oder anzeigen:** nur nach Eingabe des App-Passworts, mit deutlicher Warnung. Angezeigte Schlüssel werden nach 60 Sekunden ausgeblendet, nie in die Zwischenablage ohne Rückfrage kopiert und nach Gebrauch aus dem Speicher gelöscht (`zeroize`).
+- **Sicherungs-Quiz:** Nach dem Anlegen fragt die App einige Wörter der Phrase ab. Bis das bestätigt ist, erinnert sie, und große Beträge sind gesperrt.
+
+**Schutz in der App**
+- **Phishing-Warnliste:** Bekannte Betrugsseiten und Betrugsadressen werden blockiert. Die Liste ist öffentlich auf GitHub, jeder kann Einträge melden, Änderungen sind nachvollziehbar.
+- **Sicherheitswarnungen:** Anfragen von Web-Apps werden auf dem Gerät gegen bekannte Betrugsmuster geprüft, bevor man unterschreibt. Es werden keine Daten an fremde Dienste geschickt.
+- **Automatische Sperre** nach einstellbarer Zeit ohne Benutzung (Standard 5 Minuten).
+- **Guthaben verbergen:** Beträge als Sternchen, mit einem Tipp umschaltbar.
+
+**Web-Apps**
+- **Seiten-Berechtigungen:** Übersicht, welche Webseite welches Konto sieht, mit Trennen per Tipp. Neue Seiten sehen zuerst kein Konto.
+- **Anmelden mit Adresse** nach Sign-In with Ethereum (EIP-4361): Die App zeigt Seite, Zweck und Ablaufzeit der Anmeldung im Klartext.
+- **Browser-Erweiterung** für Chrome und Firefox auf dem PC. Sie nutzt denselben Rust-Kern.
+- **Eingebauter Browser** in der Handy-App für Web-Apps, mit Phishing-Warnliste und Adressleiste, die immer die echte Domain zeigt.
+
+**Netzwerke und Anzeige**
+- **Netzwerk per Klick** (EIP-3085): Webseiten und die App können ToyChain mit einem Klick in MetaMask und andere Wallets eintragen. ToyChain wird mit Chain-ID, Name und RPC-Adressen in öffentlichen Netzwerk-Listen wie Chainlist eingetragen (Entscheidung 40).
+- **Token- und NFT-Erkennung** auf anderen Ketten. Unbekannte oder verdächtige Token sind zuerst ausgeblendet, damit Lock-Token keine Betrugsseite bewerben können.
+- **Eigener Knoten wählbar:** Statt fremder Server kann die App den eigenen ToyNode oder eine selbst eingetragene RPC-Adresse nutzen.
+
+**Gebühren**
+- **Gebühren-Stufen** langsam, normal, schnell oder eigener Wert, mit erwarteter Wartezeit.
+- **Fehlschläge kosten nichts:** Auf anderen Ketten prüft die App eine Transaktion vorher (Simulation) und sendet sie nur, wenn sie gelingt. Auf ToyChain werden ungültige Transaktionen ohnehin nicht verbucht.
+
+**Überblick**
+- **Gesamtübersicht in Euro** über alle Konten und Ketten. Die Kurse kommen aus öffentlichen Quellen, die Funktion lässt sich ausschalten. Kurse werden abgefragt, ohne die eigenen Adressen mitzuschicken.
+- **Mitteilungen** bei Eingang, Abschluss, wartender Tresor-Abhebung, ablaufender Erben-Frist und Sicherheitswarnungen.
+- **Verständlicher Verlauf** mit Filter und Klartext, z. B. „5 TOY an Anna gesendet“.
+
+**Sync zwischen Geräten:** Kontonamen, Adressbuch, Daueraufträge und Einstellungen werden **Ende-zu-Ende verschlüsselt** abgeglichen. Der Schlüssel dafür wird aus der Phrase abgeleitet. Phrase, private Schlüssel und Signier-Schlüssel werden **nie** synchronisiert. Als Speicher dient ein frei wählbarer Dienst oder der eigene ToyNode.
+
+**Nicht gewählt:** Schutz vor Vordrängeln (MEV), Erweiterungen (Snaps), Tauschen über Börsen-Dienste.
+
 ## 8. Sicherheit
 
 - Phrase nach BIP-39, verschlüsselt mit Argon2id und XChaCha20-Poly1305, wo möglich im Android Keystore/StrongBox, im TPM oder in der Secure Enclave.
@@ -143,7 +182,9 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 | Plattformen, Energie-Modus | M9 |
 | Andere Ketten, WalletConnect, Freigaben, atomarer Tausch | M11, M12 |
 | Vorschau, Adress-Fallen, Adressbuch, Probebetrag, SLIP-39, Nur-Ansehen, QR, Export, Daueraufträge | M8, M9 |
-| Hardware-Wallets | M8 |
+| Hardware-Wallets, mehrere Konten und Phrasen, Schlüssel-Import, Sicherungs-Quiz, automatische Sperre, Guthaben verbergen, Gebühren-Stufen, Verlauf | M8 |
+| Mitteilungen, Sync, Browser-Erweiterung | M9 |
+| Phishing-Warnliste, Sicherheitswarnungen, Seiten-Berechtigungen, Anmelden mit Adresse, eingebauter Browser, Netzwerk per Klick, Token- und NFT-Erkennung, Gesamtübersicht in Euro, Simulation auf anderen Ketten | M11 |
 | Konto-Schutz, Sammelüberweisung, Gebühr übernehmen | M12 |
 
 ## 10. Offene Punkte

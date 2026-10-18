@@ -130,6 +130,7 @@ JSON, Beträge als Text in kleinsten Einheiten und zusätzlich formatiert, jede 
 | `/api/v1/epoch/{n}` | Daten einer Epoche |
 | `/api/v1/address/{adresse}` | ToyChain-Konto und andere Ketten |
 | `/api/v1/warnungen` | aktuelle Muster-Warnungen |
+| `/api/v1/netzwerk` | Netzwerk-Angaben (Chain-ID, Name, Symbol, RPC-Adressen, Explorer) im Format von EIP-3085 für das Eintragen per Klick |
 | `/api/v1/checkpoints` | Checkpoints mit allen Signaturen der unabhängigen Stellen |
 | `/api/v1/beweis/{adresse}` | Beweis für ein ruhendes Konto (Spezifikation 6.2) |
 | `/api/v1/supply/circulating.txt` | eine Zahl für Listing-Seiten |

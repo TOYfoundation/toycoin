@@ -71,10 +71,11 @@ Hinweis zur Bauumgebung: In der Cloud-Sandbox, in der das Gerüst erstellt wurde
 
 ## Neuausrichtung vom 18.10.2026
 
-Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 88):
+Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 92):
 
 - **Totaler Fair Launch:** Genesis ohne Guthaben, keine Reserve, alle 100 Mio. TOY per Emission. Erste Epoche 50.500 TOY, erstes Jahr rund 16,84 Mio., Halbwertszeit 3,76 Jahre (nachgerechnet).
 - **Kern:** ToyChain-Testnet, TOYPAY Wallet als Knoten mit Stufen 0 bis 4, Energie-Modus und Mint-Funktionen, ToyScan mit Warnampel A1 bis A9 und Anzeige anderer EVM-Ketten.
+- **Neu (18.10.2026 abends, MetaMask):** 22 Wallet-Funktionen nach dem Vorbild von MetaMask (Nr. 89 bis 91), darunter mehrere Konten, Phishing-Warnliste, Browser-Erweiterung, Netzwerk per Klick, Mitteilungen und verschlüsselter Sync.
 - **Neu (18.10.2026 abends):** 30 Funktionen aus anderen Projekten übernommen (Nr. 82 bis 88): Wallet-Schutz, Konto-Schutz mit Tresor, Notfall-Schlüssel und Erben-Adresse, Zahlungsfunktionen, atomarer Tausch, Dandelion++, Tor, mehrfach signierte Checkpoints und Builds, Testnet-Kran, Fuzzing, Bug-Bounty, Notfall-Plan.
 - **Neu:** Startphase ohne Stake, Arbeits-Lotterie, Schutzregeln mit Sperrzeiten in drei Ebenen, Aktivierungs-Pfand statt Entfernen von Konten (später senkbar), es wird nie TOY verbrannt, aktive und ruhende Konten für 100 Mio. Konten und mehr.
 - **Verschoben nach `docs/spaeter/`:** Bridge, Altbestand-Token, Reserve, Mitbestimmung, Spiel und Spiel-NFTs, alte Spezifikation v0.2.
@@ -84,7 +85,7 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 88):
 | Dokument | Stand |
 |---|---|
 | `01-spezifikation.md` | v0.3, schlank, mit Verfassung (Abschnitt 13) |
-| `02-entscheidungen.md` | Nr. 1 bis 88, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
+| `02-entscheidungen.md` | Nr. 1 bis 92, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
 | `03-bauplan-phase1.md` | M1 bis M12 |
 | `04-toypay-wallet.md` | v0.1: Clients, Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
 | `05-toyscan.md` | v0.2: Warnampel A1 bis A9, Muster-Warnungen, andere Ketten, API |
