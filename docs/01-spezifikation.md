@@ -22,7 +22,7 @@ Die Kernideen:
 ## 2. Ehrliche Einordnung
 
 - **Sicherheit** entsteht durch viele unabhängige Teilnehmer, nicht durch Design allein. Eine neue Kette ist anfangs verwundbar. Testnet, Audits und ein vorsichtiger Start gehören deshalb fest zum Plan.
-- **Fair Launch und Proof-of-Stake** passen am Anfang nicht von selbst zusammen: Ohne Premint hat beim Start niemand Stake. Die Lösung ist eine offengelegte Startphase (Abschnitt 5.3) mit 7 bis 21 Start-Validatoren. Sie bekommen für ihre Arbeit einen sinkenden, gebundenen Lohn, das ist ein offen sichtbarer, begrenzter Vorteil.
+- **Fair Launch und Proof-of-Stake** passen am Anfang nicht von selbst zusammen: Ohne Premint hat beim Start niemand Stake. Die Lösung ist eine offengelegte Startphase (Abschnitt 5.3) mit 21 Start-Validatoren. Sie bekommen für ihre Arbeit einen sinkenden, gebundenen Lohn, das ist ein offen sichtbarer, begrenzter Vorteil.
 - **Keine eigene Kryptografie:** nur geprüfte Verfahren und Bibliotheken (Abschnitt 10).
 - **256 MB** über viele Jahre halten sich nur mit dem Falten der Historie (Phase 2). Im Testnet ist das noch kein Problem.
 - **Automatische Sperren** dürfen nur auf Regeln beruhen, die jeder Knoten gleich und eindeutig prüfen kann. Musterkennung mit Schätzungen gehört in ToyScan und in die Netzwerkschicht, nicht in den Konsens (Abschnitt 8).
