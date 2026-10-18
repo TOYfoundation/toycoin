@@ -23,7 +23,7 @@ Die Stufen sind in der Spezifikation (Abschnitt 4) festgelegt. In der App sieht 
 | Stufe | Anzeige in der App | Typisches Gerät |
 |---|---|---|
 | 0 · Leicht | „Mitmachen ohne Guthaben“ | altes Handy, Tablet |
-| 1 · Konto | „Senden mit freiem Kontingent“ | jedes Gerät mit mindestens 0,1 TOY |
+| 1 · Konto | „Senden mit freiem Kontingent“ | jedes Gerät mit aktiviertem Konto (0,1 TOY Aktivierungs-Pfand) |
 | 2 · Attestierer | „Mitsignieren“, ab 10 TOY Stake | Handy am Ladegerät, PC |
 | 3 · Voll | „Voll-Knoten“, ab 100 TOY Stake | PC, Raspberry Pi 4/5 mit SSD |
 | 4 · Validator | „Validator“, ab 1.000 TOY Stake | ständig laufender PC, Pi oder Server |
@@ -58,7 +58,7 @@ Die App passt ihren Aufwand **automatisch** an. Der Nutzer wählt nur die Obergr
 
 | Weg | Stufe | Wie |
 |---|---|---|
-| **Arbeits-Lotterie** | ab 0 | Das Gerät rechnet ToyWork-Lose (Argon2id, 16 MiB) und reicht sie ein. Je Block werden Gewinner gezogen. Jeder Gewinn ist mindestens 0,1 TOY, also kann auch ein Gerät ohne Konto sein erstes TOY gewinnen |
+| **Arbeits-Lotterie** | ab 0 | Das Gerät rechnet ToyWork-Lose (Argon2id, 16 MiB) und reicht sie ein. Je Block werden Gewinner gezogen. Jeder Gewinn ist mindestens 0,2 TOY. Beim ersten Gewinn werden 0,1 TOY zum Aktivierungs-Pfand, der Rest ist frei |
 | **Mitsignieren** | ab 2 | Anteil an der Konsens-Belohnung (nach der Startphase) |
 | **Voll-Knoten** | ab 3 | zusätzliches Gewicht für Verfügbarkeit |
 | **Validator** | 4 | Konsens-Belohnung und 20 % der Gebühren des eigenen Blocks |
@@ -86,7 +86,13 @@ Auf ToyChain gibt es keine NFTs (Spezifikation, Grundregel). NFTs prägt die Wal
 - **Warnung bei gleichnamigen Token:** Ein Token mit dem Namen ToyCoin oder dem Ticker TOY auf einer anderen Kette bekommt immer den Hinweis „Nicht ToyChain-TOY, nicht eintauschbar“. Natives TOY erscheint nur unter dem Netzwerk ToyChain.
 - **Keine Bridge** im jetzigen Umfang.
 
-## 7. Sicherheit
+## 7. Konto aktivieren und auflösen
+
+- Die App erklärt beim ersten Eingang: „0,1 TOY sind als Aktivierungs-Pfand gebunden. Sie gehören weiter dir und kommen beim Auflösen zurück.“
+- Vor einer Überweisung an eine neue Adresse prüft die App, ob sie mindestens 0,1 TOY beträgt.
+- **Konto auflösen** in den Einstellungen: Die App löst zuerst gebundenen Stake (7 Epochen), dann schickt sie alles samt Pfand an eine Zieladresse. Wahlweise spendet der Nutzer den Rest in den Erstattungs-Pool. Kontingent und Stufe lassen sich nicht übertragen.
+
+## 8. Sicherheit
 
 - Phrase nach BIP-39, verschlüsselt mit Argon2id und XChaCha20-Poly1305, wo möglich im Android Keystore/StrongBox, im TPM oder in der Secure Enclave.
 - Schlüssel und Phrasen werden **nie** geloggt, nie im Klartext gespeichert und nach Gebrauch gelöscht (`zeroize`).
@@ -94,7 +100,7 @@ Auf ToyChain gibt es keine NFTs (Spezifikation, Grundregel). NFTs prägt die Wal
 - Signieren mit Chain-ID, Anzeige von Empfänger, Betrag, Kette und Gebühr vor jeder Unterschrift.
 - Im Testnet: keine echten Schlüssel, keine echten Gelder.
 
-## 8. Bauplan-Bezug
+## 9. Bauplan-Bezug
 
 | Funktion | Meilenstein |
 |---|---|
@@ -106,7 +112,7 @@ Auf ToyChain gibt es keine NFTs (Spezifikation, Grundregel). NFTs prägt die Wal
 | Plattformen, Energie-Modus | M9 |
 | Andere Ketten, NFT-Prägen | M11 |
 
-## 9. Offene Punkte
+## 10. Offene Punkte
 
 1. **NFT-Prägen** wie in Abschnitt 5.2 vorgeschlagen?
 2. **Oberfläche:** Compose Multiplatform für Android und Desktop?

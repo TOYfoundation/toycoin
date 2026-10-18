@@ -19,7 +19,7 @@ toychain/
     toy-types/               Konstanten, Amount (u128), Address, Hash, Fehlertypen
     toy-crypto/              secp256k1, Keccak-256, BLAKE3, BIP-39/32, Argon2id, BLS, VRF (Wrapper)
     toy-emission/            Emissionskurve, Faktor m, Zeitplan-Regler, Aufteilung, Startphase
-    toy-state/               Konten, Stake, Merkle-Baum, Mindestguthaben, Regel I0, Sperr-Status
+    toy-state/               Konten, Aktivierungs-Pfand, Stake, Merkle-Baum, Regel I0, Sperr-Status
     toy-tx/                  Transaktionsarten, Signaturprüfung, Kontingent, Gebühren, ToyWork-Lose
     toy-consensus/           Komitee, VRF, BFT, BLS-Sammelsignaturen, Startphase, Strafen
     toy-node/                Speicher, P2P (libp2p), Mempool, Blockproduktion, Energie-Steuerung
@@ -39,24 +39,24 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Genesis ohne Guthaben.** Emission `k × Restmenge` mit k₀ = 505/1.000.000, m ∈ [0,5; 2,0], Restmenge = 10^26 − Summe der Emissionen, Zeitplan-Regler. Aufteilung 50/40/10, in der Startphase 0/90/10.
 - Epochen-Ende nach mindestens 1.440 Blöcken **und** 86.400 Sekunden.
 - **Vorher festzulegen:** Formel für m und ihr Ganzzahl-Format.
-- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Verbranntes erhöht die Restmenge nie. Genesis-Zustand hat Summe 0.
+- **Fertig, wenn:** Property-Tests belegen, dass die Summe aller Ausschüttungen 10^26 **nie** überschreitet (auch bei m = 2,0 über 100 Jahre). Erste Epoche = 50.500 TOY, Halbwertszeit ≈ 1.372 Epochen bei m = 1. Spam erhöht m nicht. Test mit 10-s-Blöcken: Epoche dauert trotzdem 24 Stunden. Kürzungen und Spenden erhöhen die Restmenge nie. Genesis-Zustand hat Summe 0.
 
 ### M2: Kryptografie und Adressen
 - Schlüssel aus BIP-39, Pfad m/44'/60'/0'/0/n, Adresse wie Ethereum, Signieren mit Chain-ID (EIP-155), BLS12-381, VRF.
 - **Fertig, wenn:** offizielle BIP-39- und Ethereum-Testvektoren ergeben exakt die erwarteten Adressen. Signaturen anderer Chain-IDs werden abgelehnt.
 
 ### M3: Zustand, Transaktionen, Kontingent, Gebühren, Schutzregeln
-- Konten, Stake mit 7 Epochen Lösefrist, Merkle-Wurzel, Mindestguthaben 0,1 TOY (Staub wird verbrannt).
-- **Regel I0:** Summe aller Guthaben = gemintet − verbrannt in jedem Block.
+- Konten mit **Aktivierungs-Pfand 0,1 TOY** beim ersten Eingang, Transaktion „Konto auflösen“ (an Zieladresse oder als Spende in den Erstattungs-Pool), neue Nonce-Basis bei erneuter Aktivierung. Stake mit 7 Epochen Lösefrist, Merkle-Wurzel. Es wird nie TOY verbrannt.
+- **Regel I0:** Summe aller Guthaben = Summe aller Emissionen in jedem Block.
 - Kontingent, Erstattungs-Pool, progressive Gebühr mit Höchstwert, Vielnutzer-Pflicht.
-- **ToyWork-Lose** (Argon2id, 16 MiB) mit Schwierigkeits-Schwelle, Höchstzahl je Block und Peer, Arbeits-Lotterie mit Mindestgewinn 0,1 TOY.
+- **ToyWork-Lose** (Argon2id, 16 MiB) mit Schwierigkeits-Schwelle, Höchstzahl je Block und Peer, Arbeits-Lotterie mit Mindestgewinn 0,2 TOY.
 - **Schutzregeln Ebene A** (Spezifikation Abschnitt 8): Sperrzeiten, Verdopplung, Zurücksetzen nach 30 sauberen Epochen. Kein Code-Pfad sperrt Guthaben.
-- **Fertig, wenn:** Tests für I0 nach jedem Block (auch ein absichtlich fehlerhafter Block wird abgelehnt), Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebühren, ungültige und wiederverwendete Lose, jede Sperrregel mit Fall „greift“ und „greift nicht“, und ein Test, dass ein gesperrtes Konto weiter gegen Gebühr überweisen kann.
+- **Fertig, wenn:** Tests für I0 nach jedem Block (auch ein absichtlich fehlerhafter Block wird abgelehnt), Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebühren, ungültige und wiederverwendete Lose, jede Sperrregel mit Fall „greift“ und „greift nicht“, ein Test, dass ein gesperrtes Konto weiter gegen Gebühr überweisen kann, Tests für Aktivierung (Eingang unter 0,1 TOY an neue Adresse wird abgelehnt), Auflösen mit und ohne Spende und dass eine alte Transaktion nach erneuter Aktivierung ungültig bleibt.
 
 ### M4: Blöcke, Konsens, Startphase
 - Blockformat mit Zeitstempel-Regeln, Komitee mit VRF, BFT, BLS-Sammelsignatur, Finalität nach 1 Block.
 - **Startphase:** 7 bis 21 Start-Validatoren ohne Stake und ohne Konsens-Belohnung, automatische Übergabe an das Stake-Komitee (Spezifikation 5.3).
-- Strafen: Doppelsignatur (Kürzung, verbrannt), Inaktivität, Sperrzeiten für Rollen.
+- Strafen: Doppelsignatur (Kürzung in den Erstattungs-Pool), Inaktivität, Sperrzeiten für Rollen.
 - Simulation mit z. B. 20 virtuellen Validatoren, inklusive Ausfällen.
 - **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen bestraft, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten in der Startphase nachweislich 0 Konsens-Belohnung.
 

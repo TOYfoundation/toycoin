@@ -18,14 +18,16 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 68 | Mint-Funktionen | TOY verdienen über Arbeits-Lotterie, Mitsignieren und Validieren. NFTs prägt die Wallet auf einer anderen EVM-Kette. **Ausgestaltung zur Bestätigung:** Polygon, eigener ERC-721-Vertrag ohne Admin, nur Netzgebühr in POL, kein TOY (`04-toypay-wallet.md`, Abschnitt 5.2) |
 | 69 | Andere Ketten | Dieselbe Adresse wird auf EVM-Ketten angezeigt und genutzt (Ethereum, Polygon, Arbitrum, Base, BNB Chain, eigene hinzufügbar). Keine Bridge. Nicht-EVM-Ketten später |
 | 70 | Startphase ohne Stake | **Zur Bestätigung:** 7 bis 21 Start-Validatoren im Genesis-Block, ohne Stake und **ohne Konsens-Belohnung**. Deren Anteil (50 %) geht in die Arbeits-Lotterie. Automatische Übergabe, sobald 21 Validatoren mit je 1.000 TOY Stake zusammen mindestens 1 % der geminteten TOY binden. Ersetzt Nr. 37 |
-| 71 | Arbeits-Lotterie | ToyWork-Lose mit Schwierigkeits-Schwelle. Gewinner je Block per VRF, jeder Gewinn mindestens 0,1 TOY. So kann auch ein Gerät ohne Konto sein erstes TOY verdienen, und es entsteht kein Staub |
+| 71 | Arbeits-Lotterie | ToyWork-Lose mit Schwierigkeits-Schwelle. Gewinner je Block per VRF, jeder Gewinn mindestens 0,2 TOY (geändert durch Nr. 73). So kann auch ein Gerät ohne Konto sein erstes TOY verdienen, und es entsteht kein Staub |
+| 73 | Konten aktivieren und auflösen | Konten gehen **nie verloren**. Beim ersten Eingang werden **0,1 TOY als Aktivierungs-Pfand** gebunden, der Rest ist frei. Eingang an eine neue Adresse mindestens 0,1 TOY, Lotterie-Gewinn mindestens 0,2 TOY. Auflösen nur auf Wunsch: alles samt Pfand an eine Zieladresse oder als Spende in den Erstattungs-Pool. Rechte (Kontingent, Stufe) sind nicht übertragbar. Ersetzt das Mindestguthaben mit Entfernen |
+| 74 | Nichts wird verbrannt | Auf ToyChain wird **nie TOY verbrannt**. Gekürzter Stake bei Doppelsignatur geht in den Erstattungs-Pool. Regel I0: Summe aller Guthaben = Summe aller Emissionen. Ändert Nr. 60 |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**
 
 | Gilt weiter | Kommt später | Entfällt |
 |---|---|---|
-| 1 Zustandsablauf, 9 k₀ (erste Epoche jetzt 50.500 TOY), 12 MIT-Lizenz, 30 Plattformen, 32 Wallet und Spiele getrennt, 36 nur nativer Coin, 38 Mainnet erst nach Audit, 40 eigene Chain-ID, 56 ToyScan ohne Schlüssel, 58 Epoche nach Blöcken und Zeit, 60 Regel I0 (ohne Reserve: Summe = gemintet − verbrannt) | 2 privater Pool, 5 Bridge-Typ, 6 Hybrid-Signaturen, 15 TOY auf anderen Ketten bridgen, 16 bis 29, 31, 33 bis 35 und 46 Spiel und NFT-Regeln, 39 Bridge-Phase, 45 und 47 Mitbestimmung, 48 bis 54 und 59 Bridge-Details, 55 Bug-Bounty-Prämien | 3, 8, 10, 41 bis 44 Reserve und Cold-Wallets, 4, 7, 13, 14 Bridge-Deckung und Fremdbestand, 11 (ersetzt durch 58), 37 (ersetzt durch 70), 57 Altbestand-Wächter |
+| 1 Zustandsablauf, 9 k₀ (erste Epoche jetzt 50.500 TOY), 12 MIT-Lizenz, 30 Plattformen, 32 Wallet und Spiele getrennt, 36 nur nativer Coin, 38 Mainnet erst nach Audit, 40 eigene Chain-ID, 56 ToyScan ohne Schlüssel, 58 Epoche nach Blöcken und Zeit, 60 Regel I0 (jetzt: Summe = gemintet, siehe 74) | 2 privater Pool, 5 Bridge-Typ, 6 Hybrid-Signaturen, 15 TOY auf anderen Ketten bridgen, 16 bis 29, 31, 33 bis 35 und 46 Spiel und NFT-Regeln, 39 Bridge-Phase, 45 und 47 Mitbestimmung, 48 bis 54 und 59 Bridge-Details, 55 Bug-Bounty-Prämien | 3, 8, 10, 41 bis 44 Reserve und Cold-Wallets, 4, 7, 13, 14 Bridge-Deckung und Fremdbestand, 11 (ersetzt durch 58), 37 (ersetzt durch 70), 57 Altbestand-Wächter |
 
 **Die folgenden Abschnitte sind das Protokoll bis zum 17.10.2026.** Was dort steht, gilt nur, soweit die Tabelle oben es nicht ändert.
 
@@ -128,6 +130,7 @@ Nur noch Hintergrund: Die Token werden derzeit ignoriert (Nr. 63). Details in `s
 ## Noch offen (Stand 18.10.2026)
 
 - Bestätigung von Nr. 67, 68 und 70.
+- Schutz vor teurem Auffüllen des Speichers mit vielen aktivierten Konten (P5, M5): Das Pfand bindet bei 1,3 Mio. Konten rund 130.000 TOY, die zurückgeholt werden können.
 - Formel für den Faktor m mit Ganzzahl-Format, vor M1.
 - Lizenz von UniFFI (MPL-2.0) für die Wallet-Anbindung freigeben (`04-toypay-wallet.md`, Abschnitt 9).
 - Aus dem Prüfbericht für die passenden Meilensteine: P5, P6 (M5), P9 und Höchstwert der progressiven Gebühr (M3).
