@@ -73,7 +73,7 @@ story.append(Paragraph("Un réseau de paiement léger, lancé équitablement,<br
                        subtitle))
 story.append(Spacer(1, 10))
 story.append(Paragraph("Projet ToyChain · " + L("github.com/Safehaigit/toycoin", U["repo"]), center))
-story.append(Paragraph("Livre blanc provisoire · Version 0.2 · 18 octobre 2026 · édition française", center))
+story.append(Paragraph("Livre blanc provisoire · Version 0.3 · 19 octobre 2026 · édition française", center))
 story.append(Spacer(1, 12))
 BOX("<b>État : avant la phase de test.</b> ToyChain n'existe pour l'instant que sous forme de concept et d'un premier "
     "composant logiciel. Les types de base et les règles de création de la monnaie sont terminés et testés (jalon M1 "
@@ -102,7 +102,7 @@ toc_table(["1 Introduction", "2 ToyChain en un coup d'œil", "3 Notions de base 
            "10 Sécurité pour les utilisateurs", "11 Wallet, ToyScan et autres chaînes", "12 Cas d'usage",
            "13 Points communs et différences", "14 Avantages", "15 Risques et questions ouvertes",
            "16 Chances sur le marché des cryptos", "17 État et feuille de route", "18 Conclusion",
-           "Annexes : valeurs de départ, liens, sources"], "Sommaire")
+           "Annexes : valeurs, liens, sources, changements"], "Sommaire")
 
 # ================================================================ 1
 H("Introduction")
@@ -139,7 +139,8 @@ T([["Caractéristique", "ToyChain (valeurs de départ prévues)"],
    ["Stockage par nœud", "Objectif 256 Mo, aussi sur de vieux appareils Android et le Raspberry Pi"],
    ["Comptes", "comme Ethereum : mêmes adresses, même phrase de 12 ou 24 mots"],
    ["Fonctions", "uniquement des types de transaction intégrés, pas de smart contracts, pas de tokens, pas de NFT"],
-   ["Frais", "10 à 100 transactions gratuites par compte et par jour, au-delà de petits frais ou du travail de calcul"],
+   ["Frais", "10 à 100 transactions gratuites par compte et par époque (au moins un jour), au-delà de petits frais "
+            "ou du travail de calcul"],
    ["Langage", "Rust, un noyau commun pour toutes les plateformes"],
    ["Licence", L("MIT", U["mit"]) + " (logiciel libre)"]],
   [4.0, 12.4])
@@ -208,7 +209,8 @@ P("L'émission est multipliée par un facteur m compris entre 0,5 et 2,0. Il aug
   "<i>réellement</i> utilisé (transactions payantes ou couvertes par du travail de calcul) et lorsque de nombreux "
   "validateurs cosignent de façon fiable. Les transactions gratuites ne comptent pas, sinon on pourrait gonfler "
   "l'émission avec du spam. Une composante de calendrier rattrape les écarts, et m ne peut varier que de 0,05 au plus "
-  "par époque. Dans les simulations, l'émission de la première année s'écarte du plan d'environ 2 % au maximum. m "
+  "par époque. Dans les simulations, l'émission de la première année s'écarte du plan d'environ 2,2 % au maximum, et à long "
+  "terme d'environ 2,5 % au maximum. m "
   "ne déplace donc que le <i>moment</i> où les TOY sont créés, pas leur <i>nombre</i> total.")
 H2("5.4 Qui reçoit les nouveaux TOY")
 P("Chaque émission est répartie de façon fixe : <b>50 %</b> à tous ceux qui sécurisent le réseau, <b>40 %</b> à une "
@@ -234,8 +236,10 @@ P("Chacun décide de sa contribution. Au premier démarrage, le wallet mesure l'
 FIG(F + "f_tiers.png", "Les cinq niveaux de participation. Même le niveau 0 ne demande aucun fonds.", 15.0)
 P("Les TOY bloqués restent la propriété de l'utilisateur et peuvent être libérés après 21 époques. Pour que personne "
   "ne devienne trop puissant, le stake d'un participant ne compte que jusqu'à 5 % (à partir de 100 validateurs, 1 %) "
-  "du stake total. Les récompenses augmentent de façon linéaire avec le stake, auxquelles s'ajoute un montant de base "
-  "égal pour chaque validateur actif. Répartir son stake sur de nombreux comptes n'apporte donc aucun avantage.")
+  "du stake total. Après la phase de démarrage, un cinquième de la part de sécurité va à parts égales à chaque membre "
+  "du comité, le reste de façon linéaire selon le stake. Les deux ne sont versés qu'en proportion du travail "
+  "réellement fourni : qui cosigne 90 % des blocs reçoit 90 %. Comme la part selon le stake est linéaire, répartir son "
+  "stake sur de nombreux comptes n'apporte aucun avantage.")
 MORE(L("Qu'est-ce que la preuve d'enjeu ? (ethereum.org)", U["eth_pos"], "Consensus"))
 H2("6.2 Transactions gratuites et frais")
 P("Chaque compte activé dispose d'un quota gratuit par époque : 100 transactions quand le réseau est calme, au moins "
@@ -249,7 +253,8 @@ P("Pour que les personnes sans TOY puissent aussi obtenir de nouveaux coins, il 
   "délibérément beaucoup de mémoire (16 Mio). Le matériel spécialisé et les fermes de cartes graphiques n'ont ainsi "
   "presque aucun avantage sur un téléphone ou un PC. Jusqu'à 64 gagnants sont tirés au sort équitablement par bloc, "
   "chaque gain étant d'au moins 0,2 TOY. Qui calcule davantage a plus de billets ; la récompense attendue est "
-  "proportionnelle au travail. L'appareil ne calcule que s'il y est autorisé : sur le chargeur, en Wi-Fi et tant "
+  "proportionnelle au travail. Un seul gain suffit pour activer un compte : 0,1 TOY est bloqué comme dépôt (section 9), "
+  "le reste est librement disponible. L'appareil ne calcule que s'il y est autorisé : sur le chargeur, en Wi-Fi et tant "
   "qu'il reste frais. À titre de comparaison, le réseau Bitcoin consomme en permanence autant d'électricité qu'un pays "
   "entier, comme le montre " + L("l'indice d'électricité de Cambridge", U["cbeci"], "Énergie") + ".")
 
@@ -257,7 +262,8 @@ P("Pour que les personnes sans TOY puissent aussi obtenir de nouveaux coins, il 
 H("Se mettre d'accord dans le réseau")
 H2("7.1 Comment naît un bloc")
 P("Un comité d'au plus 128 validateurs est recomposé à chaque époque. Pour chaque bloc, un hasard vérifiable ("
-  + L("VRF", U["vrf"], "Technique") + ") désigne celui qui propose le bloc. Les autres votent en deux tours, selon une "
+  + L("VRF", U["vrf"], "Technique") + ") désigne celui qui propose le bloc. Les autres votent en deux phases (pré-vote et "
+  "confirmation), selon une "
   "méthode éprouvée de type " + L("Tendermint", U["tendermint"], "Consensus") + ". Dès que deux tiers ont approuvé, "
   "le bloc est <b>définitif</b>. Il ne peut plus être annulé. Avec Bitcoin, on attend en général environ une heure "
   "avant qu'un paiement soit considéré comme sûr. Tous les votes sont regroupés grâce aux "
@@ -286,14 +292,16 @@ P("Un lancement équitable sans premint pose un problème de l'œuf et de la pou
   "ouverte et limitée dans le temps :")
 B(["<b>21 validateurs de départ</b>, gérés par des bénévoles aux opérateurs et lieux aussi variés que possible, "
    "sécurisent le réseau avec un poids égal. Leurs noms et revenus sont publics dans ToyScan.",
-   "<b>Rémunération décroissante :</b> au début, ils reçoivent ensemble la moitié de l'émission. Elle baisse de façon "
-   "linéaire jour après jour et atteint zéro après 180 jours. Un plafond empêche qu'une émission plus rapide ou des "
+   "<b>Rémunération décroissante :</b> au début, ils reçoivent ensemble la moitié de tous les nouveaux TOY. La part "
+   "baisse régulièrement jour après jour et atteint zéro après 180 jours. Les jours sont comptés en <i>temps "
+   "planifié</i> : chaque pause entre deux blocs compte au plus 10 minutes, afin qu'un arrêt n'avance pas l'horloge. Un plafond empêche qu'une émission plus rapide ou des "
    "blocs volontairement lents rapportent davantage. Au total, cela représente au plus environ 2,22 millions de TOY "
    "(environ 2,2 % de l'offre maximale).",
    "<b>Rémunération bloquée :</b> chaque rémunération reste bloquée 365 époques (environ un an) et répond des fautes.",
    "<b>Passation stricte :</b> la phase de démarrage se termine au plus tôt après 90 jours, et seulement lorsqu'au "
    "moins 21 nouveaux validateurs avec 1 000 TOY chacun, bloqués depuis 30 époques, détiennent ensemble les deux tiers "
-   "du stake effectif. Ensuite, les validateurs de départ perdent tout statut particulier."])
+   "du stake effectif. Ensuite, les validateurs de départ perdent tout statut particulier. Si la passation n'a pas "
+   "eu lieu après 180 jours, ils continuent à sécuriser le réseau sans rémunération jusqu'à ce qu'elle ait lieu."])
 FIG(F + "f_bootstrap.png", "Rémunération des validateurs de départ par jour et fenêtre de temps pour la passation.")
 P("Pour être honnête : la phase de démarrage est la partie où ToyChain a le plus besoin de faire confiance à quelques "
   "personnes. Aucun protocole ne peut prouver que de « nouveaux » validateurs sont vraiment d'autres personnes. Les "
@@ -305,7 +313,8 @@ P("Stocker une chaîne Bitcoin ou Ethereum complète demande aujourd'hui des cen
   "un objectif de <b>256 Mo par nœud standard</b>. C'est possible parce qu'un nœud ne stocke que les soldes actuels "
   "de tous les comptes actifs et une courte fenêtre des derniers blocs. Des nœuds d'archive bénévoles conservent les "
   "blocs plus anciens. Dans une phase ultérieure, tout l'historique doit être « replié » dans une petite preuve "
-  "cryptographique, si bien que les nouveaux nœuds n'auront plus à faire confiance à personne.")
+  "cryptographique, si bien que les nouveaux nœuds n'auront plus à faire confiance à personne. D'ici là, les nouveaux "
+  "nœuds partent de points de contrôle signés par au moins trois instances indépendantes.")
 FIG(F + "f_budget.png", "Répartition des 256 Mo. Chaque structure de stockage a son propre test de taille.")
 P("Pour que 100 millions de comptes et plus trouvent quand même leur place, il existe des <b>comptes actifs et "
   "dormants</b>. Les comptes inutilisés depuis longtemps sont mis en sommeil hors de la mémoire si nécessaire, mais "
@@ -329,7 +338,9 @@ B(["<b>Délai de coffre-fort :</b> les retraits importants ne prennent effet qu'
    "<b>Auto-blocage :</b> téléphone perdu ? Son propre compte peut être bloqué jusqu'à 30 époques.",
    "<b>Adresse d'héritier :</b> si un compte reste très longtemps sans aucune activité (au moins 180 époques), une "
    "adresse d'héritier choisie par le propriétaire peut le reprendre. Le propriétaire est prévenu plusieurs fois "
-   "auparavant et peut annuler à tout moment."])
+   "auparavant et peut encore annuler pendant 30 époques."])
+P("Pour être honnête : sans clé d'urgence, celui qui vole le téléphone avec la clé a les mêmes droits que le "
+  "propriétaire. Le wallet recommande donc de créer une clé d'urgence sur un second appareil ou sur papier.")
 FIG(F + "f_vault.png", "Délai de coffre-fort : pendant l'attente, le propriétaire peut stopper un retrait suspect.",
     15.0)
 H2("10.2 Des règles de protection mesurées")
@@ -357,7 +368,9 @@ P("ToyChain n'invente pas ses propres procédés cryptographiques. Il utilise de
   "réutilisée sur une autre chaîne. Tous les procédés se trouvent derrière des interfaces remplaçables. Une clé "
   "supplémentaire volontaire selon le standard NIST " + L("ML-DSA", U["mldsa"], "Technique") + " doit aussi résister "
   "aux " + L("ordinateurs quantiques", U["pqk"], "Technique") + ". Les règles de calcul les plus importantes sont en "
-  "outre vérifiées mathématiquement avec l'outil de preuve " + L("Kani", U["kani"], "Technique") + ".")
+  "outre vérifiées mathématiquement avec l'outil de preuve " + L("Kani", U["kani"], "Technique") + ", c'est-à-dire "
+  "non seulement sur des exemples, mais pour tous les nombres possibles. Déjà prouvé : une époque ne verse jamais plus "
+  "que la quantité restante, et le total de tous les TOY reste toujours au plus de 100 millions (section 17).")
 
 # ================================================================ 11
 H("Wallet TOYPAY, ToyScan et autres chaînes")
@@ -385,8 +398,8 @@ BOX("<b>Remarque importante sur les tokens homonymes :</b> sur Polygon et Ethere
 
 # ================================================================ 12
 H("Cas d'usage")
-B(["<b>Paiements du quotidien</b> entre particuliers, avec libellé, virement groupé jusqu'à 32 destinataires et "
-   "caractère définitif après environ une minute. Les petits montants sont possibles sans frais grâce au quota gratuit.",
+B(["<b>Paiements du quotidien</b> entre particuliers, avec libellé et caractère définitif après environ une minute, "
+   "plus tard aussi en virement groupé jusqu'à 32 destinataires. Les petits montants sont possibles sans frais grâce au quota gratuit.",
    "<b>Participer sans capital :</b> un vieux téléphone ou un Raspberry Pi devient un nœud et peut gagner ses premiers "
    "TOY grâce à la loterie du travail.",
    "<b>Associations, familles et petites entreprises :</b> comptes à plusieurs signatures, séquestre avec arbitre, "
@@ -414,7 +427,7 @@ T([["", "Bitcoin", "Ethereum", "ToyChain (prévu)"],
    ["Programmabilité", "scripts simples", "smart contracts, tokens, NFT", "uniquement des fonctions intégrées"],
    ["Comptes", "modèle UTXO", "modèle de comptes", "modèle de comptes, adresses Ethereum"],
    ["Frais", "toujours, selon le marché", "toujours, frais de base plus pourboire",
-    "10 à 100 gratuits par jour, puis frais ou travail"],
+    "10 à 100 gratuits par époque (min. 1 jour), puis frais ou travail"],
    ["Participer sans fonds", "seulement en faisant tourner un nœud", "seulement en faisant tourner un nœud",
     "oui, y compris la loterie du travail"]],
   [3.5, 3.6, 4.2, 5.1])
@@ -432,7 +445,8 @@ B(["<b>Équité :</b> personne ne reçoit de TOY en cadeau ; toutes les règles 
    "langues.",
    "<b>Finalité rapide :</b> un paiement est sûr après environ une minute.",
    "<b>Faible consommation d'énergie :</b> pas de course à la puissance de calcul. La loterie du travail ne fonctionne "
-   "que lorsque l'électricité est disponible de toute façon et ne récompense le travail que proportionnellement.",
+   "que sur le chargeur et seulement autant que l'utilisateur le permet. Calculer plus donne proportionnellement plus "
+   "de billets, aucune avance.",
    "<b>La simplicité comme sécurité :</b> sans smart contracts, aucun programme tiers ne peut geler des fonds ou les "
    "perdre à cause d'erreurs.",
    "<b>Protection de la propriété :</b> les blocages ne retirent que des droits, jamais des fonds. Les comptes ne sont "
@@ -508,7 +522,7 @@ B(["<b>Une équité crédible :</b> un lancement sans aucun solde est rare. Sur 
    "ces dernières années disparaissent.",
    "<b>Compatibilité :</b> les adresses Ethereum abaissent la barrière pour les utilisateurs qui ont déjà un wallet.",
    "<b>Ouverture et langues :</b> une licence libre, un journal des décisions traçable (public dès le testnet) et 45 langues rendent le projet "
-   "accessible à une communauté internationale."])
+   "accessible à une communauté internationale. Ce livre blanc existe déjà en allemand, anglais, français et yoruba."])
 H2("16.3 Ce qui plaide contre")
 B(["<b>Pas de capital de départ :</b> sans premint, il n'y a pas de budget pour les développeurs, les audits, la "
    "publicité ou les cotations. Le projet dépend de bénévoles, de dons et de subventions.",
@@ -550,12 +564,16 @@ P("<b>Conclusion de l'évaluation :</b> en tant qu'investissement, ToyChain ne p
 
 # ================================================================ 17
 H("État et feuille de route")
-P("<b>Aujourd'hui (18 octobre 2026) : avant la phase de test.</b> Le concept est consigné dans 113 décisions "
+P("<b>Aujourd'hui (19 octobre 2026) : avant la phase de test.</b> Le concept est consigné dans 114 décisions "
   "documentées. La construction est divisée en 13 jalons. Le jalon M1 est terminé : les règles pour les montants et "
   "pour l'émission de nouveaux TOY sont programmées et vérifiées par 45 tests automatisés. L'implémentation en Rust "
-  "donne exactement les mêmes chiffres, jusqu'à la plus petite unité, que la simulation de référence indépendante. Les "
-  "tests tournent automatiquement sous Linux, Windows et sur processeurs ARM, et les règles clés de l'offre sont en "
-  "outre prouvées mathématiquement avec Kani.")
+  "donne exactement les mêmes chiffres, jusqu'à la plus petite unité, que la simulation de référence écrite séparément en Python. Les "
+  "tests tournent automatiquement à chaque modification sous Linux, Windows et sur processeurs ARM. Avec l'outil de "
+  "preuve Kani, trois règles clés sont prouvées mathématiquement, chacune en moins de deux minutes : aucune époque ne "
+  "verse plus que la quantité restante, le total reste au plus de 100 millions de TOY, et la répartition d'un bloc "
+  "tombe juste. Trois autres preuves de la répartition avec part de rémunération n'étaient pas terminées après 30 "
+  "minutes. Le programme vérifie donc lui-même cette répartition à chaque bloc, et des tests supplémentaires la "
+  "couvrent.")
 FIG(F + "f_roadmap.png", "Feuille de route. Il n'y a délibérément aucune date fixe pour un mainnet.")
 T([["Phase", "Contenu", "État"],
    ["Concept", "Spécification v0.3, journal des décisions, deux examens", "terminé, mis à jour en continu"],
@@ -675,6 +693,39 @@ refs = [
 ]
 for i, r in enumerate(refs, 1):
     story.append(Paragraph(french_typography(f"[{i}] {r}"), small))
+story.append(CondPageBreak(5 * cm))
+story.append(Paragraph("Annexe D : changements depuis la version 0.2", h1))
+P("La version 0.3 est une relecture de la version 0.2 sous l'angle de la logique, de la traçabilité et des nouveaux "
+  "éléments des 18 et 19 octobre 2026. Le concept lui-même n'a pas changé.")
+T([["Où", "Changement", "Raison"],
+   ["1, 18, ann. B", "Le dépôt est privé pour l'instant ; il doit être ouvert au plus tard avec le testnet public.",
+    "La version 0.2 le disait à tort public."],
+   ["2, 13", "Quota gratuit « par époque (au moins un jour) » au lieu de « par jour ».",
+    "plus précis : une époque peut durer plus de 24 heures."],
+   ["5.3", "Écart au plan : première année au plus environ 2,2 %, à long terme au plus environ 2,5 %.",
+    "« environ 2 % au maximum » était trop juste (simulation : +2,23 %)."],
+   ["6.1", "Rémunération après le démarrage décrite en entier : un cinquième en montant de base égal par membre du "
+           "comité, le reste linéaire, les deux selon le travail fourni.", "manquait, décision 112"],
+   ["6.3", "Un premier gain de loterie suffit pour le dépôt d'activation.",
+    "répond à la question du premier compte sans TOY"],
+   ["7.1", "« deux phases » (pré-vote et confirmation) au lieu de « deux tours ».",
+    "« tour » signifie autre chose dans le protocole."],
+   ["8", "Temps planifié expliqué ; rémunération comme « moitié de tous les nouveaux TOY » ; ce qui se passe si la "
+         "passation tarde après 180 jours.", "la figure 8 utilisait le terme sans explication ; lacune"],
+   ["9", "Jusqu'à la phase 2, les nouveaux nœuds partent de points de contrôle à trois signatures indépendantes.",
+    "lacune : à qui un nouveau nœud fait-il confiance d'ici là ?"],
+   ["10.1", "Délai d'annulation de l'adresse d'héritier (30 époques) et remarque honnête sur la clé d'urgence.",
+    "exhaustivité et honnêteté"],
+   ["10.4, 17", "Résultat des preuves Kani : trois règles clés prouvées, trois preuves encore ouvertes.",
+    "nouvel élément du 18/10/2026"],
+   ["12", "Virement groupé seulement après le premier testnet.", "périmètre du testnet 1 (décision 109)"],
+   ["14", "Énergie : loterie seulement sur le chargeur et autant que l'utilisateur le permet.",
+    "« quand l'électricité est disponible de toute façon » était imprécis."],
+   ["15", "Les examens viennent d'un agent de relecture IA ; un examen humain reste à faire.",
+    "« examens indépendants » prêtait à confusion."],
+   ["16.2", "Journal des décisions public seulement à partir du testnet ; livre blanc en quatre langues.",
+    "correction et nouvel état"]],
+  [2.4, 8.6, 5.4])
 story.append(Spacer(1, 6))
 story.append(Paragraph(french_typography(
     "<b>Avertissement.</b> Ce document décrit un projet logiciel en cours de développement. Il ne constitue ni un "
@@ -683,6 +734,6 @@ story.append(Paragraph(french_typography(
     "chiffres du marché reflètent la situation à la date indiquée. En cas de doute, l'édition allemande fait foi."),
     small))
 
-finish("ToyChain-Whitepaper-v0.2-fr.pdf",
-       "ToyChain · Livre blanc provisoire · Version 0.2 · avant la phase de test", "Page",
-       "ToyChain et ToyCoin (TOY) : livre blanc provisoire", "Version 0.2, avant la phase de test", "fr-FR")
+finish("ToyChain-Whitepaper-v0.3-fr.pdf",
+       "ToyChain · Livre blanc provisoire · Version 0.3 · avant la phase de test", "Page",
+       "ToyChain et ToyCoin (TOY) : livre blanc provisoire", "Version 0.3, avant la phase de test", "fr-FR")

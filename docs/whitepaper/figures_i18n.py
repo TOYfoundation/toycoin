@@ -1,6 +1,6 @@
 """Renders the whitepaper figures in English or French.
 
-Usage: python3 figures_i18n.py en|fr
+Usage: python3 figures_i18n.py en|fr|yo
 Runs figures.py unchanged and translates every label on the fly; the images go to abbildungen/<lang>/.
 """
 import os
@@ -316,8 +316,159 @@ FR = {
         "plus de la moitié des coins échouent\neffets de réseau des grandes chaînes\nles stablecoins dominent les paiements\nattaques contre un petit réseau\nstatut juridique encore ouvert",
 }
 
-TABLE = {"en": EN, "fr": FR}[LANG]
-YEAR = {"en": "Year", "fr": "Année"}[LANG]
+YO = {
+    "0 % ab Tag 180": "0 % láti ọjọ́ 180",
+    "0 · Leicht": "0 · Light",
+    "0,1 TOY Pfand": "ìdógò 0.1 TOY",
+    "0,25 Mio.": "0.25 m",
+    "1  Auswahl": "1  Yíyàn",
+    "1  Ben erzeugt ein Geheimnis und sperrt BTC mit dessen Hash (48 h)":
+        "1  Ben ṣe àṣírí kan, ó sì tì BTC pa pẹ̀lú hash rẹ̀ (48 h)",
+    "1 · Konto": "1 · Àkáǹtì",
+    "1,3 Mio.": "1.3 m",
+    "1.000 TOY Stake": "1,000 TOY stake",
+    "10 % gleichzeitig: 30 %": "10 % lẹ́ẹ̀kan náà: 30 %",
+    "10 TOY Stake": "10 TOY stake",
+    "10 bis 100 Transaktionen\nkostenlos je Tag": "10 sí 100 transaction\nlọ́fẹ̀ẹ́ lójoojúmọ́",
+    "100 TOY Stake": "100 TOY stake",
+    "11,6 Mio.": "11.6 m",
+    "2  Anna sperrt TOY mit demselben Hash (24 h)": "2  Anna tì TOY pa pẹ̀lú hash kan náà (24 h)",
+    "2  Vorschlag": "2  Àbá",
+    "2 · Attestierer": "2 · Attester",
+    "3  Abstimmung 1": "3  Ìdìbò 1",
+    "3  Ben holt die TOY mit dem Geheimnis ab, es wird öffentlich":
+        "3  Ben gba TOY pẹ̀lú àṣírí náà, àṣírí di mímọ̀ fún gbogbo ènìyàn",
+    "3 · Voll": "3 · Full node",
+    "4  Abstimmung 2": "4  Ìdìbò 2",
+    "4  Anna holt mit dem nun bekannten Geheimnis die BTC ab": "4  Anna gba BTC pẹ̀lú àṣírí tí a ti mọ̀ báyìí",
+    "4 · Validator": "4 · Validator",
+    "5  Endgültig": "5  Ó parí",
+    "50 % am ersten Tag": "50 % ní ọjọ́ kìíní",
+    "A · Kette": "A · Chain",
+    "Abbrechen möglich": "Ó ṣeé fagilé",
+    "Abbuchung über\nder eigenen Grenze": "Owó yíyọ tó ju\nààlà tìrẹ lọ",
+    "Aktives Konto\nim Speicher\njedes Knotens": "Àkáǹtì alààyè\nnínú ìrántí\ngbogbo node",
+    "Anna\n(hat TOY)": "Anna\n(ní TOY)",
+    "Anteil der Höchstmenge in %": "Ìpín iye tó pọ̀ jùlọ ní %",
+    "Anteil des Stakes, der gleichzeitig doppelt signiert, in %":
+        "Ìpín stake tó buwọ́lù lẹ́ẹ̀mejì lẹ́ẹ̀kan náà, ní %",
+    "Arbeits-Lotterie": "Lọ́tìrì iṣẹ́",
+    "Aufwecken mit der nächsten Transaktion,\nautomatisch, Guthaben vollständig":
+        "Ó jí pẹ̀lú transaction tó kàn,\nfúnra rẹ̀, owó rẹ̀ pé",
+    "Ausgeführt": "Ó ti ṣẹlẹ̀",
+    "Auslagern, wenn der Speicher\nüber 90 % voll ist (älteste zuerst)":
+        "A gbé e jáde tí ìrántí bá\nkún ju 90 % (àtijọ́ lákọ̀ọ́kọ́)",
+    "Auswertung,\nnur Anzeige": "Àyẹ̀wò,\nfífihàn nìkan",
+    "B · Netzwerk": "B · Network",
+    "Ben\n(hat z. B. BTC)": "Ben\n(ní BTC)",
+    "Beweis (< 1 KB)\nin der Wallet": "Proof (< 1 KB)\nnínú wallet",
+    "Beweis-Schicht (Phase 2)": "Proof layer (phase 2)",
+    "Beweise (8 MB)": "Proofs (8 MB)",
+    "Bitcoin (Halbierung etwa alle 4 Jahre)": "Bitcoin (halving ní nǹkan bí ọdún 4)",
+    "Bitcoin: 50 % nach 4 Jahren": "Bitcoin: 50 % lẹ́yìn ọdún 4",
+    "Block mit fester\nReihenfolge": "Block pẹ̀lú\nètò tó dúró",
+    "Block-Fenster (48 MB)": "Block window (48 MB)",
+    "C · ToyScan": "C · ToyScan",
+    "Chancen": "Àǹfààní",
+    "Clients": "Clients",
+    "Datenbudget eines Standard-Knotens: 256 MB": "Ààyè data fún node kan: 256 MB",
+    "Einzelfall: 1 %": "Ẹnìkan ṣoṣo: 1 %",
+    "Erstattungs-Topf": "Àpò ìsanpadà",
+    "Ethereum-kompatibles JSON-RPC · eigene toy_-Methoden": "JSON-RPC bí ti Ethereum · àwọn toy_ method",
+    "Hauptnetz": "Mainnet",
+    "Indizes, Wartebereich, Puffer (40 MB)": "Indexes, mempool, buffers (40 MB)",
+    "Insgesamt gelten 53,2 % aller jemals\nerfassten Kryptowerte als gescheitert\n(GeckoTerminal-Daten, Stand Anfang 2026)":
+        "Lápapọ̀, 53.2 % gbogbo crypto tí a ti\nkà rí ni a kà sí èyí tó ti kú\n(data GeckoTerminal, ìbẹ̀rẹ̀ 2026)",
+    "Jahre seit Start": "Ọdún láti ìbẹ̀rẹ̀",
+    "Komitee prüft\nund stimmt vor": "Committee ṣàyẹ̀wò\nó sì dìbò àkọ́kọ́",
+    "Komitee, VRF-Auswahl, Abstimmung im Stil von Tendermint, BLS":
+        "Committee, VRF, ìdìbò bí ti Tendermint, BLS",
+    "Konsens": "Consensus",
+    "Konten, Guthaben, Stake, Sperren in einem Merkle-Baum": "Àkáǹtì, owó, stake, ìdènà nínú Merkle tree",
+    "Kontostände aktiver Konten (128 MB)": "Owó àwọn àkáǹtì alààyè (128 MB)",
+    "Konzept": "Èrò",
+    "Kürzung des eigenen Stakes in %": "Ìyọkúrò nínú stake ní %",
+    "Lohn-Anteil an neuen TOY in %": "Ìpín èrè nínú TOY tuntun ní %",
+    "Lose in der\nArbeits-Lotterie": "Tíkẹ́ẹ̀tì nínú\nlọ́tìrì iṣẹ́",
+    "Läuft die Zeit ab, holt jeder sein Geld zurück. Niemand kann betrügen, es braucht keinen Vermittler.":
+        "Tí àkókò bá tán, olúkúlùkù gba owó rẹ̀ padà. Kò sí ẹni tó lè ṣe màgòmágó, kò sí alárinà.",
+    "M12, M13": "M12, M13",
+    "M2 bis M11": "M2 sí M11",
+    "Muster erkennen\n→ Warnung in der Ampel, nie automatische Sperre":
+        "Ó ń wá àpẹẹrẹ\n→ ìkìlọ̀ nìkan, kò sí ìdènà aládàáṣe",
+    "Nach der Übergabe": "Lẹ́yìn ìfàlé",
+    "Netzwerk": "Network",
+    "Nie ausgelagert: Konten mit Stake, Schutzeinstellungen oder einer bezahlten Transaktion in den letzten 7 Epochen":
+        "A kì í gbé jáde: àkáǹtì tó ní stake, ààbò, tàbí transaction tí a sanwó fún ní epoch 7 tó kọjá",
+    "Phase 2\nBeweise": "Phase 2\nproofs",
+    "Ratenbegrenzung, Verbindungen trennen\n→ Kontostände bleiben unberührt":
+        "Ìdínkù iyára, gígé ìsopọ̀\n→ owó kò ní fọwọ́ kàn",
+    "Risiken": "Ewu",
+    "Ruhendes Konto\nnur als Wurzel\ngespeichert": "Àkáǹtì tó ń sùn\nroot nìkan ni\na tọ́jú",
+    "Schnittstellen": "Interfaces",
+    "Schwächen": "Àìlera",
+    "Stake-Teilnehmer": "Àwọn staker",
+    "Start-Validatoren": "Start validators",
+    "Startphase, Tag 0": "Ìbẹ̀rẹ̀, ọjọ́ 0",
+    "Startphase, Tag 90": "Ìbẹ̀rẹ̀, ọjọ́ 90",
+    "Stärken": "Agbára",
+    "TOYPAY App · Browser-Erweiterung · ToyNode · ToyScan": "TOYPAY app · browser extension · ToyNode · ToyScan",
+    "Tage Planzeit seit Start": "Ọjọ́ (plan time) láti ìbẹ̀rẹ̀",
+    "Testnetz 1": "Testnet 1",
+    "ToyChain (m = 1, Planwert)": "ToyChain (m = 1, ètò)",
+    "ToyChain 99,0 %": "ToyChain 99.0 %",
+    "ToyChain: 50 % nach 3,76 Jahren": "ToyChain: 50 % lẹ́yìn ọdún 3.76",
+    "VRF-Zufall wählt\neinen Vorschlagenden": "VRF yan ẹni\ntí yóò dábàá",
+    "Versehen kostet wenig,\nein gemeinsamer Angriff alles.\nGekürzte TOY gehen in den\nErstattungs-Topf, nie verbrannt.":
+        "Àṣìṣe kò ná ọ̀pọ̀,\nìkọlù àpapọ̀ ná gbogbo rẹ̀.\nTOY tí a yọ lọ sí àpò\nìsanpadà, a kì í jó o.",
+    "Wallet und ToyScan\nzeigen sie an": "Wallet àti ToyScan\nń fi hàn",
+    "Wartezeit, z. B. 24 Stunden": "Àkókò ìdúró, bí wákàtí 24",
+    "Wunsch nach fairen, einfachen Coins\nMiCA schafft klare Regeln in der EU\nLernen und Mitmachen per Handy\nspätere Spiel-Anbindung (TOYQUEST)\nGemeinschaft statt Investoren":
+        "Ìfẹ́ sí coin tó tọ́ tó sì rọrùn\nMiCA fún EU ní òfin tó ṣe kedere\nẸ̀kọ́ àti ìkópa pẹ̀lú fóònù\nìsopọ̀ eré ní ọjọ́ iwájú (TOYQUEST)\nÀwùjọ dípò àwọn olùdókòwò",
+    "Zustand": "State",
+    "ab 2/3 Zustimmung\nwird bestätigt": "pẹ̀lú ìfọwọ́sí 2/3\nó di ìdánilójú",
+    "ab einem Drittel: 100 %": "láti ìdá mẹ́ta: 100 %",
+    "alle Knoten nach\nfesten Regeln": "gbogbo node pẹ̀lú\nòfin tó dúró",
+    "andere Kette": "chain mìíràn",
+    "ein gemeinsamer Rust-Kern für alle Plattformen": "Rust core kan fún gbogbo platform",
+    "eine BLS-Signatur\n(96 Byte) für alle": "BLS signature kan\n(96 byte) fún gbogbo",
+    "erst jetzt verlässt\ndas Geld das Konto": "ìgbà yìí nìkan ni\nowó kúrò nínú àkáǹtì",
+    "erst nach Audit\nund Rechtsprüfung": "lẹ́yìn audit àti\nàyẹ̀wò òfin nìkan",
+    "etwa 60 Sekunden je Block · nach Schritt 5 kann der Block nie mehr zurückgenommen werden":
+        "nǹkan bí ìṣẹ́jú-àáyá 60 fún block kan · lẹ́yìn ìgbésẹ̀ 5, a kò lè yí block padà mọ́",
+    "fertig": "ó ti parí",
+    "frei für später (32 MB)": "ààyè fún ọjọ́ iwájú (32 MB)",
+    "geplant": "a ti gbèrò",
+    "gescheiterte Coins/Token\nin Mio.": "coin/token tó kú\nní mílíọ̀nù",
+    "heute (18.10.2026): vor der Testphase": "lónìí (18.10.2026): ṣáájú ìpele ìdánwò",
+    "hält alle Daten,\nhöherer Anteil": "ó di gbogbo data mú,\nìpín tó pọ̀ jù",
+    "in Arbeit": "ó ń lọ lọ́wọ́",
+    "jeder Knoten\nfür sich": "node kọ̀ọ̀kan\nfúnra rẹ̀",
+    "jeder Lohn bleibt\n365 Epochen gebunden": "gbogbo èrè wà ní títì\nfún epoch 365",
+    "kein Budget aus Premint für Audits,\nWerbung und Börsenlistung\nkleines Team, frühes Stadium\nkeine Apps, Token oder DeFi\nNamensgleichheit mit alten Token":
+        "kò sí owó premint fún audit,\nìpolówó àti exchange listing\nẹgbẹ́ kékeré, ìbẹ̀rẹ̀ pẹ̀pẹ̀\nkò sí app, token tàbí DeFi\norúkọ kan náà pẹ̀lú token àtijọ́",
+    "kein TOY": "kò sí TOY",
+    "libp2p mit QUIC und Noise, Dandelion++, optional Tor": "libp2p pẹ̀lú QUIC àti Noise, Dandelion++, Tor (àṣàyàn)",
+    "mehr Beitrag  →  mehr Rechte und mehr Anteil (freiwillig, jederzeit wechselbar)":
+        "ìkópa púpọ̀ sí i  →  ẹ̀tọ́ àti ìpín púpọ̀ sí i (àṣàyàn, ó ṣeé yí padà nígbàkúùgbà)",
+    "mit eigenem Schlüssel\noder Notfall-Schlüssel": "pẹ̀lú kọ́kọ́rọ́ tìrẹ\ntàbí emergency key",
+    "neue TOY in Mio.": "TOY tuntun ní mílíọ̀nù",
+    "nur eindeutig nachweisbare Verstöße\n→ Sperrzeit für Rechte, nie für Guthaben":
+        "ẹ̀ṣẹ̀ tí a lè fi hàn kedere nìkan\n→ ìdènà ẹ̀tọ́, kì í ṣe owó láé",
+    "rekursiver Beweis über die gesamte Vorgeschichte": "recursive proof lórí gbogbo ìtàn",
+    "schlägt Blöcke vor,\ngrößter Anteil": "ó ń dábàá block,\nìpín tó tóbi jùlọ",
+    "totaler Fair Launch, keine Insider-Coins\nMitmachen ohne Guthaben, alte Geräte\nendgültig nach etwa 1 Minute\nkeine Smart-Contract-Risiken\nEthereum-kompatible Adressen":
+        "fair launch pátápátá, kò sí coin fún inú\nìkópa láìsí owó, fóònù àtijọ́\nó parí lẹ́yìn nǹkan bí ìṣẹ́jú 1\nkò sí ewu smart contract\nàdírẹ́sì bí ti Ethereum",
+    "unterschreibt mit,\nAnteil am Lohn": "ó ń buwọ́lù pẹ̀lú,\nìpín nínú èrè",
+    "Übergabe möglich, sobald 21 neue Validatoren\nzwei Drittel des Stakes halten":
+        "Ìfàlé ṣeé ṣe nígbà tí validator tuntun 21\nbá ní ìdá méjì nínú mẹ́ta stake",
+    "Übergabe noch\nnicht möglich": "Ìfàlé kò tíì\nṣeé ṣe",
+    "über die Hälfte aller Coins scheitert\nNetzwerkeffekte großer Ketten\nStablecoins dominieren Zahlungen\nAngriffe auf ein kleines Netz\nrechtliche Einordnung offen":
+        "ó ju ìdajì gbogbo coin lọ tó kú\nagbára àwọn chain ńlá\nstablecoin ló ń jọba nínú ìsanwó\nìkọlù sí network kékeré\nipò òfin kò tíì ṣe kedere",
+}
+
+TABLE = {"en": EN, "fr": FR, "yo": YO}[LANG]
+YEAR = {"en": "Year", "fr": "Année", "yo": "Ọdún"}[LANG]
 missing = set()
 
 
@@ -331,10 +482,10 @@ def translate(s):
         return f"{YEAR} {m.group(1)}"
     m = re.fullmatch(r"(\d+),(\d+)", s)
     if m:
-        return f"{m.group(1)}.{m.group(2)}" if LANG == "en" else s
+        return f"{m.group(1)}.{m.group(2)}" if LANG in ("en", "yo") else s
     m = re.fullmatch(r"(\d+) MB", s)
     if m:
-        return s if LANG == "en" else f"{m.group(1)} Mo"
+        return f"{m.group(1)} Mo" if LANG == "fr" else s
     if re.search(r"[A-Za-zÄÖÜäöüß]", s) and s not in ("M1", "ToyChain"):
         missing.add(s)
     return s

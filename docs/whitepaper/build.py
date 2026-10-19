@@ -590,7 +590,7 @@ B(["<b>Glaubwürdige Fairness:</b> Ein Start ohne jedes Guthaben ist selten. In 
    "<b>Kompatibilität:</b> Ethereum-Adressen senken die Hürde für Nutzer, die bereits eine Wallet haben.",
    "<b>Offenheit und Sprache:</b> Freie Lizenz, ein nachvollziehbares Entscheidungsprotokoll (öffentlich ab dem "
    "Testnetz) und 45 Sprachen machen das Projekt für eine internationale Gemeinschaft zugänglich. Dieses Whitepaper "
-   "gibt es bereits auf Deutsch, Englisch und Französisch."])
+   "gibt es bereits auf Deutsch, Englisch, Französisch und Yoruba."])
 H2("16.3 Was dagegen spricht")
 B(["<b>Kein Startkapital:</b> Ohne Premint gibt es keine Kasse für Entwickler, Audits, Werbung oder Börsenlistungen. "
    "Das Projekt ist auf Freiwillige, Spenden und Förderungen angewiesen.",
@@ -630,7 +630,7 @@ P("<b>Fazit der Einschätzung:</b> Als Investition ist ToyChain heute nicht bewe
 
 # ================================================================ 17
 H("Stand und Fahrplan")
-P("<b>Heute (19. Oktober 2026): vor der Testphase.</b> Das Konzept ist in 113 dokumentierten Entscheidungen "
+P("<b>Heute (19. Oktober 2026): vor der Testphase.</b> Das Konzept ist in 114 dokumentierten Entscheidungen "
   "festgehalten. Der Bau ist in 13 Meilensteine geteilt. Meilenstein M1 ist fertig: Die Regeln für Beträge und die "
   "Ausgabe neuer TOY sind programmiert und mit 45 automatischen Tests geprüft. Die Rust-Umsetzung liefert auf die "
   "kleinste Einheit genau dieselben Zahlen wie die getrennt geschriebene Referenz-Simulation in Python. Die Tests "
@@ -785,7 +785,7 @@ T([["Stelle", "Änderung", "Grund"],
     "„wenn Strom ohnehin verfügbar ist“ war ungenau."],
    ["15", "Prüfberichte stammen von einem KI-Prüfagenten; eine Prüfung durch Menschen steht aus.",
     "„unabhängige Prüfberichte“ war missverständlich."],
-   ["16.2", "Entscheidungsprotokoll öffentlich erst ab Testnetz; Whitepaper auf Deutsch, Englisch, Französisch.",
+   ["16.2", "Entscheidungsprotokoll öffentlich erst ab Testnetz; Whitepaper in vier Sprachen (Deutsch, Englisch, Französisch, Yoruba).",
     "Richtigstellung und neuer Stand"]],
   [2.4, 8.6, 5.4])
 story.append(Spacer(1, 6))

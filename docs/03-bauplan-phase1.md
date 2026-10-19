@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 113). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 114). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 

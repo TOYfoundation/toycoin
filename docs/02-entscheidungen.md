@@ -60,6 +60,7 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | 111 | Übergabe aus der Startphase | **21 Start-Validatoren.** Übergabe frühestens nach 90 Tagen, wenn 21 neue Validatoren mit je 1.000 TOY, die seit 30 Epochen gebunden sind, zwei Drittel des wirksamen Stakes halten. Deckel je Teilnehmer 5 % unter 100 Validatoren, danach 1 % |
 | 112 | Belohnung nach Stake | **Linear + Grundbetrag:** 20 % des Konsens-Anteils zu gleichen Teilen an jedes Komitee-Mitglied, 80 % linear nach wirksamem Stake. Beide Teile mal Verfügbarkeit. Nicht Verdientes geht in die Arbeits-Lotterie. Die Wurzel entfällt, weil sie das Aufteilen auf viele Konten belohnt (Prüfbericht 2, H8) |
 | 113 | Präzisierungen aus M1 | Genesis zählt nicht zu den 1.440 Blöcken von Epoche 0, deren Emission erst mit Block 1 festgelegt wird. Deckel der Start-Validatoren genau `a(t) × (P(t + 1) − P(t' + 1))`. Gesamt-Lohn bei m = 1 genau 2.217.786,5926 TOY (bisher „höchstens 2.217.786,59“, zu knapp gerundet). Halbwertszeit 1.372,25 Epochen, die Hälfte ist also in Epoche 1.373 erreicht |
+| 114 | Veröffentlichung des Repositorys | Das GitHub-Repository bleibt während der Entwicklung privat und wird **spätestens mit dem öffentlichen Testnetz** für alle freigegeben (Code, Spezifikation, Entscheidungsprotokoll). Das Whitepaper nennt das so |
 | 72 | Spiel, Spiel-NFTs, Dukaten | **Später** mit der Spiel-Anbindung. Die bisherigen Regeln bleiben als Ideensammlung in `spaeter/07-toypay-spiel-und-nft.md` und `toypay/docs/` |
 
 **Was mit den älteren Entscheidungen passiert:**

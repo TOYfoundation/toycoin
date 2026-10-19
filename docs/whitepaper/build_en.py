@@ -58,7 +58,7 @@ story.append(Spacer(1, 4))
 story.append(Paragraph("A lean, fairly launched payment network<br/>that anyone can join without funds", subtitle))
 story.append(Spacer(1, 10))
 story.append(Paragraph("ToyChain project · " + L("github.com/Safehaigit/toycoin", U["repo"]), center))
-story.append(Paragraph("Preliminary whitepaper · Draft 0.2 · 18 October 2026 · English edition", center))
+story.append(Paragraph("Preliminary whitepaper · Draft 0.3 · 19 October 2026 · English edition", center))
 story.append(Spacer(1, 12))
 BOX("<b>Status: before the test phase.</b> So far ToyChain exists as a concept and as a first software component. "
     "The basic types and the rules for creating new coins are finished and tested (milestone M1 of 13). There is "
@@ -84,7 +84,7 @@ toc_table(["1 Introduction", "2 ToyChain at a glance", "3 Basic terms in plain w
            "8 The bootstrap phase", "9 Lean nodes for old devices", "10 Security for users",
            "11 Wallet, ToyScan and other chains", "12 Use cases", "13 Similarities and differences",
            "14 Advantages", "15 Risks and open questions", "16 Chances in the crypto market",
-           "17 Status and roadmap", "18 Conclusion", "Appendix: starting values, link list, sources"], "Contents")
+           "17 Status and roadmap", "18 Conclusion", "Appendix: values, links, sources, changes"], "Contents")
 
 # ================================================================ 1
 H("Introduction")
@@ -117,7 +117,8 @@ T([["Property", "ToyChain (planned starting values)"],
    ["Storage per node", "Target 256 MB, also on old Android devices and the Raspberry Pi"],
    ["Accounts", "as on Ethereum: same addresses, same 12- or 24-word phrase"],
    ["Features", "only built-in transaction types, no smart contracts, no tokens, no NFTs"],
-   ["Fees", "10 to 100 free transactions per account and day, above that a small fee or computing work"],
+   ["Fees", "10 to 100 free transactions per account and epoch (at least one day), above that a small fee or "
+             "computing work"],
    ["Programming language", "Rust, one shared core for all platforms"],
    ["Licence", L("MIT", U["mit"]) + " (free software)"]],
   [4.0, 12.4])
@@ -178,7 +179,7 @@ P("Issuance is multiplied by a factor m between 0.5 and 2.0. It rises slightly w
   "used (transactions that pay a fee or are backed by computing work) and when many validators reliably co-sign. Free "
   "transactions do not count, otherwise issuance could be pushed up with spam. A schedule component catches up with "
   "deviations, and m may change by at most 0.05 per epoch. In simulations, issuance in the first year deviates from "
-  "plan by at most about 2 %. So m only shifts <i>when</i> TOY are created, not <i>how many</i> in total.")
+  "plan by at most about 2.2 %, and in the long run by at most about 2.5 %. So m only shifts <i>when</i> TOY are created, not <i>how many</i> in total.")
 H2("5.4 Who receives the new TOY")
 P("Every issuance is split in fixed parts: <b>50 %</b> to everyone securing the network, <b>40 %</b> to a work "
   "lottery that every device can join without funds (section 6.3), and <b>10 %</b> to a refund pool that pays for "
@@ -202,8 +203,10 @@ P("Everyone decides how much to contribute. On first start the wallet measures t
 FIG(F + "f_tiers.png", "The five participation tiers. Even tier 0 needs no funds.", 15.0)
 P("Locked TOY remain the user's property and can be released again after 21 epochs. So that nobody becomes too "
   "powerful, a participant's stake counts only up to 5 % (from 100 validators on, 1 %) of the total stake. Rewards "
-  "grow linearly with stake, plus an equal base amount for every active validator. Splitting stake across many "
-  "accounts therefore brings no advantage.")
+  "After the bootstrap phase, one fifth of the security share goes in equal parts to every committee member, the "
+  "rest linearly by stake. Both are paid only in proportion to the work actually done: whoever co-signs 90 % of the "
+  "blocks receives 90 %. Because the stake-based part is linear, splitting stake across many accounts brings no "
+  "advantage.")
 MORE(L("What is proof of stake? (ethereum.org)", U["eth_pos"], "Consensus"))
 H2("6.2 Free transactions and fees")
 P("Every activated account has a free quota per epoch: 100 transactions when the network is quiet, at least 10 when "
@@ -216,7 +219,8 @@ P("So that people without TOY can also obtain new coins, there is a lottery for 
   "tickets with " + L("Argon2id", U["argon2"], "Technology") + ", which deliberately needs a lot of memory (16 MiB). "
   "This gives special hardware and graphics-card farms hardly any advantage over a phone or PC. Up to 64 winners are "
   "drawn fairly per block, each prize being at least 0.2 TOY. Whoever computes more has more tickets; the expected "
-  "reward is proportional to the work. The device only computes when allowed: on the charger, on Wi-Fi and while it "
+  "reward is proportional to the work. A single prize is enough to activate an account: 0.1 TOY are locked as a "
+  "deposit (section 9) and the rest is freely available. The device only computes when allowed: on the charger, on Wi-Fi and while it "
   "stays cool. For comparison, the Bitcoin network continuously uses as much electricity as a whole country, as the "
   + L("Cambridge electricity index", U["cbeci"], "Energy") + " shows.")
 
@@ -224,7 +228,8 @@ P("So that people without TOY can also obtain new coins, there is a lottery for 
 H("Reaching agreement")
 H2("7.1 How a block is made")
 P("A committee of at most 128 validators is reassembled every epoch. For each block, verifiable randomness ("
-  + L("VRF", U["vrf"], "Technology") + ") selects one member to propose the block. The others vote in two rounds, "
+  + L("VRF", U["vrf"], "Technology") + ") selects one member to propose the block. The others vote in two phases (pre-vote "
+  "and confirmation), "
   "following a proven method in the style of " + L("Tendermint", U["tendermint"], "Consensus") + ". As soon as two "
   "thirds agree, the block is <b>final</b>. It can no longer be reverted. With Bitcoin, by contrast, one usually waits "
   "about an hour before a payment is considered safe. All votes are combined with "
@@ -251,13 +256,15 @@ P("A fair launch without premint has a chicken-and-egg problem under proof of st
   "so nobody has stake to secure the network. ToyChain solves this openly and for a limited time:")
 B(["<b>21 start validators</b>, run by volunteers with operators and locations as diverse as possible, secure the "
    "network with equal weight. Their names and earnings are public in ToyScan.",
-   "<b>Falling reward:</b> At first they jointly receive half of the issuance. It falls linearly by day and reaches "
-   "zero after 180 days. A cap prevents faster issuance or deliberately slow blocks from bringing more reward. In "
+   "<b>Falling reward:</b> At first they jointly receive half of all new TOY. The share falls evenly day by day and "
+   "reaches zero after 180 days. Days are counted in <i>plan time</i>: every pause between two blocks counts at most "
+   "10 minutes, so a standstill cannot move the clock forward. A cap prevents faster issuance or deliberately slow blocks from bringing more reward. In "
    "total it is at most about 2.22 million TOY (about 2.2 % of the maximum supply).",
    "<b>Bonded reward:</b> Every reward stays locked for 365 epochs (about one year) and is liable for misconduct.",
    "<b>Strict handover:</b> The bootstrap phase ends no earlier than after 90 days, and only when at least 21 new "
    "validators with 1,000 TOY each have been bonded for 30 epochs and together hold two thirds of the effective stake. "
-   "After that the start validators lose any special status."])
+   "After that the start validators lose any special status. If the handover has not happened after 180 days, they "
+   "keep securing the network without reward until it does."])
 FIG(F + "f_bootstrap.png", "Start validators' reward by day and the time window for the handover.")
 P("To be honest: the bootstrap phase is the part in which ToyChain needs the most trust in a few people. No protocol "
   "can prove that “new” validators really are other people. The rules make a takeover expensive and visible to all, "
@@ -268,7 +275,8 @@ H("Lean nodes for old devices")
 P("Storing a full Bitcoin or Ethereum chain today takes hundreds of gigabytes. ToyChain sets a fixed target of "
   "<b>256 MB per standard node</b>. That works because a node stores only the current balances of all active accounts "
   "and a short window of the latest blocks. Volunteer archive nodes keep older blocks. In a later phase the whole "
-  "history is to be “folded” into a small cryptographic proof, so that new nodes do not have to trust anyone either.")
+  "history is to be “folded” into a small cryptographic proof, so that new nodes do not have to trust anyone either. Until "
+  "then, new nodes start from snapshots (checkpoints) signed by at least three independent parties.")
 FIG(F + "f_budget.png", "How the 256 MB are divided. Every storage structure gets its own size test.")
 P("So that 100 million accounts and more still fit, there are <b>active and dormant accounts</b>. Accounts unused for "
   "a long time are moved out of memory when needed, but <b>never deleted</b>. Their content is secured by a "
@@ -290,8 +298,10 @@ B(["<b>Vault delay:</b> Larger withdrawals only take effect after a waiting time
    "pending withdrawals and rescue everything to a safe address set in advance.",
    "<b>Self-lock:</b> Lost your phone? Your own account can be locked for up to 30 epochs.",
    "<b>Heir address:</b> If an account stays without any activity for a very long time (at least 180 epochs), an heir "
-   "address chosen by the owner can take it over. The owner is reminded several times beforehand and can cancel at "
-   "any time."])
+   "address chosen by the owner can take it over. The owner is reminded several times beforehand and can still cancel "
+   "for 30 epochs."])
+P("To be honest: whoever steals the phone together with the key has the same rights as the owner unless there is an "
+  "emergency key. The wallet therefore recommends creating an emergency key on a second device or on paper.")
 FIG(F + "f_vault.png", "Vault delay: during the waiting time the owner can stop a suspicious withdrawal.", 15.0)
 H2("10.2 Protection rules with a sense of proportion")
 P("Attacks should be stopped early without hitting honest users. That is why there are three levels. The chain itself "
@@ -316,7 +326,9 @@ P("ToyChain does not invent its own cryptographic methods. It uses widely used, 
   "behind replaceable interfaces. A voluntary additional key following the NIST standard "
   + L("ML-DSA", U["mldsa"], "Technology") + " is meant to resist " + L("quantum computers", U["pqk"], "Technology") +
   " as well. The most important calculation rules are also checked mathematically with the proof tool "
-  + L("Kani", U["kani"], "Technology") + ".")
+  + L("Kani", U["kani"], "Technology") + ", that is not just for examples but for all possible numbers. Already proven: "
+  "an epoch never pays out more than the remaining amount, and the total of all TOY always stays at or below 100 "
+  "million (section 17).")
 
 # ================================================================ 11
 H("TOYPAY wallet, ToyScan and other chains")
@@ -343,8 +355,8 @@ BOX("<b>Important note on tokens with the same name:</b> On Polygon and Ethereum
 
 # ================================================================ 12
 H("Use cases")
-B(["<b>Everyday payments</b> between individuals, with a payment reference, batch transfers to up to 32 recipients and "
-   "finality after about one minute. Small amounts are possible without fees thanks to the free quota.",
+B(["<b>Everyday payments</b> between individuals, with a payment reference and finality after about one minute, later "
+   "also as batch transfers to up to 32 recipients. Small amounts are possible without fees thanks to the free quota.",
    "<b>Taking part without capital:</b> An old phone or a Raspberry Pi becomes a node and can earn its first TOY "
    "through the work lottery.",
    "<b>Clubs, families and small businesses:</b> accounts with several signatures, escrow with an arbiter, "
@@ -372,7 +384,7 @@ T([["", "Bitcoin", "Ethereum", "ToyChain (planned)"],
    ["Full node storage", "about 760 GB", "hundreds of GB to several TB", "target 256 MB"],
    ["Programmability", "simple scripts", "smart contracts, tokens, NFTs", "only built-in features"],
    ["Accounts", "UTXO model", "account model", "account model, Ethereum addresses"],
-   ["Fees", "always, by market", "always, base fee plus tip", "10 to 100 free per day, then fee or work"],
+   ["Fees", "always, by market", "always, base fee plus tip", "10 to 100 free per epoch (min. 1 day), then fee or work"],
    ["Joining without funds", "only running a node", "only running a node", "yes, including the work lottery"]],
   [3.5, 3.6, 4.2, 5.1])
 P("<b>In common with Bitcoin</b>, ToyChain has the fair launch, the fixed maximum supply, the declining issuance over "
@@ -386,8 +398,8 @@ H("Advantages")
 B(["<b>Fairness:</b> Nobody is given TOY; all rules are public and the same for everyone.",
    "<b>Accessibility:</b> Join with old devices, without funds and without expert knowledge, in 45 languages.",
    "<b>Fast finality:</b> A payment is safe after about one minute.",
-   "<b>Low energy use:</b> No race for computing power. The work lottery only runs when power is available anyway and "
-   "rewards work only proportionally.",
+   "<b>Low energy use:</b> No race for computing power. The work lottery only runs on the charger and only as much as "
+   "the user allows. Computing more brings proportionally more tickets, no head start.",
    "<b>Simplicity as security:</b> Without smart contracts there are no third-party programs that could freeze funds or "
    "lose them through bugs.",
    "<b>Protection of property:</b> Bans remove only rights, never funds. Accounts are never lost. TOY are never "
@@ -458,7 +470,7 @@ B(["<b>Credible fairness:</b> A launch without any balance is rare. In a market 
    "disappear.",
    "<b>Compatibility:</b> Ethereum addresses lower the barrier for users who already have a wallet.",
    "<b>Openness and language:</b> A free licence, a traceable decision log (public from the testnet on) and 45 languages make the project accessible to "
-   "an international community."])
+   "an international community. This whitepaper already exists in German, English, French and Yoruba."])
 H2("16.3 What speaks against it")
 B(["<b>No start capital:</b> Without premint there is no budget for developers, audits, marketing or exchange listings. "
    "The project depends on volunteers, donations and grants.",
@@ -497,11 +509,15 @@ P("<b>Conclusion of the assessment:</b> As an investment, ToyChain cannot be val
 
 # ================================================================ 17
 H("Status and roadmap")
-P("<b>Today (18 October 2026): before the test phase.</b> The concept is recorded in 113 documented decisions. "
+P("<b>Today (19 October 2026): before the test phase.</b> The concept is recorded in 114 documented decisions. "
   "Construction is divided into 13 milestones. Milestone M1 is finished: the rules for amounts and for issuing new TOY "
   "are programmed and checked with 45 automated tests. The Rust implementation produces exactly the same numbers, down "
-  "to the smallest unit, as the independent reference simulation. The tests run automatically on Linux, Windows and "
-  "ARM processors, and the key supply rules are also proven mathematically with Kani.")
+  "to the smallest unit, as the separately written reference simulation in Python. The tests run automatically on "
+  "every change on Linux, Windows and ARM processors. With the proof tool Kani, three core rules are proven "
+  "mathematically, each in under two minutes: no epoch pays out more than the remaining amount, the total stays at or "
+  "below 100 million TOY, and the split of a block adds up exactly. Three further proofs of the split with a reward "
+  "share had not finished after 30 minutes. The program therefore checks this split itself in every block, and "
+  "additional tests cover it.")
 FIG(F + "f_roadmap.png", "Roadmap. There is deliberately no fixed date for a mainnet.")
 T([["Phase", "Content", "Status"],
    ["Concept", "Specification v0.3, decision log, two reviews", "done, maintained continuously"],
@@ -613,6 +629,36 @@ refs = [
 ]
 for i, r in enumerate(refs, 1):
     story.append(Paragraph(f"[{i}] {r}", small))
+story.append(CondPageBreak(5 * cm))
+story.append(Paragraph("Appendix D: Changes since draft 0.2", h1))
+P("Draft 0.3 is a review of draft 0.2 for logic, traceability and new findings from 18 and 19 October 2026. The "
+  "concept itself has not changed.")
+T([["Where", "Change", "Reason"],
+   ["1, 18, App. B", "The repository is private for now; it is to be opened by the public testnet at the latest.",
+    "Draft 0.2 wrongly called it public."],
+   ["2, 13", "Free quota “per epoch (at least one day)” instead of “per day”.", "more precise: an epoch can last longer "
+                                                                              "than 24 hours."],
+   ["5.3", "Deviation from plan: first year at most about 2.2 %, long run at most about 2.5 %.",
+    "“at most about 2 %” was too tight (simulation: +2.23 %)."],
+   ["6.1", "Reward after the bootstrap phase fully described: one fifth as an equal base amount per committee member, "
+           "the rest linear, both by actual work done.", "was missing, decision 112"],
+   ["6.3", "A first lottery prize is enough for the activation deposit.", "answers how to get a first account without TOY"],
+   ["7.1", "“two phases” (pre-vote and confirmation) instead of “two rounds”.", "“round” means something else in the "
+                                                                              "protocol."],
+   ["8", "Plan time explained; reward as “half of all new TOY”; what happens if the handover is still pending after "
+         "180 days.", "figure 8 used the term without explanation; gap in the process"],
+   ["9", "New nodes start from checkpoints with three independent signatures until phase 2.",
+    "gap: whom does a new node trust until then?"],
+   ["10.1", "Heir address cancellation period (30 epochs) and an honest note on the emergency key.",
+    "completeness and honesty"],
+   ["10.4, 17", "Result of the Kani proofs: three core rules proven, three proofs still open.", "new finding, 18 Oct 2026"],
+   ["12", "Batch transfers only after the first testnet.", "scope of testnet 1 (decision 109)"],
+   ["14", "Energy: lottery only on the charger and only as much as the user allows.",
+    "“when power is available anyway” was imprecise."],
+   ["15", "The reviews come from an AI review agent; a human review is still pending.",
+    "“independent reviews” was misleading."],
+   ["16.2", "Decision log public only from the testnet on; whitepaper in four languages.", "correction and new status"]],
+  [2.4, 8.6, 5.4])
 story.append(Spacer(1, 6))
 story.append(Paragraph("<b>Disclaimer.</b> This document describes a software project under development. It is "
                        "neither investment, tax nor legal advice, and not an offer, prospectus or crypto-asset white "
@@ -620,5 +666,5 @@ story.append(Paragraph("<b>Disclaimer.</b> This document describes a software pr
                        "Market figures reflect the status on the stated date. If in doubt, the German edition prevails.",
                        small))
 
-finish("ToyChain-Whitepaper-v0.2-en.pdf", "ToyChain · Preliminary whitepaper · Draft 0.2 · before the test phase",
-       "Page", "ToyChain and ToyCoin (TOY): Preliminary whitepaper", "Draft 0.2, before the test phase", "en-GB")
+finish("ToyChain-Whitepaper-v0.3-en.pdf", "ToyChain · Preliminary whitepaper · Draft 0.3 · before the test phase",
+       "Page", "ToyChain and ToyCoin (TOY): Preliminary whitepaper", "Draft 0.3, before the test phase", "en-GB")
