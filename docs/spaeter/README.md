@@ -11,3 +11,4 @@ Diese Dokumente beschreiben Ideen, die **nicht** Teil des jetzigen Baus sind (Ne
 | `07-toypay-spiel-und-nft.md` | TOYPAY-Spiel, Spiel-NFTs, Dukaten, Präge-Regeln |
 | `08-toyscan-v0.1-mit-bridge.md` | ToyScan mit Bridge- und Altbestand-Kriterien |
 | `09-mitbestimmung.md` | Mitbestimmung der Community |
+| `10-toypost-schnittstelle.md` | Vorschlag: Zahlungslink, Verwendungszweck, ToyScan-Felder und Anmelden mit Adresse für den Korrespondenz-Assistenten ToyPost |
