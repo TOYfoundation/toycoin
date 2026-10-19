@@ -98,7 +98,8 @@ P("ToyChain tries to implement the core idea of Bitcoin, namely a fixed supply, 
   "lean and practical way with today's methods. The guiding questions are: Can anyone take part with an old device? "
   "Can anyone verify the rules themselves? Do your own funds stay yours under all circumstances? This whitepaper "
   "explains the ideas in plain language. The exact rules are in the technical specification (version 0.3, German) in "
-  "the " + L("public repository", U["repo"]) + ".")
+  "the " + L("project repository", U["repo"]) + ". It is still private during development and is to be opened "
+  "by the public testnet at the latest.")
 MORE(L("Bitcoin whitepaper", U["btc_pdf"], "Basics"),
      L("Size of a Bitcoin node in 2026", U["btc_size"], "Basics"))
 
@@ -398,7 +399,8 @@ B(["<b>Fairness:</b> Nobody is given TOY; all rules are public and the same for 
 H("Risks and open questions")
 P("An honest whitepaper also names what can go wrong. The main risks from today's point of view:")
 B(["<b>Early stage:</b> ToyChain has not run yet. Errors in the concept or code are likely and are to be found on the "
-   "testnet. Two independent reviews have already uncovered weaknesses that were fixed. Further reviews and an "
+   "testnet. Two reviews by an AI review agent not involved in writing the texts have already uncovered weaknesses "
+   "that were fixed; a review by humans is still pending. Further reviews and an "
    "external audit are mandatory before any mainnet.",
    "<b>Small network, little security:</b> A new chain is vulnerable at first, because few participants are easier to "
    "outvote. Security only comes from many independent participants.",
@@ -455,7 +457,7 @@ B(["<b>Credible fairness:</b> A launch without any balance is rare. In a market 
    "<b>Smaller attack surface:</b> Without smart contracts and bridges, the causes of many large losses of recent years "
    "disappear.",
    "<b>Compatibility:</b> Ethereum addresses lower the barrier for users who already have a wallet.",
-   "<b>Openness and language:</b> A free licence, a public decision log and 45 languages make the project accessible to "
+   "<b>Openness and language:</b> A free licence, a traceable decision log (public from the testnet on) and 45 languages make the project accessible to "
    "an international community."])
 H2("16.3 What speaks against it")
 B(["<b>No start capital:</b> Without premint there is no budget for developers, audits, marketing or exchange listings. "
@@ -522,7 +524,8 @@ P("ToyChain wants to show that a cryptocurrency can start fairly, get by with li
   "secure. Everyone should be able to take part, even without money and with an old device. For this, ToyChain "
   "deliberately does without much of what other chains offer and relies on a few built-in, easily verifiable "
   "features. Whether this succeeds will be decided not by this paper but by the testnet. Contributions, criticism and "
-  "reviews are explicitly welcome: code, specification and decision log are " + L("public on GitHub", U["repo"]) + ".")
+  "reviews are explicitly welcome. Code, specification and decision log are on " + L("GitHub", U["repo"]) +
+  " and will be visible to everyone by the public testnet at the latest.")
 
 # ================================================================ Appendix
 story.append(CondPageBreak(6 * cm))
@@ -550,7 +553,7 @@ T([["Area", "Starting value"],
 
 story.append(CondPageBreak(6 * cm))
 story.append(Paragraph("Appendix B: Link list", h1))
-P("The most important explanations for further reading, sorted by topic. All links were checked in October 2026.")
+P("The most important explanations for further reading, sorted by topic. Links as of October 2026; the project link works once the repository is public.")
 T([["Topic", "Link", "What it covers"],
    ["Basics", L("Bitcoin whitepaper", U["btc_pdf"]), "the original from 2008, 9 pages"],
    ["Basics", L("Bitcoin full node 2026 (Spark)", U["btc_size"]), "storage and cost of a node"],

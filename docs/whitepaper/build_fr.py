@@ -118,7 +118,8 @@ P("ToyChain tente de réaliser l'idée fondamentale de Bitcoin, à savoir une qu
   "directrices sont : chacun peut-il participer avec un vieil appareil ? Chacun peut-il vérifier lui-même les règles ? "
   "Vos propres fonds restent-ils à vous en toutes circonstances ? Ce livre blanc explique les idées en langage simple. "
   "Les règles exactes figurent dans la spécification technique (version 0.3, en allemand) du "
-  + L("dépôt public", U["repo"]) + ".")
+  + L("dépôt du projet", U["repo"]) + ". Il reste privé pendant le développement et doit être ouvert au plus tard "
+  "avec le testnet public.")
 MORE(L("Livre blanc de Bitcoin (anglais)", U["btc_pdf"], "Bases"),
      L("Le livre blanc de Bitcoin expliqué", U["btc_fr"], "Bases"),
      L("Taille d'un nœud Bitcoin en 2026 (anglais)", U["btc_size"], "Bases"))
@@ -444,7 +445,8 @@ B(["<b>Équité :</b> personne ne reçoit de TOY en cadeau ; toutes les règles 
 H("Risques et questions ouvertes")
 P("Un livre blanc honnête nomme aussi ce qui peut mal tourner. Les principaux risques du point de vue actuel :")
 B(["<b>Stade précoce :</b> ToyChain n'a encore jamais fonctionné. Des erreurs de conception ou de code sont probables "
-   "et doivent être trouvées sur le testnet. Deux examens indépendants ont déjà révélé des faiblesses, qui ont été "
+   "et doivent être trouvées sur le testnet. Deux examens par un agent de relecture IA, non impliqué dans la rédaction, ont déjà "
+   "révélé des faiblesses, qui ont été "
    "corrigées. D'autres examens et un audit externe sont obligatoires avant tout mainnet.",
    "<b>Petit réseau, faible sécurité :</b> une nouvelle chaîne est vulnérable au début, car peu de participants sont "
    "plus faciles à mettre en minorité. La sécurité ne naît que de nombreux participants indépendants.",
@@ -505,7 +507,7 @@ B(["<b>Une équité crédible :</b> un lancement sans aucun solde est rare. Sur 
    "<b>Une surface d'attaque réduite :</b> sans smart contracts ni ponts, les causes de nombreuses grandes pertes de "
    "ces dernières années disparaissent.",
    "<b>Compatibilité :</b> les adresses Ethereum abaissent la barrière pour les utilisateurs qui ont déjà un wallet.",
-   "<b>Ouverture et langues :</b> une licence libre, un journal public des décisions et 45 langues rendent le projet "
+   "<b>Ouverture et langues :</b> une licence libre, un journal des décisions traçable (public dès le testnet) et 45 langues rendent le projet "
    "accessible à une communauté internationale."])
 H2("16.3 Ce qui plaide contre")
 B(["<b>Pas de capital de départ :</b> sans premint, il n'y a pas de budget pour les développeurs, les audits, la "
@@ -576,8 +578,8 @@ P("ToyChain veut montrer qu'une cryptomonnaie peut démarrer équitablement, se 
   "rapide et sûre. Chacun doit pouvoir participer, même sans argent et avec un vieil appareil. Pour cela, ToyChain "
   "renonce délibérément à beaucoup de ce que proposent d'autres chaînes et mise sur quelques fonctions intégrées et "
   "faciles à vérifier. Ce n'est pas ce document qui décidera du succès, mais le testnet. Contributions, critiques et "
-  "examens sont expressément bienvenus : le code, la spécification et le journal des décisions sont "
-  + L("publics sur GitHub", U["repo"]) + ".")
+  "examens sont expressément bienvenus : le code, la spécification et le journal des décisions se trouvent sur "
+  + L("GitHub", U["repo"]) + ", visibles par tous au plus tard avec le testnet public.")
 
 # ================================================================ Annexes
 story.append(CondPageBreak(6 * cm))
@@ -609,7 +611,7 @@ T([["Domaine", "Valeur de départ"],
 story.append(CondPageBreak(6 * cm))
 story.append(Paragraph("Annexe B : liste des liens", h1))
 P("Les principales explications pour aller plus loin, classées par thème. Les sources en anglais sont signalées. "
-  "Tous les liens ont été vérifiés en octobre 2026.")
+  "État des liens : octobre 2026 ; le lien du projet fonctionnera dès que le dépôt sera public.")
 T([["Thème", "Lien", "De quoi il s'agit"],
    ["Bases", L("Livre blanc de Bitcoin", U["btc_pdf"]) + " (anglais)", "l'original de 2008, 9 pages"],
    ["Bases", L("Le livre blanc de Bitcoin expliqué (CoinGate)", U["btc_fr"]), "résumé en français"],

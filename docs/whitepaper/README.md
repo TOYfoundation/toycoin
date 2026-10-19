@@ -1,8 +1,10 @@
 # Whitepaper
 
-Vorläufiges Whitepaper (Entwurf 0.2, 18.10.2026, **vor der Testphase**): `ToyChain-Whitepaper-v0.2.pdf`, 18 Seiten, Deutsch, mit 16 Abbildungen, rund 40 geprüften Web-Links und einer Einschätzung der Marktchancen (Abschnitt 16).
+Vorläufiges Whitepaper (Entwurf 0.3, 19.10.2026, **vor der Testphase**): `ToyChain-Whitepaper-v0.3.pdf`, 19 Seiten, Deutsch, mit 16 Abbildungen, rund 40 geprüften Web-Links und einer Einschätzung der Marktchancen (Abschnitt 16).
 
-Übersetzungen (gleicher Inhalt, Stand 18.10.2026, die deutsche Fassung ist maßgeblich):
+Entwurf 0.3 prüft Entwurf 0.2 auf Logik, Nachvollziehbarkeit und neue Erkenntnisse; alle Änderungen stehen in Anhang D.
+
+Übersetzungen (Inhalt von Entwurf 0.2 mit den sachlichen Korrekturen aus 0.3 zu Repository, Prüfberichten und Links; die deutsche Fassung ist maßgeblich):
 
 - Englisch: `ToyChain-Whitepaper-v0.2-en.pdf` (17 Seiten), erzeugt mit `build_en.py`
 - Französisch: `ToyChain-Whitepaper-v0.2-fr.pdf` (19 Seiten), erzeugt mit `build_fr.py`
