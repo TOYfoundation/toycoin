@@ -8,7 +8,8 @@ Entwurf 0.3 prüft Entwurf 0.2 auf Logik, Nachvollziehbarkeit und neue Erkenntni
 
 - Englisch: `ToyChain-Whitepaper-v0.3-en.pdf` (19 Seiten), `build_en.py`
 - Französisch: `ToyChain-Whitepaper-v0.3-fr.pdf` (20 Seiten), `build_fr.py`
-- Yoruba: `ToyChain-Whitepaper-v0.3-yo.pdf` (16 Seiten), `build_yo.py`. Fachbegriffe ohne klare Yoruba-Entsprechung bleiben englisch, alle Links führen auf englische Seiten. Maschinell übersetzt, vor einer Veröffentlichung von Muttersprachlern gegenlesen lassen.
+- Yoruba (aus dem Englischen übersetzt): `ToyChain-Whitepaper-v0.3-yo.pdf` (16 Seiten), `build_yo.py`. Fachbegriffe ohne klare Yoruba-Entsprechung bleiben englisch, alle Links führen auf englische Seiten. Maschinell übersetzt, vor einer Veröffentlichung von Muttersprachlern gegenlesen lassen.
+- Yoruba (direkt aus dem Deutschen übersetzt, Absatz für Absatz, mit Anhang D): `ToyChain-Whitepaper-v0.3-yo-de.pdf` (18 Seiten), `build_yo_de.py`. Fachbegriffe und Links englisch. Maschinell übersetzt, vor einer Veröffentlichung von Muttersprachlern gegenlesen lassen.
 - Abbildungen: `python3 figures_i18n.py en|fr|yo` schreibt nach `abbildungen/<sprache>/`. Gemeinsames Layout: `wp_common.py`.
 
 Neu erzeugen (Python mit reportlab, matplotlib und Pillow, Schrift DejaVu):
