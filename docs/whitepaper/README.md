@@ -1,6 +1,6 @@
 # Whitepaper
 
-Vorläufiges Whitepaper (Entwurf 0.3, 19.10.2026, **vor der Testphase**): `ToyChain-Whitepaper-v0.3.pdf`, 19 Seiten, Deutsch, mit 16 Abbildungen, rund 40 geprüften Web-Links und einer Einschätzung der Marktchancen (Abschnitt 16).
+Vorläufiges Whitepaper (Entwurf 0.3, 19.10.2026, **vor der Testphase**): `ToyChain-Whitepaper-v0.3.pdf`, 19 Seiten, Deutsch, mit 16 Abbildungen, rund 40 Web-Links (Stand Oktober 2026) und einer Einschätzung der Marktchancen (Abschnitt 16).
 
 Entwurf 0.3 prüft Entwurf 0.2 auf Logik, Nachvollziehbarkeit und neue Erkenntnisse; alle Änderungen stehen in Anhang D.
 
