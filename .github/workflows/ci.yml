@@ -75,6 +75,9 @@ jobs:
           - recover_eip155
           - bls_decode_verify
           - vrf_verify
+          - rlp_decode
+          - decode_transaction
+          - decode_ticket
     defaults:
       run:
         working-directory: toychain/fuzz
