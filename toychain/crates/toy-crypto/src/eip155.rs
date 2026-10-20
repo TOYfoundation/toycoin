@@ -12,19 +12,43 @@
 //! chain ID (`v` = 27 or 28). Point 1 is the caller's job: it must compute
 //! `signing_hash` with its own chain ID.
 
-use toy_types::{Address, Hash};
+use toy_types::{Address, Hash, params};
 
 use crate::CryptoError;
 use crate::secp256k1::{RecoverableSignature, SecretKey};
 
 /// A chain ID as used in EIP-155 signatures.
 ///
-/// Always in `1..=ChainId::MAX`. ToyChain's own IDs for testnet and mainnet
-/// are not chosen yet (decision 40) and will live in `toy-types::params`.
+/// Always in `1..=ChainId::MAX`. ToyChain's own IDs (decision 116) are
+/// available as [`ChainId::TOYCHAIN_MAINNET`], [`ChainId::TOYCHAIN_TESTNET`]
+/// and [`ChainId::TOYCHAIN_DEVNET`]; their values live in
+/// `toy_types::params`.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct ChainId(u64);
 
 impl ChainId {
+    /// ToyChain mainnet, 7630713 (`0x746F79`, "toy").
+    pub const TOYCHAIN_MAINNET: Self = Self::from_param(params::CHAIN_ID_MAINNET);
+
+    /// Public ToyChain testnet, 7630714.
+    pub const TOYCHAIN_TESTNET: Self = Self::from_param(params::CHAIN_ID_TESTNET);
+
+    /// Local development networks, 7630715.
+    pub const TOYCHAIN_DEVNET: Self = Self::from_param(params::CHAIN_ID_DEVNET);
+
+    /// Builds a constant from a protocol parameter. An invalid parameter
+    /// stops compilation (const evaluation), so it can never reach a node.
+    #[allow(
+        clippy::panic,
+        reason = "only evaluated at compile time for the constants above"
+    )]
+    const fn from_param(id: u64) -> Self {
+        match Self::new(id) {
+            Ok(chain_id) => chain_id,
+            Err(_) => panic!("chain ID parameter out of range"),
+        }
+    }
+
     /// Largest chain ID whose `v` still fits into 64 bits
     /// (`floor(u64::MAX / 2) - 36`, EIP-2294).
     pub const MAX: u64 = u64::MAX / 2 - 36;
@@ -167,6 +191,16 @@ mod tests {
         assert!(ChainId::new(ChainId::MAX + 1).is_err());
         // 2 * (2^63 - 1 - 36) + 36 = u64::MAX - 37: no overflow at the top.
         assert_eq!(ChainId::new(ChainId::MAX).unwrap().v(true), u64::MAX - 37);
+    }
+
+    #[test]
+    fn toychain_ids_match_params() {
+        assert_eq!(ChainId::TOYCHAIN_MAINNET.get(), 7_630_713);
+        assert_eq!(ChainId::TOYCHAIN_TESTNET.get(), 7_630_714);
+        assert_eq!(ChainId::TOYCHAIN_DEVNET.get(), 7_630_715);
+        // v values as they appear in legacy (EIP-155) transactions.
+        assert_eq!(ChainId::TOYCHAIN_MAINNET.v(false), 15_261_461);
+        assert_eq!(ChainId::TOYCHAIN_TESTNET.v(true), 15_261_464);
     }
 
     #[test]

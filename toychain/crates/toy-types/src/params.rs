@@ -135,6 +135,33 @@ pub const LOTTERY_MIN_PRIZE: Amount = Amount::from_units(UNITS_PER_TOY / 5);
 /// Maximum number of lottery winners per block.
 pub const LOTTERY_MAX_WINNERS_PER_BLOCK: u32 = 64;
 
+// ---- Chain IDs (EIP-155, decision 116) ----------------------------------
+
+/// Chain ID of the ToyChain mainnet: `0x746F79`, the ASCII bytes of "toy".
+/// Fixed by decision 116; checked as free in ethereum-lists/chains on
+/// 2026-10-20, registration follows with the public testnet (M10).
+pub const CHAIN_ID_MAINNET: u64 = 0x0074_6f79; // 7_630_713
+
+/// Chain ID of the public ToyChain testnet (decision 40: differs from
+/// mainnet, so testnet signatures are never valid on mainnet).
+pub const CHAIN_ID_TESTNET: u64 = 7_630_714;
+
+/// Chain ID of local development networks (`toy-cli devnet`, tests).
+/// Separate from the public testnet, so local test signatures can never
+/// be replayed there.
+pub const CHAIN_ID_DEVNET: u64 = 7_630_715;
+
+// Checked at compile time: three distinct IDs, all below 2^32 (safe for
+// MetaMask and hardware wallets).
+const _: () = assert!(
+    CHAIN_ID_MAINNET != CHAIN_ID_TESTNET
+        && CHAIN_ID_MAINNET != CHAIN_ID_DEVNET
+        && CHAIN_ID_TESTNET != CHAIN_ID_DEVNET
+        && CHAIN_ID_DEVNET < 1 << 32
+        && CHAIN_ID_TESTNET < 1 << 32
+        && CHAIN_ID_MAINNET < 1 << 32
+);
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -152,5 +179,20 @@ mod tests {
         assert_eq!(ACTIVATION_DEPOSIT_FLOOR.to_string(), "0.01 TOY");
         assert_eq!(LOTTERY_MIN_PRIZE.to_string(), "0.2 TOY");
         assert!(ACTIVATION_DEPOSIT_FLOOR < ACTIVATION_DEPOSIT);
+    }
+
+    #[test]
+    fn chain_ids() {
+        // Mainnet spells "toy" in hex (decision 116).
+        assert_eq!(CHAIN_ID_MAINNET.to_be_bytes()[5..], *b"toy");
+        assert_eq!(CHAIN_ID_MAINNET, 7_630_713);
+        assert_eq!(CHAIN_ID_TESTNET, 7_630_714);
+        assert_eq!(CHAIN_ID_DEVNET, 7_630_715);
+        // Well-known IDs that must never be reused: Ethereum, Polygon,
+        // and the common local developer IDs.
+        let ours = [CHAIN_ID_MAINNET, CHAIN_ID_TESTNET, CHAIN_ID_DEVNET];
+        for taken in [1, 137, 1337, 31337] {
+            assert!(!ours.contains(&taken), "{taken}");
+        }
     }
 }
