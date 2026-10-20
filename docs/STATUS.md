@@ -100,7 +100,7 @@ Ein voller Block mit 128 Stimmen wird also in rund 1,3 ms geprüft. Bei 60 s Blo
    - Das gleiche Prinzip nutzen Ethereum (RANDAO) und das Internet Computer.
 
    Es steckt hinter der Schnittstelle `Vrf`, ein späterer Wechsel betrifft nur `toy-crypto`. **Wiedervorlage vor dem Mainnet-Audit (Entscheidung 38):** Gibt es dann eine geprüfte RFC-9381-Bibliothek, wird neu entschieden. Spezifikation 10 ist angepasst.
-2. **Chain-IDs (Entscheidung 116, setzt Nr. 40 um):** Mainnet **7630713** (`0x746F79` = „toy“), Testnet **7630714**, lokales Devnet **7630715**. Am 20.10.2026 in ethereum-lists/chains frei. Im Code als `toy_types::params::CHAIN_ID_*` und `ChainId::TOYCHAIN_*`, beim Bauen geprüft (verschieden, unter 2^32). Neuer Test: Mainnet, Testnet und Devnet lehnen Signaturen der jeweils anderen ab. **Offen:** Eintrag in die öffentliche Liste mit dem öffentlichen Testnet (M10), bis dahin vor jedem Meilenstein prüfen, ob die Nummern noch frei sind.
+2. **Chain-IDs (Entscheidung 116, setzt Nr. 40 um):** Mainnet **7630713** (`0x746F79` = „toy“), Testnet **7630714**, lokales Devnet **7630715**. Am 20.10.2026 in ethereum-lists/chains frei. Im Code als `toy_types::params::CHAIN_ID_*` und `ChainId::TOYCHAIN_*`, per Test geprüft (verschieden, unter 2^32, nicht 1, 137, 1337, 31337). Ein ungültiger Wert hält schon das Bauen von `toy-crypto` an. Eine reine Prüfung beim Bauen in `toy-types` (`const _: () = assert!(…)`) hat Kani in der CI nicht verarbeitet, deshalb ist sie dort ein Test. Neuer Test: Mainnet, Testnet und Devnet lehnen Signaturen der jeweils anderen ab. **Offen:** Eintrag in die öffentliche Liste mit dem öffentlichen Testnet (M10), bis dahin vor jedem Meilenstein prüfen, ob die Nummern noch frei sind.
 
 **Einschränkungen (ehrlich):**
 

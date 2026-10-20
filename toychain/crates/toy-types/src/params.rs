@@ -151,17 +151,6 @@ pub const CHAIN_ID_TESTNET: u64 = 7_630_714;
 /// be replayed there.
 pub const CHAIN_ID_DEVNET: u64 = 7_630_715;
 
-// Checked at compile time: three distinct IDs, all below 2^32 (safe for
-// MetaMask and hardware wallets).
-const _: () = assert!(
-    CHAIN_ID_MAINNET != CHAIN_ID_TESTNET
-        && CHAIN_ID_MAINNET != CHAIN_ID_DEVNET
-        && CHAIN_ID_TESTNET != CHAIN_ID_DEVNET
-        && CHAIN_ID_DEVNET < 1 << 32
-        && CHAIN_ID_TESTNET < 1 << 32
-        && CHAIN_ID_MAINNET < 1 << 32
-);
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -193,6 +182,16 @@ mod tests {
         let ours = [CHAIN_ID_MAINNET, CHAIN_ID_TESTNET, CHAIN_ID_DEVNET];
         for taken in [1, 137, 1337, 31337] {
             assert!(!ours.contains(&taken), "{taken}");
+        }
+        // Three distinct networks (decision 40), all below 2^32 (safe for
+        // MetaMask and hardware wallets). A runtime test instead of a
+        // compile-time `const _: () = assert!(..)`: the Kani verifier in
+        // CI failed to build toy-types with such a const item.
+        for (i, a) in ours.iter().enumerate() {
+            assert!(*a < 1 << 32, "{a}");
+            for b in ours.iter().skip(i + 1) {
+                assert_ne!(a, b);
+            }
         }
     }
 }
