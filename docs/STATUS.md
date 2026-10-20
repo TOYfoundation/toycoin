@@ -43,7 +43,8 @@ Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M2 fertig** (Kryp
 - `cargo test`: ✅ **88 Tests** (45 aus M1, **43 neu**), alle bestanden
 - `cargo deny check`: ✅ Sicherheitsmeldungen (RustSec-Datenbank, Stand 17.10.2026), Lizenzen, Herkunft, Sperrliste in Ordnung. 5 Warnungen wegen doppelter Hilfs-Bibliotheken (`sha2`, `digest` u. a. in zwei Versionen, weil `bip32` für das `xprv`-Format noch `bs58` mit älterem `sha2` nutzt). Unkritisch.
 - `cargo vet`: ✅ 21 Bibliotheken geprüft (Prüfberichte von Mozilla, Google, Bytecode Alliance, Zcash, ISRG übernommen, dazu Vertrauen in 4 Herausgeber, denen diese Organisationen übereinstimmend vertrauen), **63 als Ausnahme** („noch nicht durchgesehen“) in `toychain/supply-chain/config.toml`. Eigene Prüfberichte wurden nicht eingetragen.
-- Fuzz-Ziele (6 Stück) kompilieren. Sie laufen in der CI je 5 Minuten (Job `fuzz`, braucht Nightly). Lokal nicht ausgeführt, weil die Sandbox kein Nightly laden kann.
+- Fuzzing: ✅ alle 6 Ziele (Adressen, Phrasen, Pfade, EIP-155-Signaturen, BLS, VRF) liefen in der CI je 5 Minuten ohne Fund (Pull Request #2, 20.10.2026, zwei Läufe). Lokal nicht ausgeführt, weil die Sandbox kein Nightly laden kann.
+- CI auf GitHub (Pull Request #2): ✅ alle 14 Prüfungen bestanden, darunter Tests auf Linux x86_64, Windows x86_64 und Linux aarch64, `cargo-deny`, `cargo-vet` und die 3 Kani-Beweise aus M1.
 
 | Pflicht-Test aus dem Bauplan | Ergebnis |
 |---|---|
@@ -112,7 +113,7 @@ Ein voller Block mit 128 Stimmen wird also in rund 1,3 ms geprüft. Bei 60 s Blo
 - **Nur englische Wortliste, nur Kleinschreibung.** BIP-39-Wortlisten gibt es nur in rund 10 Sprachen. Für den Austausch mit anderen Wallets ist Englisch der Standard. Groß-/Kleinschreibung und Tippfehler-Hilfe gehören in die Wallet (M8).
 - **Eigener Ableitungspfad für ToyChain** (Spezifikation 10, optional) kommt mit M8. Er braucht eine eigene Münznummer nach SLIP-44. `DerivationPath::parse` kann schon jeden Pfad.
 - **Argon2id** (ToyWork-Lose, Keystore) kommt mit M3 bzw. M8 in `toy-crypto` dazu.
-- **Fuzzing** lief noch nicht. Die erste Ausführung erfolgt beim nächsten Push in der CI.
+- **Fuzzing** läuft je Ziel nur 5 Minuten in der CI. Das findet grobe Fehler, ersetzt aber keine langen Läufe (Stunden bis Tage). Lange Läufe gehören vor das öffentliche Testnet (M10).
 - **`cargo vet`**: 63 Ausnahmen sind ehrlich als „noch nicht durchgesehen“ eingetragen. Sie sollten mit der Zeit durch echte Prüfungen (`cargo vet certify` durch einen Menschen) oder neue Berichte anderer Organisationen ersetzt werden.
 - **`blst` im Modus `portable`:** keine CPU-Sonderbefehle, die vom Build-Rechner abhängen. Das hält Builds reproduzierbar und lauffähig auf älteren PCs ohne ADX. Messbar langsamer war es nicht.
 
