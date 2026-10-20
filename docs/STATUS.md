@@ -49,7 +49,8 @@ Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig** (Zust
 - `cargo test`: ✅ **205 Tests** (91 aus M1 und M2, **114 neu**: 4 in `toy-crypto`, 37 in `toy-state`, 73 in `toy-tx`), alle bestanden, rund 45 Sekunden
 - `cargo deny check`: ✅ Sicherheitsmeldungen, Lizenzen, Herkunft in Ordnung. 5 Warnungen wegen doppelter Hilfs-Bibliotheken (`digest`, `crypto-common`, `block-buffer`, `cpufeatures`, `sha2`, je eine alte und eine neue Version). Unkritisch
 - `cargo vet --locked`: ✅ 21 geprüft, **65 Ausnahmen** (2 neu: `argon2`, `blake2`). Keine der fünf vertrauten Organisationen hat sie bisher geprüft. Ehrlich als „noch nicht durchgesehen“ eingetragen
-- Fuzzing: 3 neue Ziele (`rlp_decode` mit der Eigenschaft „angenommen heißt kanonisch“, `decode_transaction`, `decode_ticket`) in der CI. Lokal kompiliert, aber nicht ausgeführt (kein Nightly in der Sandbox). Ersatzweise prüfen Tests 20.000 zufällig veränderte RLP-Eingaben und jede Kürzung und Bit-Änderung einer Transaktion
+- Fuzzing: 3 neue Ziele (`rlp_decode` mit der Eigenschaft „angenommen heißt kanonisch“, `decode_transaction`, `decode_ticket`). Lokal nicht ausgeführt (kein Nightly in der Sandbox), dafür prüfen Tests 20.000 zufällig veränderte RLP-Eingaben und jede Kürzung und Bit-Änderung einer Transaktion. In der CI liefen alle 9 Ziele je 5 Minuten ohne Fund
+- CI auf GitHub (Pull Request #5, 20.10.2026): ✅ alle 34 Prüfläufe bestanden (17 Prüfungen, je für Push und Pull Request), darunter Tests auf Linux x86_64, Windows x86_64 und Linux aarch64, `cargo-deny`, `cargo-vet`, die 3 Kani-Beweise aus M1 und das Fuzzing
 
 | Pflicht-Test aus dem Bauplan | Ergebnis |
 |---|---|
@@ -111,7 +112,7 @@ Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig** (Zust
 - **Liste gemeldeter Doppelsignaturen** wächst (32 Byte je Fall). Doppelsignaturen sind selten, M4 oder M5 räumt alte Einträge auf.
 - **Pool-Obergrenze** hängt an der Grundgebühr. Steigt die Grundgebühr, steigt die Obergrenze mit. Das ist gewollt, weil dann auch die Erstattungen teurer werden.
 - **Keine neuen Kani-Beweise** in M3. I0 wird in jedem Block zur Laufzeit geprüft, dazu der Zufallstest. Ein formaler Beweis der Topf-Bewegungen ist ein Kandidat für später.
-- **Fuzzing** der 3 neuen Ziele läuft erst in der CI (5 Minuten je Ziel).
+- **Fuzzing** der 3 neuen Ziele lief nur 5 Minuten je Ziel in der CI. Lange Läufe gehören vor das öffentliche Testnetz (M10).
 
 ## M2: Kryptografie und Adressen (20.10.2026)
 
@@ -331,6 +332,7 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 114):
 | `01-spezifikation.md` | v0.3, schlank, mit Verfassung (Abschnitt 13) |
 | `02-entscheidungen.md` | Nr. 1 bis 121, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
 | `03-bauplan-phase1.md` | M1 bis M13 |
+| `whitepaper/` | Whitepaper Entwurf 0.4 (20.10.2026, Stand nach M3) und Kurzanleitung für Nutzer |
 | `04-toypay-wallet.md` | v0.1: Clients, Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
 | `05-toyscan.md` | v0.2: Warnampel A1 bis A9, Muster-Warnungen, andere Ketten, API |
 | `11-pruefbericht-2.md` | Prüfbericht 2 vom 18.10.2026: 3 kritische, 10 hohe Befunde. Eindeutige Fehler korrigiert (Nr. 106 bis 108), Entscheidungen offen |
