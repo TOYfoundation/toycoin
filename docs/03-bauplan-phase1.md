@@ -65,7 +65,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 
 ### M3: Zustand, Transaktionen, Kontingent, Gebühren, Schutzregeln
 - Beide Transaktionsformate (ToyChain nach EIP-2718, Ethereum für MetaMask). Grenzen für kostenlose Transaktionen (höchstens 50 % je Block, Erstattung höchstens 1/30 des Pools je Epoche). Signierte Lotterie-Lose mit späterer Ziehung (Entscheidungen 106, 107).
-- Konten mit **Aktivierungs-Pfand 0,1 TOY** beim ersten Eingang, Transaktion „Konto auflösen“ (an Zieladresse oder als Spende in den Erstattungs-Pool), neue Nonce-Basis bei erneuter Aktivierung. Stake mit 7 Epochen Lösefrist, Merkle-Wurzel. Es wird nie TOY verbrannt.
+- Konten mit **Aktivierungs-Pfand 0,1 TOY** beim ersten Eingang, Transaktion „Konto auflösen“ (an Zieladresse oder als Spende in den Erstattungs-Pool), neue Nonce-Basis bei erneuter Aktivierung. Stake mit 21 Epochen Lösefrist (Spezifikation 4, Entscheidung 106; hier stand früher irrtümlich 7), Merkle-Wurzel. Es wird nie TOY verbrannt.
 - **Regel I0:** Summe aller Guthaben = Summe aller Emissionen in jedem Block.
 - Kontingent, Erstattungs-Pool, progressive Gebühr mit Höchstwert, Vielnutzer-Pflicht.
 - Transaktionsfelder Verwendungszweck (32 Byte) und Ablaufzeit (Entscheidung 84).
