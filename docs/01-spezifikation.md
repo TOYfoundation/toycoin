@@ -325,8 +325,8 @@ Alle Werte sind ganze Zahlen in **Millionsteln** (ppm, 1.000.000 = 1,0). Divisio
 Keine selbst erfundenen Algorithmen. Geprüfte Verfahren hinter Schnittstellen, damit sie später austauschbar sind (Krypto-Agilität).
 
 - **Konten:** secp256k1, Adresse = letzte 20 Byte von Keccak-256 des öffentlichen Schlüssels, BIP-39 (12 oder 24 Wörter), Pfad m/44'/60'/0'/0/n.
-- **Replay-Schutz:** eigene ToyChain-Chain-ID in jeder Signatur (EIP-155). Wer dieselbe Phrase auf anderen Ketten nutzt, teilt den Schlüssel. Die Wallet bietet deshalb optional einen eigenen Ableitungspfad für ToyChain an.
-- **Validatoren:** BLS12-381 mit Sammelsignaturen. **VRF** für Komitee und Lotterien.
+- **Replay-Schutz:** eigene ToyChain-Chain-ID in jeder Signatur (EIP-155): Mainnet 7630713, Testnet 7630714, lokales Devnet 7630715 (Entscheidung 116). Wer dieselbe Phrase auf anderen Ketten nutzt, teilt den Schlüssel. Die Wallet bietet deshalb optional einen eigenen Ableitungspfad für ToyChain an.
+- **Validatoren:** BLS12-381 mit Sammelsignaturen. **VRF** für Komitee und Lotterien: im Testnet die VRF aus eindeutigen BLS-Signaturen (Entscheidung 115), Wiedervorlage vor dem Mainnet-Audit.
 - **Hashes:** BLAKE3 für Merkle-Bäume, Keccak-256 für Ethereum-Kompatibilität, SHA-256 für Hash-Zeitschlösser.
 - **Ehrlich zu den Bibliotheken:** Für VRF (RFC 9381), ML-DSA, den Konsens im Tendermint-Stil und Dandelion++ gibt es in Rust weniger weit verbreitete, geprüfte Bibliotheken als für die übrigen Verfahren. Vor dem Einsatz werden Kandidaten mit Lizenz und Prüfstand bewertet. Wo nötig, wird streng nach Standard mit offiziellen Testvektoren umgesetzt und extern geprüft. Eigene Kryptografie wird nicht erfunden.
 - **Arbeit:** Argon2id.
@@ -388,6 +388,7 @@ Ehrlich gesagt: Wer eine eigene Software verbreitet, kann jede Kette abspalten. 
 - Auslagern ab 90 % Füllung bis 80 %, Schonfrist 7 Epochen, Konten mit Rollen-Stake nie
 - Emission k₀ = 0,0505 % je Epoche, m zwischen 0,5 und 2,0
 - ToyWork: Argon2id, 16 MiB
+- Chain-IDs: Mainnet 7630713, Testnet 7630714, Devnet 7630715 (Entscheidung 116)
 - Sperrzeiten wie Abschnitt 8, Verdopplung bis höchstens 64 Epochen
 
 Alle Werte sind Startannahmen und werden im Testnet gemessen und angepasst. Die Verfassung (Abschnitt 13) bleibt davon unberührt.

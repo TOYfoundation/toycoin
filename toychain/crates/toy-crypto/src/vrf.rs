@@ -6,7 +6,7 @@
 //! recompute the output, but nobody can predict the output without the
 //! secret key, and the key owner cannot choose between several outputs.
 //!
-//! # Construction (proposal, see `docs/STATUS.md`, M2)
+//! # Construction (decision 115: testnet; review before the mainnet audit)
 //!
 //! [`BlsVrf`] uses the uniqueness of BLS signatures: for a given key and
 //! message there is exactly one valid signature. The proof is the BLS
@@ -15,10 +15,13 @@
 //! the same principle for their randomness. No new cryptography is
 //! invented: it reuses the audited `blst` signature and BLAKE3.
 //!
-//! The spec names RFC 9381 (ECVRF). No audited Rust implementation of
-//! RFC 9381 exists today (October 2026). The [`Vrf`] trait keeps the
-//! choice swappable: an RFC 9381 implementation can be added later without
-//! touching callers.
+//! RFC 9381 (ECVRF) was the first choice, but no audited Rust
+//! implementation of it exists today (October 2026). Decision 115 uses
+//! this construction for the testnet and requires a review before the
+//! mainnet audit (decision 38). The [`Vrf`] trait keeps the choice
+//! swappable: an RFC 9381 implementation can be added later without
+//! touching callers. Changing it on a running mainnet would need a
+//! coordinated upgrade, which is why the review comes before mainnet.
 
 use toy_types::Hash;
 
