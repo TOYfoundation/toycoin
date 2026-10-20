@@ -96,9 +96,10 @@ jobs:
   kani:
     name: Kani proofs (${{ matrix.harness }})
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    # Kept non-blocking until the proofs have finished reliably a few times.
-    continue-on-error: true
+    # Blocking since 2026-10-20: the three proofs finished reliably in
+    # under 2 minutes in every run, and a non-blocking job once hid a
+    # real failure (PR #3). 15 minutes leaves room without hiding hangs.
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -110,7 +111,11 @@ jobs:
           - block_mint_adds_up_bootstrap_no_share
     steps:
       - uses: actions/checkout@v5
-      - uses: model-checking/kani-github-action@v1
+      # Pinned to a commit (branch v1 as of 2026-10-20) and a Kani version,
+      # so a new Kani release cannot turn a blocking job red on its own.
+      # Update both deliberately.
+      - uses: model-checking/kani-github-action@69d357bade1eb7b32bc3fc3d5c3d173c5bfa5237 # v1
         with:
+          kani-version: '0.68.0'
           working-directory: toychain
           args: -p toy-emission --harness ${{ matrix.harness }}
