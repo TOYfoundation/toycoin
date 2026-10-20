@@ -7,7 +7,7 @@
 //!   The supply cap of 10^26 smallest units (100,000,000 TOY) is part of
 //!   the constitution (spec section 13) and never changes.
 //! - [`Address`] and [`Hash`]: fixed-size byte types. Derivation and
-//!   checksums follow in milestone M2 (`toy-crypto`).
+//!   checksums are in `toy-crypto`.
 //!
 //! Floating point is never used (workspace lint `float_arithmetic`).
 
