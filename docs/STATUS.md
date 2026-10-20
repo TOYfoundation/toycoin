@@ -8,7 +8,7 @@ Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M2 fertig** (Kryp
 |---|---|---|
 | Start | Rust-Workspace, leere Crates, CI, STATUS.md | ✅ fertig |
 | M1 | Grundtypen und Emission, Genesis ohne Guthaben (`toy-types`, `toy-emission`) | ✅ fertig (18.10.2026) |
-| M2 | Kryptografie und Adressen (`toy-crypto`) | ✅ fertig (20.10.2026), VRF-Verfahren als Vorschlag offen |
+| M2 | Kryptografie und Adressen (`toy-crypto`) | ✅ fertig (20.10.2026), VRF und Chain-IDs entschieden (Nr. 115, 116) |
 | M3 | Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln (`toy-state`, `toy-tx`) | ⏳ offen, nächster Schritt |
 | M4 | Blöcke, Konsens, Startphase (`toy-consensus`) | ⏳ offen |
 | M5 | Speicher und 256-MB-Budget (`toy-node`) | ⏳ offen |
@@ -40,7 +40,7 @@ Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M2 fertig** (Kryp
 
 - `cargo fmt --check`: ✅ ohne Abweichungen
 - `cargo clippy --all-targets -D warnings`: ✅ ohne Warnungen
-- `cargo test`: ✅ **88 Tests** (45 aus M1, **43 neu**), alle bestanden
+- `cargo test`: ✅ **91 Tests** (45 aus M1, **46 neu**), alle bestanden
 - `cargo deny check`: ✅ Sicherheitsmeldungen (RustSec-Datenbank, Stand 17.10.2026), Lizenzen, Herkunft, Sperrliste in Ordnung. 5 Warnungen wegen doppelter Hilfs-Bibliotheken (`sha2`, `digest` u. a. in zwei Versionen, weil `bip32` für das `xprv`-Format noch `bs58` mit älterem `sha2` nutzt). Unkritisch.
 - `cargo vet`: ✅ 21 Bibliotheken geprüft (Prüfberichte von Mozilla, Google, Bytecode Alliance, Zcash, ISRG übernommen, dazu Vertrauen in 4 Herausgeber, denen diese Organisationen übereinstimmend vertrauen), **63 als Ausnahme** („noch nicht durchgesehen“) in `toychain/supply-chain/config.toml`. Eigene Prüfberichte wurden nicht eingetragen.
 - Fuzzing: ✅ alle 6 Ziele (Adressen, Phrasen, Pfade, EIP-155-Signaturen, BLS, VRF) liefen in der CI je 5 Minuten ohne Fund (Pull Request #2, 20.10.2026, zwei Läufe). Lokal nicht ausgeführt, weil die Sandbox kein Nightly laden kann.
@@ -82,9 +82,9 @@ Quellen, Stände und Prüfsummen aller Vektoren: `toychain/crates/toy-crypto/tes
 
 Ein voller Block mit 128 Stimmen wird also in rund 1,3 ms geprüft. Bei 60 s Blockzeit ist das unkritisch. Auf altem Android (M9/M10 messen) ist mit dem 10- bis 30-Fachen zu rechnen.
 
-**Offen, braucht deine Entscheidung:**
+**Entschieden am 20.10.2026:**
 
-1. **VRF-Verfahren (Vorschlag).** Die Spezifikation (Abschnitt 10) nennt RFC 9381. Dafür gibt es in Rust keine geprüfte Bibliothek. Die Kandidaten waren am 20.10.2026:
+1. **VRF-Verfahren (Entscheidung 115).** Die Spezifikation nannte RFC 9381. Dafür gibt es in Rust keine geprüfte Bibliothek. Die Kandidaten waren am 20.10.2026:
    - `vrf-rfc9381`: Version 0.0.7, rund 2.400 Downloads
    - `ecvrf`: Lizenz GPL-3.0, nicht MIT-verträglich
    - `ecvrf-rs`: seit 2022 verwaist
@@ -93,14 +93,14 @@ Ein voller Block mit 128 Stimmen wird also in rund 1,3 ms geprüft. Bei 60 s Blo
    - `ark-vrf` 0.5.3: weit verbreitet (rund 4,3 Mio. Downloads, MIT), aber nach eigener Aussage nur „lose an RFC 9381 angelehnt“, kein Prüfbericht genannt
    - `vrf_fun` 0.12.1: RFC-9381-Verfahren auf secp256k1. Diese Kurve ist in RFC 9381 nicht vorgesehen, rund 5.900 Downloads, kein Prüfbericht genannt
 
-   **Gebaut ist deshalb eine VRF aus eindeutigen BLS-Signaturen:**
+   **Gebaut und für das Testnet entschieden ist deshalb eine VRF aus eindeutigen BLS-Signaturen:**
    - Der Beweis ist eine BLS-Signatur mit eigenem Bereichs-Tag.
    - Das Ergebnis ist ein BLAKE3-Hash davon.
    - Es wird nur die geprüfte `blst`-Bibliothek benutzt.
    - Das gleiche Prinzip nutzen Ethereum (RANDAO) und das Internet Computer.
 
-   Es steckt hinter der Schnittstelle `Vrf`, ein späterer Wechsel betrifft nur `toy-crypto`. Wenn du zustimmst, trage ich es als Entscheidung ein und passe Spezifikation 10 an. Sonst bleibt der Punkt offen bis zu einer geprüften RFC-9381-Bibliothek oder einem externen Audit einer eigenen Umsetzung nach Standard.
-2. **Chain-ID** (Entscheidung 40) ist weiter nicht gewählt. In M2 ist sie ein Parameter (`ChainId`). Tests nutzen einen Platzhalter. Spätestens vor M7 (MetaMask) muss sie feststehen.
+   Es steckt hinter der Schnittstelle `Vrf`, ein späterer Wechsel betrifft nur `toy-crypto`. **Wiedervorlage vor dem Mainnet-Audit (Entscheidung 38):** Gibt es dann eine geprüfte RFC-9381-Bibliothek, wird neu entschieden. Spezifikation 10 ist angepasst.
+2. **Chain-IDs (Entscheidung 116, setzt Nr. 40 um):** Mainnet **7630713** (`0x746F79` = „toy“), Testnet **7630714**, lokales Devnet **7630715**. Am 20.10.2026 in ethereum-lists/chains frei. Im Code als `toy_types::params::CHAIN_ID_*` und `ChainId::TOYCHAIN_*`, beim Bauen geprüft (verschieden, unter 2^32). Neuer Test: Mainnet, Testnet und Devnet lehnen Signaturen der jeweils anderen ab. **Offen:** Eintrag in die öffentliche Liste mit dem öffentlichen Testnet (M10), bis dahin vor jedem Meilenstein prüfen, ob die Nummern noch frei sind.
 
 **Einschränkungen (ehrlich):**
 
@@ -237,7 +237,7 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 114):
 | Dokument | Stand |
 |---|---|
 | `01-spezifikation.md` | v0.3, schlank, mit Verfassung (Abschnitt 13) |
-| `02-entscheidungen.md` | Nr. 1 bis 114, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
+| `02-entscheidungen.md` | Nr. 1 bis 116, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
 | `03-bauplan-phase1.md` | M1 bis M13 |
 | `04-toypay-wallet.md` | v0.1: Clients, Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
 | `05-toyscan.md` | v0.2: Warnampel A1 bis A9, Muster-Warnungen, andere Ketten, API |
