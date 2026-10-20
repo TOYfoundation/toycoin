@@ -12,3 +12,17 @@ workspace = true
 
 [dependencies]
 toy-types.workspace = true
+k256 = { version = "=0.14.0", default-features = false, features = ["std", "ecdsa", "arithmetic"] }
+sha3 = { version = "=0.12.0", default-features = false }
+blake3 = { version = "=1.8.7", default-features = false, features = ["std"] }
+bip39 = { version = "=3.0.0", default-features = false, features = ["std", "zeroize"] }
+bip32 = { version = "=0.6.0", default-features = false, features = ["secp256k1", "alloc"] }
+# "portable": no CPU-specific code chosen from the build machine. Keeps
+# builds reproducible (spec 13) and runnable on older x86 CPUs without ADX.
+blst = { version = "=0.3.17", features = ["portable"] }
+zeroize = { version = "=1.9.1" }
+getrandom = { version = "=0.4.3", default-features = false, features = ["std"] }
+
+[dev-dependencies]
+# Only for reading the official JSON test vectors in tests/vectors/.
+serde_json = { version = "=1.0.154" }
