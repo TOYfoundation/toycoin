@@ -1,6 +1,6 @@
 [package]
 name = "toy-state"
-description = "ToyChain: Account state (balance, nonce, work credit), Merkle tree (BLAKE3), state transitions, existential deposit, state expiry"
+description = "ToyChain: Account state, activation deposit, stake, protocol pots, rule I0, penalties (level A), BLAKE3 Merkle root"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
