@@ -1,6 +1,6 @@
 # Projektstatus ToyChain
 
-Stand: 18.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M1 fertig** (Grundtypen und Emission). Nächster Schritt: **M2** (Kryptografie und Adressen).
+Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M2 fertig** (Kryptografie und Adressen). Nächster Schritt: **M3** (Zustand, Transaktionen, Kontingent, Gebühren, Schutzregeln).
 
 ## Überblick Meilensteine
 
@@ -8,8 +8,8 @@ Stand: 18.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M1 fertig** (Grun
 |---|---|---|
 | Start | Rust-Workspace, leere Crates, CI, STATUS.md | ✅ fertig |
 | M1 | Grundtypen und Emission, Genesis ohne Guthaben (`toy-types`, `toy-emission`) | ✅ fertig (18.10.2026) |
-| M2 | Kryptografie und Adressen (`toy-crypto`) | ⏳ offen, nächster Schritt |
-| M3 | Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln (`toy-state`, `toy-tx`) | ⏳ offen |
+| M2 | Kryptografie und Adressen (`toy-crypto`) | ✅ fertig (20.10.2026), VRF-Verfahren als Vorschlag offen |
+| M3 | Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln (`toy-state`, `toy-tx`) | ⏳ offen, nächster Schritt |
 | M4 | Blöcke, Konsens, Startphase (`toy-consensus`) | ⏳ offen |
 | M5 | Speicher und 256-MB-Budget (`toy-node`) | ⏳ offen |
 | M6 | Netzwerk (`toy-node`) | ⏳ offen |
@@ -20,6 +20,102 @@ Stand: 18.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M1 fertig** (Grun
 | M11 | ToyScan und andere Ketten (`toyscan/`) | ⏳ offen |
 | M12 | Konto-Schutz, Zusatz-Transaktionen, atomarer Tausch | ⏳ offen |
 | M13 | Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel | ⏳ offen |
+
+## M2: Kryptografie und Adressen (20.10.2026)
+
+**Gebaut** in `toy-crypto`. Es sind nur dünne Hüllen um geprüfte Bibliotheken, kein eigenes Verfahren. Der übrige Code sieht keine Typen der Bibliotheken (Krypto-Agilität).
+
+| Baustein | Modul | Bibliothek (Version festgenagelt) |
+|---|---|---|
+| Keccak-256, BLAKE3 (mit Bereichstrennung) | `hash` | `sha3` 0.12.0, `blake3` 1.8.7 |
+| Kontoschlüssel secp256k1, Signatur nur in „low S“-Form (EIP-2), deterministisch (RFC 6979) | `secp256k1` | `k256` 0.14.0 (RustCrypto, von NCC Group geprüft) |
+| Adresse = letzte 20 Byte von Keccak-256, Schreibweise mit Prüfsumme (EIP-55) | `secp256k1`, `address` | – |
+| Chain-ID in jeder Signatur (EIP-155) | `eip155` | `k256` |
+| Phrase mit 12 oder 24 Wörtern (BIP-39), Pfad m/44'/60'/0'/0/n (BIP-32) | `hd` | `bip39` 3.0.0 (rust-bitcoin), `bip32` 0.6.0 (iqlusion) |
+| BLS12-381 wie Ethereum: Signatur 96 Byte, Besitznachweis gegen untergeschobene Schlüssel, Sammelsignatur | `bls` | `blst` 0.3.17 (Supranational, extern geprüft), Modus `portable` |
+| VRF hinter austauschbarer Schnittstelle `Vrf` | `vrf` | `blst`, `blake3` |
+| Sichere Zufallszahlen, Löschen von Geheimnissen | intern | `getrandom` 0.4.3, `zeroize` 1.9.1 |
+
+**Ergebnisse der Prüfungen:**
+
+- `cargo fmt --check`: ✅ ohne Abweichungen
+- `cargo clippy --all-targets -D warnings`: ✅ ohne Warnungen
+- `cargo test`: ✅ **88 Tests** (45 aus M1, **43 neu**), alle bestanden
+- `cargo deny check`: ✅ Sicherheitsmeldungen (RustSec-Datenbank, Stand 17.10.2026), Lizenzen, Herkunft, Sperrliste in Ordnung. 5 Warnungen wegen doppelter Hilfs-Bibliotheken (`sha2`, `digest` u. a. in zwei Versionen, weil `bip32` für das `xprv`-Format noch `bs58` mit älterem `sha2` nutzt). Unkritisch.
+- `cargo vet`: ✅ 21 Bibliotheken geprüft (Prüfberichte von Mozilla, Google, Bytecode Alliance, Zcash, ISRG übernommen, dazu Vertrauen in 4 Herausgeber, denen diese Organisationen übereinstimmend vertrauen), **63 als Ausnahme** („noch nicht durchgesehen“) in `toychain/supply-chain/config.toml`. Eigene Prüfberichte wurden nicht eingetragen.
+- Fuzzing: ✅ alle 6 Ziele (Adressen, Phrasen, Pfade, EIP-155-Signaturen, BLS, VRF) liefen in der CI je 5 Minuten ohne Fund (Pull Request #2, 20.10.2026, zwei Läufe). Lokal nicht ausgeführt, weil die Sandbox kein Nightly laden kann.
+- CI auf GitHub (Pull Request #2): ✅ alle 14 Prüfungen bestanden, darunter Tests auf Linux x86_64, Windows x86_64 und Linux aarch64, `cargo-deny`, `cargo-vet` und die 3 Kani-Beweise aus M1.
+
+| Pflicht-Test aus dem Bauplan | Ergebnis |
+|---|---|
+| Offizielle BIP-39-Vektoren (Trezor-Referenz) | ✅ alle 16 Fälle mit 12/24 Wörtern exakt: Entropie → Phrase → Seed → Hauptschlüssel. Die 8 Fälle mit 18 Wörtern werden wie von der Spezifikation verlangt klar abgelehnt |
+| Offizielle BIP-32-Vektoren | ✅ 17 Ableitungen aus Vektor 1 bis 4 exakt, auch „führende Nullen“. Erwartete Schlüssel mit eigenem Base58-Decoder gelesen, unabhängig von `bip32` |
+| Offizielle Ethereum-Vektoren ergeben exakt die erwarteten Adressen | ✅ ethereum/tests Schlüssel → Adresse, alle 8 EIP-55-Fälle **exakt nachgebildet** (auch „All caps“ und „All Lower“), EIP-155-Beispiel **bitgenau** (Signierdaten, Hash, v = 37, r, s, Ende der signierten Transaktion) |
+| Phrase → Adresse Ende zu Ende | ✅ 4 Fälle aus alloy/MyCrypto (mit und ohne Passphrase, Index 0 bis 3) und 2 aus MetaMasks Testsuite |
+| Signaturen anderer Chain-IDs werden abgelehnt (Replay-Test) | ✅ Ethereum-Signatur auf ToyChain abgelehnt und umgekehrt. Umgeschriebenes `v` hilft dem Angreifer nicht (falscher Absender). Signatur ohne Chain-ID (v = 27/28) abgelehnt. Zwilling mit hohem S abgelehnt. 200 Zufallsfälle |
+| BLS12-381 | ✅ 85 offizielle Ethereum-Vektoren (Signieren, Prüfen, Sammeln, Sammel-Prüfung, Einlesen), Besitznachweis, Abstimmung mit 21 Validatoren |
+| VRF | ✅ Prüfen, Ablehnen fremder Schlüssel und Eingaben, Stimmen und VRF-Beweise nicht vertauschbar, Gleichverteilung grob geprüft, Regressionswert |
+| Zufallstests für alle Funktionen mit fremden Daten | ✅ Adressen, Phrasen, Pfade, Signaturen, BLS-Schlüssel und -Signaturen, VRF-Beweise. Kein Absturz, Unsinn wird abgelehnt |
+| Geheimnisse | ✅ `Debug` zeigt nie Schlüssel, Phrase oder Seed. Fehlermeldungen nennen bei falschem Wort nur die Position |
+
+Quellen, Stände und Prüfsummen aller Vektoren: `toychain/crates/toy-crypto/tests/vectors/README.md`.
+
+**Nachprüfung vor dem Commit (20.10.2026, zweite Sitzung):**
+
+- **Herkunft der Vektoren:** Alle 6 Quelldateien frisch von GitHub geladen, **byteweise identisch**. Die BLS-JSON-Datei aus dem frischen Archiv neu erzeugt, identisch. Die Werte aus alloy und MetaMask stehen wörtlich in deren Quellen. Eine falsche Commit-Angabe für MetaMask in der README ist berichtigt.
+- **Gegenprobe (Mutationstest):** Die Prüfung der Chain-ID wurde testweise abgeschaltet. 3 Replay-Tests schlugen sofort fehl. Der Test „umgeschriebenes `v`“ blieb grün, weil dann die zweite Schutzschicht greift (die Chain-ID steckt auch im signierten Hash).
+- **Verbessert:** Eine Adresse, die genau ihrer EIP-55-Schreibweise entspricht, gilt jetzt als geprüft, auch wenn sie zufällig nur Groß- oder nur Kleinbuchstaben hat. Vorher galt sie als „ohne Prüfsumme“. Das hätte in der Wallet eine unnötige Warnung ausgelöst.
+- **Verbessert:** Der BIP-32-Test liest die erwarteten Schlüssel jetzt unabhängig von der geprüften Bibliothek.
+- **Berichtigt:** Es sind 85 BLS-Vektoren, nicht 72.
+
+**Messwerte** (Release-Build, ein Kern eines Intel Xeon mit 2,1 GHz):
+
+| Vorgang | Zeit |
+|---|---|
+| Phrase → Seed (BIP-39, 2.048 Runden PBKDF2) | 1,5 ms |
+| Seed → Kontoschlüssel m/44'/60'/0'/0/0 | 0,38 ms |
+| secp256k1 signieren / Absender wiederherstellen | 0,06 ms / 0,07 ms |
+| BLS signieren / prüfen / Besitznachweis prüfen | 0,44 ms / 1,06 ms / 1,08 ms |
+| BLS 21 Stimmen sammeln / Sammelsignatur prüfen | 1,4 ms / 1,2 ms |
+| BLS 128 Stimmen sammeln / Sammelsignatur prüfen | 9,0 ms / 1,3 ms |
+| VRF beweisen / prüfen | 0,45 ms / 1,10 ms |
+
+Ein voller Block mit 128 Stimmen wird also in rund 1,3 ms geprüft. Bei 60 s Blockzeit ist das unkritisch. Auf altem Android (M9/M10 messen) ist mit dem 10- bis 30-Fachen zu rechnen.
+
+**Offen, braucht deine Entscheidung:**
+
+1. **VRF-Verfahren (Vorschlag).** Die Spezifikation (Abschnitt 10) nennt RFC 9381. Dafür gibt es in Rust keine geprüfte Bibliothek. Die Kandidaten waren am 20.10.2026:
+   - `vrf-rfc9381`: Version 0.0.7, rund 2.400 Downloads
+   - `ecvrf`: Lizenz GPL-3.0, nicht MIT-verträglich
+   - `ecvrf-rs`: seit 2022 verwaist
+   - `vrf`: braucht OpenSSL und setzt einen Entwurfsstand um
+   - `vrf-r255`: setzt einen Entwurf auf ristretto255 um, nicht RFC 9381
+   - `ark-vrf` 0.5.3: weit verbreitet (rund 4,3 Mio. Downloads, MIT), aber nach eigener Aussage nur „lose an RFC 9381 angelehnt“, kein Prüfbericht genannt
+   - `vrf_fun` 0.12.1: RFC-9381-Verfahren auf secp256k1. Diese Kurve ist in RFC 9381 nicht vorgesehen, rund 5.900 Downloads, kein Prüfbericht genannt
+
+   **Gebaut ist deshalb eine VRF aus eindeutigen BLS-Signaturen:**
+   - Der Beweis ist eine BLS-Signatur mit eigenem Bereichs-Tag.
+   - Das Ergebnis ist ein BLAKE3-Hash davon.
+   - Es wird nur die geprüfte `blst`-Bibliothek benutzt.
+   - Das gleiche Prinzip nutzen Ethereum (RANDAO) und das Internet Computer.
+
+   Es steckt hinter der Schnittstelle `Vrf`, ein späterer Wechsel betrifft nur `toy-crypto`. Wenn du zustimmst, trage ich es als Entscheidung ein und passe Spezifikation 10 an. Sonst bleibt der Punkt offen bis zu einer geprüften RFC-9381-Bibliothek oder einem externen Audit einer eigenen Umsetzung nach Standard.
+2. **Chain-ID** (Entscheidung 40) ist weiter nicht gewählt. In M2 ist sie ein Parameter (`ChainId`). Tests nutzen einen Platzhalter. Spätestens vor M7 (MetaMask) muss sie feststehen.
+
+**Einschränkungen (ehrlich):**
+
+- **Löschen von Geheimnissen ist „bestmöglich“.** Unsere eigenen Typen löschen beim Freigeben. In den Bibliotheken bleiben Reste:
+  - `bip39` gibt den Seed als Kopie zurück.
+  - `bip32` löscht den Kettencode der Zwischenschlüssel nicht.
+  - Rust kann Werte beim Verschieben im Speicher kopieren.
+
+  Für das Testnet ist das vertretbar. Für die Wallet (M8) kommt der Schutz durch das Gerät dazu (Keystore, StrongBox).
+- **Nur englische Wortliste, nur Kleinschreibung.** BIP-39-Wortlisten gibt es nur in rund 10 Sprachen. Für den Austausch mit anderen Wallets ist Englisch der Standard. Groß-/Kleinschreibung und Tippfehler-Hilfe gehören in die Wallet (M8).
+- **Eigener Ableitungspfad für ToyChain** (Spezifikation 10, optional) kommt mit M8. Er braucht eine eigene Münznummer nach SLIP-44. `DerivationPath::parse` kann schon jeden Pfad.
+- **Argon2id** (ToyWork-Lose, Keystore) kommt mit M3 bzw. M8 in `toy-crypto` dazu.
+- **Fuzzing** läuft je Ziel nur 5 Minuten in der CI. Das findet grobe Fehler, ersetzt aber keine langen Läufe (Stunden bis Tage). Lange Läufe gehören vor das öffentliche Testnet (M10).
+- **`cargo vet`**: 63 Ausnahmen sind ehrlich als „noch nicht durchgesehen“ eingetragen. Sie sollten mit der Zeit durch echte Prüfungen (`cargo vet certify` durch einen Menschen) oder neue Berichte anderer Organisationen ersetzt werden.
+- **`blst` im Modus `portable`:** keine CPU-Sonderbefehle, die vom Build-Rechner abhängen. Das hält Builds reproduzierbar und lauffähig auf älteren PCs ohne ADX. Messbar langsamer war es nicht.
 
 ## M1: Grundtypen und Emission (18.10.2026)
 

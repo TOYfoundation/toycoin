@@ -36,3 +36,8 @@ Thumbs.db
 # Python caches
 __pycache__/
 *.pyc
+
+# cargo-fuzz working data
+toychain/fuzz/corpus/
+toychain/fuzz/artifacts/
+toychain/fuzz/coverage/

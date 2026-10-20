@@ -47,6 +47,52 @@ jobs:
           manifest-path: toychain/Cargo.toml
           command: check
 
+  vet:
+    name: cargo-vet (reviewed dependencies)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: toychain
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install cargo-vet
+        run: cargo install --locked cargo-vet --version 0.10.2
+      # --locked: use supply-chain/imports.lock, no network fetch of audits.
+      - name: Vet
+        run: cargo vet --locked
+
+  fuzz:
+    name: Fuzz (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - parse_address
+          - parse_mnemonic
+          - parse_derivation_path
+          - recover_eip155
+          - bls_decode_verify
+          - vrf_verify
+    defaults:
+      run:
+        working-directory: toychain/fuzz
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install nightly and cargo-fuzz
+        run: |
+          rustup toolchain install nightly --profile minimal
+          cargo +nightly install cargo-fuzz --version 0.13.2 --locked
+      - name: Fuzz for 5 minutes
+        run: cargo +nightly fuzz run ${{ matrix.target }} -- -max_total_time=300
+      - name: Keep crash inputs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-artifacts-${{ matrix.target }}
+          path: toychain/fuzz/artifacts
+
   kani:
     name: Kani proofs (${{ matrix.harness }})
     runs-on: ubuntu-latest

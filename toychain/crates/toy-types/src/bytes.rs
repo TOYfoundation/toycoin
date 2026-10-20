@@ -11,7 +11,7 @@ fn write_hex(f: &mut fmt::Formatter<'_>, bytes: &[u8]) -> fmt::Result {
 /// A 20-byte account address (Ethereum-compatible, spec section 10).
 ///
 /// Derivation from a public key (last 20 bytes of Keccak-256) and the
-/// EIP-55 checksum follow in milestone M2.
+/// EIP-55 checksum text live in `toy-crypto` (`secp256k1`, `address`).
 #[derive(Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Address([u8; 20]);
 
@@ -33,7 +33,8 @@ impl Address {
 }
 
 impl fmt::Display for Address {
-    /// Lower-case hex with `0x` prefix (checksum casing comes with M2).
+    /// Lower-case hex with `0x` prefix. For the EIP-55 checksum form use
+    /// `toy_crypto::address::to_checksum_string`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write_hex(f, &self.0)
     }

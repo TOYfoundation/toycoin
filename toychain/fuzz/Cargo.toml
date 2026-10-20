@@ -1,0 +1,68 @@
+# Fuzz targets for toy-crypto (decision 88). Not part of the workspace:
+# needs nightly Rust and cargo-fuzz. CI runs every target for a fixed time
+# (.github/workflows/ci.yml, job "fuzz").
+#
+#   cargo +nightly install cargo-fuzz --version 0.13.2 --locked
+#   cd toychain/fuzz && cargo +nightly fuzz run parse_address -- -max_total_time=60
+#
+# libfuzzer-sys is a test tool only and never part of a node binary; its
+# licence is (MIT OR Apache-2.0) AND NCSA (permissive, LLVM).
+[package]
+name = "toy-fuzz"
+version = "0.0.0"
+edition = "2024"
+publish = false
+license = "MIT"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "=0.4.13"
+toy-crypto = { path = "../crates/toy-crypto" }
+toy-types = { path = "../crates/toy-types" }
+
+# Keep this crate out of the main workspace.
+[workspace]
+
+[[bin]]
+name = "parse_address"
+path = "fuzz_targets/parse_address.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "parse_mnemonic"
+path = "fuzz_targets/parse_mnemonic.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "parse_derivation_path"
+path = "fuzz_targets/parse_derivation_path.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "recover_eip155"
+path = "fuzz_targets/recover_eip155.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "bls_decode_verify"
+path = "fuzz_targets/bls_decode_verify.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "vrf_verify"
+path = "fuzz_targets/vrf_verify.rs"
+test = false
+doc = false
+bench = false
