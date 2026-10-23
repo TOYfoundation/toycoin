@@ -1,6 +1,6 @@
 # Projektstatus ToyChain
 
-Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M2 fertig** (Kryptografie und Adressen). Nächster Schritt: **M3** (Zustand, Transaktionen, Kontingent, Gebühren, Schutzregeln).
+Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig** (Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln). Nächster Schritt: **M4** (Blöcke, Konsens, Startphase).
 
 ## Überblick Meilensteine
 
@@ -9,8 +9,8 @@ Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M2 fertig** (Kryp
 | Start | Rust-Workspace, leere Crates, CI, STATUS.md | ✅ fertig |
 | M1 | Grundtypen und Emission, Genesis ohne Guthaben (`toy-types`, `toy-emission`) | ✅ fertig (18.10.2026) |
 | M2 | Kryptografie und Adressen (`toy-crypto`) | ✅ fertig (20.10.2026), VRF und Chain-IDs entschieden (Nr. 115, 116) |
-| M3 | Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln (`toy-state`, `toy-tx`) | ⏳ offen, nächster Schritt |
-| M4 | Blöcke, Konsens, Startphase (`toy-consensus`) | ⏳ offen |
+| M3 | Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln (`toy-state`, `toy-tx`) | ✅ fertig (20.10.2026), Entscheidungen 117 bis 121 |
+| M4 | Blöcke, Konsens, Startphase (`toy-consensus`) | ⏳ offen, nächster Schritt |
 | M5 | Speicher und 256-MB-Budget (`toy-node`) | ⏳ offen |
 | M6 | Netzwerk (`toy-node`) | ⏳ offen |
 | M7 | JSON-RPC und `toy_`-Methoden (`toy-rpc`) | ⏳ offen |
@@ -20,6 +20,99 @@ Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M2 fertig** (Kryp
 | M11 | ToyScan und andere Ketten (`toyscan/`) | ⏳ offen |
 | M12 | Konto-Schutz, Zusatz-Transaktionen, atomarer Tausch | ⏳ offen |
 | M13 | Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel | ⏳ offen |
+
+## M3: Zustand, Transaktionen, Kontingent, Gebühren, Schutzregeln (20.10.2026)
+
+**Gebaut:**
+
+| Baustein | Wo | Inhalt |
+|---|---|---|
+| Konten und Töpfe | `toy-state` (`state`, `account`, `pots`) | Freies Guthaben, Aktivierungs-Pfand 0,1 TOY (senkbar bis 0,01), Stake, Lösen in 21 Epochen, gebundener Lohn der Start-Validatoren (365 Epochen), festgehaltener Stake, Validator-Schlüssel, Zähler je Epoche. **Eine einzige Topf-Liste** (15 Töpfe, davon 5 für spätere Meilensteine, bis dahin 0) |
+| Regel I0 | `State::check_i0` | Summe aller Töpfe = Summe aller Emissionen, nach jedem Block gegen die unabhängig gerechnete Summe aus `toy-emission` |
+| Geld nur bewegen, nie erzeugen | `State` | Neues TOY entsteht nur in `mint_block`. Alle anderen Methoden buchen genau so viel ab, wie sie gutschreiben, oder ändern nichts (erst prüfen, dann ändern). Die Felder der Konten sind von außen nicht schreibbar |
+| Auflösen, Aktivieren | `State` | Auflösen mit oder ohne Spende, nur ohne Stake, Lösen, Lohn-Bindung, festgehaltenen Stake oder Validator-Rolle. Sperr-Verlauf bleibt 64 Epochen. Jedes neue Konto beginnt bei Nonce `Höhe × 2^16` |
+| Merkle-Wurzel | `merkle` | BLAKE3, getrennte Bereiche für Blätter und Knoten, Anzahl in der Wurzel, kein Verdoppeln einzelner Blätter |
+| Sperrzeiten (Ebene A) | `penalty` | 5 Verstöße, 4 Rechte, Verdopplung bis 64 Epochen, Neubeginn nach 30 sauberen Epochen. Keine Methode der Sperren kennt Beträge |
+| Transaktionsformate | `toy-tx` (`transaction`, `ethereum`, `rlp`) | ToyChain-Format mit Typ-Byte je Art (0x70 bis 0x77), Ablaufzeit, Verwendungszweck. Ethereum Legacy (EIP-155) und Typ 2 (EIP-1559), nur reine Überweisungen. Strenger RLP-Decoder: jede Eingabe hat genau eine gültige Schreibweise |
+| Arten in M3 | `transaction::Action` | Überweisung, Stake, Unstake, Validator an- und abmelden (mit BLS-Besitznachweis), Spende, Konto auflösen, Doppelsignatur melden |
+| Gebühren und Kontingent | `fees` | Progressive Gebühr mit Höchstfaktor 1.024, Grundgebühr nach EIP-1559, Trinkgeld, Aufteilung 40/20/40, Kontingent nach Auslastung, Erstattungs-Budget 1/30, Pool-Obergrenze |
+| ToyWork | `toy-crypto::work`, `ticket`, `lottery` | Argon2id 16 MiB, Lose an Adresse, Epoche, Saat und Chain-ID gebunden und signiert, Ziehung 2 Blöcke später, höchstens 64 Gewinner, Schwierigkeit je Epoche |
+| Doppelsignatur-Nachweis | `evidence` | Stimmformat für M4, Prüfung „gleiche Höhe, Runde und Phase, anderer Block“ |
+| Block ausführen | `block::execute_block` | Alles oder nichts, I0 am Ende |
+
+**Neue fremde Bibliothek:** `argon2` 0.6.0 (RustCrypto, MIT/Apache-2.0) mit `blake2` 0.11.0. Nur Argon2id, ohne Passwort-Format und ohne Threads.
+
+**Ergebnisse der Prüfungen:**
+
+- `cargo fmt --check`: ✅ ohne Abweichungen
+- `cargo clippy --all-targets -D warnings`: ✅ ohne Warnungen
+- `cargo test`: ✅ **205 Tests** (91 aus M1 und M2, **114 neu**: 4 in `toy-crypto`, 37 in `toy-state`, 73 in `toy-tx`), alle bestanden, rund 45 Sekunden
+- `cargo deny check`: ✅ Sicherheitsmeldungen, Lizenzen, Herkunft in Ordnung. 5 Warnungen wegen doppelter Hilfs-Bibliotheken (`digest`, `crypto-common`, `block-buffer`, `cpufeatures`, `sha2`, je eine alte und eine neue Version). Unkritisch
+- `cargo vet --locked`: ✅ 21 geprüft, **65 Ausnahmen** (2 neu: `argon2`, `blake2`). Keine der fünf vertrauten Organisationen hat sie bisher geprüft. Ehrlich als „noch nicht durchgesehen“ eingetragen
+- Fuzzing: 3 neue Ziele (`rlp_decode` mit der Eigenschaft „angenommen heißt kanonisch“, `decode_transaction`, `decode_ticket`). Lokal nicht ausgeführt (kein Nightly in der Sandbox), dafür prüfen Tests 20.000 zufällig veränderte RLP-Eingaben und jede Kürzung und Bit-Änderung einer Transaktion. In der CI liefen alle 9 Ziele je 5 Minuten ohne Fund
+- CI auf GitHub (Pull Request #5, 20.10.2026): ✅ alle 34 Prüfläufe bestanden (17 Prüfungen, je für Push und Pull Request), darunter Tests auf Linux x86_64, Windows x86_64 und Linux aarch64, `cargo-deny`, `cargo-vet`, die 3 Kani-Beweise aus M1 und das Fuzzing
+
+| Pflicht-Test aus dem Bauplan | Ergebnis |
+|---|---|
+| I0 nach jedem Block | ✅ Zufallstest über 2 Epochen (rund 2.880 Blöcke) mit Überweisungen, neuen Konten, kostenlosen Transaktionen, Spenden, Stake, Auflösen, gültigen und ungültigen Losen: I0 hält nach jedem Block, der Test prüft, dass jeder Weg vorkam |
+| Absichtlich fehlerhafter Block wird abgelehnt | ✅ Block, der 1 kleinste Einheit mehr oder weniger mintet als die Emission, wird von I0 abgelehnt. Nicht aufgehende Teile und falsche Summe ebenso. Ein abgelehnter Block ändert nichts. Dazu ein Test, der eine Manipulation des Zustands an I0 scheitern lässt |
+| Doppelausgabe | ✅ gleiche Nonce zweimal im Block, Wiederholung im späteren Block, zwei Überweisungen, die einzeln passen, zusammen nicht |
+| Überlauf | ✅ Betrag `u128::MAX`, Gebühren-Obergrenze und Trinkgeld `u128::MAX`, Überlauf eines Topfs: abgelehnt, Zustand unverändert |
+| Kontingent bei verschiedener Auslastung | ✅ 0 %, 25 %, 50 %, 90 %, 100 % ergeben 100, 75, 50, 10, 10. Genau Q kostenlose Transaktionen, die nächste abgelehnt, neue Epoche neues Kontingent. Kontoalter unter 100 Blöcken abgelehnt, ab 100 erlaubt. Budget 1/30 des Pools. Kostenlose höchstens 50 % des Blocks und nur hinter bezahlten |
+| Gebühren | ✅ 25 Transaktionen eines Absenders kosten Faktor 1, 2 und 4, Aufteilung 40/20/40 auf die kleinste Einheit genau, Rundungsrest in den Pool. Zu kleine Obergrenze abgelehnt, Trinkgeld berechnet. Grundgebühr ±1/8. Erstattete Gebühren werden nicht weiterverteilt. Pool-Überschuss geht genau in die Arbeits-Lotterie |
+| Vielnutzer | ✅ Die 1.001. Transaktion ohne Los wird abgelehnt, mit Los angenommen. Danach gilt: mindestens die Hälfte der Überschreitung gedeckt |
+| Ungültige und wiederverwendete Lose | ✅ Ungültige Arbeit sperrt die Lose des Eigentümers für den Rest der Epoche und eine volle Epoche. Wiederverwendung, fremde Epoche, fremde Kette: Block ungültig, keine Strafe. Höchstens 16 Lose je Block, angehängte mitgezählt. Ein Los macht eine Transaktion gebührenfrei und kann danach nicht mehr verwendet werden |
+| Arbeits-Lotterie | ✅ Ein Gerät ohne Konto gewinnt sein erstes TOY 2 Blöcke später (Konto mit Pfand entsteht), Mindestgewinn 0,2 TOY, höchstens 64 Gewinner, Topf wandert weiter, Gewinnchance proportional zu den Losen (2.000 Ziehungen), Schwierigkeit ×4 nach einer Epoche ohne Lose |
+| Jede Sperrregel „greift“ und „greift nicht“ | ✅ Doppelsignatur (greift: widersprüchliche Stimmen; greift nicht: neue Runde, andere Phase, gleiche Stimme, andere Höhe, fremder Schlüssel, Adresse ohne Validator; keine zweite Strafe). Ungültiger Block (Regel, Nachweis folgt mit M4). Ungültige Lose. Massenhaftes Anlegen (20 neue Konten nicht, das 21. ja, Überweisungen an bestehende zählen nicht, nur einmal je Epoche, neue Epoche zählt neu). Inaktivität (2 Epochen nicht, 3 ja, Ende durch neues Anmelden). Steigerung 1 → 2 Epochen und Neubeginn nach 30 sauberen Epochen |
+| Gesperrtes Konto kann weiter gegen Gebühr überweisen | ✅ für alle 5 Verstöße, freies Guthaben und Pfand unverändert |
+| Spenden | ✅ Betrag landet genau im Pool, I0 hält, kein Weg führt zurück zum Spender |
+| Aktivierung | ✅ Eingang unter dem Pfand an neue Adresse abgelehnt, genau das Pfand angenommen. Senken des Pfands gibt den Unterschied mit der nächsten eigenen Transaktion frei |
+| Auflösen | ✅ mit Teil-Spende, mit voller Spende ohne Ziel, blockiert durch Stake und Lösen |
+| Alte Transaktion nach erneuter Aktivierung | ✅ bleibt ungültig (neue Nonce-Basis) |
+| Offizielle Vektoren | ✅ 28 + 26 RLP-Vektoren, 210 Ethereum-Transaktionen (16 mit identischem Absender und Hash, alle 161 ungültigen abgelehnt), Argon2id-Vektor aus RFC 9106. Quellen: `toychain/crates/toy-tx/tests/vectors/README.md` |
+
+**Messwerte** (Release-Build, ein Kern eines Intel Xeon mit 2,8 GHz):
+
+| Größe | Wert |
+|---|---|
+| Überweisung im ToyChain-Format | 123 Byte (mit 32-Byte-Verwendungszweck 155, kostenlos 115) |
+| Ethereum Legacy / EIP-1559 | 112 / 120 Byte |
+| Eigenständiges ToyWork-Los | 79 Byte |
+| Gebühr einer Überweisung bei Grundgebühr | rund 0,000123 TOY |
+| Transaktion einlesen und Absender prüfen | 0,09 bis 0,14 ms |
+| ToyWork-Los prüfen (Argon2id, 16 MiB) | rund 10 ms, also höchstens 160 ms je Block |
+| Konto im Zustand (Kodierung) | 49 Byte, im laufenden Epochen-Zähler 90 Byte |
+| Zustandswurzel über 10.100 Konten | 5,4 ms |
+| Kopie des Zustands mit 10.100 Konten | 4,0 ms |
+| Voller Block (1.000 Überweisungen, 113 KB) bei 10.100 Konten | **97 ms** (vor dem Umbau 5,8 s, siehe unten) |
+| Pool-Obergrenze beim Start | 2.831,1552 TOY, Erstattungs-Budget dann 94,4 TOY je Epoche |
+| Eine Epoche (1.440 Blöcke) im Test-Netz, Debug-Build | rund 0,2 s |
+
+**Umbau während M3:** Die erste Fassung kopierte für jede einzelne Geldbewegung den ganzen Zustand, damit ein Fehler nichts verändert. Bei 10.000 Konten dauerte ein voller Block so 5,8 Sekunden. Jetzt prüft jede Methode zuerst alles und ändert erst dann. Ein Test belegt für 19 fehlschlagende Operationen, dass der Zustand danach exakt gleich ist.
+
+**Entschieden am 20.10.2026** (Entscheidungen 117 bis 121, Spezifikation 7.2, 8, 9, 14 und 16 angepasst):
+
+1. **Progressive Gebühr:** Faktor höchstens 1.024, Grundgebühr ab 0,000001 TOY je Byte (Nr. 117).
+2. **Auslastung:** Bytes aller Transaktionen der Vorepoche, auch kostenloser (Nr. 118).
+3. **ToyWork-Lose:** 16 je Block, 4 je Peer, 1 Los = 1 gebührenfreie Transaktion (Nr. 119).
+4. **Erstattungs-Pool (P9):** Überschuss über 30 Epochen größtmöglicher Erstattung geht in die Arbeits-Lotterie (Nr. 120). Ohne das wäre der Pool ein Topf, aus dem nie etwas abfließt.
+5. **Festlegungen** (Nr. 121): Kontingent nur auf Anforderung, Sperrdauer, Vielnutzer-Prüfung, Inaktivität als Pause, Strafe für Lose nur bei eigener Signatur, Nonce-Basis für jedes neue Konto, Lohn zu klein für das Pfand, festgehaltener Stake, Ethereum-Gebühren.
+
+**Berichtigt:** Im Bauplan stand für M3 „Stake mit 7 Epochen Lösefrist“. Die Spezifikation sagt 21 Epochen (Entscheidung 106). Gebaut ist 21, der Bauplan ist korrigiert.
+
+**Einschränkungen (ehrlich):**
+
+- **Speicher je Block:** Der Block-Ausführer kopiert den Zustand einmal je Block (alles oder nichts) und berechnet die Wurzel vollständig neu. Bei 10.000 Konten zusammen rund 9 ms, hochgerechnet bei 1 Mio. Konten rund 1 Sekunde je Block, bei 2 Mio. aktiven Konten rund 2 Sekunden. Bei 60 s Blockzeit geht das noch, für alte Android-Geräte nicht. **M5** braucht deshalb einen dauerhaften Speicher mit Änderungs-Journal und schrittweise aktualisiertem Merkle-Baum.
+- **Kürzung nach Doppelsignatur** kommt mit M4. Bis dahin wird der Stake 18 Epochen festgehalten und danach **ungekürzt** zurückgegeben. Die Rollensperre wirkt schon.
+- **Nachweise für „ungültiger Block“ und „Inaktivität“** brauchen das Blockformat und die Signaturzählung aus M4. Die Sperrregeln selbst (Dauer, Rechte, Steigerung) sind gebaut und getestet, für Inaktivität auch die Schwelle (3 Epochen).
+- **Feste Reihenfolge nach Gebühr je Byte** und die Aufnahme-Pflicht (Spezifikation 5.1a) gehören zu M4. M3 prüft nur „kostenlose hinter bezahlten“.
+- **Lose prüfen kostet Zeit:** 16 Lose sind 160 ms je Block auf einem PC, auf altem Android geschätzt 1,6 bis 5 Sekunden. Stufe-0-Geräte müssen nicht jedes Los selbst prüfen. M9 und M10 messen das auf echten Geräten. Ob 16 MiB Grafikkarten genug bremsen, ist weiter offen (Spezifikation 12).
+- **MetaMask-Nutzer zahlen**, außer sie stellen den Gaspreis auf 0. Und das Ethereum-Format kann keine Lose tragen: Wer über 1.000 Transaktionen je Epoche kommt, braucht das ToyChain-Format.
+- **Neue Konten beginnen bei einer großen Nonce** (`Höhe × 2^16`). Für Wallets ist das egal, sie fragen die Nonce ab. Es fällt nur in ToyScan auf.
+- **Liste gemeldeter Doppelsignaturen** wächst (32 Byte je Fall). Doppelsignaturen sind selten, M4 oder M5 räumt alte Einträge auf.
+- **Pool-Obergrenze** hängt an der Grundgebühr. Steigt die Grundgebühr, steigt die Obergrenze mit. Das ist gewollt, weil dann auch die Erstattungen teurer werden.
+- **Keine neuen Kani-Beweise** in M3. I0 wird in jedem Block zur Laufzeit geprüft, dazu der Zufallstest. Ein formaler Beweis der Topf-Bewegungen ist ein Kandidat für später.
+- **Fuzzing** der 3 neuen Ziele lief nur 5 Minuten je Ziel in der CI. Lange Läufe gehören vor das öffentliche Testnetz (M10).
 
 ## M2: Kryptografie und Adressen (20.10.2026)
 
@@ -237,8 +330,9 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 114):
 | Dokument | Stand |
 |---|---|
 | `01-spezifikation.md` | v0.3, schlank, mit Verfassung (Abschnitt 13) |
-| `02-entscheidungen.md` | Nr. 1 bis 116, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
+| `02-entscheidungen.md` | Nr. 1 bis 121, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
 | `03-bauplan-phase1.md` | M1 bis M13 |
+| `whitepaper/` | Whitepaper Entwurf 0.4 (20.10.2026, Stand nach M3) und Kurzanleitung für Nutzer |
 | `04-toypay-wallet.md` | v0.1: Clients, Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
 | `05-toyscan.md` | v0.2: Warnampel A1 bis A9, Muster-Warnungen, andere Ketten, API |
 | `11-pruefbericht-2.md` | Prüfbericht 2 vom 18.10.2026: 3 kritische, 10 hohe Befunde. Eindeutige Fehler korrigiert (Nr. 106 bis 108), Entscheidungen offen |
@@ -250,4 +344,4 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 114):
 - Bestätigt am 18.10.2026: Nr. 67 (drei Ebenen), 68 (NFT-Prägen später), 70 (Start-Validatoren mit Lohn), 77 (MPL-2.0 für UniFFI). Schutz in der Startphase: Nr. 78 (nur Neue lösen die Übergabe aus, Lohn sinkt über 180 Epochen auf 0, Lohn 365 Epochen gebunden).
 - Formel für m festgelegt (Nr. 81, Spezifikation 9.1, Simulation in `docs/anhang/m-simulation.py`).
 - Ab M1: Lizenzen, Sicherheitsmeldungen und Herkunft der fremden Bibliotheken automatisch prüfen (`cargo-deny`, `cargo-vet`). Erlaubt sind Lizenzen, die zu MIT passen (MIT, Apache-2.0, BSD, ISC, CC0, Zlib, Unicode). Dazu MPL-2.0 für unverändert genutzte Bibliotheken (Nr. 77) und SIL Open Font License 1.1 für Schriften (Nr. 105).
-- Aus dem Prüfbericht: P5, P6 (M5), P9 und Höchstwert der progressiven Gebühr (M3).
+- Aus dem Prüfbericht: P5, P6 (M5). P9 und der Höchstwert der progressiven Gebühr sind seit 20.10.2026 entschieden (Nr. 117, 120).

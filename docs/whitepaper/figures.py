@@ -1,4 +1,4 @@
-"""Figures for the ToyChain whitepaper (draft 0.2). Run: python3 figures.py"""
+"""Figures for the ToyChain whitepaper (German, draft 0.4). Run: python3 figures.py"""
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -347,8 +347,8 @@ def fig_arch():
 # ---------------------------------------------------------------- 14 roadmap
 def fig_roadmap():
     fig, ax = canvas(6.4, 2.0)
-    stages = [("Konzept", "fertig", BLUE, "white"), ("M1", "fertig", BLUE, "white"),
-              ("M2 bis M11", "in Arbeit", PALE_BLUE, INK), ("Testnetz 1", "geplant", PALE_GRAY, INK),
+    stages = [("Konzept", "fertig", BLUE, "white"), ("M1 bis M3", "fertig", BLUE, "white"),
+              ("M4 bis M11", "in Arbeit", PALE_BLUE, INK), ("Testnetz 1", "geplant", PALE_GRAY, INK),
               ("M12, M13", "geplant", PALE_GRAY, INK), ("Phase 2\nBeweise", "geplant", PALE_GRAY, INK),
               ("Hauptnetz", "erst nach Audit\nund Rechtsprüfung", "#f7f6f2", INK)]
     w, gap = 8.0, 1.0
@@ -361,7 +361,7 @@ def fig_roadmap():
                 linespacing=1.2)
         ax.text(x + w / 2, 4.2, s, ha="center", va="center", fontsize=6.3, color=MUTED, linespacing=1.15)
     ax.annotate("", xy=(64, 18), xytext=(1, 18), arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=0.8))
-    ax.text(14.5, 19.2, "heute (18.10.2026): vor der Testphase", ha="center", fontsize=6.8, color=BLUE,
+    ax.text(14.5, 19.2, "heute (20.10.2026): vor der Testphase", ha="center", fontsize=6.8, color=BLUE,
             fontweight="bold")
     save(fig, "abbildungen/f_roadmap.png")
 

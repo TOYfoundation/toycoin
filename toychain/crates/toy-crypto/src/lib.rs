@@ -15,11 +15,12 @@
 //! | Recovery phrase and derivation (BIP-39, BIP-32) | [`hd`] | `bip39`, `bip32` |
 //! | Validator signatures, aggregation (BLS12-381) | [`bls`] | `blst` |
 //! | Verifiable random function | [`vrf`] | `blst`, `blake3` |
+//! | ToyWork proof of work (Argon2id, 16 MiB) | [`work`] | `argon2` |
 //!
 //! Secrets (keys, phrases, seeds) are erased from memory when dropped
 //! (`zeroize`), are never printed by `Debug` and never appear in errors.
 //!
-//! Argon2id (ToyWork tickets, keystore) follows with milestone M3/M8.
+//! Argon2id for the wallet keystore follows with milestone M8.
 
 pub mod address;
 pub mod bls;
@@ -30,5 +31,6 @@ pub mod hd;
 mod random;
 pub mod secp256k1;
 pub mod vrf;
+pub mod work;
 
 pub use error::CryptoError;

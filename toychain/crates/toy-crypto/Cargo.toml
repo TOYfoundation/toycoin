@@ -22,6 +22,8 @@ bip32 = { version = "=0.6.0", default-features = false, features = ["secp256k1",
 blst = { version = "=0.3.17", features = ["portable"] }
 zeroize = { version = "=1.9.1" }
 getrandom = { version = "=0.4.3", default-features = false, features = ["std"] }
+# ToyWork (M3): Argon2id only; no password-hash format, no rayon.
+argon2 = { version = "=0.6.0", default-features = false }
 
 [dev-dependencies]
 # Only for reading the official JSON test vectors in tests/vectors/.

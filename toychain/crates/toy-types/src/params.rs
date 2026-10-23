@@ -135,6 +135,154 @@ pub const LOTTERY_MIN_PRIZE: Amount = Amount::from_units(UNITS_PER_TOY / 5);
 /// Maximum number of lottery winners per block.
 pub const LOTTERY_MAX_WINNERS_PER_BLOCK: u32 = 64;
 
+/// Tickets committed in block N are drawn with the randomness of block
+/// N + 2, so the builder of block N cannot steer the draw (decision 106).
+pub const LOTTERY_DRAW_DELAY_BLOCKS: u64 = 2;
+
+/// A new account starts its nonce at `height << NONCE_BASE_SHIFT`
+/// (spec 6.1: `height × 2^16`), so transactions signed for an earlier,
+/// closed account at the same address can never become valid again.
+pub const NONCE_BASE_SHIFT: u32 = 16;
+
+/// The penalty history of a closed account is kept this many epochs
+/// (spec 6.1), so closing and re-opening gives no clean record.
+pub const CLOSED_ACCOUNT_HISTORY_EPOCHS: u64 = 64;
+
+// ---- Transactions and blocks (spec 7.2, decisions 84, 106) -------------
+
+/// Maximum block size in bytes (transactions and tickets).
+pub const MAX_BLOCK_BYTES: u64 = 131_072;
+
+/// Free transactions may use at most this many bytes of a block (50 %).
+pub const MAX_FREE_BYTES_PER_BLOCK: u64 = MAX_BLOCK_BYTES / 2;
+
+/// Maximum length of the optional payment reference (memo) in bytes.
+pub const MEMO_MAX_BYTES: usize = 32;
+
+/// A transaction may expire at most this many blocks after the height of
+/// the block that includes it.
+pub const MAX_EXPIRY_BLOCKS: u64 = 1_440;
+
+// ---- Free quota and refund pool (spec 7.2, decisions 106, 118, 120) ----
+
+/// Smallest free quota per account and epoch.
+pub const QUOTA_MIN: u64 = 10;
+
+/// Largest free quota per account and epoch (at zero utilization).
+pub const QUOTA_MAX: u64 = 100;
+
+/// An account must be at least this many blocks old to use the free quota.
+pub const QUOTA_MIN_ACCOUNT_AGE_BLOCKS: u64 = 100;
+
+/// Per epoch at most `pool / REFUND_BUDGET_DIVISOR` is refunded.
+pub const REFUND_BUDGET_DIVISOR: u128 = 30;
+
+/// The refund pool keeps at most this many epochs of the largest possible
+/// refund demand; the surplus moves to the work lottery at the start of an
+/// epoch (decision 120, Prüfbericht 1 P9). Nothing is burned.
+pub const REFUND_POOL_CAP_EPOCHS: u128 = 30;
+
+/// Heavy users: from this many transactions per epoch on, at least half
+/// of the excess must be covered by ToyWork tickets.
+pub const HEAVY_USER_THRESHOLD: u64 = 1_000;
+
+// ---- Fees (spec 7.2, decision 117) --------------------------------------
+
+/// Lowest base fee per transaction byte: 10^12 units = 0.000001 TOY
+/// (about 0.00015 TOY for a 150-byte transfer).
+pub const BASE_FEE_MIN_PER_BYTE: Amount = Amount::from_units(1_000_000_000_000);
+
+/// Highest base fee per byte (1 TOY). Only a bound against overflow; real
+/// load cannot plausibly reach it.
+pub const BASE_FEE_MAX_PER_BYTE: Amount = Amount::from_units(UNITS_PER_TOY);
+
+/// The base fee moves towards this many used bytes per block (EIP-1559
+/// target: half of the block).
+pub const BASE_FEE_TARGET_BYTES: u64 = MAX_BLOCK_BYTES / 2;
+
+/// The base fee changes by at most 1/8 per block (EIP-1559).
+pub const BASE_FEE_CHANGE_DENOMINATOR: u128 = 8;
+
+/// The fee of a sender doubles with every this many further transactions
+/// of the same sender in the same block.
+pub const PROGRESSIVE_FEE_STEP: u64 = 10;
+
+/// Highest number of doublings: factor at most 2^10 = 1,024, reached from
+/// the 101st transaction of a sender in a block on (decision 117).
+pub const PROGRESSIVE_FEE_MAX_DOUBLINGS: u32 = 10;
+
+/// Share of a paid fee for the fee lottery among active participants.
+pub const FEE_SHARE_LOTTERY: Ppm = Ppm::new(400_000);
+
+/// Share of a paid fee for the block proposer. The refund pool gets the
+/// rest (40 % plus rounding remainders).
+pub const FEE_SHARE_PROPOSER: Ppm = Ppm::new(200_000);
+
+const _: () = assert!(
+    FEE_SHARE_LOTTERY.get() + FEE_SHARE_PROPOSER.get() <= Ppm::SCALE,
+    "fee shares must not exceed 100 %"
+);
+
+// ---- ToyWork (spec 9, 10, decision 119) ---------------------------------
+
+/// Argon2id memory per ToyWork hash in KiB (16 MiB).
+pub const TOYWORK_MEMORY_KIB: u32 = 16 * 1024;
+
+/// Argon2id passes per ToyWork hash.
+pub const TOYWORK_ITERATIONS: u32 = 1;
+
+/// Argon2id lanes per ToyWork hash.
+pub const TOYWORK_PARALLELISM: u32 = 1;
+
+/// Maximum number of ToyWork tickets per block (standalone and attached
+/// to transactions together). Verifying one costs about 10 ms on a PC.
+pub const TICKETS_MAX_PER_BLOCK: u64 = 16;
+
+/// Maximum number of tickets a node accepts from one peer per block
+/// (network layer, M6).
+pub const TICKETS_MAX_PER_PEER_PER_BLOCK: u64 = 4;
+
+/// The difficulty adapts once per epoch towards this many tickets per block.
+pub const TICKETS_TARGET_PER_BLOCK: u64 = 8;
+
+/// Start threshold: about one ticket per 1,024 hashes (2^118 of 2^128).
+pub const TOYWORK_START_THRESHOLD: u128 = 1 << 118;
+
+/// The threshold changes by at most this factor per epoch, up or down.
+pub const TOYWORK_MAX_ADJUST_FACTOR: u128 = 4;
+
+// ---- Protection rules, level A (spec 8, decision 67) --------------------
+
+/// Penalty for a double signature: role locked 7 epochs.
+pub const PENALTY_DOUBLE_SIGN_EPOCHS: u64 = 7;
+
+/// Stake of a double signer is held this many epochs until the slashing
+/// amount is fixed (spec 5.4; the slashing itself follows in M4).
+pub const DOUBLE_SIGN_HOLD_EPOCHS: u64 = 18;
+
+/// Penalty for proposing an invalid block: proposal right locked 7 epochs.
+pub const PENALTY_INVALID_PROPOSAL_EPOCHS: u64 = 7;
+
+/// Penalty for an invalid ToyWork ticket: tickets refused for 1 epoch.
+pub const PENALTY_INVALID_TICKET_EPOCHS: u64 = 1;
+
+/// Penalty for mass account creation: free quota locked 7 epochs.
+pub const PENALTY_MASS_CREATION_EPOCHS: u64 = 7;
+
+/// Mass account creation: more than this many new accounts per epoch from
+/// one sender.
+pub const MASS_CREATION_LIMIT: u64 = 20;
+
+/// Committee inactivity: missing signatures in this many consecutive
+/// epochs pause the role until the node reports back.
+pub const INACTIVITY_EPOCHS: u64 = 3;
+
+/// Every further violation doubles the penalty, up to this many epochs.
+pub const PENALTY_MAX_EPOCHS: u64 = 64;
+
+/// After this many epochs without a violation, counting starts afresh.
+pub const PENALTY_RESET_EPOCHS: u64 = 30;
+
 // ---- Chain IDs (EIP-155, decision 116) ----------------------------------
 
 /// Chain ID of the ToyChain mainnet: `0x746F79`, the ASCII bytes of "toy".
