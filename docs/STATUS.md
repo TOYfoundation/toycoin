@@ -237,12 +237,14 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 114):
 | Dokument | Stand |
 |---|---|
 | `01-spezifikation.md` | v0.3, schlank, mit Verfassung (Abschnitt 13) |
-| `02-entscheidungen.md` | Nr. 1 bis 116, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
+| `02-entscheidungen.md` | Nr. 1 bis 125, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt. Nr. 117 bis 125: Ergänzung ToyVerse (für später) |
 | `03-bauplan-phase1.md` | M1 bis M13 |
 | `04-toypay-wallet.md` | v0.1: Clients, Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
 | `05-toyscan.md` | v0.2: Warnampel A1 bis A9, Muster-Warnungen, andere Ketten, API |
 | `11-pruefbericht-2.md` | Prüfbericht 2 vom 18.10.2026: 3 kritische, 10 hohe Befunde. Eindeutige Fehler korrigiert (Nr. 106 bis 108), Entscheidungen offen |
 | `10-pruefbericht-1.md` | Prüfbericht vom 17.10.2026, mit Vermerk, welche Befunde nach der Neuausrichtung noch gelten |
+| `spaeter/11-toyverse.md`, `12-toycash.md`, `13-toyquest-items-nft.md` | Ergänzung ToyVerse vom 24.10.2026: Ökosystem, ToyCash, TOYQUEST-Items. **Für später**, ändert nichts an M3 bis M13 |
+| `toypay/docs/08_LERNWELT_ZEITREISE.md` | TOYQUEST-Lernwelt und Zeitreise, Zuordnung der 50 Maschinen zu 5 Level (für später) |
 | `toypay/docs/06_NFT_GEGENSTAENDE.md`, `07_SPIELDESIGN.md` | für später. Katalog und Effekt-Paket bleiben getestet (`nft_items_test`, `vfx_test`: ALL OK) |
 
 ## Noch offen
@@ -251,3 +253,4 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 114):
 - Formel für m festgelegt (Nr. 81, Spezifikation 9.1, Simulation in `docs/anhang/m-simulation.py`).
 - Ab M1: Lizenzen, Sicherheitsmeldungen und Herkunft der fremden Bibliotheken automatisch prüfen (`cargo-deny`, `cargo-vet`). Erlaubt sind Lizenzen, die zu MIT passen (MIT, Apache-2.0, BSD, ISC, CC0, Zlib, Unicode). Dazu MPL-2.0 für unverändert genutzte Bibliotheken (Nr. 77) und SIL Open Font License 1.1 für Schriften (Nr. 105).
 - Aus dem Prüfbericht: P5, P6 (M5), P9 und Höchstwert der progressiven Gebühr (M3).
+- ToyVerse (später, Stand 24.10.2026): Währung und Kurs der Prägegebühr (Nr. 122), Anker-Transaktion nach M13 (Nr. 119), Stufenwerte des ToyCash-Offline-Rahmens. Liste in `spaeter/11-toyverse.md`, Abschnitt 8.

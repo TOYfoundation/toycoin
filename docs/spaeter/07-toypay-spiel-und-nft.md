@@ -2,6 +2,8 @@
 
 Entwurf v0.2 vom 17.10.2026 · Grundlage: TOYPAY-Unterlagen Stand Runde 8 (im Projekt unter `toypay/docs/`) · Status: **zur Prüfung, mehrere Grundsatzentscheidungen offen (Abschnitt 7)**
 
+> **Hinweis vom 24.10.2026 (Entscheidung 121):** Präge-Gebühr, Gas und Gebühren-Kreislauf (Nr. 23, 24, 26) sind ersetzt durch `13-toyquest-items-nft.md` (ERC-1155, Gas-Formel, POL-Topf). Welche der übrigen Präge-Regeln weiter gelten, steht dort in Abschnitt 7. Mindestbestand und Sperre (Nr. 19, 21) sind neu zu prüfen. Die Bridge-Teile hier sind durch Nr. 63 überholt.
+
 Dieses Dokument beschreibt, wie die TOYPAY-App mit ToyChain zusammenspielt. Die Spielinhalte (TOYQUEST 3D, Grafik, Erfindungen, Sprachen) sind nicht Teil des ToyChain-Konzepts und werden hier nur erwähnt, wo sie die Kette berühren.
 
 ## 1. Ist-Stand laut Unterlagen

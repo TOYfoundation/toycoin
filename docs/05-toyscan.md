@@ -155,3 +155,31 @@ JSON, Beträge als Text in kleinsten Einheiten und zusätzlich formatiert, jede 
 - Zwei Quellen liefern verschiedene Werte: Gelb, kein Rot.
 - Ein Block wird vor der Endgültigkeit ersetzt: die Ampel ändert sich nicht.
 - Rust-Rechner und Prüfskript kommen bei denselben Rohdaten zum selben Ergebnis.
+
+## 11. Später: ToyVerse-Ampel und Wirtschafts-Dashboard (Entscheidungen 117 bis 121)
+
+Nicht Teil von M11. Kommt, sobald ToyCash oder TOYQUEST-Items laufen. Überblick: `spaeter/11-toyverse.md`.
+
+**Zwei Ampeln:** Die Warnampel A1 bis A9 bleibt nur für die ToyChain zuständig. Probleme bei ToyCash oder Polygon-Verträgen dürfen sie nie färben, und die große rote Lampe gilt weiter nur für Obergrenze, Fair Launch und Verfassung. Daneben steht eine eigene **ToyVerse-Ampel** mit den Kriterien B1 bis B4, mit derselben Farblogik.
+
+| Nr. | Kriterium | Grün | Gelb | Rot |
+|---|---|---|---|---|
+| **B1** | ToyCash-Deckung | Umlauf laut Polygon-Zähler (Ausgabe − Rücktausch) ≤ Reserve laut letztem signiertem Bericht | Bericht älter als 35 Tage, oder Testzahlungen des Auditors schlagen fehl | Umlauf größer als belegte Reserve |
+| **B2** | ToyCash-Anker | je Epoche ein Anker des Emittenten, Zähler steigt lückenlos | Anker fehlt in einer Epoche | Zähler springt zurück, oder zwei verschiedene Wurzeln für denselben Zähler |
+| **B3** | POL-Topf (TOYQUEST) | Topf über einem Monat erwarteter Gaskosten | darunter, oder Preisdaten veraltet | Topf leer, Prägen ohne Sponsoring |
+| **B4** | Mint-Vertrag (TOYQUEST) | Funktionsliste unverändert, Höchstzahl je Item eingehalten, kein Admin-Prägen, Tageslimit eingehalten | Notschalter ausgelöst | Höchstzahl oder Tageslimit überschritten, Prägen ohne gültigen Gutschein |
+
+**Neue Ansichten:**
+
+| Seite | Inhalt |
+|---|---|
+| **Wirtschafts-Dashboard** | Kreislauf als Bild mit echten Zahlen: Emission, Gebührenfluss, Erstattungs-Pool, POL-Topf, Projekt-Wallet, Rückflüsse an Spieler. Wer schafft Wert, wer zahlt, wohin fließt es. Keine Prognosen, keine Renditen |
+| **ToyCash-Gesundheit** | Umlauf, gemeldete Reserve, Prüfberichte, Verfügbarkeit des Emittenten, Anker-Verlauf. Nie einzelne Beträge oder Namen |
+| **TOYQUEST** | Topf-Stand, Mint-Zahlen je Item, Verteilung der Gebühren, Überschuss-Ansprüche mit Merkle-Beweis |
+| **Lernwelt-Daten** | die echten Zahlen für die Erklärtiefe „Tief“ der NPCs (`../toypay/docs/08_LERNWELT_ZEITREISE.md`) |
+| **Knotenkarte** | wie bisher, zusätzlich Community-Knoten auf Raspberry Pi |
+
+**Neue Pfade (Vorschlag):** `/api/v1/toyverse/ampel` (B1 bis B4), `/api/v1/toyverse/wirtschaft`, `/api/v1/toycash`, `/api/v1/toyquest/topf`. Gleiche Regeln wie Abschnitt 8. ToyPost liest sie für Warnungen und den Transparenz-Bericht.
+
+**Grenze:** Euro-Reserven liegen außerhalb jeder Kette. Für B1 stützt sich ToyScan auf signierte Berichte und Testzahlungen. Die Ampel ersetzt keine eigene Prüfung.
+

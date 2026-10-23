@@ -154,6 +154,8 @@ Der Spieler gibt seiner Gang einen Namen. Ein Vorschlagsgenerator hilft, z. B. �
 
 ### Schatzwind
 
+> **Hinweis vom 24.10.2026 (Entscheidung 121):** Nr. 23 ist ersetzt. Prägegebühren gehen jetzt in POL-Topf und Projekt-Wallet, Überschüsse an die Spieler, die geprägt haben (`../../docs/spaeter/13-toyquest-items-nft.md`). **Vorschlag:** Der Schatzwind wird aus der Spielwirtschaft gespeist. Seine Stärke richtet sich nach der Zahl der Prägungen und Meisterprüfungen der Vorwoche, nicht nach TOY-Beträgen, und Funde gibt es nur in Königsdukaten, Gold und Gegenständen. So bleibt der Kreislauf der Dukaten getrennt von Geld, und kein Fund sieht wie eine TOY-Ausschüttung aus. Die Angaben „Gegenwert 0,01 bis 2 TOY“ unten gelten dann nicht mehr.
+
 Die Präge-Gebühren einer Woche speisen die Schatzfunde der nächsten (Haushaltsregel, Entscheidung 23). Im Spiel heißt das **Schatzwind**:
 - Stärke 1 bis 5, sichtbar als glitzernder Staub in der Luft und als Fahne über dem Basartor.
 - **Stärke 5 = Goldregen-Nacht**: Funkelnde Funde an logischen Orten wie Dachrinnen, Brunnenschächten, Höhlennischen und Schiffswracks.

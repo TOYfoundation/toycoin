@@ -19,3 +19,13 @@ network_fee|Gebühr|fee|Betrag für die Verarbeitung einer Transaktion
 testnet|Testnet|testnet|Übungsnetz ohne echten Wert
 traffic_light|Warnampel|warning light|Ampel in ToyScan, ob die Regeln der Kette eingehalten werden
 constitution|Verfassung|constitution|Regeln, die kein Update und keine Abstimmung ändern darf
+toyverse|ToyVerse|ToyVerse|Name für das ganze Ökosystem aus ToyChain, TOY, TOYPAY, ToyScan, ToyCash, TOYQUEST und ToyPost
+toycash|ToyCash|ToyCash|Euro-gedeckter Coin, dessen Beträge nur in der eigenen Wallet sichtbar sind (später)
+note|Note|note|Verschlüsselter ToyCash-Eintrag in der eigenen Wallet mit Besitzbeweis
+seal|Siegel|seal|Kennung einer Note, die genau einmal geschlossen werden kann
+anchor|Anker|anchor|Hash, mit dem die ToyChain eine Liste bezeugt, ohne Beträge oder Namen
+offline_limit|Offline-Rahmen|offline limit|Betrag, den ein Gerät ohne Netz ausgeben darf, zugleich Kaution gegen Doppelausgabe
+recall_period|Rückholfrist|recall period|Zeit, in der nur der Empfänger einlösen darf, danach holt der Sender zurück
+voucher|Gutschein|voucher|ToyCash-Betrag, der nach festen Regeln von einer Person, einer Gruppe oder jedem eingelöst werden kann
+mint_fee|Prägegebühr|mint fee|Gebühr, um ein erspieltes Item als NFT auf Polygon zu prägen
+gas_pot|POL-Topf|POL pot|Vorrat an POL, der das Gas für das Prägen bezahlt
