@@ -1,6 +1,6 @@
 # Entscheidungsprotokoll ToyChain
 
-Stand: 24.10.2026 (Nr. 115 und 116 vom 20.10.2026, Nr. 122 bis 130 „Ergänzung ToyVerse“ vom 24.10.2026). Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit „zur Bestätigung“ markierte Punkte sind Vorschläge von Claude, die noch bestätigt werden müssen.
+Stand: 24.10.2026 (Nr. 115 und 116 vom 20.10.2026, Nr. 122 bis 133 „Ergänzung ToyVerse“ vom 24.10.2026). Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit „zur Bestätigung“ markierte Punkte sind Vorschläge von Claude, die noch bestätigt werden müssen.
 
 ## Neuausrichtung vom 18.10.2026 (gilt vor allen älteren Einträgen)
 
@@ -91,6 +91,9 @@ Grundlage: „ToyVerse: Beschreibung in 20 Seiten“ und die Konzeptblätter zu 
 | 128 | Komfort auf der Polygon-Seite | **Entschieden (24.10.2026):** Passkeys, Session-Keys, Gas in Stablecoin und Social Recovery nur für einen **Polygon-Smart-Account** (ERC-4337, EIP-7702) in TOYPAY. Für das ToyChain-Konto gelten weiter Nr. 82 und 83 (kein Passkey, keine Wiederherstellung über Vertraute) |
 | 129 | Lernwelt und Zeitreise | **Vorschlag:** Echt oder Demo, das Spiel erzeugt kein TOY, Abzeichen „Stufe aktiv“ nur mit signierter Nachricht der Adresse plus Bestätigung durch ToyScan, nie Schlüssel im Spiel (Nr. 32). Orte nach den Stufen 0 bis 4, Prover und Archiv bis Phase 2 als Demo. NPC-Texte aus einer Wissensbasis, die an Spezifikation und ToyScan gekoppelt ist. Fünf Level von der Antike zur Moderne, die 50 Maschinen werden zugeordnet und ergänzt, nicht überschrieben. Konzept: `../toypay/docs/08_LERNWELT_ZEITREISE.md` |
 | 130 | Community-Bausteine | **Vorschlag:** Mentoren, Gilden, Community-Knoten, Händler-Ökosystem, Ersteller mit Anteil an der Prägegebühr. Bug-Bounties und Ersteller werden aus der **Projekt-Wallet** bezahlt, weil es keine Reserve gibt (Nr. 62). Gewichtung nach Aktivität und Wissen wird mit der Mitbestimmung entschieden |
+| 131 | Spielsalon und Einsätze (24.10.2026) | **Entschieden:** Poker und andere Spiele mit Einsatz laufen **nur mit Dukaten**. Einsätze mit ToyCoin oder TOY gibt es erst, wenn eine rechtliche Prüfung sie erlaubt (Glücksspielrecht). Webseite und Spiel werben bis dahin nicht damit |
+| 132 | Zeitreise verbunden (24.10.2026) | **Entschieden:** Level 1 bis 3 zeigen antike Maschinen. Level 4 (Archiv und Prägung) und Level 5 (Automaten und Beweise) zeigen zusätzlich den Sprung in die Neuzeit als **Ausblick**, etwa Dampfpresse und Mehrkern-Chip. Die 50 antiken Maschinen bleiben die Lehrstätten. Ändert den Vorschlag Nr. 129 |
+| 133 | Webseite (24.10.2026) | **Entschieden:** Eigenes Repository `Safehaigit/ToyVerse-web`, statisch mit Astro, vorgerenderte Seiten je Sprache, Ziel 45 Sprachen (Start Deutsch und Englisch). Alte ToyCoin-Token nur als Warnung, kein „Wallet verbinden“ für sie und keine Bridge-Versprechen (Nr. 63). „Mit dem Testnet verbinden“ kommt mit M10. Keine Cookies, kein Tracking, keine Inhalte von Dritten, Schriften selbst gehostet. Inhalte folgen Spezifikation und Protokoll, bei Widerspruch gilt toycoin |
 
 **Die folgenden Abschnitte sind das Protokoll bis zum 17.10.2026.** Was dort steht, gilt nur, soweit die Tabelle oben es nicht ändert.
 
