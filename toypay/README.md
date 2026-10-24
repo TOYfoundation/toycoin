@@ -16,6 +16,9 @@ TOYPAY Wallet für den nativen ToyCoin (TOY), zugleich ToyChain-Knoten (Konzept:
 | `install_nft_items.py` | Installiert Katalog, Gang-Regeln und Effekt-Paket in ein TOYPAY-Projekt, mit Sicherung |
 | `../docs/04-toypay-wallet.md` | Wallet und Knoten: Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
 | `../docs/spaeter/07-toypay-spiel-und-nft.md` | Spiel-NFTs, Dukaten und Präge-Regeln (für später) |
+| `docs/08_LERNWELT_ZEITREISE.md` | TOYQUEST-Lernwelt: Orte zu den echten Stufen, NPCs mit drei Erklärtiefen, Zeitreise in 5 Level mit Zuordnung der 50 Maschinen (für später) |
+| `../docs/spaeter/13-toyquest-items-nft.md` | Items als ERC-1155 auf Polygon, Gas-Formel, POL-Topf, Überschüsse. Ersetzt die Gebühren-Regeln aus `07-…` (für später) |
+| `../docs/spaeter/12-toycash.md` | ToyCash-Bereich, Offline-Zahlung und Gutscheine in TOYPAY (für später) |
 
 ## Bevor der App-Code hierher kommt
 

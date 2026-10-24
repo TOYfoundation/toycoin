@@ -69,7 +69,7 @@ Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzu
 
 ### 5.2 NFTs prägen
 
-**Später** mit der Spiel-Anbindung (Entscheidung 68). Die Testnet-Wallet prägt keine NFTs. Sie **zeigt** aber NFTs, die eine Adresse auf anderen EVM-Ketten besitzt (Abschnitt 6). Ideen für später: `spaeter/07-toypay-spiel-und-nft.md`.
+**Später** mit der Spiel-Anbindung (Entscheidung 68). Die Testnet-Wallet prägt keine NFTs. Sie **zeigt** aber NFTs, die eine Adresse auf anderen EVM-Ketten besitzt (Abschnitt 6). Ideen für später: `spaeter/07-toypay-spiel-und-nft.md`, ab 24.10.2026 ersetzt durch `spaeter/13-toyquest-items-nft.md` (Items als ERC-1155 auf Polygon, POL-Topf, Entscheidung 126).
 
 ## 6. Andere Ketten (Entscheidung 69)
 
@@ -260,3 +260,17 @@ Der Nutzer wählt beim ersten Start einen Modus und kann jederzeit wechseln.
 ## 10. Offene Punkte
 
 1. **Oberfläche:** Compose Multiplatform für Android und Desktop? (Wird im Plan zu M9 vorgeschlagen.)
+
+## 11. Später: TOYPAY im ToyVerse (Entscheidungen 122 bis 129)
+
+Nicht Teil von Phase 1. Überblick in `spaeter/11-toyverse.md`.
+
+| Funktion | Was | Status | Konzept |
+|---|---|---|---|
+| **ToyCash-Bereich** | eigener Bereich für den unsichtbaren Euro-Coin, nur für den Besitzer sichtbar, eigener Ableitungspfad, verschlüsseltes Backup, Wiederherstellung aus der Seed | Entschieden (Bereich), Vorschlag (Pfad) | `spaeter/12-toycash.md` |
+| **Offline-Zahlung mit ToyCash** | per QR, NFC, Bluetooth, Offline-Rahmen als Kaution, Erinnerung an die Rückholfrist für Händler | Entschieden, Werte Vorschlag | `spaeter/12-toycash.md`, Abschnitt 5 |
+| **Gutscheine** | Mehrfach-, Gruppen- und Inhaber-Gutscheine, z. B. Geschenk-QR, Trinkgeld, Familien- oder Gilden-Kasse. Codes von Inhaber-Gutscheinen gelten als Geheimnis | Entschieden | `spaeter/12-toycash.md`, Abschnitt 5.3 |
+| **Händlerkasse** | Kassen-Modus (Nr. 98) zusätzlich mit ToyCash, Gutscheinen und Treuepunkten | Vorschlag | `spaeter/11-toyverse.md`, Abschnitt 5 |
+| **Polygon-Smart-Account** | Passkeys, Session-Keys, Gas in Stablecoin und Social Recovery **nur** für die Polygon-Seite (ERC-4337, EIP-7702). Das ToyChain-Konto bleibt bei Nr. 82 und 83 | Entschieden (Nr. 128) | `spaeter/11-toyverse.md`, Abschnitt 1 |
+| **Items prägen** | „Als NFT prägen“ mit Mint-Gutschein des Spielservers, Zahlung per `permit`, Gas aus dem POL-Topf, Regler für die Aufteilung | Entschieden, Währung offen (Nr. 127) | `spaeter/13-toyquest-items-nft.md` |
+| **Stufen-Nachweis für TOYQUEST** | TOYPAY signiert auf Wunsch eine Nachricht „Stufe aktiv“ (EIP-191). Das Spiel prüft sie zusammen mit ToyScan. Nie Schlüssel an das Spiel (Nr. 32) | Vorschlag (Nr. 129) | `../toypay/docs/08_LERNWELT_ZEITREISE.md` |

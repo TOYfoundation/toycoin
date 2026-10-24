@@ -2,6 +2,8 @@
 
 Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit dem nativen TOY als **totaler Fair Launch** (kein Premint, keine Reserve), die **TOYPAY Wallet**, die zugleich Knoten ist und andere EVM-Ketten unterstützt, und der Explorer **ToyScan** mit Warnampel. Zuerst als Testnet.
 
+Alles zusammen heißt **ToyVerse**: dazu kommen später der unsichtbare Euro-Coin **ToyCash**, das Lernspiel **TOYQUEST** mit Items auf Polygon und der Korrespondenz-Assistent **ToyPost** ([`Safehaigit/toypost`](https://github.com/Safehaigit/toypost)). Überblick: [`docs/spaeter/11-toyverse.md`](docs/spaeter/11-toyverse.md).
+
 **Status:** Konzept nach der Neuausrichtung vom 18.10.2026. Der ToyChain-Workspace steht als leeres Gerüst, gebaut wird ab M1. Aktueller Stand: [`docs/STATUS.md`](docs/STATUS.md).
 
 ## Aufbau
@@ -28,7 +30,7 @@ Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit 
 | `docs/05-toyscan.md` | ToyScan: Warnampel mit allen Formeln, Muster-Warnungen, andere Ketten, offene API |
 | `docs/11-pruefbericht-2.md` | Zweiter unabhängiger Prüfbericht vom 18.10.2026 |
 | `docs/10-pruefbericht-1.md` | Unabhängiger Prüfbericht vom 17.10.2026 |
-| `docs/spaeter/` | Bridge, Altbestand, Reserve, Mitbestimmung, Spiel-NFTs, alte Spezifikation v0.2 |
+| `docs/spaeter/` | Bridge, Altbestand, Reserve, Mitbestimmung, Spiel-NFTs, alte Spezifikation v0.2, **ToyVerse, ToyCash, TOYQUEST-Items** (11 bis 13) |
 | `docs/STATUS.md` | Aktueller Stand, Prüfergebnisse, offene Fragen |
 
 ## Entwicklung (ToyChain)

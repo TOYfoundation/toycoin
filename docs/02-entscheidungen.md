@@ -1,6 +1,6 @@
 # Entscheidungsprotokoll ToyChain
 
-Stand: 18.10.2026. Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit „zur Bestätigung“ markierte Punkte sind Vorschläge von Claude, die noch bestätigt werden müssen.
+Stand: 24.10.2026 (Nr. 115 und 116 vom 20.10.2026, Nr. 122 bis 130 „Ergänzung ToyVerse“ vom 24.10.2026). Alle Punkte stammen aus den Vorgaben des Projektinhabers. Mit „zur Bestätigung“ markierte Punkte sind Vorschläge von Claude, die noch bestätigt werden müssen.
 
 ## Neuausrichtung vom 18.10.2026 (gilt vor allen älteren Einträgen)
 
@@ -75,6 +75,22 @@ Das Projekt wird schlanker, unabhängiger und dezentraler. Priorität hat ein **
 | Gilt weiter | Kommt später | Entfällt |
 |---|---|---|
 | 1 Zustandsablauf (ersetzt durch 75), 9 k₀ (erste Epoche jetzt 50.500 TOY), 12 MIT-Lizenz, 30 Plattformen, 32 Wallet und Spiele getrennt, 36 nur nativer Coin, 38 Mainnet erst nach Audit, 40 eigene Chain-ID, 56 ToyScan ohne Schlüssel, 58 Epoche nach Blöcken und Zeit, 60 Regel I0 (jetzt: Summe = gemintet, siehe 74) | 2 privater Pool, 5 Bridge-Typ, 6 Hybrid-Signaturen (jetzt M13, Nr. 96), 15 TOY auf anderen Ketten bridgen, 16 bis 29, 31, 33 bis 35 und 46 Spiel und NFT-Regeln, 39 Bridge-Phase, 45 und 47 Mitbestimmung, 48 bis 54 und 59 Bridge-Details, 55 Bug-Bounty-Prämien | 3, 8, 10, 41 bis 44 Reserve und Cold-Wallets, 4, 7, 13, 14 Bridge-Deckung und Fremdbestand, 11 (ersetzt durch 58), 37 (ersetzt durch 70), 57 Altbestand-Wächter |
+
+## Ergänzung ToyVerse vom 24.10.2026 (für später, ändert nichts an Phase 1)
+
+Grundlage: „ToyVerse: Beschreibung in 20 Seiten“ und die Konzeptblätter zu ToyCash und TOYQUEST, alle vom 21.10.2026. Die Beschreibung enthält bei ToyChain und ToyCoin noch Stellen vor der Neuausrichtung (Reserve, Bridge, Entfernen von Konten, Wurzel-Deckel). Diese wurden **nicht** übernommen, es gelten die Einträge oben. Gegenüberstellung: `spaeter/11-toyverse.md`, Abschnitt 1. Alles in diesem Abschnitt gehört zu „Danach“ in Spezifikation 15 und wird in Phase 1 nicht gebaut.
+
+| Nr. | Thema | Entscheidung |
+|---|---|---|
+| 122 | ToyVerse | **ToyVerse** ist der Name für das Ökosystem aus ToyChain, TOY, TOYPAY, ToyScan, ToyCash, TOYQUEST und ToyPost, mit den Bausteinen Wirtschafts-Dashboard, Händler-Ökosystem, Mentoren, Community-Knoten und später Mitbestimmung (Nr. 64). Dokufy gehört nicht dazu. Überblick: `spaeter/11-toyverse.md` |
+| 123 | ToyCash: Grundsatz | **Entschieden (21.10.2026):** Euro-gedeckter Stablecoin, eigener Emittent (später föderiert), Hybrid-Start (eCash-Prototyp, später zk-Notes), Name ToyCash. **Angepasst (24.10.2026):** Das Feld `asset_id` (Euro = 1, Dollar später) steht im Format der ToyCash-Notes, **nicht** auf der ToyChain. Die ToyChain bleibt bei „nur TOY“ (Nr. 36). Konzept: `spaeter/12-toycash.md` |
+| 124 | ToyChain als Notar | **Vorschlag:** neue fest eingebaute Transaktionsart **Anker** (Dienst-Kennung, 32-Byte-Wurzel, Zähler, Anzahl, kein Betrag). Der Emittent verankert je Epoche die Wurzel seiner Siegel-Liste. Im Zustand bleibt je Dienst nur die letzte Wurzel, das 256-MB-Budget bleibt unberührt. Kosten über Kontingent oder Gebühr wie jede Transaktion. Doppelausgabe verhindert im Prototyp der Emittent, die Kette macht sie nachprüfbar. Einplanung als Meilenstein nach M13 |
+| 125 | ToyCash offline und Gutscheine | **Entschieden (21.10.2026):** Offline-Rahmen ab 20 €, wächst langsam bis höchstens 500 €, über 100 € nur mit gerätegebundenem Schlüssel. Doppelausgabe-Funktionen stufenweise: Rückholfrist, Betrugs-Strafe, Reservierung. Gutscheine stufenweise: Mehrfach, Gruppe, Inhaber. **Präzisiert (24.10.2026):** Der Rahmen ist eine **Offline-Kaution** aus eigenen Notes, die der Emittent sperrt. Aus ihr werden Geschädigte entschädigt. Bei der Rückholfrist gewinnt, wer zuerst vorlegt: bis zum Ablauf nur der Empfänger, danach nur der Sender. Stufenwerte bleiben Vorschlag |
+| 126 | TOYQUEST-Items | **Entschieden (21.10.2026):** Items erspielt, nicht gekauft. Prägen optional als ERC-1155 auf Polygon. Gebühr = Gaskosten in POL × Faktor ÷ Kurs, Faktor 2, später 1,5. Gebühr zwischen Projekt-Wallet und POL-Topf, kein Burn. Überschüsse anteilig an alle, die geprägt haben. **Entschieden (24.10.2026):** Überschüsse als Rabatt **oder** Auszahlung, gedeckelt auf die eigene Einzahlung. **Ersetzt** Nr. 23, 24 und 26. Nr. 19, 21 und 22 sind neu zu prüfen. Konzept: `spaeter/13-toyquest-items-nft.md` |
+| 127 | Währung und Kurs der Prägegebühr | **Offen.** Das Konzeptblatt sieht `permit` mit dem alten ToyCoin-Token auf Polygon vor. Das bräuchte eine Ausnahme von Nr. 63, die hier **nicht** gemacht wird. Alternativen: Euro-Stablecoin (später ToyCash) oder nur Dukaten mit Gas aus dem Projekt. Der Kurs wurde am 24.10.2026 auf später gelegt |
+| 128 | Komfort auf der Polygon-Seite | **Entschieden (24.10.2026):** Passkeys, Session-Keys, Gas in Stablecoin und Social Recovery nur für einen **Polygon-Smart-Account** (ERC-4337, EIP-7702) in TOYPAY. Für das ToyChain-Konto gelten weiter Nr. 82 und 83 (kein Passkey, keine Wiederherstellung über Vertraute) |
+| 129 | Lernwelt und Zeitreise | **Vorschlag:** Echt oder Demo, das Spiel erzeugt kein TOY, Abzeichen „Stufe aktiv“ nur mit signierter Nachricht der Adresse plus Bestätigung durch ToyScan, nie Schlüssel im Spiel (Nr. 32). Orte nach den Stufen 0 bis 4, Prover und Archiv bis Phase 2 als Demo. NPC-Texte aus einer Wissensbasis, die an Spezifikation und ToyScan gekoppelt ist. Fünf Level von der Antike zur Moderne, die 50 Maschinen werden zugeordnet und ergänzt, nicht überschrieben. Konzept: `../toypay/docs/08_LERNWELT_ZEITREISE.md` |
+| 130 | Community-Bausteine | **Vorschlag:** Mentoren, Gilden, Community-Knoten, Händler-Ökosystem, Ersteller mit Anteil an der Prägegebühr. Bug-Bounties und Ersteller werden aus der **Projekt-Wallet** bezahlt, weil es keine Reserve gibt (Nr. 62). Gewichtung nach Aktivität und Wissen wird mit der Mitbestimmung entschieden |
 
 **Die folgenden Abschnitte sind das Protokoll bis zum 17.10.2026.** Was dort steht, gilt nur, soweit die Tabelle oben es nicht ändert.
 
@@ -179,3 +195,4 @@ Nur noch Hintergrund: Die Token werden derzeit ignoriert (Nr. 63). Details in `s
 - Schutz vor teurem Auffüllen des Speichers (P5, M5): Durch das Auslagern nach Bedarf (Nr. 75) kann niemand den Speicher dauerhaft verstopfen. Massenhaft neue Konten verdrängen nur alte in den Ruhezustand. Die Schutzregel gegen massenhaftes Anlegen bleibt.
 - Aus dem Prüfbericht für die passenden Meilensteine: P5, P6 (M5). P9 und der Höchstwert der progressiven Gebühr sind mit Nr. 117 und 120 entschieden (20.10.2026).
 - Rechtliche Prüfung vor einem Mainnet (z. B. MiCA, Steuer).
+- ToyVerse (später): Währung und Kurs der Prägegebühr (Nr. 127), Anker-Transaktion (Nr. 124), Stufenwerte des ToyCash-Offline-Rahmens (Nr. 125), Marke und Domain für ToyCash und ToyVerse. Liste: `spaeter/11-toyverse.md`, Abschnitt 8.
