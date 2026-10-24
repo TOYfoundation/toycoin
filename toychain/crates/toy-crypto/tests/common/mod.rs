@@ -22,7 +22,7 @@ pub fn vector_file(name: &str) -> String {
 /// Decodes hex with or without `0x` prefix.
 pub fn hex(text: &str) -> Vec<u8> {
     let digits = text.strip_prefix("0x").unwrap_or(text);
-    assert!(digits.len() % 2 == 0, "odd hex length: {text}");
+    assert!(digits.len().is_multiple_of(2), "odd hex length: {text}");
     (0..digits.len())
         .step_by(2)
         .map(|i| u8::from_str_radix(&digits[i..i + 2], 16).expect("hex digit"))

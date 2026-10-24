@@ -202,7 +202,7 @@ fn random_keys_and_chain_pairs() {
         );
         // Even with v rewritten, the victim is never the recovered signer.
         let forged = Eip155Signature {
-            v: other.v(signature.v % 2 == 0),
+            v: other.v(signature.v.is_multiple_of(2)),
             ..signature
         };
         assert!(

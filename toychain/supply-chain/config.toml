@@ -108,7 +108,7 @@ version = "0.2.2"
 criteria = "safe-to-deploy"
 
 [[exemptions.ctutils]]
-version = "0.4.2"
+version = "0.4.5"
 criteria = "safe-to-deploy"
 
 [[exemptions.der]]
