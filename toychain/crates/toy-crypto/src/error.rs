@@ -68,6 +68,8 @@ pub enum CryptoError {
     EmptyAggregate,
     /// The same BLS public key appears more than once in a set.
     DuplicatePublicKey,
+    /// Argon2id (ToyWork) rejected its parameters or inputs.
+    WorkFailed,
 }
 
 impl fmt::Display for CryptoError {
@@ -107,6 +109,7 @@ impl fmt::Display for CryptoError {
             Self::PointNotInGroup => f.write_str("BLS point is not in the prime-order subgroup"),
             Self::EmptyAggregate => f.write_str("empty set in BLS aggregation"),
             Self::DuplicatePublicKey => f.write_str("duplicate BLS public key"),
+            Self::WorkFailed => f.write_str("ToyWork (Argon2id) computation failed"),
         }
     }
 }

@@ -1,4 +1,4 @@
-# Fuzz targets for toy-crypto (decision 88). Not part of the workspace:
+# Fuzz targets for toy-crypto and toy-tx (decision 88). Not part of the workspace:
 # needs nightly Rust and cargo-fuzz. CI runs every target for a fixed time
 # (.github/workflows/ci.yml, job "fuzz").
 #
@@ -21,6 +21,7 @@ cargo-fuzz = true
 libfuzzer-sys = "=0.4.13"
 toy-crypto = { path = "../crates/toy-crypto" }
 toy-types = { path = "../crates/toy-types" }
+toy-tx = { path = "../crates/toy-tx" }
 
 # Keep this crate out of the main workspace.
 [workspace]
@@ -63,6 +64,27 @@ bench = false
 [[bin]]
 name = "vrf_verify"
 path = "fuzz_targets/vrf_verify.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "rlp_decode"
+path = "fuzz_targets/rlp_decode.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "decode_transaction"
+path = "fuzz_targets/decode_transaction.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "decode_ticket"
+path = "fuzz_targets/decode_ticket.rs"
 test = false
 doc = false
 bench = false

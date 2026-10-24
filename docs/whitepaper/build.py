@@ -1,4 +1,4 @@
-"""ToyChain whitepaper, draft 0.3 (German). Run figures.py first, then this script."""
+"""ToyChain whitepaper, draft 0.4 (German). Run figures.py first, then this script."""
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.lib import colors
@@ -150,6 +150,8 @@ U = dict(
     mit="https://opensource.org/license/mit",
     repo="https://github.com/Safehaigit/toycoin",
     market="https://dailyforex.com/forex-technical-analysis/2026/10/crypto-overview-18-october-2026/250826",
+    market2="https://www.tokenpost.com/news/investing/35318",
+    ethtests="https://github.com/ethereum/tests",
     cg_charts="https://www.coingecko.com/en/charts",
     dead="https://forklog.com/en/news/coingecko-reports-record-token-mortality-in-2025",
     bridgehacks="https://decrypt.co/106718/cross-chain-crypto-bridge-hacks-hit-2-billion-2022-chainalysis",
@@ -163,14 +165,16 @@ story.append(Paragraph("Ein schlankes, fair gestartetes Zahlungsnetz,<br/>an dem
                        subtitle))
 story.append(Spacer(1, 10))
 story.append(Paragraph("ToyChain-Projekt · " + L("github.com/Safehaigit/toycoin", U["repo"]), center))
-story.append(Paragraph("Vorläufiges Whitepaper · Entwurf 0.3 · 19. Oktober 2026", center))
+story.append(Paragraph("Vorläufiges Whitepaper · Entwurf 0.4 · 20. Oktober 2026", center))
 story.append(Spacer(1, 12))
-BOX("<b>Stand: vor der Testphase.</b> ToyChain existiert bisher als Konzept und als erster Programmbaustein. Fertig "
-    "und getestet sind die Grundtypen und die Regeln der Geldentstehung (Meilenstein M1 von 13). Es gibt noch "
+BOX("<b>Stand: vor der Testphase.</b> ToyChain existiert bisher als Konzept und als erste Programmbausteine. Fertig "
+    "und getestet sind die Regeln der Geldentstehung, die Kryptografie für Konten und Unterschriften sowie Konten, "
+    "Transaktionen, Gebühren und Schutzregeln (Meilensteine M1 bis M3 von 13). Es gibt noch "
     "<b>kein Testnetz, kein Hauptnetz und keine handelbaren TOY</b>. Alle Zahlen sind Startwerte, die im Testnetz "
     "gemessen und angepasst werden. Dieses Dokument ist keine Anlageberatung und kein Angebot zum Kauf von irgendetwas. "
     "Guthaben aus dem Testnetz haben keinen Wert und werden nie in ein späteres Hauptnetz übernommen. "
-    "Unterstrichene blaue Begriffe sind Web-Links zu weiterführenden Erklärungen.")
+    "Unterstrichene blaue Begriffe sind Web-Links zu weiterführenden Erklärungen. Wie man ToyChain später als Nutzer "
+    "einrichtet, zeigt die getrennte <b>Kurzanleitung</b> (ToyChain-Kurzanleitung-v0.4.pdf).")
 
 P("<b>Zusammenfassung.</b> ToyChain ist eine eigenständige Blockchain mit der Währung ToyCoin (TOY), höchstens 100 "
   "Millionen Stück. Sie startet völlig fair: Der erste Block enthält kein einziges TOY, es gibt keine Reserve für "
@@ -231,8 +235,9 @@ T([["Eigenschaft", "ToyChain (geplante Startwerte)"],
    ["Speicher je Knoten", "Ziel 256 MB, auch auf alten Android-Geräten und dem Raspberry Pi"],
    ["Konten", "wie Ethereum: gleiche Adressen, gleiche 12- oder 24-Wörter-Phrase"],
    ["Funktionen", "nur fest eingebaute Transaktionsarten, keine Smart Contracts, keine Token, keine NFTs"],
-   ["Gebühren", "10 bis 100 kostenlose Transaktionen je Konto und Epoche (mindestens ein Tag), darüber kleine "
-                "Gebühr oder Rechenarbeit"],
+   ["Gebühren", "10 bis 100 kostenlose Transaktionen je Konto und Epoche (mindestens ein Tag), darüber eine kleine "
+                "Gebühr (rund 0,00012 TOY je Überweisung) oder ein Rechenlos"],
+   ["Netz-Kennung", "Chain-ID 7630713 (Hauptnetz, „toy“), 7630714 (Testnetz), 7630715 (lokales Probenetz)"],
    ["Programmiersprache", "Rust, ein gemeinsamer Kern für alle Plattformen"],
    ["Lizenz", L("MIT", U["mit"]) + " (freie Software)"]],
   [4.0, 12.4])
@@ -305,7 +310,10 @@ P("Jede Ausgabe wird fest aufgeteilt: <b>50 %</b> an alle, die das Netz absicher
   "Erstattungs-Topf, der die kostenlosen Transaktionen aller bezahlt. In der Startphase geht der Absicherungs-Anteil an "
   "die Start-Validatoren und sinkt bis auf null. Was sie nicht bekommen, fließt in die Lotterie. Gerechnet wird "
   "ausschließlich mit ganzen Zahlen in der kleinsten Einheit (10<super>-18</super> TOY). Rundungsreste gehen in den "
-  "Erstattungs-Topf, so dass in jeder Epoche genau die geplante Menge entsteht.")
+  "Erstattungs-Topf, so dass in jeder Epoche genau die geplante Menge entsteht. Der Erstattungs-Topf behält aber "
+  "höchstens so viel, wie die kostenlosen Transaktionen von 30 Epochen im äußersten Fall kosten könnten (beim Start "
+  "rund 2.800 TOY). Was darüber hinausgeht, fließt zu Beginn jeder Epoche ebenfalls in die Arbeits-Lotterie. So "
+  "liegt kein TOY auf Dauer ungenutzt in einem Topf.")
 FIG("abbildungen/f_split.png", "Aufteilung neuer TOY. In der Startphase wandert der Lohn der Start-Validatoren schrittweise in "
                    "die Arbeits-Lotterie, nach der Übergabe erhalten ihn alle Stake-Teilnehmer.")
 H2("5.5 Es wird nie TOY vernichtet")
@@ -329,15 +337,27 @@ P("Gebundenes TOY bleibt Eigentum des Nutzers und lässt sich mit 21 Epochen War
 MORE(L("Was ist Proof-of-Stake? (ethereum.org)", U["eth_pos"], "Konsens"))
 H2("6.2 Kostenlose Transaktionen und Gebühren")
 P("Jedes aktivierte Konto hat je Epoche ein kostenloses Kontingent: 100 Transaktionen, wenn das Netz leer ist, "
-  "mindestens 10 bei Hochbetrieb. Für den Alltag reicht das. Darüber zahlt man eine kleine Gebühr, die bei vielen "
-  "Transaktionen im selben Block schnell steigt, oder man legt einen Arbeitsnachweis bei. So bleibt das Netz für "
-  "normale Nutzer kostenlos, während Spam teuer wird. Kostenlose Transaktionen belegen höchstens die Hälfte eines "
-  "Blocks und werden aus dem Erstattungs-Topf bezahlt, in den jeder auch freiwillig spenden kann.")
+  "mindestens 10 bei Hochbetrieb. Gemessen wird, wie voll die Blöcke der vorigen Epoche waren. Für den Alltag reicht "
+  "das. Ein Konto muss dafür mindestens 100 Blöcke (rund 100 Minuten) alt sein. Die Wallet stellt die Gebühr dann "
+  "einfach auf null. Kostenlose Transaktionen belegen höchstens die Hälfte eines Blocks und werden aus dem "
+  "Erstattungs-Topf bezahlt, in den jeder auch freiwillig spenden kann. Je Epoche gibt der Topf höchstens ein "
+  "Dreißigstel seines Bestands dafür aus.")
+P("Darüber zahlt man eine kleine Gebühr nach Größe der Transaktion. Beim Start sind es 0,000001 TOY je Byte, für eine "
+  "normale Überweisung also rund 0,00012 TOY. Bei vollen Blöcken steigt diese Grundgebühr je Block um höchstens ein "
+  "Achtel, bei leeren sinkt sie wieder, ähnlich wie bei " + L("EIP-1559", U["eip1559"]) + ". Wer viele Transaktionen "
+  "in denselben Block packt, zahlt mehr: Je zehn weitere verdoppeln die Gebühr, höchstens auf das 1.024-Fache. Statt "
+  "zu zahlen, kann man ein Rechenlos (Abschnitt 6.3) anhängen, dann ist die Transaktion ganz gebührenfrei. Wer mehr als "
+  "1.000 Transaktionen am Tag sendet, muss mindestens die Hälfte des Überschusses mit Rechenlosen decken. So bleibt das "
+  "Netz für normale Nutzer kostenlos, während Spam teuer wird. Von jeder bezahlten Gebühr gehen 40 % an eine Lotterie "
+  "für aktive Teilnehmer, 40 % in den Erstattungs-Topf und 20 % an den Block-Vorschlagenden.")
 H2("6.3 Die Arbeits-Lotterie")
 P("Damit auch Menschen ohne TOY an neue Coins kommen, gibt es eine Lotterie für Rechenarbeit. Das Gerät berechnet Lose "
   "mit dem Verfahren " + L("Argon2id", U["argon2"], "Technik") + ", das bewusst viel Arbeitsspeicher (16 MiB) braucht. "
   "Dadurch haben Spezialhardware und Grafikkarten-Farmen kaum Vorteile gegenüber einem Handy oder PC. Je Block werden "
-  "bis zu 64 Gewinner fair ausgelost, jeder Gewinn beträgt mindestens 0,2 TOY. Wer mehr rechnet, hat mehr Lose, die "
+  "bis zu 64 Gewinner fair ausgelost, jeder Gewinn beträgt mindestens 0,2 TOY. Ein Los gilt nur für die eigene "
+  "Adresse und den laufenden Tag und ist mit dem eigenen Schlüssel unterschrieben. Gezogen wird erst zwei Blöcke später, "
+  "damit niemand, der einen Block baut, das Ergebnis steuern kann. Höchstens 16 Lose passen in einen Block, die "
+  "Schwierigkeit passt sich täglich an. Wer mehr rechnet, hat mehr Lose, die "
   "erwartete Belohnung ist proportional zur Arbeit. Schon ein einziger Gewinn reicht, um ein Konto zu aktivieren: "
   "0,1 TOY werden als Pfand gebunden (Abschnitt 9), der Rest ist frei verfügbar. Gerechnet wird nur, wenn das Gerät es erlaubt: am Ladegerät, im "
   "WLAN und solange es kühl bleibt. Zum Vergleich: Das Bitcoin-Netz verbraucht laufend so viel Strom wie ein ganzes "
@@ -347,7 +367,10 @@ P("Damit auch Menschen ohne TOY an neue Coins kommen, gibt es eine Lotterie für
 H("Einigung im Netz")
 H2("7.1 So entsteht ein Block")
 P("Ein Komitee aus höchstens 128 Validatoren wird je Epoche neu zusammengesetzt. Für jeden Block wird per "
-  "überprüfbarem Zufall (" + L("VRF", U["vrf"], "Technik") + ") einer ausgewählt, der den Block vorschlägt. Die "
+  "überprüfbarem Zufall (" + L("VRF", U["vrf"], "Technik") + ") einer ausgewählt, der den Block vorschlägt. Weil es "
+  "für den VRF-Standard RFC 9381 noch keine geprüfte Rust-Bibliothek gibt, nutzt das Testnetz eine VRF aus eindeutigen "
+  "BLS-Unterschriften. Dasselbe Prinzip verwendet Ethereum für seinen Zufall. Vor einem Hauptnetz wird neu "
+  "entschieden. Die "
   "anderen stimmen in zwei Phasen ab (Vorabstimmung und Bestätigung), nach einem bewährten Verfahren im Stil von " +
   L("Tendermint", U["tendermint"], "Konsens") + ". Sobald zwei Drittel zugestimmt haben, ist der Block "
   "<b>endgültig</b>. Er kann nicht mehr zurückgenommen werden. Bei Bitcoin wartet man dagegen üblicherweise etwa eine "
@@ -427,7 +450,12 @@ H2("10.2 Schutzregeln mit Augenmaß")
 P("Angriffe sollen früh gestoppt werden, ohne ehrliche Nutzer zu treffen. Deshalb gibt es drei Ebenen. Die Kette "
   "selbst ahndet nur <b>eindeutig nachweisbare</b> Verstöße, etwa eine Doppelsignatur oder einen gefälschten Block. "
   "Die Folge ist eine Sperrzeit, die Rechte entzieht, zum Beispiel das kostenlose Kontingent, <b>nie aber "
-  "Guthaben</b>. Wiederholungen verdoppeln die Sperrzeit bis höchstens 64 Epochen.")
+  "Guthaben</b>. Wiederholungen verdoppeln die Sperrzeit bis höchstens 64 Epochen, nach 30 Tagen ohne Verstoß "
+  "beginnt die Zählung von vorn. Zwei Beispiele: Wer ein Rechenlos mit falscher Arbeit unterschreibt, darf für den Rest "
+  "des Tages und einen weiteren Tag keine Lose einreichen. Wer an einem Tag mehr als 20 neue Konten anlegt, verliert "
+  "für 7 Tage das kostenlose Kontingent. Überweisen gegen Gebühr bleibt in jedem Fall möglich. Das ist seit "
+  "Meilenstein M3 für jede Regel mit einem Test belegt, jeweils für den Fall, dass sie greift, und den Fall, dass "
+  "sie nicht greift.")
 FIG("abbildungen/f_levels.png", "Die drei Ebenen der Schutzregeln. Nur Ebene A wirkt in der Kette, und nur auf Rechte.", 15.0)
 H2("10.3 Die Verfassung")
 P("Einige Regeln sind so grundlegend, dass sie fest im Code stehen und durch kein Update und keine spätere Abstimmung "
@@ -448,7 +476,9 @@ P("ToyChain erfindet keine eigenen Verschlüsselungsverfahren. Verwendet werden 
   + L("Quantencomputern", U["pqk"], "Technik") + " standhalten. Die wichtigsten Rechenregeln werden zusätzlich mit dem "
   "Beweis-Werkzeug " + L("Kani", U["kani"], "Technik") + " mathematisch geprüft, also nicht nur an Beispielen, sondern "
   "für alle möglichen Zahlen. Bewiesen ist bereits: Eine Epoche schüttet nie mehr aus als die Restmenge, und die Summe "
-  "aller TOY bleibt immer höchstens 100 Mio. (Abschnitt 17).")
+  "aller TOY bleibt immer höchstens 100 Mio. (Abschnitt 17). Alle Bausteine sind mit offiziellen Testdaten der "
+  "jeweiligen Standards geprüft, etwa für Phrasen, Adressen, Unterschriften und Argon2id. Ethereum-Überweisungen aus der "
+  "offiziellen " + L("Testsammlung", U["ethtests"], "Technik") + " ergeben bei ToyChain exakt denselben Absender.")
 
 # ================================================================ 11
 H("TOYPAY Wallet, ToyScan und andere Ketten")
@@ -462,7 +492,9 @@ P("Der Explorer <b>ToyScan</b> macht alles öffentlich sichtbar: wie viele TOY b
   "Startphase zu lange dauert. ToyScan hat nie Zugriff auf Schlüssel.")
 P("Weil die Adressen dieselben sind wie bei Ethereum, zeigen Wallet und ToyScan für eine Adresse auch Guthaben auf "
   "anderen EVM-Ketten wie Ethereum oder Polygon an. Bekannte Wallets wie MetaMask können ToyChain " +
-  L("als eigenes Netz einbinden", U["metamask"], "Wallet") + ". Eine " + L("Brücke (Bridge)", U["eth_bridges"],
+  L("als eigenes Netz einbinden", U["metamask"], "Wallet") + " (Testnetz: Chain-ID 7630714) und normale "
+  "Ethereum-Überweisungen senden. Wer dort den Gaspreis auf null stellt, nutzt das kostenlose Kontingent. Eine " +
+  L("Brücke (Bridge)", U["eth_bridges"],
                                                                             "Andere Ketten") +
   " zwischen den Ketten gibt es bewusst nicht: 2022 entfielen laut Chainalysis rund zwei Drittel aller gestohlenen "
   "Krypto-Gelder auf " + L("Angriffe auf Brücken", U["bridgehacks"], "Andere Ketten") + ". Stattdessen ist ein "
@@ -541,7 +573,12 @@ B(["<b>Frühes Stadium:</b> ToyChain ist noch nicht gelaufen. Fehler im Konzept 
    "<b>Speichergrenze:</b> Ob 256 MB über Jahre reichen, hängt von der Nutzung und von der späteren Beweis-Schicht ab. "
    "Reicht es nicht, wird das offen mit Zahlen vorgelegt. Größere Knoten bräuchten dann mehr Speicher.",
    "<b>Weniger erprobte Bausteine:</b> Für manche Verfahren (etwa überprüfbaren Zufall und die Konsens-Bibliothek) gibt "
-   "es in Rust weniger geprüfte Bibliotheken. Sie werden streng nach Standard umgesetzt und extern geprüft.",
+   "es in Rust weniger geprüfte Bibliotheken. Für den Zufall nutzt das Testnetz deshalb eine Lösung aus der geprüften "
+   "BLS-Bibliothek, die vor einem Hauptnetz erneut bewertet wird. Zwei neue Bibliotheken (für Argon2id) sind von "
+   "keiner der großen Prüf-Organisationen begutachtet und als „noch nicht durchgesehen“ vermerkt.",
+   "<b>Rechenaufwand bei vielen Konten:</b> Bisher wird der Kontostand für jeden Block vollständig kopiert und neu "
+   "zusammengerechnet. Bei 10.000 Konten dauert ein voller Block rund 0,1 Sekunden, bei einer Million Konten wären es "
+   "rund eine Sekunde, auf alten Handys mehr. Der dauerhafte Speicher aus Meilenstein M5 muss das schrittweise lösen.",
    "<b>Rechenarbeit:</b> Ob 16 MiB Speicherbedarf reichen, um Spezialhardware fernzuhalten, wird im Testnetz gemessen.",
    "<b>Recht und Regulierung:</b> Eine Kryptowährung berührt europäisches Recht (" + L("MiCA", U["mica"], "Recht") +
    "), " + L("Steuerrecht", U["bmf"], "Recht") + " und möglicherweise das Glücksspielrecht (Begriff „Lotterie“). Vor "
@@ -561,8 +598,9 @@ H("Chancen am Kryptomarkt: eine Einschätzung")
 P("Dieses Kapitel versucht eine nüchterne Einschätzung. Es ist keine Prognose und keine Anlageempfehlung. Die Zahlen "
   "zum Markt stammen von Mitte Oktober 2026 und ändern sich schnell.")
 H2("16.1 Die Ausgangslage")
-P("Der gesamte Kryptomarkt war am 18. Oktober 2026 rund 2,7 Billionen US-Dollar wert, wovon etwa 60 % auf Bitcoin "
-  "entfielen. Die Stimmung bei kleineren Coins war schwach: Von den 100 größten Kryptowerten legten an diesem Tag nur "
+P("Der gesamte Kryptomarkt war am 19. Oktober 2026 rund 2,76 Billionen US-Dollar wert, wovon 59,6 % auf Bitcoin "
+  "entfielen, ein Bitcoin kostete rund 82.000 US-Dollar (" + L("TokenPost, 20.10.2026", U["market2"], "Markt") + "). "
+  "Die Stimmung bei kleineren Coins war schwach: Am 18. Oktober legten von den 100 größten Kryptowerten nur "
   "14 zu (" + L("Marktbericht vom 18.10.2026", U["market"], "Markt") + ", laufend aktuell bei " +
   L("CoinGecko", U["cg_charts"], "Markt") + "). Gleichzeitig ist der Markt mit neuen Projekten überschwemmt. Laut "
   "einer Auswertung von CoinGecko wurden bis Ende 2025 über 20 Millionen Kryptowerte erfasst. Allein 2025 sind mehr als "
@@ -600,7 +638,7 @@ B(["<b>Kein Startkapital:</b> Ohne Premint gibt es keine Kasse für Entwickler, 
    "das bei anderen Ketten viel Aufmerksamkeit und Kapital anzieht.",
    "<b>Starke Konkurrenz bei Zahlungen:</b> Für Alltagszahlungen nutzen viele Menschen inzwischen an Währungen "
    "gebundene Stablecoins oder etablierte Netze. Ein Coin mit schwankendem Wert ist dafür weniger attraktiv.",
-   "<b>Kleines Team, frühes Stadium:</b> Bis zu einem Hauptnetz sind noch zwölf Meilensteine, Audits und rechtliche "
+   "<b>Kleines Team, frühes Stadium:</b> Bis zu einem Hauptnetz sind noch zehn Meilensteine, Audits und rechtliche "
    "Klärungen nötig.",
    "<b>Name:</b> Ältere, gleichnamige Token erschweren die Auffindbarkeit und bergen Verwechslungsgefahr."])
 FIG("abbildungen/f_swot.png", "Stärken, Schwächen, Chancen und Risiken auf einen Blick.", 15.0)
@@ -630,20 +668,32 @@ P("<b>Fazit der Einschätzung:</b> Als Investition ist ToyChain heute nicht bewe
 
 # ================================================================ 17
 H("Stand und Fahrplan")
-P("<b>Heute (19. Oktober 2026): vor der Testphase.</b> Das Konzept ist in 114 dokumentierten Entscheidungen "
-  "festgehalten. Der Bau ist in 13 Meilensteine geteilt. Meilenstein M1 ist fertig: Die Regeln für Beträge und die "
-  "Ausgabe neuer TOY sind programmiert und mit 45 automatischen Tests geprüft. Die Rust-Umsetzung liefert auf die "
+P("<b>Heute (20. Oktober 2026): vor der Testphase.</b> Das Konzept ist in 121 dokumentierten Entscheidungen "
+  "festgehalten. Der Bau ist in 13 Meilensteine geteilt, drei davon sind fertig und laufen mit zusammen 205 "
+  "automatischen Tests. Meilenstein M1 enthält die Regeln für Beträge und die Ausgabe neuer TOY. Die Rust-Umsetzung "
+  "liefert auf die "
   "kleinste Einheit genau dieselben Zahlen wie die getrennt geschriebene Referenz-Simulation in Python. Die Tests "
   "laufen bei jeder Änderung automatisch unter Linux, Windows und auf ARM-Prozessoren. Mit dem Beweis-Werkzeug Kani sind "
   "drei Kernregeln mathematisch bewiesen, jeweils in unter zwei Minuten: Keine Epoche schüttet mehr aus als die "
   "Restmenge, die Summe bleibt höchstens 100 Mio. TOY, und die Aufteilung eines Blocks geht genau auf. Drei weitere "
   "Beweise zur Aufteilung mit Lohn-Anteil waren nach 30 Minuten noch nicht fertig. Diese Aufteilung prüft das Programm "
   "deshalb bei jedem Block selbst, und zusätzliche Tests decken sie ab.")
+P("<b>Meilenstein M2</b> (Kryptografie und Adressen) erzeugt aus 12 oder 24 Wörtern dieselben Adressen wie Ethereum "
+  "und unterschreibt mit der eigenen Netz-Kennung. Geprüft ist das mit den offiziellen Testdaten der Standards "
+  "BIP-39, BIP-32, EIP-55, EIP-155 und BLS12-381. Eine Unterschrift für ein anderes Netz wird abgelehnt.")
+P("<b>Meilenstein M3</b> (Konten, Transaktionen, Gebühren, Rechenlose, Schutzregeln) bringt das Kassenbuch selbst: "
+  "Konten mit Pfand, beide Transaktionsformate (das eigene und das von Ethereum), Kontingent, Gebühren, die "
+  "Arbeits-Lotterie und alle Sperrregeln. Ein Zufallstest über rund 2.880 Blöcke zeigt, dass die Prüfregel I0 nach "
+  "jedem Block gilt, und ein absichtlich falscher Block wird abgelehnt. Alle Prüfungen laufen bei jeder Änderung "
+  "automatisch auf GitHub, auch auf Windows und auf dem Prozessor des Raspberry Pi. Am 20. Oktober 2026 waren alle "
+  "34 Prüfläufe grün. Zum ersten Mal gemessen: Eine Überweisung ist 112 bis 123 Byte groß, ein Konto belegt im "
+  "Zustand 49 bis 90 Byte, ein Rechenlos zu prüfen dauert auf einem PC rund 10 Millisekunden.")
 FIG("abbildungen/f_roadmap.png", "Fahrplan. Für ein Hauptnetz gibt es bewusst keinen festen Termin.")
 T([["Phase", "Inhalt", "Stand"],
-   ["Konzept", "Spezifikation v0.3, Entscheidungsprotokoll, zwei Prüfberichte", "fertig, wird laufend gepflegt"],
+   ["Konzept", "Spezifikation v0.3 (Stand 20.10.2026), Entscheidungsprotokoll mit 121 Entscheidungen, zwei "
+    "Prüfberichte", "fertig, wird laufend gepflegt"],
    ["Phase 1, M1 bis M11", "Grundtypen und Emission, Kryptografie, Konten und Transaktionen, Konsens und Startphase, "
-    "Speicher, Netzwerk, Schnittstellen, Wallet, Plattformen, Testnetz, ToyScan", "M1 fertig, M2 als Nächstes"],
+    "Speicher, Netzwerk, Schnittstellen, Wallet, Plattformen, Testnetz, ToyScan", "M1 bis M3 fertig, M4 als Nächstes"],
    ["Testnetz 1", "Kern plus Konto-Schutz, 45 Sprachen und vier Modi; zuerst lokal, dann öffentlich", "geplant"],
    ["Phase 1, M12 und M13", "weitere Transaktionsarten, atomarer Tausch, Namen, Einmal-Adressen, "
     "Post-Quanten-Schlüssel", "geplant"],
@@ -680,8 +730,15 @@ T([["Bereich", "Startwert"],
    ["Strafe Doppelsignatur", "max(1 %, 3 × Anteil der gleichzeitig Betroffenen), höchstens 100 %, Rolle 7 Epochen "
                              "gesperrt"],
    ["Konten", "Aktivierungs-Pfand 0,1 TOY (darf bis 0,01 TOY sinken); Auslagern ruhender Konten ab 90 % Füllung"],
-   ["Kontingent", "10 bis 100 kostenlose Transaktionen je Konto und Epoche, ab einem Kontoalter von 100 Blöcken"],
-   ["Arbeits-Lotterie", "Argon2id mit 16 MiB; bis zu 64 Gewinner je Block, Gewinn mindestens 0,2 TOY"],
+   ["Kontingent", "10 bis 100 kostenlose Transaktionen je Konto und Epoche, ab einem Kontoalter von 100 Blöcken; "
+                  "Auslastung aus den Bytes aller Transaktionen der Vorepoche"],
+   ["Gebühren", "Grundgebühr ab 0,000001 TOY je Byte, ±1/8 je Block; Faktor höchstens 1.024; Aufteilung 40 % "
+                "Gebühren-Lotterie, 40 % Erstattungs-Topf, 20 % Vorschlagender"],
+   ["Erstattungs-Topf", "Erstattung höchstens 1/30 des Bestands je Epoche; Bestand höchstens 30 Epochen der "
+                        "größtmöglichen Erstattung, Überschuss in die Arbeits-Lotterie"],
+   ["Arbeits-Lotterie", "Argon2id mit 16 MiB, 1 Durchlauf; höchstens 16 Lose je Block, Ziel 8; Ziehung 2 Blöcke später; "
+                        "bis zu 64 Gewinner je Block, Gewinn mindestens 0,2 TOY; 1 Los = 1 gebührenfreie Transaktion"],
+   ["Netz-Kennung", "Chain-ID 7630713 Hauptnetz, 7630714 Testnetz, 7630715 lokales Probenetz"],
    ["Sperrzeiten", "nur bei eindeutig nachweisbaren Verstößen, Verdopplung bei Wiederholung bis höchstens 64 Epochen"],
    ["Speicher", "256 MB je Standard-Knoten: 128 MB Zustand, 48 MB Block-Fenster, 80 MB Beweise, Indizes und Reserve"]],
   [4.0, 12.4])
@@ -725,6 +782,9 @@ link_rows = [["Thema", "Link", "Worum es geht"],
               "Stromverbrauch von Bitcoin"],
              ["Markt", L("CoinGecko Charts", U["cg_charts"]) + " (englisch)", "aktueller Marktwert"],
              ["Markt", L("Marktbericht 18.10.2026 (DailyForex)", U["market"]) + " (englisch)", "Stand zum Datum"],
+             ["Markt", L("Marktwert 19.10.2026 (TokenPost)", U["market2"]) + " (englisch)",
+              "Gesamtwert und Bitcoin-Anteil"],
+             ["Technik", L("ethereum/tests", U["ethtests"]) + " (englisch)", "offizielle Ethereum-Testdaten"],
              ["Markt", L("CoinGecko-Studie zu gescheiterten Coins (ForkLog)", U["dead"]) + " (englisch)",
               "Zahlen 2021 bis 2025"],
              ["Recht", L("MiCA-Verordnung (EUR-Lex)", U["mica"]), "amtlicher Text auf Deutsch"],
@@ -748,15 +808,43 @@ refs = [
     "G. Fanti et al.: Dandelion++: Lightweight cryptocurrency networking with formal anonymity guarantees, 2018.",
     "NIST FIPS 204: Module-Lattice-Based Digital Signature Standard (ML-DSA), 2024.",
     "Verordnung (EU) 2023/1114 über Märkte für Kryptowerte (MiCA).",
-    "Marktdaten: DailyForex, Crypto Overview, 18.10.2026; CoinGecko-Daten nach ForkLog, Januar 2026; Chainalysis nach "
+    "Marktdaten: TokenPost, 20.10.2026 (Stand 19.10.2026); DailyForex, Crypto Overview, 18.10.2026; CoinGecko-Daten "
+    "nach ForkLog, Januar 2026; Chainalysis nach "
     "Decrypt, 2022; Spark, Bitcoin Full Node Requirements 2026.",
     "ToyChain: Technische Spezifikation v0.3, Entscheidungsprotokoll, Bauplan Phase 1, Prüfberichte 1 und 2, "
-    "Referenz-Simulation m-simulation.py; github.com/Safehaigit/toycoin.",
+    "Referenz-Simulation m-simulation.py, Statusbericht mit Messwerten; github.com/Safehaigit/toycoin.",
+    "Testdaten: ethereum/tests (RLP und Transaktionen, Commit c67e485f); RFC 9106 Argon2id-Vektor aus "
+    "P-H-C/phc-winner-argon2.",
 ]
 for i, r in enumerate(refs, 1):
     story.append(Paragraph(f"[{i}] {r}", small))
 story.append(CondPageBreak(5 * cm))
-story.append(Paragraph("Anhang D: Änderungen gegenüber Entwurf 0.2", h1))
+story.append(Paragraph("Anhang D: Änderungen gegenüber Entwurf 0.3", h1))
+P("Entwurf 0.4 bringt den Stand nach den Meilensteinen M2 und M3 und die Entscheidungen 115 bis 121 vom 20. Oktober "
+  "2026. Neu ist außerdem eine getrennte Kurzanleitung für Nutzer.")
+T([["Stelle", "Änderung", "Grund"],
+   ["Titel, 17, Abb. 16", "Stand: M1 bis M3 fertig, 121 Entscheidungen, 205 Tests, erste Messwerte, Fahrplan.",
+    "M2 und M3 abgeschlossen (20.10.2026)"],
+   ["2, Anhang A", "Netz-Kennungen 7630713, 7630714, 7630715.", "Entscheidung 116"],
+   ["2, 6.2, Anhang A", "Gebühren mit Zahlen: 0,000001 TOY je Byte, ±1/8 je Block, Faktor höchstens 1.024, "
+    "Aufteilung 40/40/20, Rechenlos statt Gebühr, Vielnutzer-Regel.", "Entscheidungen 117, 119, 121"],
+   ["6.2", "Kontingent: Auslastung der Vorepoche, Kontoalter 100 Blöcke, Erstattung höchstens 1/30 je Epoche.",
+    "Entscheidung 118 und genauere Beschreibung"],
+   ["5.4, Anhang A", "Obergrenze des Erstattungs-Topfs, Überschuss in die Arbeits-Lotterie.",
+    "Entscheidung 120 (löst Prüfbefund P9)"],
+   ["6.3", "Lose an Adresse und Tag gebunden, unterschrieben, Ziehung 2 Blöcke später, höchstens 16 je Block.",
+    "Entscheidungen 106, 119"],
+   ["7.1, 15", "VRF aus eindeutigen BLS-Unterschriften statt RFC 9381, Wiedervorlage vor dem Hauptnetz.",
+    "Entscheidung 115"],
+   ["10.2", "Sperrzeiten mit Beispielen, Neubeginn nach 30 Tagen, Überweisen gegen Gebühr bleibt möglich.",
+    "Entscheidung 121, Tests aus M3"],
+   ["10.4, 11", "Offizielle Testdaten; MetaMask mit Testnetz-Kennung und Gaspreis 0.", "M2, M3, Entscheidung 121"],
+   ["15", "Neue Risiken: ungeprüfte Argon2id-Bibliotheken, Rechenaufwand je Block bei vielen Konten.",
+    "Messungen aus M3"],
+   ["16.1, 16.3", "Marktzahlen vom 19.10.2026; noch zehn statt zwölf Meilensteine.", "neuer Stand"]],
+  [2.6, 8.6, 5.2])
+story.append(CondPageBreak(5 * cm))
+story.append(Paragraph("Frühere Änderungen: Entwurf 0.3 gegenüber Entwurf 0.2", h2))
 P("Entwurf 0.3 ist eine Prüfung von Entwurf 0.2 auf Logik, Nachvollziehbarkeit und neue Erkenntnisse vom 18. und "
   "19. Oktober 2026. Am Konzept selbst hat sich nichts geändert.")
 T([["Stelle", "Änderung", "Grund"],
@@ -799,7 +887,7 @@ def on_page(c, doc):
     c.saveState()
     c.setFont("Sans", 7.5)
     c.setFillColor(MUTED)
-    c.drawString(2.3 * cm, 1.3 * cm, "ToyChain · Vorläufiges Whitepaper · Entwurf 0.3 · vor der Testphase")
+    c.drawString(2.3 * cm, 1.3 * cm, "ToyChain · Vorläufiges Whitepaper · Entwurf 0.4 · vor der Testphase")
     c.drawRightString(A4[0] - 2.3 * cm, 1.3 * cm, f"Seite {doc.page}")
     c.setStrokeColor(RULE)
     c.setLineWidth(0.5)
@@ -807,10 +895,10 @@ def on_page(c, doc):
     c.restoreState()
 
 
-doc = BaseDocTemplate("ToyChain-Whitepaper-v0.3.pdf", pagesize=A4, leftMargin=2.3 * cm, rightMargin=2.3 * cm,
+doc = BaseDocTemplate("ToyChain-Whitepaper-v0.4.pdf", pagesize=A4, leftMargin=2.3 * cm, rightMargin=2.3 * cm,
                       topMargin=2.0 * cm, bottomMargin=2.1 * cm,
                       title="ToyChain und ToyCoin (TOY): Vorläufiges Whitepaper", author="ToyChain-Projekt",
-                      subject="Entwurf 0.3, vor der Testphase", lang="de-DE")
+                      subject="Entwurf 0.4, vor der Testphase", lang="de-DE")
 frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id="f", leftPadding=0, rightPadding=0,
               topPadding=0, bottomPadding=0)
 doc.addPageTemplates([PageTemplate(id="p", frames=[frame], onPage=on_page)])

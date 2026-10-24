@@ -1,6 +1,6 @@
 [package]
 name = "toy-tx"
-description = "ToyChain: Transaction format, signature verification (EIP-155 chain id), free quota, progressive fees, refund pool and ToyWork shares (Argon2id)"
+description = "ToyChain: Transaction formats (ToyChain and Ethereum), signatures with chain ID, free quota, progressive fees, refund pool, ToyWork tickets, work lottery, block execution with rule I0"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -14,3 +14,8 @@ workspace = true
 toy-types.workspace = true
 toy-crypto.workspace = true
 toy-state.workspace = true
+
+[dev-dependencies]
+toy-emission.workspace = true
+# Only for reading the official JSON test vectors in tests/vectors/.
+serde_json = { version = "=1.0.154" }

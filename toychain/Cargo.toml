@@ -64,6 +64,14 @@ dbg_macro = "warn"
 todo = "warn"
 unimplemented = "warn"
 
+# Argon2id (ToyWork) is far too slow unoptimized; tests hash thousands of
+# tickets. Only these crates are optimized in test and debug builds.
+[profile.dev.package.argon2]
+opt-level = 3
+
+[profile.dev.package.blake2]
+opt-level = 3
+
 [profile.release]
 # Reproducible, small binaries for Raspberry Pi and Android.
 lto = "thin"
