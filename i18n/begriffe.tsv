@@ -29,3 +29,7 @@ recall_period|Rückholfrist|recall period|Zeit, in der nur der Empfänger einlö
 voucher|Gutschein|voucher|ToyCash-Betrag, der nach festen Regeln von einer Person, einer Gruppe oder jedem eingelöst werden kann
 mint_fee|Prägegebühr|mint fee|Gebühr, um ein erspieltes Item als NFT auf Polygon zu prägen
 gas_pot|POL-Topf|POL pot|Vorrat an POL, der das Gas für das Prägen bezahlt
+toysafe|ToySafe|ToySafe|Eigenständige Schutz- und Prüf-App im ToyVerse. Hat nie Schlüssel, warnt statt zu sperren
+protection_level|Schutzstufe|protection level|Ergebnis des Sicherheits-Checks in ToySafe: wie gut Gerät und Konto geschützt sind
+warning_list|Warnliste|warning list|Öffentliche, signierte Liste bekannter Betrugsadressen und -seiten. Sie warnt, sperrt aber nichts
+test_permission|Prüf-Freigabe|test permission|Signierte Erlaubnis des Eigentümers, sein Gerät, seinen Knoten oder Dienst aktiv zu prüfen

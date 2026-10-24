@@ -1,8 +1,8 @@
 # ToyVerse: das Ökosystem im Überblick
 
-Stand 24.10.2026 · **Konzept für später**, ändert nichts an Phase 1 · Quelle: „ToyVerse: Beschreibung in 20 Seiten“, Entwurf vom 21.10.2026, dazu die Konzeptblätter zu ToyCash und TOYQUEST vom 21.10.2026 · Entscheidungen 122 bis 130 (`../02-entscheidungen.md`)
+Stand 24.10.2026, ergänzt um ToySafe und die Verknüpfungen am selben Tag · **Konzept für später**, ändert nichts an Phase 1 · Quelle: „ToyVerse: Beschreibung in 20 Seiten“, Entwurf vom 21.10.2026, dazu die Konzeptblätter zu ToyCash und TOYQUEST vom 21.10.2026 · Entscheidungen 122 bis 130 (`../02-entscheidungen.md`)
 
-**ToyVerse** ist der Name für alles zusammen: ToyChain, ToyCoin (TOY), TOYPAY, ToyScan, ToyCash, TOYQUEST und ToyPost, samt Wirtschaftskreislauf und Community (Entscheidung 122). Dieses Dokument verbindet die Teile. Die Einzelheiten stehen in den verlinkten Dokumenten.
+**ToyVerse** ist der Name für alles zusammen: ToyChain, ToyCoin (TOY), TOYPAY, ToyScan, ToyCash, TOYQUEST, ToyPost und ToySafe, samt Wirtschaftskreislauf und Community (Entscheidungen 122, 134). Dieses Dokument verbindet die Teile. Die Einzelheiten stehen in den verlinkten Dokumenten.
 
 ## 1. Wichtig: Was bei ToyChain und ToyCoin gilt
 
@@ -35,6 +35,7 @@ flowchart TB
     TP["TOYPAY<br>Wallet, Knoten, Händlerkasse"]
     TS["ToyScan<br>Explorer, Ampel, Dashboard"]
     PO["ToyPost<br>Posteingang, Rechnungen, Mitteilungen"]
+    SF["ToySafe<br>Schutz, Prüfung, Warnliste"]
   end
   subgraph B["Basis (Phase 1)"]
     CH["ToyChain mit TOY<br>256 MB, totaler Fair Launch"]
@@ -50,19 +51,23 @@ flowchart TB
   TQ -->|"ERC-1155, Gebühr"| PG
   PG --> TS
   PO -->|"toychain:-Link"| TP
+  SF -->|"Risiko-Prüfung, Konto-Schutz"| TP
+  TS -->|"Alarm, Ampel"| SF
+  SF -->|"Warnungen"| PO
 ```
 
 | Teil | Aufgabe | Dokument | Stand |
 |---|---|---|---|
-| **ToyChain, TOY** | Konten, Konsens, Emission, Kontingent, Notar für ToyCash | `../01-spezifikation.md` | Phase 1, M3 fertig (20.10.2026) |
+| **ToyChain, TOY** | Konten, Konsens, Emission, Kontingent, Notar für ToyCash | `../01-spezifikation.md`, feste Werte in `../../shared/toyverse.json` | Phase 1, M3 fertig (20.10.2026), M4 als Nächstes |
 | **TOYPAY** | Wallet und Knoten mit Stufen, später ToyCash-Bereich, Gutscheine, Prägen | `../04-toypay-wallet.md` | Konzept, Bau M8/M9 |
 | **ToyScan** | Explorer, Ampel A1 bis A9, später ToyVerse-Ampel B1 bis B4 und Wirtschafts-Dashboard | `../05-toyscan.md` | Konzept, Bau M11 |
 | **ToyCash** | Euro-Stablecoin mit Client-Side Validation, offline, Gutscheine | `12-toycash.md` | für später |
 | **TOYQUEST** | Spiel, Items als NFT auf Polygon, Lernwelt und Zeitreise | `13-toyquest-items-nft.md`, `../../toypay/docs/08_LERNWELT_ZEITREISE.md` | für später |
 | **ToyPost** | Korrespondenz, TOY-Rechnungen, Betrugsschutz, Mitteilungen in 45 Sprachen | `10-toypost-schnittstelle.md`, Repository `Safehaigit/toypost` | gebaut, Schnittstellen als Vorschlag |
-| **Webseite** | Vorstellung für Community und Presse, Simulationen, 45 Sprachen geplant | Repository `Safehaigit/ToyVerse-web` (Nr. 133) | Grundgerüst, Deutsch und Englisch |
+| **ToySafe** | Schutz- und Prüf-App: Sicherheits-Check, Konto-Schutz-Assistent, Adress- und Link-Prüfung, Wächter, Knoten-Prüfung, Prüflabor, Warnliste | `14-toysafe.md` | Konzept (Nr. 134) |
+| **Webseite** | Vorstellung für Community und Presse, Simulationen, 45 Sprachen geplant | Repository `Safehaigit/ToyVerse-web` (Nr. 133) | gebaut, 22 von 45 Sprachen, noch nicht veröffentlicht |
 
-Dokufy gehört nicht zum ToyVerse. ToyPost nutzt nur dieselbe technische Grundlage.
+Dokufy gehört nicht zum ToyVerse. ToyPost nutzt nur dieselbe technische Grundlage. Sprachen, Datenverträge und Abgleich aller Repositories: `15-verknuepfung-und-kompatibilitaet.md`.
 
 ## 3. Wie die Teile zusammenspielen
 
@@ -74,6 +79,7 @@ Dokufy gehört nicht zum ToyVerse. ToyPost nutzt nur dieselbe technische Grundla
 4. Später bezahlt sie im Laden mit ToyCash offline. Der Händler löst vor Ablauf der Rückholfrist ein, die Siegel landen in der nächsten Epochenwurzel auf der ToyChain.
 5. Jeder kann in ToyScan Emission, Ampel und ToyCash-Gesundheit prüfen, ohne ihren Namen oder Betrag zu sehen.
 6. ToyPost schickt ihr eine Rechnung als `toychain:`-Link oder warnt sie vor einer Phishing-Nachricht, die nach ihrer Phrase fragt.
+7. ToySafe zeigt ihr die Schutzstufe ihres Handys und hilft, Tresor-Verzögerung und Notfall-Schlüssel einzurichten. Vor jeder Zahlung an eine neue Adresse warnt TOYPAY mit der Risiko-Prüfung von ToySafe.
 
 **Schnittstellen zwischen den Teilen:**
 
@@ -86,6 +92,10 @@ Dokufy gehört nicht zum ToyVerse. ToyPost nutzt nur dieselbe technische Grundla
 | TOYQUEST → Polygon | Mint-Gutschein, `permit`, Paymaster | `13-toyquest-items-nft.md` |
 | ToyScan → ToyPost | Ampel, Adress-Alarm, später ToyVerse-Ampel | Webhook signiert (Vorschlag) |
 | ToyPost → TOYPAY | `toychain:`-Link, Anmelden mit Adresse | ToyPost hat keine Schlüssel |
+| ToySafe → TOYPAY | Risiko-Prüfung vor dem Signieren, vorbereitete Konto-Schutz-Aktionen | ToySafe hat keine Schlüssel, TOYPAY signiert (`14-toysafe.md`) |
+| ToyScan → ToySafe | Adress-Alarm, Ampeln | nur lesend |
+| ToySafe → ToyPost | Warnungen, Prüfberichte | signiert, Versand nur nach Freigabe |
+| toycoin → alle Repositories | `shared/toyverse.json`, Sprachen, Begriffe, Meilensteine | täglicher Abgleich per Pull Request (`15-…`, Abschnitt 5) |
 
 ## 4. Wirtschaftskreislauf
 
@@ -150,7 +160,7 @@ ToyScan zeigt den Kreislauf als Bild mit echten Zahlen aus Kette und Verträgen:
 
 ## 6. Sicherheit über alle Teile
 
-Schichten von außen nach innen: **Mensch** (Phrase nie weitergeben, Warnungen, die weise Warnerin im Spiel, ToyPost-Betrugsschutz), **Betrieb** (Audits, Fuzzing, reproduzierbare Builds, Bug-Bounty), **Verträge** (kein Admin, Limits, Notschalter nur zum Pausieren), **Konsens** (Stake-Deckel, Kürzung, Checkpoints, Dandelion++), **Kryptografie** (nur geprüfte Verfahren, Krypto-Agilität, ML-DSA als Zusatz).
+Schichten von außen nach innen: **Mensch** (Phrase nie weitergeben, Warnungen, die weise Warnerin im Spiel, ToyPost-Betrugsschutz, ToySafe mit Sicherheits-Check und Warnliste), **Betrieb** (Audits, Fuzzing, reproduzierbare Builds, Bug-Bounty), **Verträge** (kein Admin, Limits, Notschalter nur zum Pausieren), **Konsens** (Stake-Deckel, Kürzung, Checkpoints, Dandelion++), **Kryptografie** (nur geprüfte Verfahren, Krypto-Agilität, ML-DSA als Zusatz).
 
 **Neue Gefahren durch das ToyVerse und Gegenmittel:**
 
@@ -178,6 +188,7 @@ Reihenfolge, keine Termine. Jede Stufe braucht Messungen und Prüfungen.
 | ToyCash | 1 Prototyp mit Test-Euro, 2 Offline-Wallet, 3 zk-Notes, 4 Compliance und Föderation | 1 läuft neben dem Testnet, 2 braucht die Anker-Transaktion, 3 Phase 2 |
 | TOYQUEST | Lernwelt im Demo-Modus jederzeit, echte Stufen ab Testnet. Items auf Polygon unabhängig vom ToyChain-Kern, sobald Nr. 127 entschieden ist | Audit von Mint-Vertrag und Paymaster |
 | ToyPost | gebaut. Neue ToyScan-Daten und ToyCash-Hinweise, sobald es sie gibt | – |
+| ToySafe | Stufe 1 (Check, Warnliste, Devnet-Prüflabor) jederzeit, Wächter ab Testnet, Konto-Schutz-Assistent ab M12 | Nr. 134 (Name und Rolle entschieden, Rest Vorschlag) |
 | Community | Dashboard und Bausteine, sobald Daten und Nutzer da sind | Testnet |
 
 **Schon jetzt ohne Umbau vorgesehen:** ToyChain-Transaktionen haben einen Typ (EIP-2718), damit kommt die Anker-Transaktion ohne Umbau dazu. ToyCash-Notes und alle ToyVerse-Datenformate bekommen von Anfang an ein Versionsfeld und `asset_id`.
@@ -192,3 +203,37 @@ Reihenfolge, keine Termine. Jede Stufe braucht Messungen und Prüfungen.
 6. Community-Fragen aus Abschnitt 5 (Nr. 130).
 7. Marke und Domain für ToyCash und ToyVerse.
 8. Rechtliche Prüfung vor jedem echten Geld, bewusst am Schluss.
+9. ToySafe: Grundsätze, Bausteine und Ort im Repository (`14-toysafe.md`, S1 bis S6).
+10. Vorschläge V1 bis V11 aus Abschnitt 9.
+
+## 9. Anwendungsfälle und Vorschläge zur Verknüpfung (24.10.2026)
+
+Ziel: Jedes Teil funktioniert allein. Zusammen soll jede Nutzung allen etwas bringen, ohne neue Regeln auf der ToyChain und ohne Verfassung oder feste Vorgaben anzutasten.
+
+### 9.1 Anwendungsfälle über mehrere Teile
+
+| Fall | Beteiligte | Nutzen |
+|---|---|---|
+| Sicher bezahlen im Laden | TOYPAY-Kasse, ToySafe-Risiko-Prüfung, ToyChain, ToyPost-Beleg | Händler und Kunde sehen vor dem Signieren dieselbe geprüfte Adresse, der Beleg kommt in der Sprache des Kunden |
+| Lernen, dann mitmachen | TOYQUEST-Lernwelt, TOYPAY-Stufe 0, ToyScan | wer versteht, wie ToyWork funktioniert, schaltet es mit einem Klick ein und sieht seine Lose in ToyScan |
+| Gemeinsam schützen | ToyPost-Betrugsmuster, ToySafe-Warnliste, ToyScan-Alarm, TOYPAY-Warnung | eine gemeldete Falle warnt nach Prüfung alle Wallets, auch fremde |
+| Knoten betreiben | TOYPAY-Stufen, ToySafe-Knoten-Prüfung, ToyScan-Knotenkarte, ToyPost-Mitteilung | gesunde Knoten stärken das Netz, Probleme fallen früh auf |
+| Projekt verfolgen | toycoin `STATUS.md`, Webseite-Roadmap, ToyPost-Mitteilung | ein fertiger Meilenstein erscheint automatisch auf der Webseite und als Nachricht an die Tester |
+| Sicherheitslücke melden | ToySafe-Prüflabor, Bug-Bounty aus der Projekt-Wallet, ToyPost | Funde kommen vertraulich an und werden belohnt |
+| Erbe regeln | ToySafe-Assistent, Konto-Schutz auf der ToyChain, ToyPost-Erinnerung | Guthaben gehen nie verloren, auch nicht im Todesfall |
+
+### 9.2 Vorschläge zur Entscheidung
+
+| Nr. | Vorschlag | Betrifft |
+|---|---|---|
+| V1 | `shared/toyverse.json` ist die **einzige Quelle** für feste Werte. Kein Projekt hält eigene Kopien ohne Vergleichstest | alle |
+| V2 | **Täglicher Abgleich** per Pull Request in Webseite und ToyPost, Zusammenführen von Hand | Webseite, ToyPost |
+| V3 | **Öffentliche, signierte Warnliste** als gemeinsamer Dienst (`14-toysafe.md`, 6.3). ToyPost liefert Muster, ToySafe prüft, TOYPAY und ToyScan zeigen Warnungen. Erweitert Nr. 89 | ToySafe, ToyPost, TOYPAY, ToyScan |
+| V4 | **Risiko-Prüfung vor dem Signieren** als Teil des gemeinsamen Rust-Kerns. TOYPAY nutzt sie immer, die ToySafe-App zeigt Einzelheiten | TOYPAY, ToySafe |
+| V5 | **Signierte Ereignisse** (EIP-191) zwischen ToyScan, ToySafe und ToyPost statt offener Webhooks | ToyScan, ToySafe, ToyPost |
+| V6 | **Ein Benachrichtigungsweg:** ToyScan und ToySafe schicken Hinweise über ToyPost oder lokal, nie über proprietäre Push-Dienste (Nr. 108) | ToyScan, ToySafe, ToyPost |
+| V7 | **Sicherheits-Siegel in TOYQUEST:** wer den Sicherheits-Check besteht oder eine Phishing-Übung löst, bekommt ein Wissens-Siegel (kosmetisch, nie TOY) | TOYQUEST, ToySafe |
+| V8 | **Prüfsiegel für Knoten und Händler** auf der Knotenkarte und im Händlerverzeichnis, freiwillig und jederzeit widerrufbar | ToySafe, ToyScan, Händler (Nr. 130) |
+| V9 | **Devnet in einem Befehl** (Nr. 101) als gemeinsames Prüffeld für ToySafe, TOYQUEST-Demo und ToyPost-Tests | alle |
+| V10 | Präge-Regeln im Godot-Code (`nft_items.gd`) an Nr. 126 anpassen, sobald Nr. 127 entschieden ist (Befund K4 in `15-…`) | TOYQUEST |
+| V11 | ToySafe bekommt **keine eigene Transaktionsart**. Die Kette nutzt nur den schon entschiedenen Konto-Schutz (Nr. 83) | ToyChain |

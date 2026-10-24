@@ -1,6 +1,6 @@
 # Projektstatus ToyChain
 
-Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig** (Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln). Nächster Schritt: **M4** (Blöcke, Konsens, Startphase).
+Stand: 24.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig** (Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln). Nächster Schritt: **M4** (Blöcke, Konsens, Startphase).
 
 ## Überblick Meilensteine
 
@@ -20,6 +20,26 @@ Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig** (Zust
 | M11 | ToyScan und andere Ketten (`toyscan/`) | ⏳ offen |
 | M12 | Konto-Schutz, Zusatz-Transaktionen, atomarer Tausch | ⏳ offen |
 | M13 | Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel | ⏳ offen |
+
+## Verknüpfung im ToyVerse vom 24.10.2026 (kein Meilenstein)
+
+**Anlass:** Alle Projekte des ToyVerse sollen logisch und technisch verknüpft sein und ihren Stand automatisch abgleichen. Neu ist ToySafe, die Schutz- und Prüf-App.
+
+**Gebaut:**
+
+| Was | Wo |
+|---|---|
+| Gemeinsame Datei mit allen festen Werten (Chain-IDs, Dezimalstellen, Obergrenze, Emission, Gebühren, Kontingent, Typ-Bytes, alte Token, Sprachen, Grundregeln) | `shared/toyverse.json` |
+| Test, der die Datei aus den Rust-Konstanten erzeugt und Abweichungen meldet (2 Tests) | `toychain/tests/tests/toyverse_manifest.rs` |
+| 4 neue Begriffe (ToySafe, Schutzstufe, Warnliste, Prüf-Freigabe) | `i18n/begriffe.tsv` |
+| Konzept ToySafe, Bestandsaufnahme mit Befunden K1 bis K8, Vorschläge V1 bis V11 | `docs/spaeter/14-toysafe.md`, `15-verknuepfung-und-kompatibilitaet.md`, `11-toyverse.md` Abschnitt 9 |
+| Entscheidungen 134 (ToySafe) und 135 (Verknüpfung, Vorschläge) | `docs/02-entscheidungen.md` |
+
+**Nicht geändert:** kein Konsens- oder Protokoll-Code, keine neue Transaktionsart, keine neue Bibliothek. M4 bleibt der nächste Meilenstein. Das Godot-Skript `nft_items.gd` rechnet noch mit den alten Präge-Regeln (Befund K4) und wird erst nach Entscheidung 127 angepasst.
+
+**Sicherheits-Update RUSTSEC-2026-0387:** Bei der Prüfung meldete `cargo-deny` eine neue Lücke in `crypto-bigint` 0.7.5 (Rechenzeit nicht immer konstant, über `k256` auch in den Kontoschlüsseln). Angehoben auf **0.7.7** in `Cargo.lock` und `fuzz/Cargo.lock`, ohne Code-Änderung, weiter mit Rust 1.87 als Mindestversion. `cargo vet`: Ausnahme von 0.7.5 auf 0.7.7 umgestellt, ehrlich als „noch nicht durchgesehen“.
+
+**Ergebnisse:** `cargo fmt --check` ✅, `cargo clippy --all-targets -D warnings` ✅, `cargo test` ✅ **207 Tests** (205 bisher, 2 neu), `cargo deny check` ✅, `cargo vet --locked` ✅ (21 geprüft, 65 Ausnahmen). Lokal mit Rust 1.97.0 (stable).
 
 ## Sicherheits-Update vom 24.10.2026 (RUSTSEC-2026-0385)
 
