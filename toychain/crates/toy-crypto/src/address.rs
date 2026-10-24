@@ -62,7 +62,11 @@ fn lower_hex(address: &Address) -> [u8; 40] {
 /// Nibble `i` (0..40) of a 32-byte hash, high nibble first.
 fn hash_nibble(hash: &[u8; 32], i: usize) -> u8 {
     let byte = hash.get(i / 2).copied().unwrap_or(0);
-    if i % 2 == 0 { byte >> 4 } else { byte & 0x0f }
+    if i.is_multiple_of(2) {
+        byte >> 4
+    } else {
+        byte & 0x0f
+    }
 }
 
 /// Writes the address with its EIP-55 checksum, e.g.

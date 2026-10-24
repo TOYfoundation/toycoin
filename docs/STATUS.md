@@ -21,6 +21,22 @@ Stand: 20.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig** (Zust
 | M12 | Konto-Schutz, Zusatz-Transaktionen, atomarer Tausch | ⏳ offen |
 | M13 | Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel | ⏳ offen |
 
+## Sicherheits-Update vom 24.10.2026 (RUSTSEC-2026-0385)
+
+**Anlass:** Nach dem Zusammenführen von M3 schlug `cargo-deny` in der CI fehl. Grund war die Sicherheitsmeldung [RUSTSEC-2026-0385](https://rustsec.org/advisories/RUSTSEC-2026-0385): Die Hilfsbibliothek `ctutils` (RustCrypto) erzeugte Masken und verglich `u128`-Werte vor Version 0.4.4 **nicht in konstanter Zeit**. Solche Zeitunterschiede können bei Kryptografie geheime Werte verraten. `ctutils` kommt nicht direkt ins Projekt, sondern über `k256` → `elliptic-curve` → `crypto-bigint` sowie `digest` und `sec1`, also auch in den Kontoschlüsseln.
+
+**Geändert:**
+
+| Was | Vorher | Nachher |
+|---|---|---|
+| `ctutils` im Workspace (`Cargo.lock`) | 0.4.2 | **0.4.5** |
+| `ctutils` im Fuzzing (`fuzz/Cargo.lock`) | 0.4.3 | **0.4.5** |
+| Mindestversion von Rust (`rust-version`) | 1.85 | **1.87**, weil `ctutils` ab 0.4.3 Rust 1.87 verlangt. Gebaut wird weiter mit 1.97.0 |
+| Code | `i % 2 == 0` | `i.is_multiple_of(2)` an 3 Stellen (1 in `toy-crypto/src/address.rs`, 2 in Tests). Clippy verlangt das ab Mindestversion 1.87, das Verhalten ist gleich |
+| `cargo vet` | Ausnahme für 0.4.2 | Ausnahme für **0.4.5**, ehrlich als „noch nicht durchgesehen“. Für 0.4.5 gab es am 24.10.2026 keinen Prüfbericht einer der importierten Organisationen. Unterschied zu 0.4.2: 12 Dateien, rund 700 Zeilen (`cargo vet diff ctutils 0.4.2 0.4.5`) |
+
+**Ergebnisse:** `cargo fmt --check` ✅, `cargo clippy --all-targets -D warnings` ✅, `cargo test` ✅ **205 Tests** wie nach M3, `cargo deny check` ✅ (advisories, bans, licenses, sources ok), `cargo vet --locked` ✅ (21 geprüft, 65 Ausnahmen). Lokal mit Rust 1.97.0 (stable), weil die Sandbox die festgenagelte Toolchain nicht laden konnte, die Versionen sind gleich.
+
 ## M3: Zustand, Transaktionen, Kontingent, Gebühren, Schutzregeln (20.10.2026)
 
 **Gebaut:**
@@ -284,7 +300,7 @@ toy-cli: node, rpc, wallet, types   ·   tests/: alle
 
 **Festgelegte Werkzeuge und Regeln:**
 
-- `rust-toolchain.toml`: Rust **1.97.0** festgenagelt (reproduzierbare Builds), Edition 2024, Mindestversion 1.85.
+- `rust-toolchain.toml`: Rust **1.97.0** festgenagelt (reproduzierbare Builds), Edition 2024, Mindestversion 1.85, **seit 24.10.2026 1.87** (Abschnitt „Sicherheits-Update vom 24.10.2026“ oben).
 - Workspace-Lints, die die festen Vorgaben aus `CLAUDE.md` technisch absichern:
   - `unsafe_code = forbid` (kein unsicherer Code im Kern).
   - `clippy::float_arithmetic`: Fließkomma-Rechnung ist ein Fehler. Beträge nur als `u128`.
