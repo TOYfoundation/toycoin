@@ -1,6 +1,6 @@
 # TOYQUEST: Items als NFT auf Polygon
 
-Stand 24.10.2026 · **für später** (Spiel-Anbindung, Entscheidung 72), nicht Teil von Phase 1 · Quellen: Konzeptblatt „TOYQUEST: Items als NFT auf Polygon“ vom 21.10.2026 (Abschnitte 1 bis 8), ToyVerse-Beschreibung S. 14 · Entscheidungen 121 und 122 · Lernwelt und Zeitreise: `../../toypay/docs/08_LERNWELT_ZEITREISE.md` · Überblick: `11-toyverse.md`
+Stand 24.10.2026 · **für später** (Spiel-Anbindung, Entscheidung 72), nicht Teil von Phase 1 · Quellen: Konzeptblatt „TOYQUEST: Items als NFT auf Polygon“ vom 21.10.2026 (Abschnitte 1 bis 8), ToyVerse-Beschreibung S. 14 · Entscheidungen 126 und 127 · Lernwelt und Zeitreise: `../../toypay/docs/08_LERNWELT_ZEITREISE.md` · Überblick: `11-toyverse.md`
 
 Dieses Dokument **ersetzt** in `07-toypay-spiel-und-nft.md` die Regeln zu Präge-Gebühr, Gas und Gebühren-Kreislauf (Entscheidungen 23, 24, 26). Die übrigen Präge-Regeln dort gelten weiter, soweit Abschnitt 7 nichts anderes sagt.
 
@@ -35,8 +35,8 @@ Spieler erspielen Items in TOYQUEST und können sie **optional** als NFT auf Pol
 | Gaskosten | Ein Mint verbraucht ungefähr gleich viel Gas, der Gaspreis wird aktuell gemessen | Entschieden |
 | Preis im Gutschein | gilt nur wenige Minuten | Entschieden |
 | Schutz | Mindest- und Höchstgebühr, Begrenzung der Preisänderung je Stunde, Notschalter bei veralteten Preisdaten | Entschieden |
-| **Währung der Gebühr** | siehe 4.1 | **Offen (Nr. 122)** |
-| **Kurs** | Chainlink-Feed für POL. Für die Gebühren-Währung TWAP aus einem Pool oder ein signierter Preis mit festen Grenzen | **Offen (Nr. 122, am 24.10.2026 auf später gelegt)** |
+| **Währung der Gebühr** | siehe 4.1 | **Offen (Nr. 127)** |
+| **Kurs** | Chainlink-Feed für POL. Für die Gebühren-Währung TWAP aus einem Pool oder ein signierter Preis mit festen Grenzen | **Offen (Nr. 127, am 24.10.2026 auf später gelegt)** |
 
 ### 4.1 Offen: Mit welchem Geld wird bezahlt?
 
@@ -110,12 +110,12 @@ Die Entscheidungen 16 bis 35 und 46 gehören zur Spiel-Anbindung (kommt später,
 - **Token:** ERC-1155, feste Höchstzahl je Item im Vertrag, kein Proxy, kein Admin-Prägen.
 - **Zahlung:** `permit` (EIP-2612), also Signatur statt Freigabe-Transaktion.
 - **Gas-Sponsoring:** ERC-4337-Paymaster oder Relayer, gespeist aus dem POL-Topf.
-- **TOYPAY:** prägt über den Polygon-Smart-Account (Nr. 123). Die Spiel-App hält nie Schlüssel (Nr. 32).
+- **TOYPAY:** prägt über den Polygon-Smart-Account (Nr. 128). Die Spiel-App hält nie Schlüssel (Nr. 32).
 - **ToyScan:** Kriterium B3 (Topf) und B4 (Mint-Vertrag), `../05-toyscan.md` Abschnitt 11.
 
 ## 10. Offene Punkte
 
-1. Währung der Gebühr und Kurs (4.1, Nr. 122).
+1. Währung der Gebühr und Kurs (4.1, Nr. 127).
 2. Rahmen des Reglers und Standardwerte (5).
 3. Gibt es einen Pool auf Polygon mit genug Liquidität, oder muss er angelegt werden?
 4. Größe und Art der Kollektion (fest begrenzt oder wachsend).

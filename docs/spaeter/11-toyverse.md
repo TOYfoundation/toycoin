@@ -1,8 +1,8 @@
 # ToyVerse: das Ökosystem im Überblick
 
-Stand 24.10.2026 · **Konzept für später**, ändert nichts an Phase 1 · Quelle: „ToyVerse: Beschreibung in 20 Seiten“, Entwurf vom 21.10.2026, dazu die Konzeptblätter zu ToyCash und TOYQUEST vom 21.10.2026 · Entscheidungen 117 bis 125 (`../02-entscheidungen.md`)
+Stand 24.10.2026 · **Konzept für später**, ändert nichts an Phase 1 · Quelle: „ToyVerse: Beschreibung in 20 Seiten“, Entwurf vom 21.10.2026, dazu die Konzeptblätter zu ToyCash und TOYQUEST vom 21.10.2026 · Entscheidungen 122 bis 130 (`../02-entscheidungen.md`)
 
-**ToyVerse** ist der Name für alles zusammen: ToyChain, ToyCoin (TOY), TOYPAY, ToyScan, ToyCash, TOYQUEST und ToyPost, samt Wirtschaftskreislauf und Community (Entscheidung 117). Dieses Dokument verbindet die Teile. Die Einzelheiten stehen in den verlinkten Dokumenten.
+**ToyVerse** ist der Name für alles zusammen: ToyChain, ToyCoin (TOY), TOYPAY, ToyScan, ToyCash, TOYQUEST und ToyPost, samt Wirtschaftskreislauf und Community (Entscheidung 122). Dieses Dokument verbindet die Teile. Die Einzelheiten stehen in den verlinkten Dokumenten.
 
 ## 1. Wichtig: Was bei ToyChain und ToyCoin gilt
 
@@ -19,7 +19,7 @@ Die 20-Seiten-Beschreibung enthält an einigen Stellen den Stand **vor** der Neu
 | ToyChain-Phasen 1 Kern, 2 Beweise, 3 Privatsphäre, 4 Offline, 5 Bridge und EVM | Phase 1 Testnet (M1 bis M13), Phase 2 Beweise, danach Reihenfolge offen | Spezifikation 15 |
 | Hybrid-Signaturen mit ML-DSA | Post-Quanten-Zusatzschlüssel in M13 | 96 |
 | TOYPAY nur Android, 28 Sprachen | Android, Windows, Linux, Raspberry Pi, **45 Sprachen**, vier Modi | 30, 103, 104 |
-| Passkeys und Social Recovery in TOYPAY | nur für den **Polygon-Smart-Account**. Das ToyChain-Konto bleibt bei Nr. 82 und 83 | 123 |
+| Passkeys und Social Recovery in TOYPAY | nur für den **Polygon-Smart-Account**. Das ToyChain-Konto bleibt bei Nr. 82 und 83 | 128 |
 
 Neu aus der Beschreibung sind dagegen ToyCash, die TOYQUEST-Items mit POL-Topf, Lernwelt und Zeitreise, das Wirtschafts-Dashboard und die Community-Bausteine.
 
@@ -54,7 +54,7 @@ flowchart TB
 
 | Teil | Aufgabe | Dokument | Stand |
 |---|---|---|---|
-| **ToyChain, TOY** | Konten, Konsens, Emission, Kontingent, Notar für ToyCash | `../01-spezifikation.md` | Phase 1, M2 fertig |
+| **ToyChain, TOY** | Konten, Konsens, Emission, Kontingent, Notar für ToyCash | `../01-spezifikation.md` | Phase 1, M3 fertig (20.10.2026) |
 | **TOYPAY** | Wallet und Knoten mit Stufen, später ToyCash-Bereich, Gutscheine, Prägen | `../04-toypay-wallet.md` | Konzept, Bau M8/M9 |
 | **ToyScan** | Explorer, Ampel A1 bis A9, später ToyVerse-Ampel B1 bis B4 und Wirtschafts-Dashboard | `../05-toyscan.md` | Konzept, Bau M11 |
 | **ToyCash** | Euro-Stablecoin mit Client-Side Validation, offline, Gutscheine | `12-toycash.md` | für später |
@@ -79,7 +79,7 @@ Dokufy gehört nicht zum ToyVerse. ToyPost nutzt nur dieselbe technische Grundla
 | Von → nach | Was | Regel |
 |---|---|---|
 | ToyChain → TOYPAY, ToyScan, ToyPost | JSON-RPC (`eth_*`, `toy_*`, ab M7) | nur lesend für ToyScan und ToyPost |
-| ToyCash → ToyChain | Transaktionsart **Anker** (Hash, Zähler, kein Betrag) | Vorschlag Nr. 119, nach M13 |
+| ToyCash → ToyChain | Transaktionsart **Anker** (Hash, Zähler, kein Betrag) | Vorschlag Nr. 124, nach M13 |
 | ToyCash → Polygon | Zähler für Ausgabe und Rücktausch | Summen öffentlich, Einzelbeträge nie |
 | TOYPAY → TOYQUEST | signierter Stufen-Nachweis (EIP-191) plus ToyScan-Daten | nie Schlüssel (Nr. 32) |
 | TOYQUEST → Polygon | Mint-Gutschein, `permit`, Paymaster | `13-toyquest-items-nft.md` |
@@ -107,10 +107,11 @@ flowchart LR
 |---|---|---|
 | Emission | 50 % Konsens, 40 % Arbeit, 10 % Erstattungs-Pool. In der Startphase sinkender Lohn der 21 Start-Validatoren | Spezifikation 9 |
 | Gebühren | 40 % Gebühren-Lotterie, 40 % Erstattungs-Pool, 20 % Vorschlagender | Spezifikation 7.2 |
-| Prägegebühr | mindestens 1× Gaskosten in den Topf, Rest per Regler zwischen Topf und Projekt-Wallet. Kein Burn | Nr. 121 |
-| Überschüsse | anteilig an alle, die geprägt haben, gedeckelt auf die eigene Einzahlung, als Rabatt oder Auszahlung | Nr. 121 |
-| Projekt-Wallet | finanziert Betrieb, Audits, Lernwelt, Bug-Bounties und Community-Ersteller. **Keine Reserve aus der Kette** | Nr. 62, 125 |
-| Händler | Kasse in TOYPAY, stabile Euro-Preise mit ToyCash, Gutscheine und Treue | Nr. 120, 125 |
+| Erstattungs-Pool | behält höchstens 30 Epochen der größtmöglichen Erstattung, der Überschuss geht in die Arbeits-Lotterie. Gebühr mit Faktor bis 1.024, ein ToyWork-Los macht eine Transaktion gebührenfrei | Nr. 117, 119, 120 (M3) |
+| Prägegebühr | mindestens 1× Gaskosten in den Topf, Rest per Regler zwischen Topf und Projekt-Wallet. Kein Burn | Nr. 126 |
+| Überschüsse | anteilig an alle, die geprägt haben, gedeckelt auf die eigene Einzahlung, als Rabatt oder Auszahlung | Nr. 126 |
+| Projekt-Wallet | finanziert Betrieb, Audits, Lernwelt, Bug-Bounties und Community-Ersteller. **Keine Reserve aus der Kette** | Nr. 62, 130 |
+| Händler | Kasse in TOYPAY, stabile Euro-Preise mit ToyCash, Gutscheine und Treue | Nr. 125, 130 |
 
 **Was es nicht gibt:** keine Reserve, kein Premint, kein Verbrennen auf der ToyChain (Nr. 74), keine Renditeversprechen.
 
@@ -174,7 +175,7 @@ Reihenfolge, keine Termine. Jede Stufe braucht Messungen und Prüfungen.
 | ToyChain | Phase 1 Testnet (M1 bis M13), dann Phase 2 Beweise, danach Reihenfolge offen | – |
 | ToyScan | Bau mit M11, ToyVerse-Ampel und Dashboard danach | M11 |
 | ToyCash | 1 Prototyp mit Test-Euro, 2 Offline-Wallet, 3 zk-Notes, 4 Compliance und Föderation | 1 läuft neben dem Testnet, 2 braucht die Anker-Transaktion, 3 Phase 2 |
-| TOYQUEST | Lernwelt im Demo-Modus jederzeit, echte Stufen ab Testnet. Items auf Polygon unabhängig vom ToyChain-Kern, sobald Nr. 122 entschieden ist | Audit von Mint-Vertrag und Paymaster |
+| TOYQUEST | Lernwelt im Demo-Modus jederzeit, echte Stufen ab Testnet. Items auf Polygon unabhängig vom ToyChain-Kern, sobald Nr. 127 entschieden ist | Audit von Mint-Vertrag und Paymaster |
 | ToyPost | gebaut. Neue ToyScan-Daten und ToyCash-Hinweise, sobald es sie gibt | – |
 | Community | Dashboard und Bausteine, sobald Daten und Nutzer da sind | Testnet |
 
@@ -182,11 +183,11 @@ Reihenfolge, keine Termine. Jede Stufe braucht Messungen und Prüfungen.
 
 ## 8. Offene Punkte
 
-1. Währung und Kurs der Prägegebühr (Nr. 122).
-2. Anker-Transaktion bestätigen und einplanen (Nr. 119).
-3. Stufenwerte des Offline-Rahmens, Fristen der Rückholung (Nr. 120).
-4. Regler-Rahmen, Pool, Kollektion, Überschuss-Regeln für TOYQUEST (Nr. 121).
-5. Orte, NPC-Rollen und Maschinen-Zuordnung im ersten Release (Nr. 124).
-6. Community-Fragen aus Abschnitt 5 (Nr. 125).
+1. Währung und Kurs der Prägegebühr (Nr. 127).
+2. Anker-Transaktion bestätigen und einplanen (Nr. 124).
+3. Stufenwerte des Offline-Rahmens, Fristen der Rückholung (Nr. 125).
+4. Regler-Rahmen, Pool, Kollektion, Überschuss-Regeln für TOYQUEST (Nr. 126).
+5. Orte, NPC-Rollen und Maschinen-Zuordnung im ersten Release (Nr. 129).
+6. Community-Fragen aus Abschnitt 5 (Nr. 130).
 7. Marke und Domain für ToyCash und ToyVerse.
 8. Rechtliche Prüfung vor jedem echten Geld, bewusst am Schluss.

@@ -156,7 +156,7 @@ JSON, Beträge als Text in kleinsten Einheiten und zusätzlich formatiert, jede 
 - Ein Block wird vor der Endgültigkeit ersetzt: die Ampel ändert sich nicht.
 - Rust-Rechner und Prüfskript kommen bei denselben Rohdaten zum selben Ergebnis.
 
-## 11. Später: ToyVerse-Ampel und Wirtschafts-Dashboard (Entscheidungen 117 bis 121)
+## 11. Später: ToyVerse-Ampel und Wirtschafts-Dashboard (Entscheidungen 122 bis 126)
 
 Nicht Teil von M11. Kommt, sobald ToyCash oder TOYQUEST-Items laufen. Überblick: `spaeter/11-toyverse.md`.
 

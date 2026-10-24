@@ -330,8 +330,7 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 114):
 | Dokument | Stand |
 |---|---|
 | `01-spezifikation.md` | v0.3, schlank, mit Verfassung (Abschnitt 13) |
-| `02-entscheidungen.md` | Nr. 1 bis 125, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt. Nr. 117 bis 125: Ergänzung ToyVerse (für später) |
-| `02-entscheidungen.md` | Nr. 1 bis 121, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt |
+| `02-entscheidungen.md` | Nr. 1 bis 130, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt. Nr. 117 bis 121: Festlegungen aus M3. Nr. 122 bis 130: Ergänzung ToyVerse (für später) |
 | `03-bauplan-phase1.md` | M1 bis M13 |
 | `whitepaper/` | Whitepaper Entwurf 0.4 (20.10.2026, Stand nach M3) und Kurzanleitung für Nutzer |
 | `04-toypay-wallet.md` | v0.1: Clients, Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
@@ -347,5 +346,5 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 114):
 - Bestätigt am 18.10.2026: Nr. 67 (drei Ebenen), 68 (NFT-Prägen später), 70 (Start-Validatoren mit Lohn), 77 (MPL-2.0 für UniFFI). Schutz in der Startphase: Nr. 78 (nur Neue lösen die Übergabe aus, Lohn sinkt über 180 Epochen auf 0, Lohn 365 Epochen gebunden).
 - Formel für m festgelegt (Nr. 81, Spezifikation 9.1, Simulation in `docs/anhang/m-simulation.py`).
 - Ab M1: Lizenzen, Sicherheitsmeldungen und Herkunft der fremden Bibliotheken automatisch prüfen (`cargo-deny`, `cargo-vet`). Erlaubt sind Lizenzen, die zu MIT passen (MIT, Apache-2.0, BSD, ISC, CC0, Zlib, Unicode). Dazu MPL-2.0 für unverändert genutzte Bibliotheken (Nr. 77) und SIL Open Font License 1.1 für Schriften (Nr. 105).
-- Aus dem Prüfbericht: P5, P6 (M5), P9 und Höchstwert der progressiven Gebühr (M3).
-- ToyVerse (später, Stand 24.10.2026): Währung und Kurs der Prägegebühr (Nr. 122), Anker-Transaktion nach M13 (Nr. 119), Stufenwerte des ToyCash-Offline-Rahmens. Liste in `spaeter/11-toyverse.md`, Abschnitt 8.
+- Aus dem Prüfbericht: P5, P6 (M5). P9 und der Höchstwert der progressiven Gebühr sind seit 20.10.2026 entschieden (Nr. 117, 120).
+- ToyVerse (später, Stand 24.10.2026): Währung und Kurs der Prägegebühr (Nr. 127), Anker-Transaktion nach M13 (Nr. 124), Stufenwerte des ToyCash-Offline-Rahmens. Liste in `spaeter/11-toyverse.md`, Abschnitt 8.

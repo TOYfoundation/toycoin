@@ -1,6 +1,6 @@
 # ToyCash: unsichtbarer Euro-Coin im ToyVerse
 
-Stand 24.10.2026 · **für später**, nicht Teil von Phase 1 · Quellen: ToyVerse-Beschreibung vom 21.10.2026 (S. 12 und 13), Konzeptblatt „ToyCash (bisher Invisible Coin): Methodik und Erweiterungen“ vom 21.10.2026 · Entscheidungen 118 bis 120 (`../02-entscheidungen.md`) · Überblick: `11-toyverse.md`
+Stand 24.10.2026 · **für später**, nicht Teil von Phase 1 · Quellen: ToyVerse-Beschreibung vom 21.10.2026 (S. 12 und 13), Konzeptblatt „ToyCash (bisher Invisible Coin): Methodik und Erweiterungen“ vom 21.10.2026 · Entscheidungen 123 bis 125 (`../02-entscheidungen.md`) · Überblick: `11-toyverse.md`
 
 Kennzeichnung: **Entschieden** heißt, der Projektinhaber hat es festgelegt. **Vorschlag** heißt, es ist noch zu bestätigen. **Offen** heißt, es ist noch zu klären.
 
@@ -28,14 +28,14 @@ Die Konzeptblätter stammen teils aus der Zeit vor der Neuausrichtung. Drei Stel
 ### 3.1 `asset_id` gehört in ToyCash, nicht in die ToyChain
 
 - **Problem:** „Zweites Asset auf der ToyChain, Feld `asset_id` (TOY = 0)“ widerspricht Entscheidung 36: Auf der ToyChain gibt es für immer nur TOY, keine Token.
-- **Lösung (Nr. 118):** Das Feld `asset_id` steht im **Datenformat der ToyCash-Notes** (Euro = 1, Dollar später = 2). Die ToyChain kennt kein zweites Asset. Sie bekommt nur eine fest eingebaute Transaktionsart **Anker** (3.2), die keinen Betrag trägt.
+- **Lösung (Nr. 123):** Das Feld `asset_id` steht im **Datenformat der ToyCash-Notes** (Euro = 1, Dollar später = 2). Die ToyChain kennt kein zweites Asset. Sie bekommt nur eine fest eingebaute Transaktionsart **Anker** (3.2), die keinen Betrag trägt.
 - **Folge:** Der Wunsch „Dollar später, ohne Umbau“ bleibt erfüllt. ToyChain-Transaktionen haben bereits einen Typ nach EIP-2718 (Entscheidung 106), damit sind spätere Arten ohne Umbau möglich.
 - **Folge für die Reihenfolge:** ToyCash braucht den abgeschirmten Pool der ToyChain **nicht**. Die Privatsphäre liegt in den Notes außerhalb der Kette. Der Prototyp kann deshalb schon neben dem ToyChain-Testnet laufen (5).
 
 ### 3.2 Siegel und das 256-MB-Budget
 
 - **Problem:** Würde die ToyChain jedes geschlossene Siegel einzeln speichern, wüchse diese Liste ohne Ende und sprengte das 256-MB-Budget.
-- **Lösung (Nr. 119, Vorschlag):** Die Liste der geschlossenen Siegel führt der **Emittent** (später die Guardians). Die ToyChain speichert je Epoche nur eine **Epochenwurzel** dieser Liste (RGB++-Prinzip, Konzeptblatt 5.1):
+- **Lösung (Nr. 124, Vorschlag):** Die Liste der geschlossenen Siegel führt der **Emittent** (später die Guardians). Die ToyChain speichert je Epoche nur eine **Epochenwurzel** dieser Liste (RGB++-Prinzip, Konzeptblatt 5.1):
   - Transaktionsart **Anker**: Absender (Emittent), Kennung des Dienstes, 32-Byte-Merkle-Wurzel, laufender Zähler, Anzahl neuer Siegel. Kein Betrag, kein Name.
   - Anker liegen nur im Block-Fenster. Im Zustand bleibt je Dienst die letzte Wurzel mit Zähler, also wenige Byte. Ältere Wurzeln gehen mit der Historie in den rekursiven Beweis (Phase 2).
   - Ein Anker kostet wie jede Transaktion Kontingent oder Gebühr. Spam ist so begrenzt wie überall.
@@ -45,7 +45,7 @@ Die Konzeptblätter stammen teils aus der Zeit vor der Neuausrichtung. Drei Stel
 ### 3.3 Offline-Rahmen als Kaution
 
 - **Problem:** „Der Geschädigte wird sofort aus dem Offline-Rahmen entschädigt“ geht nur, wenn hinter dem Rahmen echtes, gesperrtes Geld steht.
-- **Lösung (Nr. 120):** Der Offline-Rahmen ist eine **Offline-Kaution**. Beim Freischalten sperrt der Emittent Notes des Nutzers in Höhe des Rahmens und bestätigt das in einem Offline-Zertifikat, gebunden an den Geräteschlüssel und mit Ablaufdatum. Offline darf das Gerät höchstens den Rahmen ausgeben.
+- **Lösung (Nr. 125):** Der Offline-Rahmen ist eine **Offline-Kaution**. Beim Freischalten sperrt der Emittent Notes des Nutzers in Höhe des Rahmens und bestätigt das in einem Offline-Zertifikat, gebunden an den Geräteschlüssel und mit Ablaufdatum. Offline darf das Gerät höchstens den Rahmen ausgeben.
 - **Folge:** Wer offline doppelt ausgibt, kann höchstens den Rahmen erschleichen und verliert genau diese Kaution an die Geschädigten. Betrug lohnt sich nicht, ehrliche Empfänger verlieren nichts.
 - Die Kaution bleibt Eigentum des Nutzers. Er bekommt sie zurück, wenn er den Rahmen senkt oder das Zertifikat abläuft und online alles abgeglichen ist.
 
@@ -110,7 +110,7 @@ Ein Gutschein ist ein Siegel, das kontrolliert mehrfach geöffnet werden darf. D
 | Folding-Beweise | kleine, konstante Besitzbeweise auch auf Handys | Stufe 3, frühe Forschung, auf alten Android-Geräten messen |
 | Privacy Pools | Beweis, zu einer geprüften Menge zu gehören, ohne Identität | Stufe 4, Vertrauensfrage bei der Pflege der Menge |
 | Post-Quanten-Hybrid | ML-DSA-Signaturen in der App, nicht auf der Kette | Stufe 3 |
-| Account Abstraction (Polygon) | Paymaster, Gas in Stablecoin | nur Polygon-Seite (Nr. 123) |
+| Account Abstraction (Polygon) | Paymaster, Gas in Stablecoin | nur Polygon-Seite (Nr. 128) |
 
 Die Quellenliste steht im Konzeptblatt vom 21.10.2026. Vor Entscheidungen sind Primärquellen zu prüfen.
 

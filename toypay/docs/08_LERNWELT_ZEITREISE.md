@@ -1,6 +1,6 @@
 # TOYQUEST: Lernwelt und Zeitreise
 
-Stand 24.10.2026 · **für später** (Spiel-Anbindung, Entscheidung 72) · Quellen: Konzeptblatt „TOYQUEST: Items als NFT auf Polygon“ vom 21.10.2026 (Abschnitte 9 und 10), ToyVerse-Beschreibung S. 15 · Entscheidung 124 (`../../docs/02-entscheidungen.md`) · Baut auf `04_AENDERUNGEN_v7_Erfindungen.md` (50 Maschinen, 11 Lehrstätten) auf, **ergänzt sie und überschreibt nichts** · Überblick: `../../docs/spaeter/11-toyverse.md`
+Stand 24.10.2026 · **für später** (Spiel-Anbindung, Entscheidung 72) · Quellen: Konzeptblatt „TOYQUEST: Items als NFT auf Polygon“ vom 21.10.2026 (Abschnitte 9 und 10), ToyVerse-Beschreibung S. 15 · Entscheidung 129 (`../../docs/02-entscheidungen.md`) · Baut auf `04_AENDERUNGEN_v7_Erfindungen.md` (50 Maschinen, 11 Lehrstätten) auf, **ergänzt sie und überschreibt nichts** · Überblick: `../../docs/spaeter/11-toyverse.md`
 
 ## 1. Ziel
 
@@ -81,7 +81,7 @@ Die Nummern und Lehrstätten stammen unverändert aus `04_AENDERUNGEN_v7_Erfindu
 | 30 | Kran | Hafen | 1 | Arbeit hebt die Last: ToyWork senkt die Gebühr bis auf null |
 | 31 | Tretrad-Hafenkran | Hafen | 1 | Wer länger läuft, hebt mehr: mehr Lose, Chance wächst mit der Arbeit |
 | 32 | Onager | Arsenal | 1 | Der Winkel wird nachgestellt: Die Schwierigkeit der Lose passt sich an |
-| 34 | Trebuchet | Arsenal | 1 | Mehr Gegengewicht für mehr Wurf: Gebühr verdoppelt sich je 10 Transaktionen über dem Kontingent |
+| 34 | Trebuchet | Arsenal | 1 | Mehr Gegengewicht für mehr Wurf: Der Gebühren-Faktor verdoppelt sich je 10 weiteren Transaktionen im selben Block, höchstens 1.024-fach (Nr. 117) |
 | 35 | Rammbock | Arsenal | 1 | Ein Angriff auf das Tor kostet Kraft: Spam wird teuer |
 | 36 | Belagerungsturm | Arsenal | 1 | Ein Turm allein nimmt keine Stadt: Stake-Deckel gegen Übermacht |
 | 33 | Balliste | Arsenal | 1 | Gespannte Kraft bleibt gebunden: Stake und Lösefrist |
