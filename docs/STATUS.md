@@ -346,7 +346,7 @@ Das Projekt ist auf den Kern reduziert (Entscheidungen 61 bis 114):
 | Dokument | Stand |
 |---|---|
 | `01-spezifikation.md` | v0.3, schlank, mit Verfassung (Abschnitt 13) |
-| `02-entscheidungen.md` | Nr. 1 bis 130, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt. Nr. 117 bis 121: Festlegungen aus M3. Nr. 122 bis 130: Ergänzung ToyVerse (für später) |
+| `02-entscheidungen.md` | Nr. 1 bis 133, Abschnitt „Neuausrichtung“ sagt, was gilt, später kommt oder entfällt. Nr. 117 bis 121: Festlegungen aus M3. Nr. 122 bis 133: Ergänzung ToyVerse und Webseite (für später) |
 | `03-bauplan-phase1.md` | M1 bis M13 |
 | `whitepaper/` | Whitepaper Entwurf 0.4 (20.10.2026, Stand nach M3) und Kurzanleitung für Nutzer |
 | `04-toypay-wallet.md` | v0.1: Clients, Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |

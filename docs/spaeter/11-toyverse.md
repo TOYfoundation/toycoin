@@ -60,6 +60,7 @@ flowchart TB
 | **ToyCash** | Euro-Stablecoin mit Client-Side Validation, offline, Gutscheine | `12-toycash.md` | für später |
 | **TOYQUEST** | Spiel, Items als NFT auf Polygon, Lernwelt und Zeitreise | `13-toyquest-items-nft.md`, `../../toypay/docs/08_LERNWELT_ZEITREISE.md` | für später |
 | **ToyPost** | Korrespondenz, TOY-Rechnungen, Betrugsschutz, Mitteilungen in 45 Sprachen | `10-toypost-schnittstelle.md`, Repository `Safehaigit/toypost` | gebaut, Schnittstellen als Vorschlag |
+| **Webseite** | Vorstellung für Community und Presse, Simulationen, 45 Sprachen geplant | Repository `Safehaigit/ToyVerse-web` (Nr. 133) | Grundgerüst, Deutsch und Englisch |
 
 Dokufy gehört nicht zum ToyVerse. ToyPost nutzt nur dieselbe technische Grundlage.
 
