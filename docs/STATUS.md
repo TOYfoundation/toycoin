@@ -1,6 +1,6 @@
 # Projektstatus ToyChain
 
-Stand: 24.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig** (Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln). Nächster Schritt: **M4** (Blöcke, Konsens, Startphase).
+Stand: 25.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig**, Spezifikation auf **Tokenomics v0.4** umgestellt (Entscheidungen 136 bis 152). Nächster Schritt: **M3b** (Tokenomics v0.4 im Code), danach **M4** (Blöcke, Konsens, Startphase).
 
 ## Überblick Meilensteine
 
@@ -10,7 +10,8 @@ Stand: 24.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig** (Zust
 | M1 | Grundtypen und Emission, Genesis ohne Guthaben (`toy-types`, `toy-emission`) | ✅ fertig (18.10.2026) |
 | M2 | Kryptografie und Adressen (`toy-crypto`) | ✅ fertig (20.10.2026), VRF und Chain-IDs entschieden (Nr. 115, 116) |
 | M3 | Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln (`toy-state`, `toy-tx`) | ✅ fertig (20.10.2026), Entscheidungen 117 bis 121 |
-| M4 | Blöcke, Konsens, Startphase (`toy-consensus`) | ⏳ offen, nächster Schritt |
+| M3b | Tokenomics v0.4 im Code: K-Tabelle, Aufteilung, Belohnungs-Zähler, Stufen 1 bis 7, Kontingent 21 bis 49, Arbeits-Lotterie mit Jackpots (`toy-emission`, `toy-state`, `toy-tx`) | ⏳ offen, nächster Schritt |
+| M4 | Blöcke, Konsens, Startphase (`toy-consensus`) | ⏳ offen |
 | M5 | Speicher und 256-MB-Budget (`toy-node`) | ⏳ offen |
 | M6 | Netzwerk (`toy-node`) | ⏳ offen |
 | M7 | JSON-RPC und `toy_`-Methoden (`toy-rpc`) | ⏳ offen |
@@ -20,6 +21,18 @@ Stand: 24.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig** (Zust
 | M11 | ToyScan und andere Ketten (`toyscan/`) | ⏳ offen |
 | M12 | Konto-Schutz, Zusatz-Transaktionen, atomarer Tausch | ⏳ offen |
 | M13 | Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel | ⏳ offen |
+
+## Tokenomics v0.4 vom 25.10.2026 (kein Meilenstein, nur Dokumente)
+
+**Anlass:** Prüfbericht 3 (`12-pruefbericht-tokenomics.md`) fand drei kritische Punkte: Die Übergabe aus der Startphase war rechnerisch unmöglich, der Grundbetrag je Kopf lud zum Aufteilen ein, und Stufe 3 bekam keinen Lohn für mehr Aufwand. Die Varianten-Rechnung (`13-tokenomics-v04-entwurf.md`, Skripte in `docs/anhang/v04/`) hat 15 Kurven, 6 Markt-Szenarien, 4 Übergabe-Regeln, 5 Größen der Start-Gruppe, 2 Stufensysteme, Kontingente und 7 Lotterie-Varianten mit Jackpots verglichen. Der Projektinhaber hat alles Empfohlene übernommen.
+
+**Geändert:** Spezifikation v0.4 (Abschnitte 1, 2, 4, 5.1, 5.1a, 5.3, 6.2, 7, 9, 10, 12, 13, 14, 16), Entscheidungen 136 bis 152 (ältere Einträge mit Verweis markiert), Bauplan (neuer Meilenstein M3b, M4 angepasst), `CLAUDE.md` (feste Vorgaben), Wallet- und ToyScan-Konzept.
+
+**Kernpunkte:** Gezeiten-Kurve mit K-Tabelle (Verfassung Punkt 3 geändert, vor dem Mainnet), Staker ab Tag 1, 64 Start-Validatoren mit gesperrtem Lohn und gleitender Übergabe, Stufen 1 / 5 / 10 / 25 / 50 / 75 / 100 TOY, Komitee mit Stimmgewicht nach Stake, Kontingent 21 bis 49 mit Wasserstand, Arbeits-Lotterie mit zufälliger Gewinnzahl, Glücksstufen und den Jackpots Funke, Welle und Gezeiten.
+
+**Nicht geändert:** kein Code, keine Konstanten, `shared/toyverse.json` bleibt bis M3b auf v0.3 (Stufen 10 / 100 / 1.000 TOY, k₀ = 0,0505 %). Die Webseite und ToyPost übernehmen die neuen Werte erst mit M3b über den täglichen Abgleich.
+
+**Offen:** rechtliche Prüfung der Jackpots, neue Begriffe in `i18n/begriffe.tsv` (Jackpot, Funke, Welle, Gezeiten, Sparer, Helfer, Beweis-Knoten, Ersatz-Validator, Vorkasse-Kontingent) mit Übersetzungen in 45 Sprachen.
 
 ## Verknüpfung im ToyVerse vom 24.10.2026 (kein Meilenstein)
 
