@@ -42,7 +42,7 @@ Der Knoten liefert über `toy_`-Methoden (M7). Beträge kommen als **Dezimalzahl
 
 | Methode | Inhalt |
 |---|---|
-| `toy_getSupply` | Obergrenze, gemintet, Summe aller Guthaben, Aktivierungs-Pfänder, Erstattungs-Pool, Lotterie-Töpfe, gesamter Stake |
+| `toy_getSupply` | Obergrenze, gemintet, Summe aller Guthaben, Aktivierungs-Pfänder, Erstattungs-Pool, Lotterie- und Jackpot-Töpfe, noch nicht gutgeschriebene Staking-Belohnungen, gesamter Stake |
 | `toy_getEpoch` | Nummer, erster und letzter Block mit Zeitstempel, Faktor m mit Anteilen, Emission, Restmenge, Aufteilung |
 | `toy_getBootstrap` | Startphase aktiv ja/nein, Start-Validatoren, Fortschritt zur Übergabe (Spezifikation 5.3) |
 | `toy_getValidators` | Validatoren, Stake, Verfügbarkeit, Stufen-Zähler |
@@ -72,7 +72,7 @@ Der Knoten liefert über `toy_`-Methoden (M7). Beträge kommen als **Dezimalzahl
 | **A4** | Epochen und Zeit | jede Epoche mindestens 1.440 Blöcke und mindestens 86.400 Sekunden, Zeitstempel steigen um mindestens 10 Sekunden | Zeitstempel weichen dauerhaft mehr als 5 Sekunden von unabhängigen Zeitquellen ab | Epoche zu kurz |
 | **A5** | Verfassung | `toy_getConstitution` liefert den veröffentlichten Hash, alle Parameter im erlaubten Bereich | — | verletzt, dazu große rote Lampe |
 | **A6** | Konsens-Gesundheit | Blöcke werden endgültig, Komitee vollständig, Reihenfolge im Block korrekt, gemeldete Transaktionen aufgenommen (Spezifikation 5.1a) | eine Adresse hält mehr als 1/10 des gebundenen Stakes (vor dem Deckel), die größten 3 zusammen mehr als 1/3, weniger als 21 aktive Validatoren nach der Startphase, Finalität stockt | ein Validator mit mehr als 1/3 des wirksamen Stakes |
-| **A7** | Startphase | Lohn zu genau gleichen Teilen, sinkt nach Tagen Planzeit (nach 180 Tagen 0), hält den Deckel ein, ist 365 Epochen gebunden. Jede Übergabe-Bedingung wird einzeln angezeigt. Übergabe nach den Regeln aus Spezifikation 5.3. Hinweis: Ob „neue“ Validatoren wirklich andere Personen sind, kann ToyScan nicht beweisen, nur Auffälligkeiten melden. Einnahmen jedes Start-Validators öffentlich | Startphase dauert länger als 365 Epochen, oder Start-Validatoren halten zusammen mehr als 1/3 des gebundenen Stakes | ungleiche Verteilung, Lohn über dem Plan, ungebundener Lohn oder Übergabe durch Stake von Start-Validatoren |
+| **A7** | Startphase | Lohn zu genau gleichen Teilen mal Verfügbarkeit, sinkt nach Tagen Planzeit (nach 365 Tagen 0), hält den Deckel ein, ist 365 Epochen als Zeitschloss gesperrt und gibt kein Stimmgewicht. `V`, Ziel `T(t)`, Stimmgewicht `G` der Start-Gruppe und die Zahl neuer Validatoren werden laufend angezeigt. Übergabe nach den Regeln aus Spezifikation 5.3. Hinweis: Ob „neue“ Validatoren wirklich andere Personen sind, kann ToyScan nicht beweisen, nur Auffälligkeiten melden. Einnahmen jedes Start-Validators öffentlich | Sonderrolle dauert länger als 365 Epochen, oder der gebundene Anteil aller TOY liegt unter 10 % | ungleiche Verteilung, Lohn über dem Plan, ungesperrter Lohn, Lohn mit Stimmgewicht oder Übergabe durch Stake von Start-Validatoren |
 | **A8** | Schutzregeln | jede Sperre hat einen gültigen Beweis und eine Dauer nach Spezifikation Abschnitt 8. Kein Guthaben wurde eingefroren | Muster-Warnungen (Abschnitt 5) | Sperre ohne Beweis, falsche Dauer oder Zugriff auf Guthaben |
 | **A9** | Datenlage | beide Quellen einig, ToyChain-Daten jünger als 10 Minuten, andere Ketten jünger als 30 Minuten | Quellen uneinig oder Daten veraltet | — |
 
@@ -110,7 +110,7 @@ Jede Warnung nennt die Regel, die Zahlen und die betroffenen Adressen. Die Regel
 |---|---|
 | **Start** | Gesamtampel, Obergrenze, gemintet, Epoche, m, Emission dieser Epoche, Ist im Vergleich zum Plan, Stand der Startphase |
 | **Blöcke, Transaktionen, Adressen** | Suche, jede Transaktionsart verständlich beschrieben, Adressen mit anderen Ketten |
-| **Epochen** | Emission, Anteile von m, Aufteilung, Lotterie-Gewinner |
+| **Epochen** | Emission mit Stand in der K-Tabelle und Gezeiten-Phase, Anteile von m, Aufteilung, Lotterie-Gewinner, Jackpot-Stände und jede Ziehung mit allen Eingaben zum Nachrechnen |
 | **Erstattungs-Pool** | Stand, Zuflüsse (Emission, Gebühren, Kürzungen, Spenden), Abflüsse für kostenlose Transaktionen, Liste der Spenden |
 | **Teilnehmer** | Anzahl je Stufe, Validatoren, Stake-Verteilung, Verfügbarkeit |
 | **Validator-Bewertung** | je Validator: Verfügbarkeit, verpasste Signaturen, Strafen, Anteil für den Validator, delegierter Stake. Hilft beim Delegieren (Entscheidung 100) |
@@ -139,7 +139,7 @@ JSON, Beträge als Text in kleinsten Einheiten und zusätzlich formatiert, jede 
 | `/api/v1/daten` | offene Daten: tägliche Downloads aller Blöcke, Epochen und Kennzahlen für Forschung und Presse |
 | `/api/v1/supply/circulating.txt` | eine Zahl für Listing-Seiten |
 
-**Umlauf** = gemintet − gebundener Stake − Aktivierungs-Pfänder − Erstattungs-Pool − Lotterie-Töpfe. Der gesamte Bestand (gemintet) wird zusätzlich angezeigt. Auf ToyChain wird nie TOY verbrannt.
+**Umlauf** = gemintet − gebundener Stake − Aktivierungs-Pfänder − Erstattungs-Pool − Lotterie- und Jackpot-Töpfe, noch nicht gutgeschriebene Staking-Belohnungen. Der gesamte Bestand (gemintet) wird zusätzlich angezeigt. Auf ToyChain wird nie TOY verbrannt.
 
 ## 9. Betrieb
 

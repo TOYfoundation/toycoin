@@ -24,11 +24,16 @@ Die Stufen sind in der Spezifikation (Abschnitt 4) festgelegt. In der App sieht 
 | Stufe | Anzeige in der App | Typisches Gerät |
 |---|---|---|
 | 0 · Leicht | „Mitmachen ohne Guthaben“ | altes Handy, Tablet |
-| 1 · Konto | „Senden mit freiem Kontingent“ | jedes Gerät mit aktiviertem Konto (0,1 TOY Aktivierungs-Pfand) |
-| 2 · Attestierer | „Mitsignieren“, ab 10 TOY Stake | Handy am Ladegerät, PC |
-| 3 · Voll | „Voll-Knoten“, ab 100 TOY Stake | PC, Raspberry Pi 4/5 mit SSD |
-| 4 · Validator | „Validator“, ab 1.000 TOY Stake | ständig laufender PC, Pi oder Server |
+| Konto | „Senden mit freiem Kontingent“ (21 bis 49 je Tag) | jedes Gerät mit aktiviertem Konto (0,1 TOY Aktivierungs-Pfand) |
+| 1 · Sparer | „TOY arbeiten lassen“, ab 1 TOY Stake | jedes Gerät, auch wenn es oft aus ist |
+| 2 · Helfer | „Helfen“, ab 5 TOY Stake | Handy am Ladegerät |
+| 3 · Attestierer | „Mitsignieren“, ab 10 TOY Stake | Handy am Ladegerät, PC |
+| 4 · Voll-Knoten | „Voll-Knoten“, ab 25 TOY Stake | PC, Raspberry Pi 4/5 mit SSD |
+| 5 · Beweis-Knoten | „Beweise liefern“, ab 50 TOY Stake | PC, Raspberry Pi 5, kleiner Server |
+| 6 · Ersatz-Validator | „Ersatzbank“, ab 75 TOY Stake | ständig laufender PC, Pi oder Server |
+| 7 · Validator | „Validator“, ab 100 TOY Stake | ständig laufender PC, Pi oder Server |
 
+- **Standard „TOY arbeiten lassen“:** Wer TOY hat und nichts einstellt, bekommt den Vorschlag, sie zu binden oder an einen Validator zu delegieren (Spezifikation 4 und 7.4). Ein hoher gebundener Anteil macht die Kette sicher.
 - Beim ersten Start misst die App kurz das Gerät (Speicher, Kerne, Akku, Netz) und **schlägt eine Stufe vor**. Der Nutzer entscheidet und kann jederzeit wechseln.
 - Höhere Stufen sind nur wählbar, wenn das Gerät sie schafft. Eine Validator-Rolle auf einem Handy mit 1 GB RAM bietet die App gar nicht an.
 - Die App zeigt offen, was jede Stufe bringt, was sie kostet (Strom, Daten, Speicher) und welche Sperrzeiten bei Verstößen drohen (Spezifikation Abschnitt 8).
@@ -51,7 +56,7 @@ Die App passt ihren Aufwand **automatisch** an. Der Nutzer wählt nur die Obergr
 - Mobiles Netz: höchstens 20 MB pro Tag, sonst nur Kopfdaten.
 - Wird das Gerät aktiv benutzt: Arbeit auf niedrigste Priorität.
 
-**Wichtig für höhere Stufen:** Ein Validator, der wegen Akku oder Hitze plötzlich pausiert, gilt als inaktiv (Spezifikation Abschnitt 5.4). Die App warnt deshalb, bevor der Auto-Modus eine Rolle mit Stake herunterstuft, und empfiehlt für Stufe 4 ein dauerhaft versorgtes Gerät.
+**Wichtig für höhere Stufen:** Ein Validator, der wegen Akku oder Hitze plötzlich pausiert, gilt als inaktiv (Spezifikation Abschnitt 5.4). Die App warnt deshalb, bevor der Auto-Modus eine Rolle mit Stake herunterstuft, und empfiehlt für die Stufen 4 bis 7 ein dauerhaft versorgtes Gerät. Ausgeloste Helfer und Attestierer (Stufen 2 und 3) müssen nur in der Epoche erreichbar sein, für die sie ausgelost sind.
 
 ## 5. Mint-Funktionen
 
@@ -59,11 +64,12 @@ Die App passt ihren Aufwand **automatisch** an. Der Nutzer wählt nur die Obergr
 
 | Weg | Stufe | Wie |
 |---|---|---|
-| **Arbeits-Lotterie** | ab 0 | Das Gerät rechnet ToyWork-Lose (Argon2id, 16 MiB) und reicht sie ein. Je Block werden Gewinner gezogen. Jeder Gewinn ist mindestens 0,2 TOY. Beim ersten Gewinn werden 0,1 TOY zum Aktivierungs-Pfand, der Rest ist frei |
-| **Mitsignieren** | ab 2 | Anteil an der Konsens-Belohnung (nach der Startphase. Vorher geht der Konsens-Anteil an die Start-Validatoren und, sinkend, in die Arbeits-Lotterie) |
-| **Voll-Knoten** | ab 3 | zusätzliches Gewicht für Verfügbarkeit |
-| **Validator** | 4 | Konsens-Belohnung und 20 % der Gebühren des eigenen Blocks |
-| **Gebühren-Lotterie** | ab 2 | Anteil an 40 % der Gebühren für aktive Teilnehmer |
+| **Arbeits-Lotterie** | ab 0 | Das Gerät rechnet ToyWork-Lose (Argon2id, 16 MiB) und reicht sie ein, allein oder als Teil eines **Gemeinschafts-Loses**. Je Block gewinnt eine zufällige Zahl der Lose, die Gewinnhöhe richtet sich nach Glücksstufen 1, 2, 3, 5 oder 8. Mindestens 0,01 TOY, der erste Gewinn mindestens 0,2 TOY (davon 0,1 TOY Aktivierungs-Pfand) |
+| **Jackpots** | ab 0 | Funke (rund alle 4 Stunden), Welle (rund alle 5 Tage) und Gezeiten (rund alle 60 Tage) werden unregelmäßig unter den Losen der letzten Stunde oder des letzten Tages ausgelost. Die App zeigt die Topfstände, verspricht aber keinen Gewinn |
+| **Staking** | ab 1 | Anteil am Staking-Topf linear nach gebundenem TOY, wächst jede Minute mit (Sparer mit Gewicht 0,8). Schon in der Startphase |
+| **Pflichten** | ab 2 | Wer ausgelost wird, muss in dieser Epoche erreichbar sein, sonst sinkt seine Staking-Belohnung anteilig |
+| **Voll-Knoten** | ab 4 | zusätzlich Anteil am Voll-Knoten-Topf für bestandene Daten- und Erreichbarkeits-Proben |
+| **Validator** | 7 (Ersatz ab 6) | Anteil am Komitee-Topf nach Stake, wenn im Komitee, und 20 % der Gebühren des eigenen Blocks |
 
 Die App zeigt die erwartete Belohnung je Tag als Spanne und ehrlich als Schätzung. Versprochen wird keine Rendite.
 
@@ -232,7 +238,7 @@ Der Nutzer wählt beim ersten Start einen Modus und kann jederzeit wechseln.
 - Phrase nach BIP-39, verschlüsselt mit Argon2id und XChaCha20-Poly1305, wo möglich im Android Keystore/StrongBox, im TPM oder in der Secure Enclave.
 - Schlüssel und Phrasen werden **nie** geloggt, nie im Klartext gespeichert und nach Gebrauch gelöscht (`zeroize`).
 - **Mitsignieren nur auf einem Gerät** (Entscheidung 80): Wer dieselbe Phrase auf Handy und PC nutzt, kann das Mitsignieren nur auf einem Gerät einschalten. Der Signier-Schlüssel wird auf diesem Gerät neu erzeugt. Beim Gerätewechsel führt die App durch den Umzug, nimmt das Signier-Gedächtnis mit und wartet 2 Epochen, bevor das neue Gerät signiert. Erkennt sie, dass derselbe Schlüssel schon woanders signiert, bleibt sie stumm und warnt.
-- Validator-Schlüssel (BLS) sind getrennt vom Geld-Schlüssel. Wer Stufe 4 betreibt, braucht den Geld-Schlüssel dafür nicht auf dem Gerät.
+- Validator-Schlüssel (BLS) sind getrennt vom Geld-Schlüssel. Wer Stufe 7 (Validator) betreibt, braucht den Geld-Schlüssel dafür nicht auf dem Gerät.
 - Signieren mit Chain-ID, Anzeige von Empfänger, Betrag, Kette und Gebühr vor jeder Unterschrift.
 - Im Testnet: keine echten Schlüssel, keine echten Gelder.
 

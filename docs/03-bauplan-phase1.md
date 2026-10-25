@@ -1,6 +1,6 @@
 # Bauplan Phase 1: Testnet mit Knoten, Wallet und ToyScan
 
-Stand 18.10.2026 (Neuausrichtung, Entscheidungen 61 bis 114). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
+Stand 25.10.2026 (Neuausrichtung, Entscheidungen 61 bis 114; Tokenomics v0.4, Entscheidungen 136 bis 152, neuer Meilenstein M3b). Ziel von Phase 1: ein lauffähiges **Testnet** mit totalem Fair Launch (Genesis ohne Guthaben), Startphase ohne Stake, Emission, Kontingent, Gebühren, Schutzregeln, der TOYPAY Wallet als Knoten auf allen Zielplattformen und ToyScan mit Warnampel. Beweis-Schicht (Phase 2) und alles in `docs/spaeter/` kommen später.
 
 ## Ehrliche Einschätzung
 
@@ -35,7 +35,8 @@ toyscan/                     Explorer und Warnampel (M11)
 | In Testnet 1 | Danach (spätere Testnet-Versionen) |
 |---|---|
 | M1 bis M3: Emission, Konten mit Pfand, Kontingent mit Grenzen, Gebühren, Arbeits-Lotterie, Schutzregeln | Aufnahme-Pflicht (feste Reihenfolge bleibt in Testnet 1), Strafe nach Ausmaß über den einfachen Fall hinaus |
-| M4: Konsens im Stil von Tendermint, 21 Start-Validatoren, Lohn, Übergabe | Stake delegieren |
+| M3b: Tokenomics v0.4 (K-Tabelle, Aufteilung, Belohnungs-Zähler, Stufen 1 bis 7, Kontingent 21 bis 49, Arbeits-Lotterie mit Jackpots) | Vorkasse-Kontingent, Gemeinschafts-Lose |
+| M4: Konsens im Stil von Tendermint, 64 Start-Validatoren, Lohn, gleitende Übergabe, Komitee mit festen und Los-Sitzen, Dienst-Auslosung | Stake delegieren |
 | M5: Speicher, Messbericht. Ruhende Konten nur, wenn die Messung sie nötig macht | Ruhende Konten mit Zusammenführen, falls nicht schon nötig |
 | M6: Netzwerk mit libp2p | Dandelion++, Tor |
 | M7: JSON-RPC und `toy_`-Methoden | SDKs |
@@ -67,22 +68,33 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - Beide Transaktionsformate (ToyChain nach EIP-2718, Ethereum für MetaMask). Grenzen für kostenlose Transaktionen (höchstens 50 % je Block, Erstattung höchstens 1/30 des Pools je Epoche). Signierte Lotterie-Lose mit späterer Ziehung (Entscheidungen 106, 107).
 - Konten mit **Aktivierungs-Pfand 0,1 TOY** beim ersten Eingang, Transaktion „Konto auflösen“ (an Zieladresse oder als Spende in den Erstattungs-Pool), neue Nonce-Basis bei erneuter Aktivierung. Stake mit 21 Epochen Lösefrist (Spezifikation 4, Entscheidung 106; hier stand früher irrtümlich 7), Merkle-Wurzel. Es wird nie TOY verbrannt.
 - **Regel I0:** Summe aller Guthaben = Summe aller Emissionen in jedem Block.
-- Kontingent, Erstattungs-Pool, progressive Gebühr mit Höchstwert, Vielnutzer-Pflicht.
+- Kontingent, Erstattungs-Pool, progressive Gebühr mit Höchstwert, Vielnutzer-Pflicht (in M3b durch v0.4 ersetzt).
 - Transaktionsfelder Verwendungszweck (32 Byte) und Ablaufzeit (Entscheidung 84).
 - **ToyWork-Lose** (Argon2id, 16 MiB) mit Schwierigkeits-Schwelle, Höchstzahl je Block und Peer, Arbeits-Lotterie mit Mindestgewinn 0,2 TOY.
 - **Schutzregeln Ebene A** (Spezifikation Abschnitt 8): Sperrzeiten, Verdopplung, Zurücksetzen nach 30 sauberen Epochen. Kein Code-Pfad sperrt Guthaben.
 - **Fertig, wenn:** Tests für I0 nach jedem Block (auch ein absichtlich fehlerhafter Block wird abgelehnt), Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebühren, ungültige und wiederverwendete Lose, jede Sperrregel mit Fall „greift“ und „greift nicht“, ein Test, dass ein gesperrtes Konto weiter gegen Gebühr überweisen kann, Tests für Spenden an den Erstattungs-Pool (Betrag landet genau im Pool, Regel I0 hält, nicht rückholbar), Aktivierung (Eingang unter dem Pfand an neue Adresse wird abgelehnt, Senken des Pfands gibt den Unterschied frei), Auflösen mit und ohne Spende und dass eine alte Transaktion nach erneuter Aktivierung ungültig bleibt.
 
+### M3b: Tokenomics v0.4 (Entscheidungen 136 bis 152)
+- **K-Tabelle:** Erzeugungs-Skript mit 50-stelliger Dezimal-Rechnung in `docs/anhang/`, Tabelle als Datei im Code (2.434 Stützstellen, `k` in 10^−12, `w` und `W` in ppm), BLAKE3-Hash als Verfassungs-Konstante, ganzzahliges Einsetzen zwischen den Stützstellen (Spezifikation 9.1).
+- Emission `floor(floor(Restmenge × k ÷ 10^6) × m ÷ 10^12)`, Plan P(t) aus der Tabelle, m-Formel unverändert. Ersetzt k₀ = 505/1.000.000.
+- **Aufteilung je Block** nach Spezifikation 9.2 (Arbeit `w(t)`, Startlohn, Komitee 5 %, Voll-Knoten 8 %, Pool 2 %, Staking-Topf Rest), Überschuss des Pools und Gebühren-Anteil in den Staking-Topf, Gebühren 20/40/40.
+- **Belohnungs-Zähler** (Spezifikation 9.4), Gewicht Sparer 0,8, Pflichterfüllung je Epoche, neuer Topf in Regel I0.
+- **Stufen 1 bis 7** (1 / 5 / 10 / 25 / 50 / 75 / 100 TOY) als Konstanten, `shared/toyverse.json` neu erzeugen.
+- **Kontingent** `min(21 + 28 × (1 − Auslastung), λ)` mit Wasserstand und Anlauf über 7 Epochen. Vielnutzer-Regel neu (doppelte Grundgebühr statt Arbeitspflicht).
+- **Arbeits-Lotterie** (Spezifikation 9.3): bis 32 Lose je Block zeitanteilig, zufällige Gewinnzahl, Glücksstufen 1/2/3/5/8, Mindestgewinn 0,01 TOY bzw. 0,2 TOY, Jackpot-Töpfe Funke, Welle, Gezeiten mit Faktoren, Zwang, Meilensteinen und Höchstgrenze, Zufallsmix.
+- **Fertig, wenn:** Kani beweist `k × 2 < 1` für jeden Tabelleneintrag, Emission ≤ Restmenge und keine Überläufe. Property-Test über 200 Jahre bei m = 2,0 bleibt unter 10^26. Erste Epoche und erstes Jahr stimmen mit `docs/anhang/v04/kurven.py` überein (rund 15.822 TOY und 10,16 Mio. TOY bei m = 1). Die Aufteilung geht in jedem Block genau auf (I0). 100 Konten mit je 1 TOY bekommen aus dem Staking-Topf bis auf Rundung genau so viel wie 1 Konto mit 100 TOY gleicher Stufe. Kontingent bei 0 % Last 49, bei voller Last 21, mit Wasserstand weniger. Jackpot-Töpfe zählen in I0, eine Ausschüttung überschreitet nie die Höchstgrenze, und Ziehungen hängen nur von `R_(N+2)` ab (Test: anderer Vorschlagender in Block N ändert nichts). Erwartungswert je Los ist in Simulation und Rust-Umsetzung gleich (Abweichung < 1 % über 1 Mio. Blöcke).
+
 ### M4: Blöcke, Konsens, Startphase
 - Blockformat mit Zeitstempel-Regeln, Komitee mit VRF, BFT im Stil von Tendermint (zwei Abstimmungsphasen je Höhe, Runden bei Zeitüberschreitung), BLS-Sammelsignatur, Finalität nach 1 Block (Entscheidung 106).
-- **Startphase:** 21 Start-Validatoren ohne Stake, mit sinkendem, gedeckeltem und 365 Epochen gebundenem Lohn, strenge Übergabe (Entscheidungen 110, 111), automatische Übergabe an das Stake-Komitee (Spezifikation 5.3).
+- **Komitee** mit 64 festen Sitzen und 64 Los-Sitzen, Stimmgewicht nach wirksamem Stake, Ersatzbank, Dienst-Auslosung für Attestierer und Proben (Spezifikation 4 und 5.1, Entscheidungen 143, 144).
+- **Startphase:** 64 Start-Validatoren ohne Stake, Startlohn 25 % → 0 % in 365 Tagen mit Deckel, als Zeitschloss gesperrt, gleitende Übergabe mit sinkendem Ziel (Spezifikation 5.3, Entscheidungen 139 bis 141).
 - Strafen: Doppelsignatur mit Kürzung nach Ausmaß (Spezifikation 5.4), Inaktivität, Sperrzeiten für Rollen.
 - Feste Reihenfolge im Block und Aufnahme-Pflicht mit Listen des Komitees (Spezifikation 5.1a).
 - **Stake delegieren** mit Validator-Anteil, anteiliger Kürzung und ohne Delegation an Start-Validatoren (Spezifikation 7.4).
 - Konsens zusätzlich als formales Modell prüfen (z. B. TLA+, Entscheidung 102).
 - Pannenschutz (Spezifikation 5.5): Signier-Gedächtnis, Doppelgänger-Erkennung, ein Signier-Gerät je Konto.
 - Simulation mit z. B. 20 virtuellen Validatoren, inklusive Ausfällen.
-- **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen nach Ausmaß bestraft (Einzelfall 1 %, ein Drittel gleichzeitig 100 %), Signier-Gedächtnis verhindert eine zweite Unterschrift auch nach Neustart und nach Zurückspielen einer alten Sicherung, ein Doppelgänger bleibt stumm, ein falsch sortierter Block und ein Block ohne gemeldete Transaktion (bei freiem Platz) werden abgelehnt, Übergabe aus der Startphase in der Simulation getestet, Start-Validatoren erhalten genau gleiche, sinkende Anteile (nach 180 Tagen Planzeit 0), ihr Lohn ist gebunden, und Stake von Start-Validatoren löst die Übergabe nicht aus. **Belohnung nach der Startphase** (Entscheidung 112): 100 Konten mit je 10 TOY bekommen aus dem linearen Teil genau so viel wie 1 Konto mit 1.000 TOY (bis auf Rundung), Stake über dem Deckel bringt nichts, jedes Komitee-Mitglied mit voller Verfügbarkeit bekommt den gleichen Grundbetrag, und verteilter Lohn plus Rest in der Arbeits-Lotterie ergibt genau den Konsens-Anteil.
+- **Fertig, wenn:** 10.000 Blöcke stabil, bei bis zu 1/3 Ausfall weiter, Doppelsignaturen nach Ausmaß bestraft (Einzelfall 1 %, ein Drittel gleichzeitig 100 %), Signier-Gedächtnis verhindert eine zweite Unterschrift auch nach Neustart und nach Zurückspielen einer alten Sicherung, ein Doppelgänger bleibt stumm, ein falsch sortierter Block und ein Block ohne gemeldete Transaktion (bei freiem Platz) werden abgelehnt, gleitende Übergabe in der Simulation getestet (Stimmgewicht der Start-Gruppe sinkt mit `V`, Ende spätestens ab Tag 540 möglich), Start-Validatoren erhalten genau gleiche, sinkende Anteile mal Verfügbarkeit (nach 365 Tagen Planzeit 0), ihr Lohn ist gesperrt und gibt kein Stimmgewicht, und Stake von Start-Validatoren zählt nicht für `V`. **Komitee:** Ein Teilnehmer mit 86 Validatoren zu je 100 TOY hat nicht mehr Stimmgewicht als mit einem Validator gleichen Stakes. Komitee-Topf und Voll-Knoten-Topf werden linear nach Stake verteilt, Stake über dem Deckel bringt nichts.
 
 ### M5: Speicher und 256-MB-Budget
 - Persistente Datenbank (z. B. redb), Block-Fenster nach Bytes, Checkpoints mit Signaturen von mindestens 3 unabhängigen Stellen (Entscheidung 87).
