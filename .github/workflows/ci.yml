@@ -106,12 +106,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The block-mint proofs with a non-zero share did not finish within
-        # 30 minutes (see docs/STATUS.md); block_mint checks its sum at runtime.
+        # The whole block_mint with its ten shares did not finish within
+        # 15 minutes (M3b, docs/STATUS.md). Its parts add up by construction;
+        # these proofs cover the three steps it is built from.
         harness:
           - emission_at_max_factor_never_exceeds_remaining
           - issued_stays_within_cap_at_max_factor
-          - block_mint_adds_up_bootstrap_no_share
+          - splitter_give_keeps_the_sum
+          - mul_ppm_never_overflows_for_block_amounts
+          - block_emission_adds_up
     steps:
       - uses: actions/checkout@v5
       # Pinned to a commit (branch v1 as of 2026-10-20) and a Kani version,

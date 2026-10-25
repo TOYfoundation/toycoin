@@ -146,21 +146,29 @@ fn add_ppm(parts: &[Ppm]) -> Result<u64, ArithmeticError> {
 /// the refund pool. Mathematically the sum of the floors never exceeds the
 /// amount, so the cap only makes that fact visible to the type checker and
 /// the proof tool: the parts always add up, there is no error path.
-struct Splitter {
+pub(crate) struct Splitter {
     amount: Amount,
-    rest: Amount,
+    pub(crate) rest: Amount,
 }
 
 impl Splitter {
-    const fn new(amount: Amount) -> Self {
+    pub(crate) const fn new(amount: Amount) -> Self {
         Self {
             amount,
             rest: amount,
         }
     }
 
-    fn take(&mut self, share: Ppm) -> Result<Amount, EmissionError> {
-        let part = self.amount.mul_ppm(share)?.min(self.rest);
+    /// Takes `floor(amount × share)`, at most the rest.
+    pub(crate) fn take(&mut self, share: Ppm) -> Result<Amount, EmissionError> {
+        let wanted = self.amount.mul_ppm(share)?;
+        self.give(wanted)
+    }
+
+    /// Takes `wanted`, at most the rest. Afterwards `part + rest` equals
+    /// the rest before (proven by Kani, `verification.rs`).
+    pub(crate) fn give(&mut self, wanted: Amount) -> Result<Amount, EmissionError> {
+        let part = wanted.min(self.rest);
         self.rest = self
             .rest
             .checked_sub(part)
