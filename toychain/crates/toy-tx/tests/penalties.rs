@@ -19,7 +19,7 @@ use toy_state::{Right, Violation, inactivity_violated, mass_creation_violated};
 use toy_tx::evidence::{DoubleSignEvidence, Vote, VotePhase};
 use toy_tx::ticket::sign_ticket;
 use toy_tx::{Action, Block, TxError};
-use toy_types::params::STAKE_TIER_4;
+use toy_types::params::VALIDATOR_MIN_STAKE;
 use toy_types::{Address, Amount, Hash};
 
 fn bls(n: u8) -> BlsSecretKey {
@@ -32,12 +32,12 @@ fn with_validator() -> (Net, SecretKey, SecretKey) {
     let mut net = Net::new(Phase::Normal);
     let val = key(1);
     let reporter = key(2);
-    net.fund(&val, toy(1_200));
+    net.fund(&val, toy(120));
     net.fund(&reporter, toy(10));
     net.txs(vec![net.sign(
         &val,
         &net.fields(&val),
-        &Action::Bond(STAKE_TIER_4),
+        &Action::Bond(VALIDATOR_MIN_STAKE),
     )]);
     let key = bls(1);
     let register = Action::RegisterValidator {
@@ -102,7 +102,7 @@ fn double_signature_applies() {
     // Free balance untouched; the bonded stake is held, still owned.
     assert_eq!(account.free(), free);
     assert_eq!(account.stake(), Amount::ZERO);
-    assert_eq!(account.held_total().unwrap(), STAKE_TIER_4);
+    assert_eq!(account.held_total().unwrap(), VALIDATOR_MIN_STAKE);
     paid_transfer_works(&mut net, &val);
     // The same offence cannot be punished twice.
     let again = evidence(
@@ -176,11 +176,11 @@ fn double_signature_does_not_apply() {
 fn registration_needs_a_valid_proof_of_possession() {
     let mut net = Net::new(Phase::Normal);
     let val = key(1);
-    net.fund(&val, toy(1_200));
+    net.fund(&val, toy(120));
     net.txs(vec![net.sign(
         &val,
         &net.fields(&val),
-        &Action::Bond(STAKE_TIER_4),
+        &Action::Bond(VALIDATOR_MIN_STAKE),
     )]);
     let register = Action::RegisterValidator {
         bls_key: bls(1).public_key().to_bytes(),

@@ -67,9 +67,9 @@ pub enum TxError {
     FreeBytesExceeded,
     /// A paid transaction follows a free one in the block.
     PaidAfterFree,
-    /// Heavy user: at least half of the excess over 1,000 transactions
-    /// must be covered by ToyWork tickets.
-    HeavyUserNeedsWork,
+    /// Heavy user (from 1,000 transactions per epoch): only paid
+    /// transactions, at least twice the base fee (decision 146).
+    HeavyUserMustPay,
     /// Tickets of this address are refused (penalty).
     TicketsLocked,
     /// The ticket was already used in this epoch.
@@ -137,7 +137,9 @@ impl fmt::Display for TxError {
             Self::RefundBudgetExhausted => f.write_str("refund budget of the epoch used up"),
             Self::FreeBytesExceeded => f.write_str("free transactions exceed 50 % of the block"),
             Self::PaidAfterFree => f.write_str("paid transaction after a free one"),
-            Self::HeavyUserNeedsWork => f.write_str("heavy user must cover half with work"),
+            Self::HeavyUserMustPay => {
+                f.write_str("heavy user must pay at least twice the base fee")
+            }
             Self::TicketsLocked => f.write_str("tickets of this address are refused"),
             Self::TicketReused => f.write_str("ticket already used"),
             Self::TicketWrongEpoch => f.write_str("ticket for another epoch"),
@@ -170,8 +172,12 @@ pub enum BlockError {
     },
     /// The block is larger than 128 KB.
     TooLarge,
-    /// More than 16 tickets (standalone and attached together).
-    TooManyTickets,
+    /// More tickets than allowed for the block gap (32 at 60 seconds,
+    /// at least 8; standalone and attached together).
+    TooManyTickets {
+        /// Allowed number.
+        limit: u64,
+    },
     /// The state rejected a block-level step (mint, epoch change).
     State(StateError),
     /// Rule I0 failed after the block.
@@ -196,7 +202,7 @@ impl fmt::Display for BlockError {
             Self::Transaction { index, error } => write!(f, "transaction {index}: {error}"),
             Self::Ticket { index, error } => write!(f, "ticket {index}: {error}"),
             Self::TooLarge => f.write_str("block larger than 128 KB"),
-            Self::TooManyTickets => f.write_str("more than 16 tickets"),
+            Self::TooManyTickets { limit } => write!(f, "more than {limit} tickets"),
             Self::State(e) => write!(f, "{e}"),
             Self::I0(e) => write!(f, "{e}"),
         }

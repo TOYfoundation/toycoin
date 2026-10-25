@@ -15,20 +15,28 @@ use toy_crypto::eip155::ChainId;
 use toy_crypto::hash::blake3;
 use toy_crypto::secp256k1::SecretKey;
 use toy_crypto::work::ToyWorkHasher;
-use toy_emission::{BlockInput, ConsensusPayout, EmissionEngine, Phase};
-use toy_state::{ConsensusMint, GenesisConfig, Mint, State};
+use toy_emission::{BlockInput, EmissionEngine, Phase};
+use toy_state::{GenesisConfig, Mint, State};
 use toy_tx::ticket::sign_ticket;
 use toy_tx::{
     Action, Block, BlockContext, BlockError, BlockReceipt, TxFields, execute_block,
     sign_transaction,
 };
-use toy_types::{Address, Amount, Hash};
+use toy_types::params::START_VALIDATORS;
+use toy_types::{Address, Amount, Hash, Ppm};
 
 pub const GENESIS_TIME: u64 = 1_800_000_000;
 pub const CHAIN: ChainId = ChainId::TOYCHAIN_DEVNET;
 
 pub fn key(n: u8) -> SecretKey {
     SecretKey::from_bytes(&[n; 32]).unwrap()
+}
+
+/// Key of start validator `i` (0 to 63).
+pub fn start_key(i: u8) -> SecretKey {
+    let mut bytes = [0x77u8; 32];
+    bytes[31] = i;
+    SecretKey::from_bytes(&bytes).unwrap()
 }
 
 pub fn toy(n: u64) -> Amount {
@@ -38,17 +46,17 @@ pub fn toy(n: u64) -> Amount {
 /// A generous fee cap for paid transactions (0.1 TOY).
 pub const FEE: Amount = Amount::from_units(100_000_000_000_000_000);
 
-pub fn to_state_mint(m: &toy_emission::BlockMint) -> Mint {
+pub fn to_state_mint(m: &toy_emission::BlockMint, phase: Phase) -> Mint {
     Mint {
         total: m.total,
-        consensus: match m.consensus {
-            ConsensusPayout::StartValidators { each, .. } => {
-                ConsensusMint::StartValidators { each }
-            }
-            ConsensusPayout::Stakers(a) => ConsensusMint::Stakers(a),
-        },
-        work_lottery: m.work_lottery,
+        start_each: m.start_each,
+        work_base: m.work.base,
+        jackpots: [m.work.funke, m.work.welle, m.work.gezeiten],
+        committee: m.committee,
+        full_node: m.full_node,
         refund_pool: m.refund_pool,
+        staking: m.staking,
+        bootstrap: phase == Phase::Bootstrap,
     }
 }
 
@@ -64,7 +72,8 @@ pub struct Net {
 
 impl Net {
     pub fn new(phase: Phase) -> Self {
-        let start_keys: Vec<SecretKey> = (200..221).map(key).collect();
+        let count = u8::try_from(START_VALIDATORS).unwrap();
+        let start_keys: Vec<SecretKey> = (0..count).map(start_key).collect();
         let config = GenesisConfig {
             start_validators: start_keys.iter().map(SecretKey::address).collect(),
             genesis_randomness: Hash::default(),
@@ -85,8 +94,8 @@ impl Net {
             timestamp: self.timestamp + 60,
             counted_tx,
             free_tx,
-            signatures_received: 21,
-            signatures_expected: 21,
+            signatures_received: START_VALIDATORS.into(),
+            signatures_expected: START_VALIDATORS.into(),
             phase: self.phase,
         }
     }
@@ -96,14 +105,19 @@ impl Net {
         let mut engine = self.engine.clone();
         let outcome = engine.apply_block(&self.input(0, 0)).unwrap();
         let height = outcome.height;
+        let epoch = engine.current_epoch().unwrap();
         BlockContext {
             height,
             epoch: outcome.epoch,
             chain: CHAIN,
             proposer: self.proposer,
             randomness: blake3(&height.to_be_bytes()),
-            mint: to_state_mint(&outcome.mint),
+            mint: to_state_mint(&outcome.mint, epoch.phase),
             minted_total: engine.minted(),
+            gap_seconds: 60,
+            plan_days: engine.plan_clock().full_days(),
+            tide: epoch.tide,
+            participation: Ppm::ONE,
         }
     }
 
@@ -121,7 +135,8 @@ impl Net {
         let outcome = engine
             .apply_block(&self.input(receipt.counted_tx, receipt.free_tx))
             .unwrap();
-        assert_eq!(to_state_mint(&outcome.mint), ctx.mint);
+        let phase = engine.current_epoch().unwrap().phase;
+        assert_eq!(to_state_mint(&outcome.mint, phase), ctx.mint);
         self.engine = engine;
         self.state = state;
         self.timestamp += 60;
@@ -195,7 +210,7 @@ impl Net {
         let mut nonce = 1_000_000u64;
         while self.free(&address) < amount {
             let need = amount.checked_sub(self.free(&address)).unwrap();
-            // Grow the pot to cover the need (about 14 TOY per block).
+            // Grow the pot to cover the need (about 4 TOY per block).
             while self.state.work_lottery() < need.checked_add(toy(1)).unwrap() {
                 self.empty(1);
             }

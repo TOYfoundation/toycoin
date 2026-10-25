@@ -74,7 +74,7 @@ Jeder Meilenstein hat **Fertig-Kriterien**. Erst wenn alle erfüllt sind, geht e
 - **Schutzregeln Ebene A** (Spezifikation Abschnitt 8): Sperrzeiten, Verdopplung, Zurücksetzen nach 30 sauberen Epochen. Kein Code-Pfad sperrt Guthaben.
 - **Fertig, wenn:** Tests für I0 nach jedem Block (auch ein absichtlich fehlerhafter Block wird abgelehnt), Doppelausgabe, Überlauf, Kontingent bei verschiedener Auslastung, Gebühren, ungültige und wiederverwendete Lose, jede Sperrregel mit Fall „greift“ und „greift nicht“, ein Test, dass ein gesperrtes Konto weiter gegen Gebühr überweisen kann, Tests für Spenden an den Erstattungs-Pool (Betrag landet genau im Pool, Regel I0 hält, nicht rückholbar), Aktivierung (Eingang unter dem Pfand an neue Adresse wird abgelehnt, Senken des Pfands gibt den Unterschied frei), Auflösen mit und ohne Spende und dass eine alte Transaktion nach erneuter Aktivierung ungültig bleibt.
 
-### M3b: Tokenomics v0.4 (Entscheidungen 136 bis 152)
+### M3b: Tokenomics v0.4 (Entscheidungen 136 bis 153) ✅ fertig (25.10.2026)
 - **K-Tabelle:** Erzeugungs-Skript mit 50-stelliger Dezimal-Rechnung in `docs/anhang/`, Tabelle als Datei im Code (2.434 Stützstellen, `k` in 10^−12, `w` und `W` in ppm), BLAKE3-Hash als Verfassungs-Konstante, ganzzahliges Einsetzen zwischen den Stützstellen (Spezifikation 9.1).
 - Emission `floor(floor(Restmenge × k ÷ 10^6) × m ÷ 10^12)`, Plan P(t) aus der Tabelle, m-Formel unverändert. Ersetzt k₀ = 505/1.000.000.
 - **Aufteilung je Block** nach Spezifikation 9.2 (Arbeit `w(t)`, Startlohn, Komitee 5 %, Voll-Knoten 8 %, Pool 2 %, Staking-Topf Rest), Überschuss des Pools und Gebühren-Anteil in den Staking-Topf, Gebühren 20/40/40.

@@ -12,7 +12,7 @@ mod common;
 
 use common::*;
 use toy_emission::Phase;
-use toy_state::{ConsensusMint, Pot, StateError};
+use toy_state::{Pot, StateError};
 use toy_tx::ticket::sign_ticket;
 use toy_tx::{Action, Block, BlockError};
 use toy_types::{Address, Amount};
@@ -33,14 +33,14 @@ fn genesis_and_empty_blocks_keep_i0() {
 /// free transactions, donations, stake, closing, valid and invalid
 /// tickets. After every block the pots must add up to the minted sum,
 /// and the refund pool may only shrink by the surplus moved to the
-/// lottery at an epoch start.
+/// staking pot at an epoch start.
 #[test]
 fn i0_holds_after_every_block_with_mixed_activity() {
     let mut net = Net::new(Phase::Bootstrap);
     let users: Vec<_> = (1..=8).map(key).collect();
-    net.fund(&users[0], toy(20_000));
+    net.fund(&users[0], toy(2_000));
     for u in &users[1..] {
-        let tx = net.transfer(&users[0], &u.address(), toy(1_000));
+        let tx = net.transfer(&users[0], &u.address(), toy(100));
         net.txs(vec![tx]);
     }
     let mut rng = Rng(42);
@@ -48,6 +48,7 @@ fn i0_holds_after_every_block_with_mixed_activity() {
     let start_epoch = net.state.epoch();
     let mut checked_blocks = 0;
     let (mut free_tx, mut paid_tx, mut penalties, mut prizes, mut surplus) = (0, 0, 0, 0, 0);
+    let mut jackpots = 0;
     while net.state.epoch() < start_epoch + 2 {
         let mut candidates = Vec::new();
         for _ in 0..rng.below(4) {
@@ -122,12 +123,14 @@ fn i0_holds_after_every_block_with_mixed_activity() {
         paid_tx += receipt.counted_tx;
         penalties += receipt.penalties.len();
         prizes += receipt.prizes.len();
+        jackpots += receipt.jackpots.len();
         surplus += usize::from(!receipt.pool_surplus.is_zero());
     }
     // The random walk really reached every path.
     assert!(
-        free_tx > 0 && paid_tx > 0 && penalties > 0 && prizes > 0 && surplus > 0,
-        "free {free_tx}, paid {paid_tx}, penalties {penalties}, prizes {prizes}, surplus {surplus}"
+        free_tx > 0 && paid_tx > 0 && penalties > 0 && prizes > 0 && jackpots > 0,
+        "free {free_tx}, paid {paid_tx}, penalties {penalties}, prizes {prizes}, \
+         jackpots {jackpots}, surplus {surplus}"
     );
     assert!(checked_blocks > 1_440);
     // Every pot that M3 fills was used, the later ones stay zero.
@@ -135,8 +138,14 @@ fn i0_holds_after_every_block_with_mixed_activity() {
     for pot in [
         Pot::Free,
         Pot::ActivationDeposit,
+        Pot::OwnStake,
+        Pot::StartValidatorRewards,
         Pot::RefundPool,
         Pot::WorkLottery,
+        Pot::JackpotFunke,
+        Pot::JackpotWelle,
+        Pot::JackpotGezeiten,
+        Pot::StakingPot,
     ] {
         assert!(totals.get(pot) > Amount::ZERO, "{pot:?}");
     }
@@ -182,16 +191,16 @@ fn block_that_mints_less_or_inconsistent_is_rejected() {
     let mut net = Net::new(Phase::Normal);
     net.empty(2);
     let less = net.try_block_with(&Block::default(), |ctx| {
-        ctx.mint.work_lottery = ctx
+        ctx.mint.work_base = ctx
             .mint
-            .work_lottery
+            .work_base
             .checked_sub(Amount::from_units(1))
             .unwrap();
         ctx.mint.total = ctx.mint.total.checked_sub(Amount::from_units(1)).unwrap();
     });
     assert!(matches!(less, Err(BlockError::I0(_))), "{less:?}");
     let inconsistent = net.try_block_with(&Block::default(), |ctx| {
-        ctx.mint.consensus = ConsensusMint::Stakers(Amount::ZERO);
+        ctx.mint.staking = ctx.mint.staking.checked_add(Amount::from_units(1)).unwrap();
     });
     assert!(
         matches!(
@@ -210,14 +219,20 @@ fn block_that_mints_less_or_inconsistent_is_rejected() {
 }
 
 #[test]
-fn bootstrap_rewards_are_bonded_and_counted() {
+fn bootstrap_rewards_are_locked_and_counted() {
     let mut net = Net::new(Phase::Bootstrap);
-    net.empty(10);
+    net.empty(1);
     net.i0();
     let validators = net.state.start_validators().to_vec();
-    assert_eq!(validators.len(), 21);
+    assert_eq!(validators.len(), 64);
+    // One block pays about 0.05 TOY each: it waits for the deposit.
+    assert!(net.state.account(&validators[0]).is_none());
+    assert!(net.state.start_wage_pending(&validators[0]) > Amount::ZERO);
+    net.empty(9);
+    net.i0();
     let first = net.state.account(&validators[0]).unwrap();
-    assert_eq!(first.free(), Amount::ZERO, "reward is bonded, not free");
+    assert_eq!(first.free(), Amount::ZERO, "the wage is locked, not free");
+    assert_eq!(first.stake(), Amount::ZERO, "the wage is no stake");
     assert!(first.reward_locks_total().unwrap() > Amount::ZERO);
     // All start validators receive exactly the same.
     for v in &validators {

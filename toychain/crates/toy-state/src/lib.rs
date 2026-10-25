@@ -34,9 +34,7 @@ pub use penalty::{
     PenaltyOutcome, PenaltyRecord, Right, Violation, inactivity_violated, mass_creation_violated,
 };
 pub use pots::{Pot, PotTotals};
-pub use state::{
-    ConsensusMint, CreditOutcome, DetachedRecord, FeeSplit, GenesisConfig, Mint, State,
-};
+pub use state::{CreditOutcome, DetachedRecord, FeeSplit, GenesisConfig, LotteryPot, Mint, State};
 
 #[cfg(test)]
 mod tests;

@@ -784,6 +784,7 @@ dependencies = [
 name = "toy-emission"
 version = "0.1.0"
 dependencies = [
+ "toy-crypto",
  "toy-types",
 ]
 

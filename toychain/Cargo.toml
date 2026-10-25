@@ -72,6 +72,10 @@ opt-level = 3
 [profile.dev.package.blake2]
 opt-level = 3
 
+# The lottery fairness test draws a million blocks (BLAKE3 per ticket).
+[profile.dev.package.blake3]
+opt-level = 3
+
 [profile.release]
 # Reproducible, small binaries for Raspberry Pi and Android.
 lto = "thin"

@@ -21,7 +21,7 @@ pub enum Pot {
     Free,
     /// Activation deposits (spec 6.1).
     ActivationDeposit,
-    /// Own bonded stake (tiers 2 to 4).
+    /// Own bonded stake (tiers 1 to 7).
     OwnStake,
     /// Delegated stake (spec 7.4, M4). Always zero before M4.
     DelegatedStake,
@@ -29,17 +29,27 @@ pub enum Pot {
     Unbonding,
     /// Stake held after a double signature until slashing is fixed.
     HeldStake,
-    /// Bonded rewards of the start validators (365 epochs).
+    /// Locked start wage of the start validators (time lock, 365 epochs),
+    /// including wage waiting for an account to be activated.
     StartValidatorRewards,
     /// The refund pool that pays for free transactions.
     RefundPool,
-    /// Pot of the work lottery (ToyWork tickets).
+    /// Base pot of the work lottery (paid every block).
     WorkLottery,
-    /// Pot of the fee lottery among active participants (paid out in M4).
-    FeeLottery,
-    /// Consensus share after the bootstrap phase, waiting for distribution
-    /// by the consensus layer (decision 112, M4).
-    ConsensusRewards,
+    /// Jackpot "Funke" of the work lottery.
+    JackpotFunke,
+    /// Jackpot "Welle" of the work lottery.
+    JackpotWelle,
+    /// Jackpot "Gezeiten" of the work lottery.
+    JackpotGezeiten,
+    /// Staking pot: rewards not yet credited to stakers (spec 9.4).
+    StakingPot,
+    /// Committee pot after the bootstrap phase, waiting for distribution
+    /// by the consensus layer (M4).
+    CommitteePot,
+    /// Full-node pot (tiers 4 to 7). Until the probes exist (M4, M6) it is
+    /// passed on to the staking pot at every epoch start.
+    FullNodePot,
     /// Pending vault withdrawals (spec 7.3, M12). Always zero before M12.
     VaultWithdrawals,
     /// Hash time locks (spec 7.1, M12). Always zero before M12.
@@ -53,7 +63,7 @@ pub enum Pot {
 
 impl Pot {
     /// Every pot, in a fixed order.
-    pub const ALL: [Self; 15] = [
+    pub const ALL: [Self; 19] = [
         Self::Free,
         Self::ActivationDeposit,
         Self::OwnStake,
@@ -63,8 +73,12 @@ impl Pot {
         Self::StartValidatorRewards,
         Self::RefundPool,
         Self::WorkLottery,
-        Self::FeeLottery,
-        Self::ConsensusRewards,
+        Self::JackpotFunke,
+        Self::JackpotWelle,
+        Self::JackpotGezeiten,
+        Self::StakingPot,
+        Self::CommitteePot,
+        Self::FullNodePot,
         Self::VaultWithdrawals,
         Self::HashTimeLocks,
         Self::Escrow,

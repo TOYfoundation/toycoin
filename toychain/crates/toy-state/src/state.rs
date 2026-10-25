@@ -15,10 +15,11 @@ use std::collections::BTreeMap;
 
 use toy_types::params::{
     ACTIVATION_DEPOSIT, ACTIVATION_DEPOSIT_FLOOR, CLOSED_ACCOUNT_HISTORY_EPOCHS,
-    DOUBLE_SIGN_HOLD_EPOCHS, NONCE_BASE_SHIFT, STAKE_TIER_4, START_REWARD_LOCK_EPOCHS,
-    UNBONDING_EPOCHS,
+    DOUBLE_SIGN_HOLD_EPOCHS, NONCE_BASE_SHIFT, REWARD_INDEX_SCALE, SAVER_WEIGHT, STAKE_CAP,
+    STAKE_CAP_FEW_VALIDATORS, STAKE_CAP_VALIDATOR_COUNT, STAKE_TIER_1, STAKE_TIER_2,
+    STAKING_MAX_PER_EPOCH, START_REWARD_LOCK_EPOCHS, UNBONDING_EPOCHS, VALIDATOR_MIN_STAKE,
 };
-use toy_types::{Address, Amount, ArithmeticError, EpochNumber, Hash, Height};
+use toy_types::{Address, Amount, ArithmeticError, EpochNumber, Hash, Height, Ppm};
 
 use crate::account::{Account, BLS_KEY_LEN, EpochActivity, HeldStake, RewardLock, Unbonding};
 use crate::chain::ChainData;
@@ -32,44 +33,43 @@ use crate::pots::{Pot, PotTotals};
 /// constitution no. 2).
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct GenesisConfig {
-    /// Addresses of the start validators (spec 5.3: 21), which receive the
-    /// consensus share during the bootstrap phase.
+    /// Addresses of the start validators (spec 5.3: 64), which receive the
+    /// start wage and the committee pot during the bootstrap phase.
     pub start_validators: Vec<Address>,
     /// Randomness of the genesis block (seed of epoch 0).
     pub genesis_randomness: Hash,
 }
 
-/// How the consensus share of a block is minted.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum ConsensusMint {
-    /// Bootstrap phase: every start validator receives `each`, bonded for
-    /// 365 epochs.
-    StartValidators {
-        /// Amount per start validator.
-        each: Amount,
-    },
-    /// Normal phase: the pot waits for distribution by consensus (M4).
-    Stakers(Amount),
-}
-
-/// Newly minted TOY of one block, as computed by `toy-emission`.
+/// Newly minted TOY of one block, as computed by `toy-emission` (spec 9.2).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Mint {
     /// Total minted in the block.
     pub total: Amount,
-    /// Consensus share.
-    pub consensus: ConsensusMint,
-    /// Work lottery share.
-    pub work_lottery: Amount,
+    /// Bootstrap phase: amount for each start validator (start wage plus
+    /// committee pot), locked for 365 epochs.
+    pub start_each: Amount,
+    /// Base pot of the work lottery.
+    pub work_base: Amount,
+    /// Jackpots Funke, Welle and Gezeiten.
+    pub jackpots: [Amount; 3],
+    /// Committee pot (normal phase).
+    pub committee: Amount,
+    /// Full-node pot.
+    pub full_node: Amount,
     /// Refund pool share (with rounding remainders).
     pub refund_pool: Amount,
+    /// Staking pot share.
+    pub staking: Amount,
+    /// `true` in the bootstrap phase: start validators earn nothing from
+    /// the staking pot (spec 5.3, decision 141).
+    pub bootstrap: bool,
 }
 
-/// How a paid fee is split (computed by `toy-tx`, spec 7.2).
+/// How a paid fee is split (computed by `toy-tx`, spec 7.2, decision 147).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct FeeSplit {
-    /// Share of the fee lottery.
-    pub fee_lottery: Amount,
+    /// Share of the staking pot.
+    pub staking: Amount,
     /// Share of the block proposer.
     pub proposer: Amount,
     /// Share of the refund pool (with rounding remainders).
@@ -82,8 +82,26 @@ impl FeeSplit {
     /// # Errors
     /// [`ArithmeticError::Overflow`] on overflow.
     pub fn total(&self) -> Result<Amount, ArithmeticError> {
-        Amount::checked_sum([self.fee_lottery, self.proposer, self.refund_pool])
+        Amount::checked_sum([self.staking, self.proposer, self.refund_pool])
     }
+}
+
+/// The pots of the work lottery (spec 9.3, decision 149).
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum LotteryPot {
+    /// Base pot, drawn every block.
+    Base,
+    /// Jackpot "Funke".
+    Funke,
+    /// Jackpot "Welle".
+    Welle,
+    /// Jackpot "Gezeiten".
+    Gezeiten,
+}
+
+impl LotteryPot {
+    /// The three jackpots in the order of [`Mint::jackpots`].
+    pub const JACKPOTS: [Self; 3] = [Self::Funke, Self::Welle, Self::Gezeiten];
 }
 
 /// Result of a credit to an address.
@@ -111,10 +129,24 @@ pub struct State {
     detached: BTreeMap<Address, DetachedRecord>,
     bls_keys: BTreeMap<[u8; BLS_KEY_LEN], Address>,
     start_validators: Vec<Address>,
+    /// Start wage of start validators that have no account yet.
+    start_wage_pending: BTreeMap<Address, Amount>,
     refund_pool: Amount,
     work_lottery: Amount,
-    fee_lottery: Amount,
-    consensus_rewards: Amount,
+    jackpots: [Amount; 3],
+    committee_pot: Amount,
+    full_node_pot: Amount,
+    /// Staking pot: everything not yet credited to stakers.
+    staking_pot: Amount,
+    /// Part of the staking pot not yet distributed by the counter.
+    staking_carry: Amount,
+    /// Staking reward counter per weighted unit (spec 9.4).
+    reward_index: u128,
+    /// Sum of all reward weights of the current epoch.
+    total_reward_weight: u128,
+    /// Amount distributed by the counter in the current epoch.
+    staking_distributed: Amount,
+    bootstrap: bool,
     activation_deposit: Amount,
     height: Height,
     epoch: EpochNumber,
@@ -137,10 +169,18 @@ impl State {
             detached: BTreeMap::new(),
             bls_keys: BTreeMap::new(),
             start_validators: config.start_validators.clone(),
+            start_wage_pending: BTreeMap::new(),
             refund_pool: Amount::ZERO,
             work_lottery: Amount::ZERO,
-            fee_lottery: Amount::ZERO,
-            consensus_rewards: Amount::ZERO,
+            jackpots: [Amount::ZERO; 3],
+            committee_pot: Amount::ZERO,
+            full_node_pot: Amount::ZERO,
+            staking_pot: Amount::ZERO,
+            staking_carry: Amount::ZERO,
+            reward_index: 0,
+            total_reward_weight: 0,
+            staking_distributed: Amount::ZERO,
+            bootstrap: true,
             activation_deposit: ACTIVATION_DEPOSIT,
             height: 0,
             epoch: 0,
@@ -195,7 +235,7 @@ impl State {
     pub fn can_sign(&self, address: &Address) -> bool {
         self.accounts.get(address).is_some_and(|a| {
             a.validator.is_some()
-                && a.stake >= STAKE_TIER_4
+                && a.stake >= VALIDATOR_MIN_STAKE
                 && !a.penalties.is_locked(Right::Role, self.epoch)
         })
     }
@@ -224,22 +264,70 @@ impl State {
         self.refund_pool
     }
 
-    /// Balance of the work lottery pot.
+    /// Balance of the base pot of the work lottery.
     #[must_use]
     pub const fn work_lottery(&self) -> Amount {
         self.work_lottery
     }
 
-    /// Balance of the fee lottery pot.
+    /// Balance of a lottery pot.
     #[must_use]
-    pub const fn fee_lottery(&self) -> Amount {
-        self.fee_lottery
+    pub const fn lottery_pot(&self, pot: LotteryPot) -> Amount {
+        match pot {
+            LotteryPot::Base => self.work_lottery,
+            LotteryPot::Funke => self.jackpots[0],
+            LotteryPot::Welle => self.jackpots[1],
+            LotteryPot::Gezeiten => self.jackpots[2],
+        }
     }
 
-    /// Consensus share waiting for distribution (normal phase, M4).
+    /// Committee pot waiting for distribution (normal phase, M4).
     #[must_use]
-    pub const fn consensus_rewards(&self) -> Amount {
-        self.consensus_rewards
+    pub const fn committee_pot(&self) -> Amount {
+        self.committee_pot
+    }
+
+    /// Full-node pot of the current epoch.
+    #[must_use]
+    pub const fn full_node_pot(&self) -> Amount {
+        self.full_node_pot
+    }
+
+    /// Staking pot (rewards not yet credited).
+    #[must_use]
+    pub const fn staking_pot(&self) -> Amount {
+        self.staking_pot
+    }
+
+    /// Sum of all reward weights of the current epoch.
+    #[must_use]
+    pub const fn total_reward_weight(&self) -> u128 {
+        self.total_reward_weight
+    }
+
+    /// `true` while the last mint was in the bootstrap phase.
+    #[must_use]
+    pub const fn bootstrap(&self) -> bool {
+        self.bootstrap
+    }
+
+    /// Start wage of `address` that waits for its account to be activated.
+    #[must_use]
+    pub fn start_wage_pending(&self, address: &Address) -> Amount {
+        self.start_wage_pending
+            .get(address)
+            .copied()
+            .unwrap_or(Amount::ZERO)
+    }
+
+    /// Staking reward that `address` could claim now.
+    ///
+    /// # Errors
+    /// [`StateError::Arithmetic`] on overflow (not reachable, see spec 9.4).
+    pub fn pending_reward(&self, address: &Address) -> Result<Amount, StateError> {
+        self.accounts
+            .get(address)
+            .map_or(Ok(Amount::ZERO), |a| self.claim_of(a))
     }
 
     /// Current activation deposit for new accounts.
@@ -290,11 +378,17 @@ impl State {
             Pot::OwnStake => sum_accounts(&|a| Ok(a.stake))?,
             Pot::Unbonding => sum_accounts(&Account::unbonding_total)?,
             Pot::HeldStake => sum_accounts(&Account::held_total)?,
-            Pot::StartValidatorRewards => sum_accounts(&Account::reward_locks_total)?,
+            Pot::StartValidatorRewards => sum_accounts(&Account::reward_locks_total)?.checked_add(
+                Amount::checked_sum(self.start_wage_pending.values().copied())?,
+            )?,
             Pot::RefundPool => self.refund_pool,
             Pot::WorkLottery => self.work_lottery,
-            Pot::FeeLottery => self.fee_lottery,
-            Pot::ConsensusRewards => self.consensus_rewards,
+            Pot::JackpotFunke => self.jackpots[0],
+            Pot::JackpotWelle => self.jackpots[1],
+            Pot::JackpotGezeiten => self.jackpots[2],
+            Pot::StakingPot => self.staking_pot,
+            Pot::CommitteePot => self.committee_pot,
+            Pot::FullNodePot => self.full_node_pot,
             // Filled by later milestones (M4, M5, M12); zero until then.
             Pot::DelegatedStake
             | Pot::VaultWithdrawals
@@ -358,10 +452,23 @@ impl State {
         for amount in [
             self.refund_pool,
             self.work_lottery,
-            self.fee_lottery,
-            self.consensus_rewards,
+            self.jackpots[0],
+            self.jackpots[1],
+            self.jackpots[2],
+            self.committee_pot,
+            self.full_node_pot,
+            self.staking_pot,
+            self.staking_carry,
+            self.staking_distributed,
             self.activation_deposit,
         ] {
+            global.extend_from_slice(&amount.units().to_be_bytes());
+        }
+        global.extend_from_slice(&self.reward_index.to_be_bytes());
+        global.extend_from_slice(&self.total_reward_weight.to_be_bytes());
+        global.push(u8::from(self.bootstrap));
+        for (address, amount) in &self.start_wage_pending {
+            global.extend_from_slice(address.as_bytes());
             global.extend_from_slice(&amount.units().to_be_bytes());
         }
         global.extend_from_slice(&self.height.to_be_bytes());
@@ -424,6 +531,19 @@ impl State {
 
     fn begin_epoch(&mut self, epoch: EpochNumber) -> Result<(), StateError> {
         self.epoch = epoch;
+        // 1. Credit every staker with the old weights (spec 9.4).
+        let mut claimed = Amount::ZERO;
+        let index = self.reward_index;
+        for account in self.accounts.values_mut() {
+            let claim = claim_amount(account, index)?;
+            account.free = account.free.checked_add(claim)?;
+            claimed = claimed.checked_add(claim)?;
+        }
+        self.staking_pot = self
+            .staking_pot
+            .checked_sub(claimed)
+            .map_err(|_| StateError::PotTooSmall)?;
+        // 2. Time-based releases.
         for account in self.accounts.values_mut() {
             let (due, keep): (Vec<_>, Vec<_>) = core::mem::take(&mut account.unbonding)
                 .into_iter()
@@ -433,12 +553,14 @@ impl State {
                 account.free = account.free.checked_add(u.amount)?;
             }
 
+            // The start wage is a time lock, not stake (decision 139): it
+            // becomes free when the lock ends.
             let (due, keep): (Vec<_>, Vec<_>) = core::mem::take(&mut account.reward_locks)
                 .into_iter()
                 .partition(|r| r.unlock_epoch <= epoch);
             account.reward_locks = keep;
             for r in due {
-                account.stake = account.stake.checked_add(r.amount)?;
+                account.free = account.free.checked_add(r.amount)?;
             }
 
             // Until M4 fixes the slashing amount, held stake returns
@@ -452,6 +574,15 @@ impl State {
                 account.stake = account.stake.checked_add(h.amount)?;
             }
         }
+        // 3. Nobody can prove full-node service before the probes exist
+        //    (M4, M6): the full-node pot goes to the staking pot, so nothing
+        //    is hoarded (spec 9.2: what is not earned goes to stakers).
+        let passed = self.full_node_pot;
+        self.full_node_pot = Amount::ZERO;
+        self.staking_pot = self.staking_pot.checked_add(passed)?;
+        self.staking_carry = self.staking_carry.checked_add(passed)?;
+        // 4. New weights for this epoch.
+        self.set_reward_weights()?;
         self.detached.retain(|_, d| {
             let active = Right::ALL.iter().any(|r| d.record.is_locked(*r, epoch));
             active || epoch <= d.since_epoch.saturating_add(CLOSED_ACCOUNT_HISTORY_EPOCHS)
@@ -459,74 +590,186 @@ impl State {
         Ok(())
     }
 
+    /// Weighted effective stake of every account for the new epoch
+    /// (spec 4, 9.2, decisions 111, 141, 142): stake up to the cap (5 % of
+    /// all bonded stake below 100 validators, then 1 %), tier 1 counts 0.8,
+    /// tiers 2 to 7 count 1.0, below 1 TOY nothing. In the bootstrap phase
+    /// the start validators get nothing from the staking pot.
+    fn set_reward_weights(&mut self) -> Result<(), StateError> {
+        let total_stake = Amount::checked_sum(self.accounts.values().map(|a| a.stake))?;
+        let validators = self
+            .accounts
+            .values()
+            .filter(|a| a.validator.is_some() && a.stake >= VALIDATOR_MIN_STAKE)
+            .count();
+        let cap_share = if validators < STAKE_CAP_VALIDATOR_COUNT {
+            STAKE_CAP_FEW_VALIDATORS
+        } else {
+            STAKE_CAP
+        };
+        let cap = total_stake.mul_ppm(cap_share)?;
+        let mut total = 0u128;
+        let bootstrap = self.bootstrap;
+        for (address, account) in &mut self.accounts {
+            let excluded = bootstrap && self.start_validators.contains(address);
+            let weight = if excluded || account.stake < STAKE_TIER_1 {
+                Ppm::ZERO
+            } else if account.stake < STAKE_TIER_2 {
+                SAVER_WEIGHT
+            } else {
+                Ppm::ONE
+            };
+            let w = account.stake.min(cap).mul_ppm(weight)?.units();
+            account.reward_weight = w;
+            // Invariant: an account without weight has mark 0, so its
+            // encoding stays small (spec 6).
+            account.reward_mark = if w == 0 { 0 } else { self.reward_index };
+            total = total.checked_add(w).ok_or(ArithmeticError::Overflow)?;
+        }
+        self.total_reward_weight = total;
+        self.staking_distributed = Amount::ZERO;
+        Ok(())
+    }
+
+    /// Distributes `amount` plus the carry over the current weights by
+    /// raising the reward counter, at most [`STAKING_MAX_PER_EPOCH`] per
+    /// epoch; what does not divide evenly or exceeds the limit stays as
+    /// carry. Without weights everything stays as carry.
+    fn distribute_staking(&mut self, amount: Amount) -> Result<(), StateError> {
+        let pool = self.staking_carry.checked_add(amount)?;
+        let weight = self.total_reward_weight;
+        let allowed = STAKING_MAX_PER_EPOCH
+            .checked_sub(self.staking_distributed)
+            .unwrap_or(Amount::ZERO);
+        let share = pool.min(allowed);
+        if weight == 0 || share.is_zero() {
+            self.staking_carry = pool;
+            return Ok(());
+        }
+        let delta = share
+            .units()
+            .checked_mul(REWARD_INDEX_SCALE)
+            .ok_or(ArithmeticError::Overflow)?
+            .checked_div(weight)
+            .ok_or(ArithmeticError::DivisionByZero)?;
+        let distributed = Amount::from_units(delta).mul_div_floor(weight, REWARD_INDEX_SCALE)?;
+        self.reward_index = self
+            .reward_index
+            .checked_add(delta)
+            .ok_or(ArithmeticError::Overflow)?;
+        self.staking_carry = pool.checked_sub(distributed)?;
+        self.staking_distributed = self.staking_distributed.checked_add(distributed)?;
+        Ok(())
+    }
+
+    fn claim_of(&self, account: &Account) -> Result<Amount, StateError> {
+        Ok(claim_amount(account, self.reward_index)?)
+    }
+
+    /// Credits the staking reward of `address` to its free balance (spec
+    /// 9.4: at every transaction of the account and at every epoch start).
+    /// Returns the credited amount.
+    ///
+    /// # Errors
+    /// [`StateError::UnknownAccount`], [`StateError::PotTooSmall`] (not
+    /// reachable: claims never exceed what the counter distributed).
+    pub fn settle_rewards(&mut self, address: &Address) -> Result<Amount, StateError> {
+        let index = self.reward_index;
+        let account = self
+            .accounts
+            .get(address)
+            .ok_or(StateError::UnknownAccount(*address))?;
+        let claim = claim_amount(account, index)?;
+        let pot = self
+            .staking_pot
+            .checked_sub(claim)
+            .map_err(|_| StateError::PotTooSmall)?;
+        let account = self.account_mut(address)?;
+        account.free = account.free.checked_add(claim)?;
+        if account.reward_weight != 0 {
+            account.reward_mark = index;
+        }
+        self.staking_pot = pot;
+        Ok(claim)
+    }
+
     /// Mints the emission of one block: the only operation that creates
-    /// TOY. The amounts come from `toy-emission`.
+    /// TOY. The amounts come from `toy-emission` (spec 9.2).
     ///
     /// # Errors
     /// [`StateError::PartsMismatch`] if the parts do not add up to the
     /// total.
     pub fn mint_block(&mut self, mint: &Mint) -> Result<(), StateError> {
-        let consensus_total = match mint.consensus {
-            ConsensusMint::StartValidators { each } => {
-                let count = u128::try_from(self.start_validators.len())
-                    .map_err(|_| ArithmeticError::Overflow)?;
-                each.checked_mul(count)?
-            }
-            ConsensusMint::Stakers(amount) => amount,
-        };
-        let parts = Amount::checked_sum([consensus_total, mint.work_lottery, mint.refund_pool])?;
+        let count =
+            u128::try_from(self.start_validators.len()).map_err(|_| ArithmeticError::Overflow)?;
+        let start_total = mint.start_each.checked_mul(count)?;
+        let parts = Amount::checked_sum([
+            start_total,
+            mint.work_base,
+            Amount::checked_sum(mint.jackpots)?,
+            mint.committee,
+            mint.full_node,
+            mint.refund_pool,
+            mint.staking,
+        ])?;
         if parts != mint.total {
             return Err(StateError::PartsMismatch);
         }
-        let mut work_lottery = self.work_lottery.checked_add(mint.work_lottery)?;
+        let work_lottery = self.work_lottery.checked_add(mint.work_base)?;
+        let mut jackpots = self.jackpots;
+        for (pot, add) in jackpots.iter_mut().zip(mint.jackpots) {
+            *pot = pot.checked_add(add)?;
+        }
         let refund_pool = self.refund_pool.checked_add(mint.refund_pool)?;
-        let mut consensus_rewards = self.consensus_rewards;
-        // Planned reward locks: (address, bonded amount, account to create).
-        let mut plans: Vec<(Address, Amount, bool)> = Vec::new();
+        let committee_pot = self.committee_pot.checked_add(mint.committee)?;
+        let full_node_pot = self.full_node_pot.checked_add(mint.full_node)?;
+        let staking_pot = self.staking_pot.checked_add(mint.staking)?;
         let unlock = self
             .epoch
             .checked_add(START_REWARD_LOCK_EPOCHS)
             .ok_or(ArithmeticError::Overflow)?;
-        match mint.consensus {
-            ConsensusMint::Stakers(amount) => {
-                consensus_rewards = consensus_rewards.checked_add(amount)?;
-            }
-            ConsensusMint::StartValidators { each } if !each.is_zero() => {
-                for address in &self.start_validators {
-                    if let Some(account) = self.accounts.get(address) {
-                        let existing = account
-                            .reward_locks
-                            .iter()
-                            .find(|r| r.unlock_epoch == unlock)
-                            .map_or(Amount::ZERO, |r| r.amount);
-                        existing.checked_add(each)?;
-                        plans.push((*address, each, false));
-                    } else if each >= self.activation_deposit {
-                        // The first reward activates the account: the
-                        // deposit is taken from it, the rest is bonded
-                        // (spec 6.1, 5.3).
-                        self.nonce_base()?;
-                        plans.push((*address, each.checked_sub(self.activation_deposit)?, true));
-                    } else {
-                        // Too small to activate an account: nothing may be
-                        // burned, so it goes to the work lottery like any
-                        // unpaid bootstrap share.
-                        work_lottery = work_lottery.checked_add(each)?;
-                    }
+        // Start wage: locked on the account, or kept as pending until it
+        // covers the activation deposit (spec 6.1, 5.3). With 64 start
+        // validators one block pays less than the deposit.
+        let mut locks: Vec<(Address, Amount)> = Vec::new();
+        let mut pending = self.start_wage_pending.clone();
+        let mut created: Vec<(Address, Amount)> = Vec::new();
+        if !mint.start_each.is_zero() {
+            for address in &self.start_validators {
+                if self.accounts.contains_key(address) {
+                    locks.push((*address, mint.start_each));
+                    continue;
+                }
+                let sum = pending
+                    .get(address)
+                    .copied()
+                    .unwrap_or(Amount::ZERO)
+                    .checked_add(mint.start_each)?;
+                if sum >= self.activation_deposit {
+                    pending.remove(address);
+                    self.nonce_base()?;
+                    created.push((*address, sum.checked_sub(self.activation_deposit)?));
+                } else {
+                    pending.insert(*address, sum);
                 }
             }
-            ConsensusMint::StartValidators { .. } => {}
         }
         // Everything checked: apply.
         self.work_lottery = work_lottery;
+        self.jackpots = jackpots;
         self.refund_pool = refund_pool;
-        self.consensus_rewards = consensus_rewards;
+        self.committee_pot = committee_pot;
+        self.full_node_pot = full_node_pot;
+        self.staking_pot = staking_pot;
+        self.start_wage_pending = pending;
+        self.bootstrap = mint.bootstrap;
         let deposit = self.activation_deposit;
-        for (address, bonded, create) in plans {
-            if create {
-                self.create_account(address, deposit, Amount::ZERO)?;
-            }
-            if bonded.is_zero() {
+        for (address, rest) in created {
+            self.create_account(address, deposit, Amount::ZERO)?;
+            locks.push((address, rest));
+        }
+        for (address, amount) in locks {
+            if amount.is_zero() {
                 continue;
             }
             let account = self.account_mut(&address)?;
@@ -535,15 +778,15 @@ impl State {
                 .iter_mut()
                 .find(|r| r.unlock_epoch == unlock)
             {
-                lock.amount = lock.amount.checked_add(bonded)?;
+                lock.amount = lock.amount.checked_add(amount)?;
             } else {
                 account.reward_locks.push(RewardLock {
-                    amount: bonded,
+                    amount,
                     unlock_epoch: unlock,
                 });
             }
         }
-        Ok(())
+        self.distribute_staking(mint.staking)
     }
 
     // ---- Operations signed by the account owner ---------------------------
@@ -618,7 +861,8 @@ impl State {
         proposer: &Address,
     ) -> Result<(), StateError> {
         let remaining = self.free_after_debit(from, split.total()?)?;
-        let fee_lottery = self.fee_lottery.checked_add(split.fee_lottery)?;
+        let staking_pot = self.staking_pot.checked_add(split.staking)?;
+        let carry = self.staking_carry.checked_add(split.staking)?;
         let mut refund_pool = self.refund_pool.checked_add(split.refund_pool)?;
         let pay_proposer = !split.proposer.is_zero()
             && (self.accounts.contains_key(proposer) || split.proposer >= self.activation_deposit);
@@ -628,7 +872,8 @@ impl State {
             refund_pool = refund_pool.checked_add(split.proposer)?;
         }
         self.account_mut(from)?.free = remaining;
-        self.fee_lottery = fee_lottery;
+        self.staking_pot = staking_pot;
+        self.staking_carry = carry;
         self.refund_pool = refund_pool;
         if pay_proposer {
             self.credit(*proposer, split.proposer)?;
@@ -664,7 +909,7 @@ impl State {
     }
 
     /// Starts unbonding `amount` of own stake; it becomes free after 21
-    /// epochs. A registered validator must keep the tier 4 stake.
+    /// epochs. A registered validator must keep the tier 7 stake.
     ///
     /// # Errors
     /// [`StateError::InsufficientStake`], [`StateError::ValidatorStakeTooLow`].
@@ -682,10 +927,10 @@ impl State {
                     needed: amount,
                     available: account.stake,
                 })?;
-        if account.validator.is_some() && rest < STAKE_TIER_4 {
+        if account.validator.is_some() && rest < VALIDATOR_MIN_STAKE {
             return Err(StateError::ValidatorStakeTooLow {
                 stake: rest,
-                required: STAKE_TIER_4,
+                required: VALIDATOR_MIN_STAKE,
             });
         }
         account.stake = rest;
@@ -717,10 +962,10 @@ impl State {
             return Err(StateError::BlsKeyInUse);
         }
         let account = self.account_mut(address)?;
-        if account.stake < STAKE_TIER_4 {
+        if account.stake < VALIDATOR_MIN_STAKE {
             return Err(StateError::ValidatorStakeTooLow {
                 stake: account.stake,
-                required: STAKE_TIER_4,
+                required: VALIDATOR_MIN_STAKE,
             });
         }
         // A running penalty period blocks the role; a pause does not
@@ -794,7 +1039,13 @@ impl State {
         if target == Some(address) {
             return Err(StateError::CloseTargetIsSelf);
         }
-        let total = account.free.checked_add(account.deposit)?;
+        // Rewards not yet credited are part of what the owner takes along.
+        let claim = self.claim_of(account)?;
+        let staking_pot = self
+            .staking_pot
+            .checked_sub(claim)
+            .map_err(|_| StateError::PotTooSmall)?;
+        let total = Amount::checked_sum([account.free, account.deposit, claim])?;
         let rest = total
             .checked_sub(donation)
             .map_err(|_| StateError::DonationTooLarge)?;
@@ -812,6 +1063,7 @@ impl State {
             .remove(address)
             .ok_or(StateError::UnknownAccount(*address))?;
         self.refund_pool = refund_pool;
+        self.staking_pot = staking_pot;
         if closed.penalties.has_history() {
             self.detached.insert(
                 *address,
@@ -850,46 +1102,59 @@ impl State {
 
     // ---- Operations of the protocol ---------------------------------------
 
-    /// Pays lottery prizes from the work lottery pot. Winners without an
-    /// account are activated (every prize is at least 0.2 TOY). Several
-    /// prizes for the same address are paid as one credit.
+    /// Pays lottery prizes from one pot of the work lottery. Winners
+    /// without an account are activated (the draw gives them at least
+    /// 0.2 TOY). Several prizes for the same address are paid as one credit.
     ///
     /// # Errors
-    /// [`StateError::PotTooSmall`] if the prizes exceed the pot.
-    pub fn pay_lottery_prizes(&mut self, prizes: &[(Address, Amount)]) -> Result<(), StateError> {
+    /// [`StateError::PotTooSmall`] if the prizes exceed the pot,
+    /// [`StateError::BelowActivationDeposit`] for a too small prize to a new
+    /// address.
+    pub fn pay_lottery_prizes(
+        &mut self,
+        pot: LotteryPot,
+        prizes: &[(Address, Amount)],
+    ) -> Result<(), StateError> {
         let mut per_winner: BTreeMap<Address, Amount> = BTreeMap::new();
         for (winner, prize) in prizes {
             let sum = per_winner.entry(*winner).or_insert(Amount::ZERO);
             *sum = sum.checked_add(*prize)?;
         }
         let total = Amount::checked_sum(per_winner.values().copied())?;
-        let work_lottery = self
-            .work_lottery
+        let rest = self
+            .lottery_pot(pot)
             .checked_sub(total)
             .map_err(|_| StateError::PotTooSmall)?;
         for (winner, amount) in &per_winner {
             self.check_credit(winner, *amount)?;
         }
-        self.work_lottery = work_lottery;
+        match pot {
+            LotteryPot::Base => self.work_lottery = rest,
+            LotteryPot::Funke => self.jackpots[0] = rest,
+            LotteryPot::Welle => self.jackpots[1] = rest,
+            LotteryPot::Gezeiten => self.jackpots[2] = rest,
+        }
         for (winner, amount) in per_winner {
             self.credit(winner, amount)?;
         }
         Ok(())
     }
 
-    /// Moves the surplus of the refund pool to the work lottery
-    /// (decision 120).
+    /// Moves the surplus of the refund pool to the staking pot
+    /// (decisions 120, 138). It is distributed with the next block.
     ///
     /// # Errors
     /// [`StateError::PotTooSmall`] if `amount` exceeds the pool.
-    pub fn move_refund_surplus_to_lottery(&mut self, amount: Amount) -> Result<(), StateError> {
+    pub fn move_refund_surplus_to_staking(&mut self, amount: Amount) -> Result<(), StateError> {
         let pool = self
             .refund_pool
             .checked_sub(amount)
             .map_err(|_| StateError::PotTooSmall)?;
-        let lottery = self.work_lottery.checked_add(amount)?;
+        let staking_pot = self.staking_pot.checked_add(amount)?;
+        let carry = self.staking_carry.checked_add(amount)?;
         self.refund_pool = pool;
-        self.work_lottery = lottery;
+        self.staking_pot = staking_pot;
+        self.staking_carry = carry;
         Ok(())
     }
 
@@ -1057,4 +1322,18 @@ impl State {
             a.free = amount;
         }
     }
+}
+
+/// Staking reward of `account` since its last credit:
+/// `weight × (index − mark) ÷ 10^15`, rounded down (spec 9.4). Credits
+/// happen at least at every epoch start and an epoch distributes at most
+/// 100,000 TOY, so the product stays below 10^38, inside `u128`.
+fn claim_amount(account: &Account, index: u128) -> Result<Amount, ArithmeticError> {
+    if account.reward_weight == 0 {
+        return Ok(Amount::ZERO);
+    }
+    let delta = index
+        .checked_sub(account.reward_mark)
+        .ok_or(ArithmeticError::Underflow)?;
+    Amount::from_units(delta).mul_div_floor(account.reward_weight, REWARD_INDEX_SCALE)
 }

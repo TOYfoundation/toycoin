@@ -23,7 +23,7 @@ Dieses Dokument beschreibt, wie die Projekte technisch zusammenhängen, welche P
 
 | Vertrag | Quelle | Nutzer | Format |
 |---|---|---|---|
-| **Feste Werte** | `shared/toyverse.json`, erzeugt aus den Rust-Konstanten | Webseite, ToyPost, ToySafe, TOYPAY, ToyScan, Werkzeuge | JSON, Schema `toyverse/1` |
+| **Feste Werte** | `shared/toyverse.json`, erzeugt aus den Rust-Konstanten | Webseite, ToyPost, ToySafe, TOYPAY, ToyScan, Werkzeuge | JSON, Schema `toyverse/2` (seit M3b, 25.10.2026) |
 | Sprachen und Begriffe | `i18n/sprachen.tsv`, `i18n/begriffe.tsv` | alle Oberflächen | TSV mit `\|` |
 | Projektfortschritt | Tabelle „Überblick Meilensteine“ in `docs/STATUS.md` | Webseite (Roadmap), ToyPost (Mitteilungen) | Markdown-Tabelle, Spalten Meilenstein, Inhalt, Status (✅ = fertig) |
 | Knotendaten | JSON-RPC `eth_*`, `toy_*` | TOYPAY, ToyScan, ToyPost, ToySafe | ab M7 |

@@ -1,6 +1,6 @@
 # Projektstatus ToyChain
 
-Stand: 25.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig**, Spezifikation auf **Tokenomics v0.4** umgestellt (Entscheidungen 136 bis 152). Nächster Schritt: **M3b** (Tokenomics v0.4 im Code), danach **M4** (Blöcke, Konsens, Startphase).
+Stand: 25.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3b fertig** (Tokenomics v0.4 im Code, Entscheidungen 136 bis 153). Nächster Schritt: **M4** (Blöcke, Konsens, Startphase).
 
 ## Überblick Meilensteine
 
@@ -10,8 +10,8 @@ Stand: 25.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig**, Spez
 | M1 | Grundtypen und Emission, Genesis ohne Guthaben (`toy-types`, `toy-emission`) | ✅ fertig (18.10.2026) |
 | M2 | Kryptografie und Adressen (`toy-crypto`) | ✅ fertig (20.10.2026), VRF und Chain-IDs entschieden (Nr. 115, 116) |
 | M3 | Zustand, Transaktionen, Kontingent, Gebühren, ToyWork-Lose, Schutzregeln (`toy-state`, `toy-tx`) | ✅ fertig (20.10.2026), Entscheidungen 117 bis 121 |
-| M3b | Tokenomics v0.4 im Code: K-Tabelle, Aufteilung, Belohnungs-Zähler, Stufen 1 bis 7, Kontingent 21 bis 49, Arbeits-Lotterie mit Jackpots (`toy-emission`, `toy-state`, `toy-tx`) | ⏳ offen, nächster Schritt |
-| M4 | Blöcke, Konsens, Startphase (`toy-consensus`) | ⏳ offen |
+| M3b | Tokenomics v0.4 im Code: K-Tabelle, Aufteilung, Belohnungs-Zähler, Stufen 1 bis 7, Kontingent 21 bis 49, Arbeits-Lotterie mit Jackpots (`toy-emission`, `toy-state`, `toy-tx`) | ✅ fertig (25.10.2026), Entscheidung 153 |
+| M4 | Blöcke, Konsens, Startphase (`toy-consensus`) | ⏳ offen, nächster Schritt |
 | M5 | Speicher und 256-MB-Budget (`toy-node`) | ⏳ offen |
 | M6 | Netzwerk (`toy-node`) | ⏳ offen |
 | M7 | JSON-RPC und `toy_`-Methoden (`toy-rpc`) | ⏳ offen |
@@ -22,6 +22,44 @@ Stand: 25.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig**, Spez
 | M12 | Konto-Schutz, Zusatz-Transaktionen, atomarer Tausch | ⏳ offen |
 | M13 | Namen, Einmal-Empfangsadressen, Post-Quanten-Schlüssel | ⏳ offen |
 
+## M3b: Tokenomics v0.4 im Code (25.10.2026)
+
+**Gebaut:**
+
+| Baustein | Wo | Inhalt |
+|---|---|---|
+| K-Tabelle | `toy-emission` (`ktable`, `k_table_data.rs`, `data/k-tabelle.csv`) | 2.434 Stützstellen (je 30 Tage Planzeit, 200 Jahre) mit `k`, `w` und `W`, ganzzahlig eingesetzt. BLAKE3-Hash `cf0ea8cd…8bf032` als Verfassungs-Konstante. Ein Test vergleicht Rust-Tabelle, CSV und Hash, das Python-Skript erzeugt auch die Rust-Datei (`k_tabelle.py --rust`) |
+| Emission und Plan | `toy-emission` (`schedule`, `plan`) | `floor(floor(R × k ÷ 10^6) × m ÷ 10^12)`, Plan P(t) aus der Tabelle, m-Formel unverändert. Ersetzt k₀ = 0,0505 % |
+| Aufteilung je Block | `toy-emission` (`mint`) | Arbeit `w(t)` (Grundtopf 85 %, Funke 8 %, Welle 5 %, Gezeiten 2 %), Startlohn `a(d)` mit Deckel, Komitee 5 %, Voll-Knoten 8 %, Pool 2 % plus Rundung, Staking-Topf Rest. Jeder Teil höchstens so groß wie der Rest, so gibt es keinen Fehlerpfad |
+| Töpfe | `toy-state` (`pots`) | 19 Töpfe in Regel I0, neu: Grundtopf, drei Jackpots, Staking-Topf, Komitee-Topf, Voll-Knoten-Topf (Gebühren-Lotterie und Konsens-Topf entfallen) |
+| Belohnungs-Zähler | `toy-state` (`state`) | Skala 10^15, Gewichte je Epoche (Deckel 5 % bzw. 1 %, Sparer 0,8, unter 1 TOY nichts, Start-Validatoren in der Startphase ohne Anteil), Gutschrift bei jeder eigenen Transaktion und zu jedem Epochenbeginn, höchstens 100.000 TOY je Epoche |
+| Startlohn | `toy-state` | Zeitschloss 365 Epochen, danach frei (kein Stake). Unter dem Pfand wartet der Lohn, bis er 0,1 TOY deckt |
+| Stufen | `toy-types` (`params`) | 1 / 5 / 10 / 25 / 50 / 75 / 100 TOY, Validator ab 100 TOY |
+| Kontingent und Gebühren | `toy-tx` (`fees`) | `min(21 + 28 × (1 − Auslastung), λ)` mit Wasserstand, Anlauf über 7 Epochen, Vielnutzer ab der 1.000. Transaktion nur bezahlt mit doppelter Grundgebühr, Gebühren 20 / 40 / 40 (Vorschlagender, Staking-Topf, Pool), Pool-Überschuss in den Staking-Topf |
+| Arbeits-Lotterie | `toy-tx` (`lottery`, `block`) | Zufallsmix je Block, bis 32 Lose je Block zeitanteilig (mindestens 8), Gewinnzahl 50 bis 100 %, Glücksstufen 1 / 2 / 3 / 5 / 8, Mindestgewinn 0,01 bzw. 0,2 TOY, Jackpots mit Chance nach Topfstand und Faktoren (Ebbe, Beteiligung), Zwang beim Vierfachen, Meilensteine, Höchstgrenze 0,5 % der Jahres-Emission, Schwierigkeit mit Ziel 16 Lose je Block |
+| Gemeinsame Werte | `shared/toyverse.json` | neu erzeugt, Schema `toyverse/2` (Änderungen in `shared/README.md`) |
+
+**Messwerte:**
+
+| Messung | Wert |
+|---|---|
+| Erste Epoche bei m = 1 | 15.821,94 TOY (wie `docs/anhang/v04/kurven.py`) |
+| Erstes Jahr Plan | 10.163.927 TOY |
+| 100 Jahre bei hoher Nutzung | 99.999.505 TOY ausgegeben, m zwischen 1,00 und 1,25 (wie `m_simulation_v04.py`) |
+| Startlohn je Start-Validator und Block am ersten Tag | rund 0,0515 TOY (Lohn plus Komitee-Topf ÷ 64), das erste Konto entsteht mit dem 2. Block |
+| Fairness der Lotterie, 1 Mio. Blöcke | Wer die Hälfte aller Lose hält, bekommt 49,88 % aller Gewinne (Abweichung 0,24 %, Ziel unter 1 %). Funke 4.973-mal, Welle 181-mal, Gezeiten 13-mal |
+| Aufteilen lohnt nicht | 100 Konten mit je 5 TOY bekommen bis auf Rundung (höchstens 1 Einheit je Konto und Block) genau so viel wie ein Konto mit 500 TOY |
+| Speicher je Konto | ohne Stake 49 Byte, mit Nutzung in der Epoche 82 Byte, mit Stake 97 Byte (Zählerstand nur bei Gewicht) |
+| Speicher der Los-Listen | höchstens rund 2,8 MB für zwei Epochen (1,1 % von 256 MB), im Zustands-Hash nur als Prüfsumme |
+
+**Fertig-Bedingungen aus dem Bauplan:** Emission ≤ Restmenge und `k × 2 < 1` für jeden Eintrag (Test über alle Zeilen, Kani-Beweise bei größtem `k` und m = 2), 200 Jahre bei m = 2 unter 10^26, erste Epoche und erstes Jahr wie `kurven.py`, Aufteilung geht in jedem Block auf (I0), Aufteilen bringt nichts, Kontingent 49 bei 0 % Last und 21 bei voller Last, mit Wasserstand weniger, Jackpot-Töpfe in I0, Ausschüttung nie über der Höchstgrenze, Ziehung hängt vom Zufall von Block N + 2 ab (anderer Vorschlagender in Block N ändert nichts, andere VRF-Ausgabe in N + 2 schon), Erwartungswert je Los gleich (Abweichung 0,24 % über 1 Mio. Blöcke).
+
+**Nicht in M3b:** Vorkasse-Kontingent und Gemeinschafts-Lose (später), Komitee-Topf der normalen Phase, Dienste, Verfügbarkeit, Proben, Beteiligung für die Jackpot-Faktoren und gleitende Übergabe (M4), Grenze von 8 Losen je Peer (Netzwerk, M6). Bis dahin: Voll-Knoten-Topf geht in den Staking-Topf, Beteiligung zählt als 100 %, alle Start-Validatoren bekommen gleich viel.
+
+**Ehrlich zu Kani:** Die Kani-Beweise laufen nur in der CI, die Sandbox kann die Nightly-Toolchain von Kani nicht laden. Der bisherige Beweis über die ganze Aufteilung je Block (`block_mint_adds_up_bootstrap_no_share`) brach mit den zehn Anteilen von v0.4 nach 15 Minuten ab. Die Aufteilung nimmt deshalb jeden Teil höchstens bis zum Rest, so gehen die Teile **durch ihren Aufbau** auf. Die CI beweist jetzt die drei Bausteine: jeder Schritt erhält die Summe (`splitter_give_keeps_the_sum`), kein Anteil läuft über (`mul_ppm_never_overflows_for_block_amounts`), die 1.440 Blockbeträge ergeben die Emission der Epoche (`block_emission_adds_up`). Der Beweis über die ganze Aufteilung bleibt im Code, läuft aber nicht in der CI. Dazu kommen die Prüfung zur Laufzeit und die Property-Tests über 300 Epochen.
+
+**Ergebnisse:** `cargo fmt --check` ✅, `cargo clippy --all-targets -D warnings` ✅, `cargo test` ✅ **246 Tests** (207 vorher), `cargo deny check` ✅ (advisories, bans, licenses, sources ok), `cargo vet --locked` ✅ (21 geprüft, 65 Ausnahmen). Keine neue fremde Bibliothek. Lokal mit Rust 1.97.0 (stable).
+
 ## Tokenomics v0.4 vom 25.10.2026 (kein Meilenstein, nur Dokumente)
 
 **Anlass:** Prüfbericht 3 (`12-pruefbericht-tokenomics.md`) fand drei kritische Punkte: Die Übergabe aus der Startphase war rechnerisch unmöglich, der Grundbetrag je Kopf lud zum Aufteilen ein, und Stufe 3 bekam keinen Lohn für mehr Aufwand. Die Varianten-Rechnung (`13-tokenomics-v04-entwurf.md`, Skripte in `docs/anhang/v04/`) hat 15 Kurven, 6 Markt-Szenarien, 4 Übergabe-Regeln, 5 Größen der Start-Gruppe, 2 Stufensysteme, Kontingente und 7 Lotterie-Varianten mit Jackpots verglichen. Der Projektinhaber hat alles Empfohlene übernommen.
@@ -30,7 +68,7 @@ Stand: 25.10.2026 · Phase 1 (Testnet) · Aktueller Schritt: **M3 fertig**, Spez
 
 **Kernpunkte:** Gezeiten-Kurve mit K-Tabelle (Verfassung Punkt 3 geändert, vor dem Mainnet), Staker ab Tag 1, 64 Start-Validatoren mit gesperrtem Lohn und gleitender Übergabe, Stufen 1 / 5 / 10 / 25 / 50 / 75 / 100 TOY, Komitee mit Stimmgewicht nach Stake, Kontingent 21 bis 49 mit Wasserstand, Arbeits-Lotterie mit zufälliger Gewinnzahl, Glücksstufen und den Jackpots Funke, Welle und Gezeiten.
 
-**Nicht geändert:** kein Code, keine Konstanten, `shared/toyverse.json` bleibt bis M3b auf v0.3 (Stufen 10 / 100 / 1.000 TOY, k₀ = 0,0505 %). Die Webseite und ToyPost übernehmen die neuen Werte erst mit M3b über den täglichen Abgleich.
+**Nicht geändert:** kein Code, keine Konstanten (das kam mit M3b, siehe oben).
 
 **Offen:** rechtliche Prüfung der Jackpots, neue Begriffe in `i18n/begriffe.tsv` (Jackpot, Funke, Welle, Gezeiten, Sparer, Helfer, Beweis-Knoten, Ersatz-Validator, Vorkasse-Kontingent) mit Übersetzungen in 45 Sprachen.
 

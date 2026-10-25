@@ -7,7 +7,7 @@
     clippy::indexing_slicing
 )]
 
-use toy_emission::{BlockInput, ConsensusPayout, EmissionEngine, Phase};
+use toy_emission::{BlockInput, EmissionEngine, Phase};
 use toy_types::Amount;
 
 const GENESIS: u64 = 1_800_000_000;
@@ -17,8 +17,8 @@ fn block(timestamp: u64) -> BlockInput {
         timestamp,
         counted_tx: 0,
         free_tx: 3,
-        signatures_received: 21,
-        signatures_expected: 21,
+        signatures_received: 64,
+        signatures_expected: 64,
         phase: Phase::Bootstrap,
     }
 }
@@ -61,7 +61,8 @@ fn sixty_second_blocks() {
     assert_eq!(lengths, vec![1_440, 1_441, 1_441]);
     assert_eq!(engine.state().next_epoch(), 3);
     let first = engine.state().issued();
-    assert!(first > Amount::from_toy(150_000) && first < Amount::from_toy(151_500));
+    // 15,821.94 + about 15,906 + about 15,990 TOY (K table, m = 1).
+    assert!(first > Amount::from_toy(47_000) && first < Amount::from_toy(48_500));
 }
 
 #[test]
@@ -69,7 +70,10 @@ fn ten_second_blocks_still_give_24_hour_epochs_and_one_emission() {
     let mut engine = EmissionEngine::genesis(GENESIS);
     let lengths = run(&mut engine, 10, 1);
     assert_eq!(lengths, vec![8_640]);
-    assert_eq!(engine.minted(), Amount::from_toy(50_500));
+    assert_eq!(
+        engine.minted(),
+        Amount::from_units(15_821_939_400_000_000_000_000)
+    );
     assert_eq!(engine.plan_clock().seconds(), 86_400);
 }
 
@@ -79,15 +83,12 @@ fn start_validators_get_equal_parts_in_epoch_0() {
     let out = engine.apply_block(&block(GENESIS + 60)).unwrap();
     assert_eq!(out.height, 1);
     assert_eq!(out.epoch, 0);
-    match out.mint.consensus {
-        ConsensusPayout::StartValidators { each, count } => {
-            assert_eq!(count, 21);
-            // 50,500 TOY / 1,440 blocks / 2 / 21 validators = about 0.835 TOY.
-            assert!(each > Amount::from_units(834_000_000_000_000_000));
-            assert!(each < Amount::from_units(836_000_000_000_000_000));
-        }
-        ConsensusPayout::Stakers(_) => panic!("bootstrap phase expected"),
-    }
+    assert_eq!(out.mint.start_count, 64);
+    // 15,821.94 TOY / 1,440 blocks × 30 % (wage + committee) / 64
+    // validators = about 0.0515 TOY.
+    let each = out.mint.start_each;
+    assert!(each > Amount::from_units(51_400_000_000_000_000));
+    assert!(each < Amount::from_units(51_600_000_000_000_000));
 }
 
 #[test]

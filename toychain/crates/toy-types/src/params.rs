@@ -42,10 +42,23 @@ pub const SECONDS_PER_DAY: u64 = 86_400;
 /// Plan time (decision 110): each block gap counts at most this many seconds.
 pub const PLAN_GAP_CAP_SECONDS: u64 = 600;
 
-// ---- Emission (spec 9, 9.0, 9.1) --------------------------------------
+// ---- Emission (spec 9, 9.0, 9.1, decisions 136, 137) ------------------
 
-/// Base emission rate k0 = 0.0505 % per epoch = 505 / 1,000,000.
-pub const K0: Ppm = Ppm::new(505);
+/// Number of rows of the K table (one every 30 plan days, 200 years).
+pub const K_TABLE_ROWS: usize = 2_434;
+
+/// Plan days between two rows of the K table.
+pub const K_TABLE_STEP_DAYS: u64 = 30;
+
+/// `k` in the K table is given in units of 10^-12 per epoch.
+pub const K_SCALE: u128 = 1_000_000_000_000;
+
+/// BLAKE3 hash of `toy-emission/data/k-tabelle.csv` (constitution, spec 13
+/// no. 3, decision 136): the emission curve can never change.
+pub const K_TABLE_BLAKE3: [u8; 32] = [
+    0xcf, 0x0e, 0xa8, 0xcd, 0xf3, 0x29, 0x82, 0x08, 0x07, 0xbf, 0x03, 0xd8, 0x9d, 0xb4, 0x21, 0x16,
+    0x84, 0x78, 0x91, 0x30, 0x94, 0x4b, 0xbd, 0xf4, 0xac, 0xf3, 0x0a, 0x81, 0x7c, 0x8b, 0xf0, 0x32,
+];
 
 /// Lower bound of the emission factor m (0.5).
 pub const FACTOR_MIN: Ppm = Ppm::new(500_000);
@@ -62,32 +75,32 @@ pub const EMISSION_BLOCKS_PER_EPOCH: u64 = 1_440;
 /// Block capacity used for the usage measurement `u` (transactions per block).
 pub const USAGE_CAPACITY_PER_BLOCK: u64 = 1_000;
 
-/// Share of each block emission for consensus (stake tiers 2 to 4).
-pub const CONSENSUS_SHARE: Ppm = Ppm::new(500_000);
+/// Largest work share `w(t)` in the K table (45 %, falls to 25 %).
+pub const WORK_SHARE_MAX: Ppm = Ppm::new(450_000);
 
-/// Share of each block emission for the work lottery.
-pub const WORK_SHARE: Ppm = Ppm::new(400_000);
+/// Share of each block emission for the committee pot (spec 9.2).
+pub const COMMITTEE_SHARE: Ppm = Ppm::new(50_000);
 
-/// Share of each block emission for the refund pool (plus rounding remainders).
-pub const REFUND_POOL_SHARE: Ppm = Ppm::new(100_000);
+/// Share of each block emission for the full-node pot (tiers 4 to 7).
+pub const FULL_NODE_SHARE: Ppm = Ppm::new(80_000);
 
-const _: () = assert!(
-    CONSENSUS_SHARE.get() + WORK_SHARE.get() + REFUND_POOL_SHARE.get() == Ppm::SCALE,
-    "emission shares must add up to 100 %"
-);
+/// Share of each block emission for the refund pool (plus rounding
+/// remainders). The staking pot gets the rest of every block.
+pub const REFUND_POOL_SHARE: Ppm = Ppm::new(20_000);
 
-// ---- Bootstrap phase (spec 5.3, decisions 70, 78, 110, 111) -----------
+// ---- Bootstrap phase (spec 5.3, decisions 110, 139 to 141) ------------
 
 /// Number of start validators named in the genesis block.
-pub const START_VALIDATORS: u32 = 21;
+pub const START_VALIDATORS: u32 = 64;
 
-/// Share of the emission paid to start validators on plan day 0 (50 %).
-pub const START_REWARD_INITIAL_SHARE: Ppm = Ppm::new(500_000);
+/// Start wage on plan day 0 (25 % of the emission).
+pub const START_REWARD_INITIAL_SHARE: Ppm = Ppm::new(250_000);
 
-/// The start validator reward falls linearly to zero over this many plan days.
-pub const START_REWARD_DAYS: u64 = 180;
+/// The start wage falls linearly to zero over this many plan days.
+pub const START_REWARD_DAYS: u64 = 365;
 
-/// Start validator rewards stay bonded for this many epochs.
+/// Start validator rewards stay locked for this many epochs (time lock,
+/// no stake and no voting weight).
 pub const START_REWARD_LOCK_EPOCHS: u64 = 365;
 
 /// Earliest handover out of the bootstrap phase, in plan days.
@@ -99,9 +112,26 @@ pub const HANDOVER_MIN_NEW_VALIDATORS: u32 = 21;
 /// Stake of new validators counts for the handover only after this many epochs.
 pub const HANDOVER_MIN_BONDED_EPOCHS: u64 = 30;
 
+/// Handover target: 5 % of all minted TOY until plan day 180 ...
+pub const HANDOVER_TARGET: Ppm = Ppm::new(50_000);
+
+/// ... then falling linearly to 1 % by plan day 540 (decision 140).
+pub const HANDOVER_TARGET_FLOOR: Ppm = Ppm::new(10_000);
+
+/// Plan day on which the handover target starts to fall.
+pub const HANDOVER_TARGET_FALL_FROM_DAYS: u64 = 180;
+
+/// Plan day on which the handover target reaches its floor.
+pub const HANDOVER_TARGET_FALL_UNTIL_DAYS: u64 = 540;
+
 const _: () = assert!(
-    START_REWARD_INITIAL_SHARE.get() <= CONSENSUS_SHARE.get(),
-    "start validators can never get more than the consensus share"
+    WORK_SHARE_MAX.get()
+        + START_REWARD_INITIAL_SHARE.get()
+        + COMMITTEE_SHARE.get()
+        + FULL_NODE_SHARE.get()
+        + REFUND_POOL_SHARE.get()
+        < Ppm::SCALE,
+    "fixed shares must leave a staking share in every block"
 );
 
 // ---- Stake and committee (spec 4, 5, 14) -------------------------------
@@ -109,14 +139,81 @@ const _: () = assert!(
 /// Maximum committee size.
 pub const COMMITTEE_MAX: u32 = 128;
 
-/// Stake of tier 2 (light stake).
-pub const STAKE_TIER_2: Amount = Amount::from_toy(10);
+/// Fixed committee seats for the largest effective stake (decision 143).
+pub const COMMITTEE_FIXED_SEATS: u32 = 64;
 
-/// Stake of tier 3 (full node).
-pub const STAKE_TIER_3: Amount = Amount::from_toy(100);
+/// Committee seats drawn by stake among the other validators.
+pub const COMMITTEE_LOTTERY_SEATS: u32 = 64;
 
-/// Stake of tier 4 (validator).
-pub const STAKE_TIER_4: Amount = Amount::from_toy(1_000);
+/// Reserve seats drawn from tiers 6 and 7.
+pub const COMMITTEE_RESERVE_SEATS: u32 = 32;
+
+/// Duty draws per epoch: attester places (tiers 3 to 7).
+pub const DUTY_ATTESTERS: u32 = 2_048;
+
+/// Duty draws per epoch: reachability probes (tiers 2 to 7).
+pub const DUTY_PROBES: u32 = 1_024;
+
+const _: () = assert!(
+    COMMITTEE_FIXED_SEATS + COMMITTEE_LOTTERY_SEATS == COMMITTEE_MAX,
+    "fixed and lottery seats make up the committee"
+);
+
+/// Stake tier 1, saver (decision 142).
+pub const STAKE_TIER_1: Amount = Amount::from_toy(1);
+
+/// Stake tier 2, helper.
+pub const STAKE_TIER_2: Amount = Amount::from_toy(5);
+
+/// Stake tier 3, attester.
+pub const STAKE_TIER_3: Amount = Amount::from_toy(10);
+
+/// Stake tier 4, full node.
+pub const STAKE_TIER_4: Amount = Amount::from_toy(25);
+
+/// Stake tier 5, proof node.
+pub const STAKE_TIER_5: Amount = Amount::from_toy(50);
+
+/// Stake tier 6, reserve validator.
+pub const STAKE_TIER_6: Amount = Amount::from_toy(75);
+
+/// Stake tier 7, validator.
+pub const STAKE_TIER_7: Amount = Amount::from_toy(100);
+
+/// All stake tiers 1 to 7 in rising order.
+pub const STAKE_TIERS: [Amount; 7] = [
+    STAKE_TIER_1,
+    STAKE_TIER_2,
+    STAKE_TIER_3,
+    STAKE_TIER_4,
+    STAKE_TIER_5,
+    STAKE_TIER_6,
+    STAKE_TIER_7,
+];
+
+/// Minimum stake of a validator (tier 7).
+pub const VALIDATOR_MIN_STAKE: Amount = STAKE_TIER_7;
+
+/// Weight of tier 1 (saver) in the staking pot; tiers 2 to 7 count 1.0.
+pub const SAVER_WEIGHT: Ppm = Ppm::new(800_000);
+
+/// Stake cap per participant while fewer than [`STAKE_CAP_VALIDATOR_COUNT`]
+/// validators are active: 5 % of all bonded stake (decision 111).
+pub const STAKE_CAP_FEW_VALIDATORS: Ppm = Ppm::new(50_000);
+
+/// Stake cap per participant from then on: 1 %.
+pub const STAKE_CAP: Ppm = Ppm::new(10_000);
+
+/// Number of validators from which the 1 % cap applies.
+pub const STAKE_CAP_VALIDATOR_COUNT: usize = 100;
+
+/// Scale of the staking reward counter (spec 9.4).
+pub const REWARD_INDEX_SCALE: u128 = 1_000_000_000_000_000;
+
+/// The staking pot distributes at most this much per epoch; the rest waits
+/// for the next epoch. With [`REWARD_INDEX_SCALE`] this keeps every
+/// product of the counter below 10^38, inside `u128` (spec 9.4).
+pub const STAKING_MAX_PER_EPOCH: Amount = Amount::from_toy(100_000);
 
 /// Unbonding period in epochs.
 pub const UNBONDING_EPOCHS: u64 = 21;
@@ -129,11 +226,82 @@ pub const ACTIVATION_DEPOSIT: Amount = Amount::from_units(UNITS_PER_TOY / 10);
 /// Lowest value the activation deposit may ever be lowered to: 0.01 TOY.
 pub const ACTIVATION_DEPOSIT_FLOOR: Amount = Amount::from_units(UNITS_PER_TOY / 100);
 
-/// Minimum prize of the work lottery: 0.2 TOY.
+/// Minimum prize of the work lottery for an address without account:
+/// 0.2 TOY (0.1 TOY of it become the activation deposit).
 pub const LOTTERY_MIN_PRIZE: Amount = Amount::from_units(UNITS_PER_TOY / 5);
 
-/// Maximum number of lottery winners per block.
-pub const LOTTERY_MAX_WINNERS_PER_BLOCK: u32 = 64;
+/// Minimum prize for an address with an active account: 0.01 TOY.
+pub const LOTTERY_MIN_PRIZE_ACTIVE: Amount = Amount::from_units(UNITS_PER_TOY / 100);
+
+/// Share of the work reward for the base pot, paid every block
+/// (decision 149). The three jackpots get the rest.
+pub const LOTTERY_BASE_SHARE: Ppm = Ppm::new(850_000);
+
+/// Share of the work reward for the jackpot "Funke".
+pub const JACKPOT_FUNKE_SHARE: Ppm = Ppm::new(80_000);
+
+/// Share of the work reward for the jackpot "Welle".
+pub const JACKPOT_WELLE_SHARE: Ppm = Ppm::new(50_000);
+
+/// Share of the work reward for the jackpot "Gezeiten".
+pub const JACKPOT_GEZEITEN_SHARE: Ppm = Ppm::new(20_000);
+
+const _: () = assert!(
+    LOTTERY_BASE_SHARE.get()
+        + JACKPOT_FUNKE_SHARE.get()
+        + JACKPOT_WELLE_SHARE.get()
+        + JACKPOT_GEZEITEN_SHARE.get()
+        == Ppm::SCALE,
+    "lottery pot shares must add up to 100 %"
+);
+
+/// Base pot: at least this share of the tickets of a block wins.
+pub const LOTTERY_MIN_WINNER_SHARE: Ppm = Ppm::new(500_000);
+
+/// Target interval of the jackpots in blocks: Funke, Welle, Gezeiten.
+pub const JACKPOT_INTERVALS: [u64; 3] = [240, 7_200, 86_400];
+
+/// Fewest and most winners of a jackpot: Funke, Welle, Gezeiten.
+pub const JACKPOT_WINNERS: [(u64, u64); 3] = [(1, 4), (8, 64), (64, 512)];
+
+/// Funke draws from the tickets of the last this many blocks; Welle and
+/// Gezeiten from the tickets of the previous epoch.
+pub const JACKPOT_FUNKE_WINDOW_BLOCKS: u64 = 60;
+
+/// A jackpot pays a random share of its pot of at least 40 %.
+pub const JACKPOT_MIN_PAYOUT: Ppm = Ppm::new(400_000);
+
+/// One jackpot pays at most 0.5 % of the emission of the last 365 epochs.
+pub const JACKPOT_MAX_SHARE_OF_YEAR: Ppm = Ppm::new(5_000);
+
+/// Number of past epochs for [`JACKPOT_MAX_SHARE_OF_YEAR`].
+pub const JACKPOT_YEAR_EPOCHS: usize = 365;
+
+/// A pot of this many times its target level is paid out in any case.
+pub const JACKPOT_FORCE_FACTOR: u128 = 4;
+
+/// Bounds of the pot-level factor of the trigger chance.
+pub const JACKPOT_LEVEL_FACTOR_BOUNDS: (u64, u64) = (250_000, 3_000_000);
+
+/// Bounds of the product of the special factors.
+pub const JACKPOT_SPECIAL_FACTOR_BOUNDS: (u64, u64) = (500_000, 3_000_000);
+
+/// Participation of the previous epoch from which Funke and Welle get
+/// more likely (×1.3), and below which they get less likely (×0.8).
+pub const JACKPOT_PARTICIPATION_HIGH: Ppm = Ppm::new(950_000);
+
+/// See [`JACKPOT_PARTICIPATION_HIGH`].
+pub const JACKPOT_PARTICIPATION_LOW: Ppm = Ppm::new(800_000);
+
+/// Milestone: every this many blocks a Gezeiten jackpot follows.
+pub const JACKPOT_MILESTONE_HEIGHT: u64 = 1_000_000;
+
+/// Milestone: every full this many TOY minted a Welle jackpot follows.
+pub const JACKPOT_MILESTONE_SUPPLY: Amount = Amount::from_toy(10_000_000);
+
+/// Milestone: the lowest tide of the curve, every this many plan days
+/// (from the first full wave on), brings a Gezeiten jackpot.
+pub const JACKPOT_MILESTONE_TIDE_DAYS: u64 = 1_825;
 
 /// Tickets committed in block N are drawn with the randomness of block
 /// N + 2, so the builder of block N cannot steer the draw (decision 106).
@@ -165,11 +333,23 @@ pub const MAX_EXPIRY_BLOCKS: u64 = 1_440;
 
 // ---- Free quota and refund pool (spec 7.2, decisions 106, 118, 120) ----
 
-/// Smallest free quota per account and epoch.
-pub const QUOTA_MIN: u64 = 10;
+/// Smallest free quota per account and epoch (at full utilization,
+/// before the water level, decision 145).
+pub const QUOTA_MIN: u64 = 21;
 
 /// Largest free quota per account and epoch (at zero utilization).
-pub const QUOTA_MAX: u64 = 100;
+pub const QUOTA_MAX: u64 = 49;
+
+/// Water level: the free transactions of the previous epoch must fit into
+/// this share of the free space.
+pub const QUOTA_WATER_LEVEL: Ppm = Ppm::new(900_000);
+
+/// Nominal size of a free transaction for the water level.
+pub const QUOTA_NOMINAL_TX_BYTES: u64 = 150;
+
+/// New accounts reach the full quota over this many blocks after the
+/// minimum age (7 epochs).
+pub const QUOTA_RAMP_BLOCKS: u64 = 7 * 1_440;
 
 /// An account must be at least this many blocks old to use the free quota.
 pub const QUOTA_MIN_ACCOUNT_AGE_BLOCKS: u64 = 100;
@@ -182,9 +362,13 @@ pub const REFUND_BUDGET_DIVISOR: u128 = 30;
 /// epoch (decision 120, Prüfbericht 1 P9). Nothing is burned.
 pub const REFUND_POOL_CAP_EPOCHS: u128 = 30;
 
-/// Heavy users: from this many transactions per epoch on, at least half
-/// of the excess must be covered by ToyWork tickets.
+/// Heavy users: from this many transactions per epoch on, a sender pays
+/// at least [`HEAVY_USER_FEE_FACTOR`] times the base fee and cannot use
+/// tickets or the free quota (decision 146).
 pub const HEAVY_USER_THRESHOLD: u64 = 1_000;
+
+/// Fee factor for heavy users.
+pub const HEAVY_USER_FEE_FACTOR: u128 = 2;
 
 // ---- Fees (spec 7.2, decision 117) --------------------------------------
 
@@ -211,15 +395,15 @@ pub const PROGRESSIVE_FEE_STEP: u64 = 10;
 /// the 101st transaction of a sender in a block on (decision 117).
 pub const PROGRESSIVE_FEE_MAX_DOUBLINGS: u32 = 10;
 
-/// Share of a paid fee for the fee lottery among active participants.
-pub const FEE_SHARE_LOTTERY: Ppm = Ppm::new(400_000);
+/// Share of a paid fee for the staking pot (decision 147).
+pub const FEE_SHARE_STAKING: Ppm = Ppm::new(400_000);
 
 /// Share of a paid fee for the block proposer. The refund pool gets the
 /// rest (40 % plus rounding remainders).
 pub const FEE_SHARE_PROPOSER: Ppm = Ppm::new(200_000);
 
 const _: () = assert!(
-    FEE_SHARE_LOTTERY.get() + FEE_SHARE_PROPOSER.get() <= Ppm::SCALE,
+    FEE_SHARE_STAKING.get() + FEE_SHARE_PROPOSER.get() <= Ppm::SCALE,
     "fee shares must not exceed 100 %"
 );
 
@@ -234,16 +418,21 @@ pub const TOYWORK_ITERATIONS: u32 = 1;
 /// Argon2id lanes per ToyWork hash.
 pub const TOYWORK_PARALLELISM: u32 = 1;
 
-/// Maximum number of ToyWork tickets per block (standalone and attached
-/// to transactions together). Verifying one costs about 10 ms on a PC.
-pub const TICKETS_MAX_PER_BLOCK: u64 = 16;
+/// Maximum number of ToyWork tickets per block at a block gap of 60 s or
+/// more (standalone and attached together). Shorter gaps allow
+/// proportionally fewer, at least [`TICKETS_MIN_PER_BLOCK`]. Verifying one
+/// costs about 10 ms on a PC (decision 148).
+pub const TICKETS_MAX_PER_BLOCK: u64 = 32;
+
+/// Lower bound of the ticket limit for short block gaps.
+pub const TICKETS_MIN_PER_BLOCK: u64 = 8;
 
 /// Maximum number of tickets a node accepts from one peer per block
 /// (network layer, M6).
-pub const TICKETS_MAX_PER_PEER_PER_BLOCK: u64 = 4;
+pub const TICKETS_MAX_PER_PEER_PER_BLOCK: u64 = 8;
 
 /// The difficulty adapts once per epoch towards this many tickets per block.
-pub const TICKETS_TARGET_PER_BLOCK: u64 = 8;
+pub const TICKETS_TARGET_PER_BLOCK: u64 = 16;
 
 /// Start threshold: about one ticket per 1,024 hashes (2^118 of 2^128).
 pub const TOYWORK_START_THRESHOLD: u128 = 1 << 118;
@@ -315,7 +504,17 @@ mod tests {
         assert_eq!(ACTIVATION_DEPOSIT.to_string(), "0.1 TOY");
         assert_eq!(ACTIVATION_DEPOSIT_FLOOR.to_string(), "0.01 TOY");
         assert_eq!(LOTTERY_MIN_PRIZE.to_string(), "0.2 TOY");
+        assert_eq!(LOTTERY_MIN_PRIZE_ACTIVE.to_string(), "0.01 TOY");
         assert!(ACTIVATION_DEPOSIT_FLOOR < ACTIVATION_DEPOSIT);
+    }
+
+    #[test]
+    fn stake_tiers_rise() {
+        assert_eq!(STAKE_TIER_1.to_string(), "1 TOY");
+        assert_eq!(VALIDATOR_MIN_STAKE.to_string(), "100 TOY");
+        for pair in STAKE_TIERS.windows(2) {
+            assert!(pair.first() < pair.get(1));
+        }
     }
 
     #[test]
