@@ -1,5 +1,5 @@
 {
-  "schema": "toyverse/1",
+  "schema": "toyverse/2",
   "generatedBy": "toychain/tests/tests/toyverse_manifest.rs (do not edit by hand)",
   "toy": {
     "ticker": "TOY",
@@ -26,23 +26,56 @@
     "minSeconds": 86400
   },
   "emission": {
-    "k0Ppm": 505,
+    "kTableRows": 2434,
+    "kTableStepDays": 30,
+    "kScale": "1000000000000",
+    "kTableBlake3": "cf0ea8cdf329820807bf03d89db4211684789130944bbdf4acf30a817c8bf032",
+    "kTableFile": "toychain/crates/toy-emission/data/k-tabelle.csv",
     "factorMinPpm": 500000,
     "factorMaxPpm": 2000000,
-    "factorMaxStepPpm": 50000,
-    "consensusSharePpm": 500000,
-    "workSharePpm": 400000,
-    "refundPoolSharePpm": 100000
+    "factorMaxStepPpm": 50000
+  },
+  "split": {
+    "workShareStartPpm": 450000,
+    "committeeSharePpm": 50000,
+    "fullNodeSharePpm": 80000,
+    "refundPoolSharePpm": 20000,
+    "stakingShare": "rest"
+  },
+  "bootstrap": {
+    "startValidators": 64,
+    "startWageInitialSharePpm": 250000,
+    "startWageDays": 365,
+    "startWageLockEpochs": 365,
+    "handoverFromDays": 90
+  },
+  "lottery": {
+    "baseSharePpm": 850000,
+    "jackpots": {
+      "funke": { "sharePpm": 80000, "intervalBlocks": 240, "minWinners": 1, "maxWinners": 4 },
+      "welle": { "sharePpm": 50000, "intervalBlocks": 7200, "minWinners": 8, "maxWinners": 64 },
+      "gezeiten": { "sharePpm": 20000, "intervalBlocks": 86400, "minWinners": 64, "maxWinners": 512 }
+    },
+    "jackpotMinPayoutPpm": 400000,
+    "jackpotMaxShareOfYearPpm": 5000,
+    "minWinnerSharePpm": 500000,
+    "luckLevels": [1, 2, 3, 5, 8],
+    "minPrizeActiveUnits": "10000000000000000",
+    "minPrizeNewUnits": "200000000000000000"
   },
   "fees": {
-    "lotterySharePpm": 400000,
+    "stakingSharePpm": 400000,
     "proposerSharePpm": 200000,
     "progressiveStep": 10,
-    "progressiveMaxFactor": 1024
+    "progressiveMaxFactor": 1024,
+    "heavyUserThreshold": 1000,
+    "heavyUserFeeFactor": 2
   },
   "quota": {
-    "min": 10,
-    "max": 100,
+    "min": 21,
+    "max": 49,
+    "waterLevelPpm": 900000,
+    "rampBlocks": 10080,
     "minAccountAgeBlocks": 100
   },
   "accounts": {
@@ -50,18 +83,30 @@
     "activationDepositFloorUnits": "10000000000000000",
     "unbondingEpochs": 21
   },
-  "stakeTiersUnits": {
-    "0": "0",
-    "2": "10000000000000000000",
-    "3": "100000000000000000000",
-    "4": "1000000000000000000000"
+  "stake": {
+    "tiers": [
+      { "tier": 1, "role": "saver", "units": "1000000000000000000" },
+      { "tier": 2, "role": "helper", "units": "5000000000000000000" },
+      { "tier": 3, "role": "attester", "units": "10000000000000000000" },
+      { "tier": 4, "role": "fullNode", "units": "25000000000000000000" },
+      { "tier": 5, "role": "proofNode", "units": "50000000000000000000" },
+      { "tier": 6, "role": "reserveValidator", "units": "75000000000000000000" },
+      { "tier": 7, "role": "validator", "units": "100000000000000000000" }
+    ],
+    "saverWeightPpm": 800000,
+    "capFewValidatorsPpm": 50000,
+    "capPpm": 10000,
+    "capValidatorCount": 100
   },
   "toyWork": {
     "algorithm": "argon2id",
     "memoryKib": 16384,
     "iterations": 1,
     "parallelism": 1,
-    "lotteryMinPrizeUnits": "200000000000000000"
+    "ticketsMaxPerBlock": 32,
+    "ticketsMinPerBlock": 8,
+    "ticketsMaxPerPeer": 8,
+    "ticketsTargetPerBlock": 16
   },
   "txKinds": {
     "transfer": "0x70",

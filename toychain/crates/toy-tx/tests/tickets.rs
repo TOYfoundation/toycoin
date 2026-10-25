@@ -1,4 +1,5 @@
-//! ToyWork tickets and the work lottery (spec 9, decisions 106, 107, 119).
+//! ToyWork tickets and the base pot of the work lottery (spec 9.3,
+//! decisions 106, 107, 119, 148 to 150).
 
 #![allow(
     clippy::arithmetic_side_effects,
@@ -13,7 +14,7 @@ use common::*;
 use toy_crypto::eip155::ChainId;
 use toy_emission::Phase;
 use toy_state::{Right, Violation};
-use toy_tx::lottery::draw;
+use toy_tx::lottery::{draw_base, next_mix};
 use toy_tx::ticket::{TicketClaim, decode_ticket, sign_ticket};
 use toy_tx::{Action, Block, BlockError, TxError};
 use toy_types::params::{LOTTERY_MIN_PRIZE, TOYWORK_START_THRESHOLD};
@@ -41,17 +42,25 @@ fn a_device_without_account_wins_its_first_toy() {
     // Block N + 1: no draw yet.
     let r = net.block(Block::default());
     assert!(r.prizes.is_empty());
-    // Block N + 2: drawn with that block's randomness over the whole pot.
+    // Block N + 2: drawn with that block's randomness mix over the pot.
     let ctx = net.next_ctx();
     let pot = net
         .state
         .work_lottery()
-        .checked_add(ctx.mint.work_lottery)
+        .checked_add(ctx.mint.work_base)
         .unwrap();
-    let expected = draw(&[device.address()], pot, &ctx.randomness, committed).unwrap();
+    let mix = next_mix(&net.state.chain().mix, &ctx.randomness);
+    let id = TicketClaim {
+        owner: device.address(),
+        epoch,
+        nonce: 7,
+    }
+    .id();
+    let expected = draw_base(&[(id, device.address())], pot, &mix, committed, |_| false).unwrap();
     let r = net.block(Block::default());
     assert_eq!(r.prizes, expected);
-    assert_eq!(r.prizes.len(), 1);
+    // A single ticket wins the whole pot; a new address needs 0.2 TOY.
+    assert_eq!(r.prizes, vec![(device.address(), pot)]);
     assert!(r.prizes[0].1 >= LOTTERY_MIN_PRIZE);
     let account = net.state.account(&device.address()).unwrap();
     assert_eq!(account.deposit(), net.state.activation_deposit());
@@ -160,35 +169,88 @@ fn tickets_for_another_epoch_or_chain_are_refused_without_penalty() {
 }
 
 #[test]
-fn at_most_16_tickets_per_block_including_attached_ones() {
+fn at_most_32_tickets_per_block_including_attached_ones() {
     let mut net = Net::new(Phase::Normal);
     let alice = key(1);
     net.fund(&alice, toy(10));
     net.easy_work();
     let epoch = net.next_ctx().epoch;
-    let many: Vec<_> = (0..17)
+    let many: Vec<_> = (0..33)
         .map(|i| sign_ticket(&key(40 + i), CHAIN, epoch, 1))
         .collect();
     assert_eq!(
         net.try_block(&tickets(many.clone())),
-        Err(BlockError::TooManyTickets)
+        Err(BlockError::TooManyTickets { limit: 32 })
     );
-    // 15 standalone plus one attached to a transaction: 16, fine.
+    // 31 standalone plus one attached to a transaction: 32, fine.
     let mut f = net.fields(&alice);
     f.max_fee = Amount::ZERO;
     f.work_nonce = Some(99);
     let worked = net.sign(&alice, &f, &Action::Donate(Amount::from_units(1)));
     let block = Block {
         transactions: vec![worked.clone()],
-        tickets: many[..16].to_vec(),
+        tickets: many[..32].to_vec(),
     };
-    assert_eq!(net.try_block(&block), Err(BlockError::TooManyTickets));
+    assert_eq!(
+        net.try_block(&block),
+        Err(BlockError::TooManyTickets { limit: 32 })
+    );
     let block = Block {
         transactions: vec![worked],
-        tickets: many[..15].to_vec(),
+        tickets: many[..31].to_vec(),
     };
     let r = net.block(block);
-    assert_eq!(r.valid_tickets, 16);
+    assert_eq!(r.valid_tickets, 32);
+}
+
+#[test]
+fn faster_blocks_carry_proportionally_fewer_tickets() {
+    let mut net = Net::new(Phase::Normal);
+    net.easy_work();
+    let epoch = net.next_ctx().epoch;
+    let nine: Vec<_> = (0..9)
+        .map(|i| sign_ticket(&key(40 + i), CHAIN, epoch, 1))
+        .collect();
+    // 15 seconds after the previous block: 32 × 15 ÷ 60 = 8.
+    let r = net.try_block_with(&tickets(nine.clone()), |ctx| ctx.gap_seconds = 15);
+    assert_eq!(r, Err(BlockError::TooManyTickets { limit: 8 }));
+    // 30 seconds: 16.
+    let r = net
+        .try_block_with(&tickets(nine), |ctx| ctx.gap_seconds = 30)
+        .unwrap();
+    assert_eq!(r.valid_tickets, 9);
+}
+
+#[test]
+fn many_tickets_share_the_base_pot_by_luck_levels() {
+    let mut net = Net::new(Phase::Normal);
+    net.empty(50);
+    net.easy_work();
+    let epoch = net.next_ctx().epoch;
+    let devices: Vec<_> = (60..76).map(key).collect();
+    let list: Vec<_> = devices
+        .iter()
+        .map(|d| sign_ticket(d, CHAIN, epoch, 1))
+        .collect();
+    net.block(tickets(list));
+    net.empty(1);
+    let pot = net.state.work_lottery();
+    let ctx = net.next_ctx();
+    let r = net.block(Block::default());
+    // Half to all 16 tickets win; prizes differ by luck level.
+    assert!((8..=16).contains(&r.prizes.len()), "{}", r.prizes.len());
+    let paid = Amount::checked_sum(r.prizes.iter().map(|(_, p)| *p)).unwrap();
+    let available = pot.checked_add(ctx.mint.work_base).unwrap();
+    assert!(paid <= available);
+    assert!(paid > available.checked_sub(Amount::from_units(100)).unwrap());
+    let mut sizes: Vec<Amount> = r.prizes.iter().map(|(_, p)| *p).collect();
+    sizes.sort();
+    sizes.dedup();
+    assert!(sizes.len() > 1, "luck levels give different prizes");
+    for (winner, _) in &r.prizes {
+        assert!(devices.iter().any(|d| d.address() == *winner));
+    }
+    net.i0();
 }
 
 #[test]
@@ -268,7 +330,8 @@ fn tickets_are_bound_to_owner_epoch_seed_and_chain() {
 fn difficulty_adapts_once_per_epoch() {
     let mut net = Net::new(Phase::Normal);
     assert_eq!(net.state.chain().ticket_threshold, TOYWORK_START_THRESHOLD);
-    // No tickets at all in epoch 0: four times easier in epoch 1.
+    // No tickets at all in epoch 0 (target 16 per block): four times
+    // easier in epoch 1.
     net.to_next_epoch();
     assert_eq!(
         net.state.chain().ticket_threshold,
@@ -280,4 +343,41 @@ fn difficulty_adapts_once_per_epoch() {
         net.state.chain().epoch_seed,
         toy_crypto::hash::blake3(&height.to_be_bytes())
     );
+}
+
+/// Prizes of block N + 2 for 16 tickets of block N, with optional changes
+/// to the proposer of block N and the VRF output of block N + 2.
+fn draw_after(other_proposer: bool, other_vrf: bool) -> Vec<(toy_types::Address, Amount)> {
+    let mut net = Net::new(Phase::Normal);
+    net.empty(20);
+    net.easy_work();
+    let epoch = net.next_ctx().epoch;
+    let list: Vec<_> = (60..76)
+        .map(|i| sign_ticket(&key(i), CHAIN, epoch, 1))
+        .collect();
+    net.try_block_with(&tickets(list), |ctx| {
+        if other_proposer {
+            ctx.proposer = key(251).address();
+        }
+    })
+    .unwrap();
+    net.empty(1);
+    let r = net
+        .try_block_with(&Block::default(), |ctx| {
+            if other_vrf {
+                ctx.randomness = Hash::from_bytes([0xee; 32]);
+            }
+        })
+        .unwrap();
+    r.prizes
+}
+
+/// Spec 9.3, decision 150: the draw for block N uses `R_(N+2)`. Whoever
+/// builds block N cannot steer it, the VRF output of block N + 2 decides.
+#[test]
+fn the_draw_depends_on_the_randomness_two_blocks_later() {
+    let normal = draw_after(false, false);
+    assert!(!normal.is_empty());
+    assert_eq!(draw_after(true, false), normal, "proposer of block N");
+    assert_ne!(draw_after(false, true), normal, "VRF of block N + 2");
 }

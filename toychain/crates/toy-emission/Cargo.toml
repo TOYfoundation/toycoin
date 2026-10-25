@@ -12,3 +12,7 @@ workspace = true
 
 [dependencies]
 toy-types.workspace = true
+
+[dev-dependencies]
+# Only for the BLAKE3 hash of the K table in tests/k_table.rs.
+toy-crypto.workspace = true

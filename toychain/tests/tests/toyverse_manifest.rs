@@ -31,6 +31,13 @@ fn repo_root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 
+fn hex(bytes: &[u8]) -> String {
+    bytes.iter().fold(String::new(), |mut out, b| {
+        let _ = write!(out, "{b:02x}");
+        out
+    })
+}
+
 fn language_count() -> usize {
     // A missing file counts as 0 languages and fails the tests below.
     let tsv = std::fs::read_to_string(repo_root().join("i18n/sprachen.tsv")).unwrap_or_default();
@@ -48,7 +55,7 @@ fn manifest() -> String {
         s.push('\n');
     };
     line("{".into());
-    line("  \"schema\": \"toyverse/1\",".into());
+    line("  \"schema\": \"toyverse/2\",".into());
     line(
         "  \"generatedBy\": \"toychain/tests/tests/toyverse_manifest.rs (do not edit by hand)\","
             .into(),
@@ -93,27 +100,114 @@ fn manifest() -> String {
     line(format!("    \"minSeconds\": {}", params::EPOCH_MIN_SECONDS));
     line("  },".into());
     line("  \"emission\": {".into());
-    line(format!("    \"k0Ppm\": {},", p(params::K0)));
+    line(format!("    \"kTableRows\": {},", params::K_TABLE_ROWS));
+    line(format!(
+        "    \"kTableStepDays\": {},",
+        params::K_TABLE_STEP_DAYS
+    ));
+    line(format!("    \"kScale\": \"{}\",", params::K_SCALE));
+    line(format!(
+        "    \"kTableBlake3\": \"{}\",",
+        hex(&params::K_TABLE_BLAKE3)
+    ));
+    line("    \"kTableFile\": \"toychain/crates/toy-emission/data/k-tabelle.csv\",".into());
     line(format!("    \"factorMinPpm\": {},", p(params::FACTOR_MIN)));
     line(format!("    \"factorMaxPpm\": {},", p(params::FACTOR_MAX)));
     line(format!(
-        "    \"factorMaxStepPpm\": {},",
+        "    \"factorMaxStepPpm\": {}",
         p(params::FACTOR_MAX_STEP)
     ));
+    line("  },".into());
+    line("  \"split\": {".into());
     line(format!(
-        "    \"consensusSharePpm\": {},",
-        p(params::CONSENSUS_SHARE)
+        "    \"workShareStartPpm\": {},",
+        p(params::WORK_SHARE_MAX)
     ));
-    line(format!("    \"workSharePpm\": {},", p(params::WORK_SHARE)));
     line(format!(
-        "    \"refundPoolSharePpm\": {}",
+        "    \"committeeSharePpm\": {},",
+        p(params::COMMITTEE_SHARE)
+    ));
+    line(format!(
+        "    \"fullNodeSharePpm\": {},",
+        p(params::FULL_NODE_SHARE)
+    ));
+    line(format!(
+        "    \"refundPoolSharePpm\": {},",
         p(params::REFUND_POOL_SHARE)
+    ));
+    line("    \"stakingShare\": \"rest\"".into());
+    line("  },".into());
+    line("  \"bootstrap\": {".into());
+    line(format!(
+        "    \"startValidators\": {},",
+        params::START_VALIDATORS
+    ));
+    line(format!(
+        "    \"startWageInitialSharePpm\": {},",
+        p(params::START_REWARD_INITIAL_SHARE)
+    ));
+    line(format!(
+        "    \"startWageDays\": {},",
+        params::START_REWARD_DAYS
+    ));
+    line(format!(
+        "    \"startWageLockEpochs\": {},",
+        params::START_REWARD_LOCK_EPOCHS
+    ));
+    line(format!(
+        "    \"handoverFromDays\": {}",
+        params::HANDOVER_MIN_DAYS
+    ));
+    line("  },".into());
+    line("  \"lottery\": {".into());
+    line(format!(
+        "    \"baseSharePpm\": {},",
+        p(params::LOTTERY_BASE_SHARE)
+    ));
+    let jackpots = [
+        ("funke", params::JACKPOT_FUNKE_SHARE),
+        ("welle", params::JACKPOT_WELLE_SHARE),
+        ("gezeiten", params::JACKPOT_GEZEITEN_SHARE),
+    ];
+    let jackpots: Vec<String> = jackpots
+        .iter()
+        .zip(params::JACKPOT_INTERVALS.iter().zip(params::JACKPOT_WINNERS))
+        .map(|((name, share), (interval, (low, high)))| {
+            format!(
+                "      \"{name}\": {{ \"sharePpm\": {}, \"intervalBlocks\": {interval}, \"minWinners\": {low}, \"maxWinners\": {high} }}",
+                share.get()
+            )
+        })
+        .collect();
+    line("    \"jackpots\": {".into());
+    line(jackpots.join(",\n"));
+    line("    },".into());
+    line(format!(
+        "    \"jackpotMinPayoutPpm\": {},",
+        p(params::JACKPOT_MIN_PAYOUT)
+    ));
+    line(format!(
+        "    \"jackpotMaxShareOfYearPpm\": {},",
+        p(params::JACKPOT_MAX_SHARE_OF_YEAR)
+    ));
+    line(format!(
+        "    \"minWinnerSharePpm\": {},",
+        p(params::LOTTERY_MIN_WINNER_SHARE)
+    ));
+    line("    \"luckLevels\": [1, 2, 3, 5, 8],".into());
+    line(format!(
+        "    \"minPrizeActiveUnits\": {},",
+        u(params::LOTTERY_MIN_PRIZE_ACTIVE)
+    ));
+    line(format!(
+        "    \"minPrizeNewUnits\": {}",
+        u(params::LOTTERY_MIN_PRIZE)
     ));
     line("  },".into());
     line("  \"fees\": {".into());
     line(format!(
-        "    \"lotterySharePpm\": {},",
-        p(params::FEE_SHARE_LOTTERY)
+        "    \"stakingSharePpm\": {},",
+        p(params::FEE_SHARE_STAKING)
     ));
     line(format!(
         "    \"proposerSharePpm\": {},",
@@ -124,13 +218,29 @@ fn manifest() -> String {
         params::PROGRESSIVE_FEE_STEP
     ));
     line(format!(
-        "    \"progressiveMaxFactor\": {}",
+        "    \"progressiveMaxFactor\": {},",
         1u64 << params::PROGRESSIVE_FEE_MAX_DOUBLINGS
+    ));
+    line(format!(
+        "    \"heavyUserThreshold\": {},",
+        params::HEAVY_USER_THRESHOLD
+    ));
+    line(format!(
+        "    \"heavyUserFeeFactor\": {}",
+        params::HEAVY_USER_FEE_FACTOR
     ));
     line("  },".into());
     line("  \"quota\": {".into());
     line(format!("    \"min\": {},", params::QUOTA_MIN));
     line(format!("    \"max\": {},", params::QUOTA_MAX));
+    line(format!(
+        "    \"waterLevelPpm\": {},",
+        p(params::QUOTA_WATER_LEVEL)
+    ));
+    line(format!(
+        "    \"rampBlocks\": {},",
+        params::QUOTA_RAMP_BLOCKS
+    ));
     line(format!(
         "    \"minAccountAgeBlocks\": {}",
         params::QUOTA_MIN_ACCOUNT_AGE_BLOCKS
@@ -150,11 +260,41 @@ fn manifest() -> String {
         params::UNBONDING_EPOCHS
     ));
     line("  },".into());
-    line("  \"stakeTiersUnits\": {".into());
-    line("    \"0\": \"0\",".into());
-    line(format!("    \"2\": {},", u(params::STAKE_TIER_2)));
-    line(format!("    \"3\": {},", u(params::STAKE_TIER_3)));
-    line(format!("    \"4\": {}", u(params::STAKE_TIER_4)));
+    let roles = [
+        "saver",
+        "helper",
+        "attester",
+        "fullNode",
+        "proofNode",
+        "reserveValidator",
+        "validator",
+    ];
+    let tiers: Vec<String> = (1..)
+        .zip(roles.iter().zip(params::STAKE_TIERS))
+        .map(|(tier, (role, amount))| {
+            format!(
+                "      {{ \"tier\": {tier}, \"role\": \"{role}\", \"units\": {} }}",
+                u(amount)
+            )
+        })
+        .collect();
+    line("  \"stake\": {".into());
+    line("    \"tiers\": [".into());
+    line(tiers.join(",\n"));
+    line("    ],".into());
+    line(format!(
+        "    \"saverWeightPpm\": {},",
+        p(params::SAVER_WEIGHT)
+    ));
+    line(format!(
+        "    \"capFewValidatorsPpm\": {},",
+        p(params::STAKE_CAP_FEW_VALIDATORS)
+    ));
+    line(format!("    \"capPpm\": {},", p(params::STAKE_CAP)));
+    line(format!(
+        "    \"capValidatorCount\": {}",
+        params::STAKE_CAP_VALIDATOR_COUNT
+    ));
     line("  },".into());
     line("  \"toyWork\": {".into());
     line("    \"algorithm\": \"argon2id\",".into());
@@ -171,8 +311,20 @@ fn manifest() -> String {
         params::TOYWORK_PARALLELISM
     ));
     line(format!(
-        "    \"lotteryMinPrizeUnits\": {}",
-        u(params::LOTTERY_MIN_PRIZE)
+        "    \"ticketsMaxPerBlock\": {},",
+        params::TICKETS_MAX_PER_BLOCK
+    ));
+    line(format!(
+        "    \"ticketsMinPerBlock\": {},",
+        params::TICKETS_MIN_PER_BLOCK
+    ));
+    line(format!(
+        "    \"ticketsMaxPerPeer\": {},",
+        params::TICKETS_MAX_PER_PEER_PER_BLOCK
+    ));
+    line(format!(
+        "    \"ticketsTargetPerBlock\": {}",
+        params::TICKETS_TARGET_PER_BLOCK
     ));
     line("  },".into());
     let kinds = [
@@ -243,6 +395,14 @@ fn manifest_values_follow_the_fixed_rules() {
     // Amounts beyond 2^53 must be strings in the manifest.
     let m = manifest();
     assert!(m.contains("\"maxSupplyUnits\": \"100000000000000000000000000\""));
+    // The K table hash is a constitution constant (spec 13).
+    assert!(m.contains(
+        "\"kTableBlake3\": \"cf0ea8cdf329820807bf03d89db4211684789130944bbdf4acf30a817c8bf032\""
+    ));
+    // Seven stake tiers, the highest is the validator with 100 TOY.
+    assert!(m.contains(
+        "{ \"tier\": 7, \"role\": \"validator\", \"units\": \"100000000000000000000\" }"
+    ));
     let mut ids = String::new();
     write!(ids, "{}", params::CHAIN_ID_MAINNET).expect("write");
     assert_eq!(ids, "7630713");

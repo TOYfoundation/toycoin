@@ -1,16 +1,20 @@
 //! Plan curve `P(t)`: the emission at m = 1 after `t` whole plan days
-//! (spec 9.1): `P(0) = 0`, `P(i+1) = P(i) + floor((10^26 - P(i)) * 505 / 10^6)`.
+//! (spec 9.1, decision 136):
+//! `P(0) = 0`, `P(i+1) = P(i) + floor(floor((10^26 − P(i)) × k(i) ÷ 10^6) ÷ 10^6)`
+//! with `k(i)` from the K table.
 
-use toy_types::params::{K0, MAX_SUPPLY};
-use toy_types::{Amount, ArithmeticError};
+use toy_types::params::MAX_SUPPLY;
+use toy_types::{Amount, ArithmeticError, Ppm};
 
-/// One plan day: `p + floor((10^26 - p) * k0)`.
+use crate::ktable::k_at;
+use crate::schedule::emission_for;
+
+/// One plan day: `p + emission(10^26 − p, k(day), m = 1)`.
 ///
 /// # Errors
 /// [`ArithmeticError::Underflow`] if `p` exceeds the supply cap.
-pub fn plan_step(p: Amount) -> Result<Amount, ArithmeticError> {
-    let rest = MAX_SUPPLY.checked_sub(p)?;
-    p.checked_add(rest.mul_ppm(K0)?)
+pub fn plan_step(p: Amount, day: u64) -> Result<Amount, ArithmeticError> {
+    p.checked_add(plan_day_amount(p, day)?)
 }
 
 /// `P(days)`, computed from scratch.
@@ -50,7 +54,7 @@ impl PlanCurve {
             *self = Self::new();
         }
         while self.days < days {
-            let next = plan_step(self.value)?;
+            let next = plan_step(self.value, self.days)?;
             if next == self.value {
                 self.days = days;
                 break;
@@ -62,13 +66,13 @@ impl PlanCurve {
     }
 }
 
-/// Plan emission for one day starting at `P(t)`; equals the emission of an
-/// epoch at m = 1 when issued matches the plan.
+/// Plan emission of plan day `day` starting at `P(day)`; equals the
+/// emission of an epoch at m = 1 when issued matches the plan.
 ///
 /// # Errors
 /// [`ArithmeticError::Underflow`] if `p` exceeds the supply cap.
-pub fn plan_day_amount(p: Amount) -> Result<Amount, ArithmeticError> {
-    MAX_SUPPLY.checked_sub(p)?.mul_ppm(K0)
+pub fn plan_day_amount(p: Amount, day: u64) -> Result<Amount, ArithmeticError> {
+    emission_for(MAX_SUPPLY.checked_sub(p)?, k_at(day), Ppm::ONE)
 }
 
 #[cfg(test)]
@@ -76,9 +80,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn first_day_is_50500_toy() {
-        assert_eq!(plan_after_days(1), Ok(Amount::from_toy(50_500)));
-        assert_eq!(plan_day_amount(Amount::ZERO), Ok(Amount::from_toy(50_500)));
+    fn first_day_is_15821_toy() {
+        // 10^26 × 158,219,394 × 10^-12 = 15,821.9394 TOY.
+        let first = Amount::from_units(15_821_939_400_000_000_000_000);
+        assert_eq!(plan_after_days(1), Ok(first));
+        assert_eq!(plan_day_amount(Amount::ZERO, 0), Ok(first));
     }
 
     #[test]
@@ -94,6 +100,6 @@ mod tests {
         let mut curve = PlanCurve::new();
         let end = curve.at(u64::MAX).unwrap();
         assert!(end <= MAX_SUPPLY);
-        assert_eq!(plan_step(end), Ok(end));
+        assert_eq!(plan_step(end, u64::MAX), Ok(end));
     }
 }

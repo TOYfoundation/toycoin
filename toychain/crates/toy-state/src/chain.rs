@@ -1,11 +1,12 @@
 //! Non-monetary consensus data that the transaction rules (`toy-tx`)
 //! keep between blocks: base fee, free quota, refund budget, ToyWork
-//! difficulty, used tickets and pending lottery draws.
+//! difficulty, used tickets, pending lottery draws, the ticket history for
+//! the jackpots, the randomness mix and the emission history.
 //!
 //! These values hold no TOY, so `toy-tx` may change them directly. They
 //! are part of the state root, because every node must agree on them.
 
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
 use toy_types::params::{BASE_FEE_MIN_PER_BYTE, QUOTA_MAX, TOYWORK_START_THRESHOLD};
 use toy_types::{Address, Amount, Hash, Height};
@@ -36,11 +37,37 @@ pub struct ChainData {
     pub epoch_tickets: u64,
     /// Ids of all tickets used in the current epoch (no reuse).
     pub used_tickets: BTreeSet<Hash>,
-    /// Owners of the valid lottery tickets per committing block, waiting
-    /// for the draw two blocks later.
-    pub pending_draws: BTreeMap<Height, Vec<Address>>,
+    /// Valid lottery tickets `(ticket id, owner)` per committing block,
+    /// waiting for the draw of the base pot two blocks later.
+    pub pending_draws: BTreeMap<Height, Vec<(Hash, Address)>>,
     /// Ids of double signatures already punished.
     pub reported_evidence: BTreeSet<Hash>,
+    /// Randomness mix `R_b = BLAKE3(R_(b−1) ‖ VRF output of block b)`
+    /// (spec 9.3, decision 150).
+    pub mix: Hash,
+    /// Owners of the valid tickets of the last 60 blocks (jackpot Funke).
+    pub recent_tickets: VecDeque<(Height, Vec<Address>)>,
+    /// Owners of all valid tickets of the current epoch, in block order.
+    /// Bound into the state root through [`Self::epoch_tickets_digest`].
+    pub epoch_ticket_owners: Vec<Address>,
+    /// Running BLAKE3 digest over [`Self::epoch_ticket_owners`].
+    pub epoch_tickets_digest: Hash,
+    /// Owners of all valid tickets of the previous epoch (jackpots Welle
+    /// and Gezeiten).
+    pub prev_epoch_ticket_owners: Vec<Address>,
+    /// Digest of [`Self::prev_epoch_ticket_owners`].
+    pub prev_epoch_tickets_digest: Hash,
+    /// Height from which a milestone jackpot is due: Funke, Welle,
+    /// Gezeiten (only Welle and Gezeiten have milestones).
+    pub jackpot_due: [Option<Height>; 3],
+    /// Emission minted in the current epoch so far.
+    pub epoch_minted: Amount,
+    /// Emission of the last up to 365 finished epochs (jackpot cap).
+    pub minted_history: VecDeque<Amount>,
+    /// Sum of all emissions after the previous block (milestones).
+    pub minted_total: Amount,
+    /// Full plan days at the previous block (milestones).
+    pub plan_days: u64,
 }
 
 impl ChainData {
@@ -63,6 +90,17 @@ impl ChainData {
             used_tickets: BTreeSet::new(),
             pending_draws: BTreeMap::new(),
             reported_evidence: BTreeSet::new(),
+            mix: genesis_randomness,
+            recent_tickets: VecDeque::new(),
+            epoch_ticket_owners: Vec::new(),
+            epoch_tickets_digest: Hash::from_bytes([0; 32]),
+            prev_epoch_ticket_owners: Vec::new(),
+            prev_epoch_tickets_digest: Hash::from_bytes([0; 32]),
+            jackpot_due: [None; 3],
+            epoch_minted: Amount::ZERO,
+            minted_history: VecDeque::new(),
+            minted_total: Amount::ZERO,
+            plan_days: 0,
         }
     }
 
@@ -85,10 +123,11 @@ impl ChainData {
             out.extend_from_slice(id.as_bytes());
         }
         push_len(&mut out, self.pending_draws.len());
-        for (height, owners) in &self.pending_draws {
+        for (height, tickets) in &self.pending_draws {
             out.extend_from_slice(&height.to_be_bytes());
-            push_len(&mut out, owners.len());
-            for owner in owners {
+            push_len(&mut out, tickets.len());
+            for (id, owner) in tickets {
+                out.extend_from_slice(id.as_bytes());
                 out.extend_from_slice(owner.as_bytes());
             }
         }
@@ -96,6 +135,31 @@ impl ChainData {
         for id in &self.reported_evidence {
             out.extend_from_slice(id.as_bytes());
         }
+        out.extend_from_slice(self.mix.as_bytes());
+        push_len(&mut out, self.recent_tickets.len());
+        for (height, owners) in &self.recent_tickets {
+            out.extend_from_slice(&height.to_be_bytes());
+            push_len(&mut out, owners.len());
+            for owner in owners {
+                out.extend_from_slice(owner.as_bytes());
+            }
+        }
+        // The ticket lists of the epochs are bound by their digests and
+        // lengths; encoding them in full every block would be too costly.
+        push_len(&mut out, self.epoch_ticket_owners.len());
+        out.extend_from_slice(self.epoch_tickets_digest.as_bytes());
+        push_len(&mut out, self.prev_epoch_ticket_owners.len());
+        out.extend_from_slice(self.prev_epoch_tickets_digest.as_bytes());
+        for due in self.jackpot_due {
+            out.extend_from_slice(&due.map_or(u64::MAX, |h| h).to_be_bytes());
+        }
+        out.extend_from_slice(&self.epoch_minted.units().to_be_bytes());
+        push_len(&mut out, self.minted_history.len());
+        for amount in &self.minted_history {
+            out.extend_from_slice(&amount.units().to_be_bytes());
+        }
+        out.extend_from_slice(&self.minted_total.units().to_be_bytes());
+        out.extend_from_slice(&self.plan_days.to_be_bytes());
         out
     }
 }

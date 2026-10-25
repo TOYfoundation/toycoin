@@ -12,6 +12,7 @@ mod common;
 
 use common::TestRng;
 use toy_emission::factor::next_factor;
+use toy_emission::ktable::k_at;
 use toy_emission::mint::block_mint;
 use toy_emission::plan::plan_after_days;
 use toy_emission::{
@@ -33,16 +34,17 @@ fn random_measurements(rng: &mut TestRng) -> EpochMeasurements {
 }
 
 #[test]
-fn constant_m_2_over_100_years_never_exceeds_cap() {
+fn constant_m_2_over_200_years_never_exceeds_cap() {
+    // The whole K table (200 years) and beyond its last row.
     let mut issued = Amount::ZERO;
-    for _ in 0..(100 * 365) {
+    for day in 0..(201 * 365) {
         let remaining = MAX_SUPPLY.checked_sub(issued).unwrap();
-        let e = emission_for(remaining, FACTOR_MAX).unwrap();
+        let e = emission_for(remaining, k_at(day), FACTOR_MAX).unwrap();
         assert!(e <= remaining);
         issued = issued.checked_add(e).unwrap();
         assert!(issued <= MAX_SUPPLY);
     }
-    // At m = 2 almost everything is out after 100 years, but never more.
+    // At m = 2 almost everything is out after 200 years, but never more.
     assert!(issued.units() > MAX_SUPPLY.units() / 100 * 99);
 }
 
@@ -129,7 +131,8 @@ fn factor_rejects_invalid_input() {
 #[test]
 fn every_epoch_mints_exactly_its_emission() {
     let mut rng = TestRng::new(7);
-    let largest = 101_000_000_000_000_000_000_000u128; // 10^26 * 0.000505 * 2
+    // 10^26 × largest k (0.000471) × 2 ≈ 9.4 × 10^22.
+    let largest = 100_000_000_000_000_000_000_000u128;
     for case in 0..300 {
         let emission = if case == 0 {
             largest
@@ -145,6 +148,9 @@ fn every_epoch_mints_exactly_its_emission() {
                 plan_days: 1,
                 phase,
                 start_validator_share: Ppm::new(share),
+                k: k_at(1),
+                work_share: Ppm::new(rng.range(250_000, 450_000)),
+                tide: Ppm::ONE,
             };
             let mut sum = Amount::ZERO;
             for index in 1..=1_500 {
@@ -161,11 +167,14 @@ fn every_epoch_mints_exactly_its_emission() {
 fn block_index_zero_is_rejected() {
     let epoch = EpochEmission {
         epoch: 0,
-        emission: Amount::from_toy(50_500),
+        emission: Amount::from_toy(15_822),
         factor: Ppm::ONE,
         plan_days: 0,
         phase: Phase::Normal,
         start_validator_share: Ppm::ZERO,
+        k: k_at(0),
+        work_share: Ppm::new(450_000),
+        tide: Ppm::ONE,
     };
     assert!(block_mint(&epoch, 0).is_err());
 }

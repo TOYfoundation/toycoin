@@ -5,7 +5,8 @@
 
 use toy_types::params::{
     ACTIVATION_DEPOSIT, ACTIVATION_DEPOSIT_FLOOR, CLOSED_ACCOUNT_HISTORY_EPOCHS,
-    DOUBLE_SIGN_HOLD_EPOCHS, STAKE_TIER_4, START_REWARD_LOCK_EPOCHS, UNBONDING_EPOCHS,
+    DOUBLE_SIGN_HOLD_EPOCHS, STAKING_MAX_PER_EPOCH, START_REWARD_LOCK_EPOCHS, UNBONDING_EPOCHS,
+    VALIDATOR_MIN_STAKE,
 };
 use toy_types::{Address, Amount, Hash};
 
@@ -20,6 +21,26 @@ fn addr(n: u8) -> Address {
 
 fn toy(n: u64) -> Amount {
     Amount::from_toy(n)
+}
+
+/// `n` thousandths of a TOY.
+fn milli(n: u128) -> Amount {
+    Amount::from_units(n * 1_000_000_000_000_000)
+}
+
+/// A mint of `total` with every part zero (fill in the parts).
+fn empty_mint(total: Amount) -> Mint {
+    Mint {
+        total,
+        start_each: Amount::ZERO,
+        work_base: Amount::ZERO,
+        jackpots: [Amount::ZERO; 3],
+        committee: Amount::ZERO,
+        full_node: Amount::ZERO,
+        refund_pool: Amount::ZERO,
+        staking: Amount::ZERO,
+        bootstrap: false,
+    }
 }
 
 /// A state with a running minted counter, funded through the work
@@ -54,21 +75,27 @@ impl World {
     }
 
     fn mint_to_lottery(&mut self, amount: Amount) {
-        self.state
-            .mint_block(&Mint {
-                total: amount,
-                consensus: ConsensusMint::Stakers(Amount::ZERO),
-                work_lottery: amount,
-                refund_pool: Amount::ZERO,
-            })
-            .unwrap();
-        self.minted = self.minted.checked_add(amount).unwrap();
+        self.mint(&Mint {
+            work_base: amount,
+            ..empty_mint(amount)
+        });
+    }
+
+    fn mint(&mut self, mint: &Mint) {
+        self.state.mint_block(mint).unwrap();
+        self.minted = self.minted.checked_add(mint.total).unwrap();
     }
 
     fn fund(&mut self, who: Address, amount: Amount) {
         self.mint_to_lottery(amount);
-        self.state.pay_lottery_prizes(&[(who, amount)]).unwrap();
+        self.state
+            .pay_lottery_prizes(LotteryPot::Base, &[(who, amount)])
+            .unwrap();
         self.i0();
+    }
+
+    fn weight(&self, who: Address) -> u128 {
+        self.state.account(&who).map_or(0, Account::reward_weight)
     }
 
     fn i0(&self) {
@@ -130,24 +157,25 @@ fn i0_detects_tampering() {
 }
 
 #[test]
-fn bootstrap_mint_pays_bonded_rewards_and_activates_with_deposit() {
+fn bootstrap_mint_locks_the_start_wage_and_activates_with_deposit() {
     let mut w = World::new();
     w.next_block();
     let each = Amount::from_units(835_000_000_000_000_000);
-    let consensus = each.checked_mul(21).unwrap();
+    let start_total = each.checked_mul(21).unwrap();
     let mint = Mint {
-        total: consensus.checked_add(toy(10)).unwrap(),
-        consensus: ConsensusMint::StartValidators { each },
-        work_lottery: toy(8),
+        start_each: each,
+        work_base: toy(8),
         refund_pool: toy(2),
+        bootstrap: true,
+        ..empty_mint(start_total.checked_add(toy(10)).unwrap())
     };
-    w.state.mint_block(&mint).unwrap();
-    w.minted = mint.total;
+    w.mint(&mint);
     w.i0();
     for v in w.state.start_validators().to_vec() {
         let a = w.state.account(&v).unwrap();
         assert_eq!(a.deposit(), ACTIVATION_DEPOSIT);
         assert_eq!(a.free(), Amount::ZERO);
+        assert_eq!(a.stake(), Amount::ZERO, "the start wage is no stake");
         assert_eq!(
             a.reward_locks(),
             &[RewardLock {
@@ -157,43 +185,63 @@ fn bootstrap_mint_pays_bonded_rewards_and_activates_with_deposit() {
         );
     }
     // A second block in the same epoch adds to the same lock entry.
-    w.state.mint_block(&mint).unwrap();
-    w.minted = w.minted.checked_add(mint.total).unwrap();
+    w.mint(&mint);
     w.i0();
     let a = w.state.account(&w.state.start_validators()[0]).unwrap();
     assert_eq!(a.reward_locks().len(), 1);
-    // After 365 epochs the reward becomes normal stake (not free).
+    // After 365 epochs the wage becomes free (decision 139: a time lock,
+    // not stake).
     for _ in 0..START_REWARD_LOCK_EPOCHS {
         w.next_epoch();
     }
     let a = w.state.account(&w.state.start_validators()[0]).unwrap();
     assert!(a.reward_locks().is_empty());
+    assert_eq!(a.stake(), Amount::ZERO);
     assert_eq!(
-        a.stake(),
+        a.free(),
         each.checked_mul(2)
             .unwrap()
             .checked_sub(ACTIVATION_DEPOSIT)
             .unwrap()
     );
-    assert_eq!(a.free(), Amount::ZERO);
     w.i0();
 }
 
 #[test]
-fn reward_too_small_to_activate_goes_to_work_lottery() {
+fn small_start_wage_waits_until_it_covers_the_deposit() {
+    // With 64 start validators one block pays about 0.05 TOY each, less
+    // than the 0.1 TOY deposit (spec 5.3, 6.1).
     let mut w = World::new();
-    let each = Amount::from_units(1_000);
+    let each = Amount::from_units(60_000_000_000_000_000);
     let mint = Mint {
-        total: each.checked_mul(21).unwrap(),
-        consensus: ConsensusMint::StartValidators { each },
-        work_lottery: Amount::ZERO,
-        refund_pool: Amount::ZERO,
+        start_each: each,
+        bootstrap: true,
+        ..empty_mint(each.checked_mul(21).unwrap())
     };
-    w.state.mint_block(&mint).unwrap();
-    w.minted = mint.total;
+    w.mint(&mint);
     w.i0();
     assert_eq!(w.state.account_count(), 0);
-    assert_eq!(w.state.work_lottery(), mint.total);
+    let v = w.state.start_validators()[0];
+    assert_eq!(w.state.start_wage_pending(&v), each);
+    assert_eq!(
+        w.state.pot_total(Pot::StartValidatorRewards).unwrap(),
+        mint.total
+    );
+    // Second block: 0.12 TOY >= 0.1 TOY, the account is created.
+    w.next_block();
+    w.mint(&mint);
+    w.i0();
+    assert_eq!(w.state.account_count(), 21);
+    assert_eq!(w.state.start_wage_pending(&v), Amount::ZERO);
+    let a = w.state.account(&v).unwrap();
+    assert_eq!(a.deposit(), ACTIVATION_DEPOSIT);
+    assert_eq!(
+        a.reward_locks_total().unwrap(),
+        each.checked_mul(2)
+            .unwrap()
+            .checked_sub(ACTIVATION_DEPOSIT)
+            .unwrap()
+    );
 }
 
 #[test]
@@ -201,10 +249,18 @@ fn mint_parts_must_add_up() {
     let mut w = World::new();
     let before = w.state.clone();
     let bad = Mint {
-        total: toy(10),
-        consensus: ConsensusMint::Stakers(toy(5)),
-        work_lottery: toy(4),
+        staking: toy(5),
+        work_base: toy(4),
         refund_pool: toy(2),
+        ..empty_mint(toy(10))
+    };
+    assert_eq!(w.state.mint_block(&bad), Err(StateError::PartsMismatch));
+    let bad = Mint {
+        jackpots: [toy(1), toy(1), toy(1)],
+        committee: toy(1),
+        full_node: toy(1),
+        start_each: Amount::from_units(1),
+        ..empty_mint(toy(5))
     };
     assert_eq!(w.state.mint_block(&bad), Err(StateError::PartsMismatch));
     assert_eq!(w.state, before);
@@ -282,10 +338,8 @@ fn double_spend_and_overflow_are_rejected_without_change() {
     w.mint_to_lottery(Amount::from_units(u128::MAX));
     let before = w.state.clone();
     let more = Mint {
-        total: Amount::from_units(1),
-        consensus: ConsensusMint::Stakers(Amount::ZERO),
-        work_lottery: Amount::from_units(1),
-        refund_pool: Amount::ZERO,
+        work_base: Amount::from_units(1),
+        ..empty_mint(Amount::from_units(1))
     };
     assert!(matches!(
         w.state.mint_block(&more),
@@ -320,7 +374,7 @@ fn fee_split_and_proposer_without_account() {
     let mut w = World::new();
     w.fund(addr(1), toy(10));
     let split = FeeSplit {
-        fee_lottery: Amount::from_units(40),
+        staking: Amount::from_units(40),
         proposer: Amount::from_units(20),
         refund_pool: Amount::from_units(41),
     };
@@ -331,7 +385,7 @@ fn fee_split_and_proposer_without_account() {
         w.free(addr(1)),
         before_free.checked_sub(Amount::from_units(101)).unwrap()
     );
-    assert_eq!(w.state.fee_lottery(), Amount::from_units(40));
+    assert_eq!(w.state.staking_pot(), Amount::from_units(40));
     assert_eq!(w.state.refund_pool(), Amount::from_units(61));
     assert!(w.state.account(&addr(9)).is_none());
     w.i0();
@@ -385,12 +439,12 @@ fn bond_unbond_and_release_after_21_epochs() {
 fn validator_registration_rules() {
     let mut w = World::new();
     let key = [7u8; BLS_KEY_LEN];
-    w.fund(addr(1), toy(2_000));
+    w.fund(addr(1), toy(200));
     assert!(matches!(
         w.state.register_validator(&addr(1), key),
         Err(StateError::ValidatorStakeTooLow { .. })
     ));
-    w.state.bond(&addr(1), STAKE_TIER_4).unwrap();
+    w.state.bond(&addr(1), VALIDATOR_MIN_STAKE).unwrap();
     w.state.register_validator(&addr(1), key).unwrap();
     assert!(w.state.can_sign(&addr(1)));
     assert!(w.state.can_propose(&addr(1)));
@@ -400,13 +454,13 @@ fn validator_registration_rules() {
         Err(StateError::AlreadyValidator)
     );
     // Another address cannot take the same key.
-    w.fund(addr(2), toy(2_000));
-    w.state.bond(&addr(2), STAKE_TIER_4).unwrap();
+    w.fund(addr(2), toy(200));
+    w.state.bond(&addr(2), VALIDATOR_MIN_STAKE).unwrap();
     assert_eq!(
         w.state.register_validator(&addr(2), key),
         Err(StateError::BlsKeyInUse)
     );
-    // A validator must keep 1,000 TOY bonded.
+    // A validator must keep 100 TOY (tier 7) bonded.
     assert!(matches!(
         w.state.unbond(&addr(1), toy(1)),
         Err(StateError::ValidatorStakeTooLow { .. })
@@ -580,8 +634,8 @@ fn lowering_the_deposit_frees_the_difference() {
 #[test]
 fn double_sign_holds_stake_but_never_touches_free_balance() {
     let mut w = World::new();
-    w.fund(addr(1), toy(1_500));
-    w.state.bond(&addr(1), STAKE_TIER_4).unwrap();
+    w.fund(addr(1), toy(150));
+    w.state.bond(&addr(1), VALIDATOR_MIN_STAKE).unwrap();
     w.state
         .register_validator(&addr(1), [1; BLS_KEY_LEN])
         .unwrap();
@@ -596,7 +650,7 @@ fn double_sign_holds_stake_but_never_touches_free_balance() {
     assert_eq!(a.free(), free, "free balance untouched");
     assert_eq!(a.deposit(), ACTIVATION_DEPOSIT, "deposit untouched");
     assert_eq!(a.stake(), Amount::ZERO);
-    assert_eq!(a.held_total().unwrap(), STAKE_TIER_4);
+    assert_eq!(a.held_total().unwrap(), VALIDATOR_MIN_STAKE);
     assert!(!w.state.can_sign(&addr(1)));
     w.i0();
     // Paid transfers keep working during the penalty.
@@ -605,7 +659,10 @@ fn double_sign_holds_stake_but_never_touches_free_balance() {
     for _ in 0..DOUBLE_SIGN_HOLD_EPOCHS {
         w.next_epoch();
     }
-    assert_eq!(w.state.account(&addr(1)).unwrap().stake(), STAKE_TIER_4);
+    assert_eq!(
+        w.state.account(&addr(1)).unwrap().stake(),
+        VALIDATOR_MIN_STAKE
+    );
     w.i0();
 }
 
@@ -650,8 +707,8 @@ fn no_penalty_changes_any_balance() {
 fn inactivity_pause_ends_when_the_node_reports_back() {
     let mut w = World::new();
     let key = [3u8; BLS_KEY_LEN];
-    w.fund(addr(1), toy(1_100));
-    w.state.bond(&addr(1), STAKE_TIER_4).unwrap();
+    w.fund(addr(1), toy(110));
+    w.state.bond(&addr(1), VALIDATOR_MIN_STAKE).unwrap();
     w.state.register_validator(&addr(1), key).unwrap();
     w.state
         .apply_violation(&addr(1), Violation::Inactivity)
@@ -685,6 +742,10 @@ fn root_changes_with_every_part_of_the_state() {
     w.state.chain_mut().epoch_tickets = 1;
     let r2 = w.state.root();
     assert_ne!(r1, r2);
+    w.state.chain_mut().jackpot_due[1] = Some(9);
+    assert_ne!(w.state.root(), r2);
+    let r2 = w.state.root();
+    assert_ne!(r1, r2);
     w.state
         .apply_violation(&addr(7), Violation::InvalidTicket)
         .unwrap();
@@ -708,7 +769,7 @@ fn account_encoding_size() {
         })
         .unwrap();
     let active = w.state.account(&addr(1)).unwrap().encode().len();
-    assert_eq!(active, 90, "account used in the current epoch");
+    assert_eq!(active, 82, "account used in the current epoch");
     // Plus about 32 to 64 bytes of Merkle tree per account: within the
     // 100 to 200 bytes of spec 6. M5 measures the real tree.
     assert!(active + 64 <= 200);
@@ -720,14 +781,14 @@ fn account_encoding_size() {
 fn every_failing_operation_leaves_the_state_unchanged() {
     let mut w = World::new();
     w.fund(addr(1), toy(5));
-    w.fund(addr(2), toy(2_000));
-    w.state.bond(&addr(2), STAKE_TIER_4).unwrap();
+    w.fund(addr(2), toy(200));
+    w.state.bond(&addr(2), VALIDATOR_MIN_STAKE).unwrap();
     w.state
         .register_validator(&addr(2), [5; BLS_KEY_LEN])
         .unwrap();
     let before = w.state.clone();
     let big = FeeSplit {
-        fee_lottery: toy(3),
+        staking: toy(3),
         proposer: toy(3),
         refund_pool: toy(3),
     };
@@ -755,9 +816,12 @@ fn every_failing_operation_leaves_the_state_unchanged() {
         w.state
             .close_account(&addr(1), Some(&addr(1)), Amount::ZERO)
             .map(|_| ()),
-        w.state.pay_lottery_prizes(&[(addr(1), toy(1))]),
-        w.state.pay_lottery_prizes(&[(addr(9), small)]),
-        w.state.move_refund_surplus_to_lottery(toy(1)),
+        w.state
+            .pay_lottery_prizes(LotteryPot::Base, &[(addr(1), toy(1))]),
+        w.state
+            .pay_lottery_prizes(LotteryPot::Funke, &[(addr(1), small)]),
+        w.state.move_refund_surplus_to_staking(toy(1)),
+        w.state.settle_rewards(&addr(9)).map(|_| ()),
         w.state.use_nonce(&addr(1), 12345),
         w.state.lower_activation_deposit(toy(1)),
     ];
@@ -765,5 +829,331 @@ fn every_failing_operation_leaves_the_state_unchanged() {
         assert!(r.is_err(), "operation {i} should fail");
     }
     assert_eq!(w.state, before);
+    w.i0();
+}
+
+// ---- Staking pot and reward counter (spec 9.4) -----------------------------
+
+/// 20 accounts with 5 TOY (tier 2, weight 1.0) and 5 accounts with 1 TOY
+/// (tier 1, saver weight 0.8): weighted stake 104 TOY, no one above the
+/// 5 % cap of 105 TOY.
+fn stakers(w: &mut World) {
+    for n in 1..=20 {
+        w.fund(addr(n), toy(6));
+        w.state.bond(&addr(n), toy(5)).unwrap();
+    }
+    for n in 21..=25 {
+        w.fund(addr(n), toy(2));
+        w.state.bond(&addr(n), toy(1)).unwrap();
+    }
+}
+
+fn staking_mint(amount: Amount) -> Mint {
+    Mint {
+        staking: amount,
+        ..empty_mint(amount)
+    }
+}
+
+#[test]
+fn staking_rewards_follow_the_weights_of_the_epoch() {
+    let mut w = World::new();
+    stakers(&mut w);
+    // Weights change only at epoch boundaries.
+    assert_eq!(w.state.total_reward_weight(), 0);
+    w.next_epoch();
+    assert_eq!(w.state.total_reward_weight(), toy(104).units());
+    assert_eq!(w.weight(addr(1)), toy(5).units());
+    assert_eq!(w.weight(addr(21)), milli(800).units());
+
+    let pot = milli(10_400);
+    w.mint(&staking_mint(pot));
+    w.i0();
+    assert_eq!(w.state.pending_reward(&addr(1)).unwrap(), milli(500));
+    assert_eq!(w.state.pending_reward(&addr(21)).unwrap(), milli(80));
+    // Credited with the next own transaction ...
+    let free = w.free(addr(1));
+    let claimed = w.state.settle_rewards(&addr(1)).unwrap();
+    assert_eq!(claimed, milli(500));
+    assert_eq!(w.free(addr(1)), free.checked_add(claimed).unwrap());
+    assert_eq!(w.state.pending_reward(&addr(1)).unwrap(), Amount::ZERO);
+    assert_eq!(w.state.settle_rewards(&addr(1)).unwrap(), Amount::ZERO);
+    w.i0();
+    // ... or at the latest when the next epoch starts.
+    let free = w.free(addr(21));
+    w.next_epoch();
+    assert_eq!(w.free(addr(21)), free.checked_add(milli(80)).unwrap());
+    // Everything was distributed exactly: the pot is empty.
+    assert_eq!(w.state.staking_pot(), Amount::ZERO);
+    w.i0();
+}
+
+#[test]
+fn stake_above_the_cap_counts_only_up_to_the_cap() {
+    let mut w = World::new();
+    stakers(&mut w);
+    w.fund(addr(50), toy(101));
+    w.state.bond(&addr(50), toy(100)).unwrap();
+    w.next_epoch();
+    // Total stake 205 TOY, fewer than 100 validators: cap 5 % = 10.25 TOY.
+    assert_eq!(w.weight(addr(50)), milli(10_250).units());
+    assert_eq!(w.weight(addr(1)), toy(5).units());
+    // Below 1 TOY there is no weight at all.
+    w.fund(addr(60), toy(1));
+    w.state.bond(&addr(60), milli(900)).unwrap();
+    w.next_epoch();
+    assert_eq!(w.weight(addr(60)), 0);
+    w.i0();
+}
+
+#[test]
+fn start_validators_earn_nothing_from_staking_in_the_bootstrap_phase() {
+    let mut w = World::new();
+    stakers(&mut w);
+    let v = w.state.start_validators()[0];
+    w.fund(v, toy(6));
+    w.state.bond(&v, toy(5)).unwrap();
+    w.mint(&Mint {
+        bootstrap: true,
+        ..empty_mint(Amount::ZERO)
+    });
+    w.next_epoch();
+    assert_eq!(w.weight(v), 0);
+    assert!(w.weight(addr(1)) > 0, "stakers are paid from day 1");
+    w.mint(&Mint {
+        bootstrap: true,
+        ..staking_mint(toy(1))
+    });
+    assert_eq!(w.state.pending_reward(&v).unwrap(), Amount::ZERO);
+    w.i0();
+    // Normal phase: the start validator is a staker like everyone else.
+    w.mint(&empty_mint(Amount::ZERO));
+    w.next_epoch();
+    assert_eq!(w.weight(v), toy(5).units());
+    w.i0();
+}
+
+#[test]
+fn without_stakers_the_staking_pot_waits() {
+    let mut w = World::new();
+    w.mint(&staking_mint(toy(7)));
+    w.i0();
+    assert_eq!(w.state.staking_pot(), toy(7));
+    stakers(&mut w);
+    w.next_epoch();
+    // The carry is paid out with the next block.
+    w.mint(&staking_mint(milli(3_400)));
+    assert_eq!(w.state.pending_reward(&addr(1)).unwrap(), milli(500));
+    w.i0();
+}
+
+#[test]
+fn staking_distribution_per_epoch_is_limited() {
+    // Keeps `weight × (I_now − I_last)` far inside u128 (spec 9.4).
+    let mut w = World::new();
+    stakers(&mut w);
+    w.next_epoch();
+    let big = STAKING_MAX_PER_EPOCH.checked_add(toy(52_000)).unwrap();
+    w.mint(&staking_mint(big));
+    w.i0();
+    let all: Amount =
+        Amount::checked_sum((1..=25).map(|n| w.state.pending_reward(&addr(n)).unwrap())).unwrap();
+    assert!(all <= STAKING_MAX_PER_EPOCH);
+    assert!(all > STAKING_MAX_PER_EPOCH.checked_sub(toy(1)).unwrap());
+    // The rest follows in the next epoch.
+    w.next_epoch();
+    w.mint(&staking_mint(Amount::ZERO));
+    let rest: Amount =
+        Amount::checked_sum((1..=25).map(|n| w.state.pending_reward(&addr(n)).unwrap())).unwrap();
+    assert!(rest > toy(51_999));
+    w.i0();
+}
+
+#[test]
+fn fees_and_pool_surplus_feed_the_staking_pot() {
+    let mut w = World::new();
+    stakers(&mut w);
+    w.next_epoch();
+    let split = FeeSplit {
+        staking: milli(1_040),
+        proposer: Amount::ZERO,
+        refund_pool: milli(500),
+    };
+    w.fund(addr(80), toy(5));
+    w.state.pay_fee(&addr(80), &split, &addr(2)).unwrap();
+    w.state.move_refund_surplus_to_staking(milli(500)).unwrap();
+    w.i0();
+    // Distributed with the next block: 1.54 TOY over 104 TOY weight.
+    w.mint(&empty_mint(Amount::ZERO));
+    assert_eq!(
+        w.state.pending_reward(&addr(2)).unwrap(),
+        // Counter step floor(1.54e18 × 1e15 ÷ 1.04e20) = 14,807,692,307,692,
+        // times 5 TOY of weight ÷ 1e15.
+        Amount::from_units(74_038_461_538_460_000)
+    );
+    w.i0();
+}
+
+#[test]
+fn the_full_node_pot_goes_to_the_stakers_until_probes_exist() {
+    let mut w = World::new();
+    stakers(&mut w);
+    w.next_epoch();
+    w.mint(&Mint {
+        full_node: milli(10_400),
+        ..empty_mint(milli(10_400))
+    });
+    assert_eq!(w.state.full_node_pot(), milli(10_400));
+    w.i0();
+    w.next_epoch();
+    assert_eq!(w.state.full_node_pot(), Amount::ZERO);
+    w.mint(&empty_mint(Amount::ZERO));
+    assert_eq!(w.state.pending_reward(&addr(1)).unwrap(), milli(500));
+    w.i0();
+}
+
+#[test]
+fn jackpots_and_committee_pot_are_kept_apart() {
+    let mut w = World::new();
+    w.mint(&Mint {
+        work_base: toy(85),
+        jackpots: [toy(8), toy(5), toy(2)],
+        committee: toy(3),
+        ..empty_mint(toy(103))
+    });
+    assert_eq!(w.state.lottery_pot(LotteryPot::Base), toy(85));
+    assert_eq!(w.state.lottery_pot(LotteryPot::Funke), toy(8));
+    assert_eq!(w.state.lottery_pot(LotteryPot::Welle), toy(5));
+    assert_eq!(w.state.lottery_pot(LotteryPot::Gezeiten), toy(2));
+    assert_eq!(w.state.committee_pot(), toy(3));
+    w.i0();
+    // A jackpot pays only from its own pot.
+    assert_eq!(
+        w.state
+            .pay_lottery_prizes(LotteryPot::Gezeiten, &[(addr(1), toy(3))]),
+        Err(StateError::PotTooSmall)
+    );
+    w.state
+        .pay_lottery_prizes(
+            LotteryPot::Welle,
+            &[(addr(1), toy(2)), (addr(2), toy(2)), (addr(1), toy(1))],
+        )
+        .unwrap();
+    assert_eq!(
+        w.free(addr(1)),
+        toy(3).checked_sub(ACTIVATION_DEPOSIT).unwrap()
+    );
+    assert_eq!(w.state.lottery_pot(LotteryPot::Welle), Amount::ZERO);
+    w.i0();
+}
+
+#[test]
+fn closing_takes_the_pending_reward_along() {
+    let mut w = World::new();
+    stakers(&mut w);
+    w.next_epoch();
+    w.mint(&staking_mint(milli(10_400)));
+    // addr(1) unbonds; the weight of this epoch stays (spec 9.4).
+    w.state.unbond(&addr(1), toy(5)).unwrap();
+    for _ in 0..UNBONDING_EPOCHS {
+        w.next_epoch();
+    }
+    assert_eq!(w.weight(addr(1)), 0);
+    let target = w.free(addr(2));
+    let total = w.free(addr(1)).checked_add(ACTIVATION_DEPOSIT).unwrap();
+    w.state
+        .close_account(&addr(1), Some(&addr(2)), Amount::ZERO)
+        .unwrap();
+    assert_eq!(w.free(addr(2)), target.checked_add(total).unwrap());
+    w.i0();
+}
+
+/// Size test for the new account fields: an account without weight stores
+/// no reward counter.
+#[test]
+fn reward_counter_costs_space_only_for_stakers() {
+    let mut w = World::new();
+    stakers(&mut w);
+    w.fund(addr(70), toy(1));
+    w.next_epoch();
+    w.mint(&staking_mint(toy(1)));
+    w.next_epoch();
+    let plain = w.state.account(&addr(70)).unwrap().encode().len();
+    assert_eq!(plain, 49);
+    let staker = w.state.account(&addr(1)).unwrap().encode().len();
+    assert_eq!(staker, 49 + 16 + 32, "stake plus weight and mark");
+    assert!(staker + 64 <= 200);
+}
+
+/// Size test for the lottery history in the rule data (CLAUDE.md: every
+/// storage structure needs one; spec 6: 256 MB per node).
+#[test]
+fn lottery_history_fits_the_data_budget() {
+    // Worst case of tickets in one epoch: 24 hours of blocks at the 10 s
+    // minimum gap carry at least 8 tickets each (8,640 × 8 = 69,120);
+    // from 15 s on the time-scaled limit gives 46,080 per day.
+    const MAX_TICKETS_PER_EPOCH: usize = 8_640 * 8;
+    let mut chain = ChainData::genesis(Hash::default());
+    let owners = vec![addr(1); MAX_TICKETS_PER_EPOCH];
+    chain.epoch_ticket_owners.clone_from(&owners);
+    chain.prev_epoch_ticket_owners = owners;
+    for h in 0..62u64 {
+        chain.recent_tickets.push_back((h, vec![addr(2); 32]));
+    }
+    for h in 0..3u64 {
+        chain
+            .pending_draws
+            .insert(h, vec![(Hash::default(), addr(3)); 32]);
+    }
+    for _ in 0..364 {
+        chain.minted_history.push_back(toy(50_000));
+    }
+    let lists =
+        (chain.epoch_ticket_owners.len() + chain.prev_epoch_ticket_owners.len()) * Address::LEN;
+    assert_eq!(lists, 2_764_800, "about 2.8 MB, 1.1 % of 256 MB");
+    // The state root binds the long lists by digest, so the encoding per
+    // block stays small.
+    let encoded = chain.encode().len();
+    assert!(encoded < 64 * 1024, "{encoded}");
+}
+
+/// Bauplan M3b: splitting stake over many accounts of the same weight
+/// brings nothing. 100 accounts with 5 TOY each earn, up to rounding,
+/// exactly what one account with 500 TOY earns.
+#[test]
+fn splitting_stake_over_accounts_brings_nothing() {
+    let mut w = World::new();
+    // Background stake keeps the 5 % cap far away (total 11,000 TOY).
+    for n in 1..=20 {
+        w.fund(addr(n), toy(501));
+        w.state.bond(&addr(n), toy(500)).unwrap();
+    }
+    let single = addr(30);
+    w.fund(single, toy(501));
+    w.state.bond(&single, toy(500)).unwrap();
+    let many: Vec<Address> = (0..100u8)
+        .map(|i| {
+            let mut b = [0u8; 20];
+            b[0] = 0xbb;
+            b[19] = i;
+            Address::from_bytes(b)
+        })
+        .collect();
+    for a in &many {
+        w.fund(*a, toy(6));
+        w.state.bond(a, toy(5)).unwrap();
+    }
+    w.next_epoch();
+    for _ in 0..1_440 {
+        w.mint(&staking_mint(Amount::from_units(7_777_777_777_777_777)));
+    }
+    let one = w.state.pending_reward(&single).unwrap();
+    let split =
+        Amount::checked_sum(many.iter().map(|a| w.state.pending_reward(a).unwrap())).unwrap();
+    // 500 of 11,000 TOY weight: about 0.509 of 11.2 TOY.
+    assert!(one > milli(500), "{one:?}");
+    // Each of the 100 accounts loses less than one unit per block.
+    let diff = one.units().abs_diff(split.units());
+    assert!(diff <= 100 * 1_440, "{diff}");
     w.i0();
 }

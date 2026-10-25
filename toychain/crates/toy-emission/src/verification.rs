@@ -21,14 +21,19 @@ use toy_types::{Amount, Ppm};
 use crate::mint::block_mint;
 use crate::schedule::{EpochEmission, Phase, emission_for};
 
-/// Largest possible epoch emission: 10^26 * 505 * 2 / 10^6.
-const MAX_EPOCH_EMISSION: u128 = 101_000_000_000_000_000_000_000;
+/// Largest `k` of the K table (checked by a unit test in `ktable`). The
+/// emission grows with `k` as it grows with `m`, so proving the bounds at
+/// the largest `k` and `m = 2.0` covers every row of the table.
+const K_MAX: u64 = 470_811_069;
+
+/// Upper bound of any epoch emission: 10^26 × K_MAX × 2 / 10^18 ≈ 9.4 × 10^22.
+const MAX_EPOCH_EMISSION: u128 = 100_000_000_000_000_000_000_000;
 
 #[kani::proof]
 fn emission_at_max_factor_never_exceeds_remaining() {
     let remaining: u128 = kani::any();
     kani::assume(remaining <= MAX_SUPPLY.units());
-    let emission = emission_for(Amount::from_units(remaining), FACTOR_MAX);
+    let emission = emission_for(Amount::from_units(remaining), K_MAX, FACTOR_MAX);
     assert!(matches!(emission, Ok(e) if e.units() <= remaining));
 }
 
@@ -37,7 +42,7 @@ fn issued_stays_within_cap_at_max_factor() {
     let issued: u128 = kani::any();
     kani::assume(issued <= MAX_SUPPLY.units());
     let remaining = MAX_SUPPLY.units() - issued;
-    let emission = emission_for(Amount::from_units(remaining), FACTOR_MAX);
+    let emission = emission_for(Amount::from_units(remaining), K_MAX, FACTOR_MAX);
     assert!(matches!(emission, Ok(e) if issued + e.units() <= MAX_SUPPLY.units()));
 }
 
@@ -53,6 +58,9 @@ fn check_block_mint(phase: Phase, share: u64) {
         plan_days: 0,
         phase,
         start_validator_share: Ppm::new(share),
+        k: K_MAX,
+        work_share: Ppm::new(450_000),
+        tide: Ppm::ONE,
     };
     let mint = block_mint(&epoch, index);
     assert!(matches!(mint, Ok(m) if m.sum_of_parts() == Ok(m.total)));
@@ -65,7 +73,7 @@ fn block_mint_adds_up_normal_phase() {
 
 #[kani::proof]
 fn block_mint_adds_up_bootstrap_full_share() {
-    check_block_mint(Phase::Bootstrap, 500_000);
+    check_block_mint(Phase::Bootstrap, 250_000);
 }
 
 #[kani::proof]

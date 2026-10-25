@@ -1,27 +1,26 @@
 //! Emission per epoch (spec 9 and 9.0).
 
-use toy_types::params::{K0, MAX_SUPPLY};
+use toy_types::params::{K_SCALE, MAX_SUPPLY};
 use toy_types::{Amount, ArithmeticError, EpochNumber, Ppm};
 
 use crate::bootstrap;
 use crate::error::EmissionError;
 use crate::factor::{self, EpochMeasurements};
+use crate::ktable;
 use crate::plan::{PlanCurve, plan_step};
 
-/// Emission of an epoch for a given remaining amount and factor:
-/// `floor(remaining * 505 * m / 10^12)`. The largest intermediate value is
-/// about 10^35 and fits `u128`.
+/// Emission of an epoch for a remaining amount, the rate `k` from the K
+/// table (in 10^-12) and the factor `m`:
+/// `floor(floor(remaining × k ÷ 10^6) × m ÷ 10^12)` (spec 9.1). The largest
+/// intermediate value is about 10^35 and fits `u128`.
 ///
 /// # Errors
-/// [`ArithmeticError::Overflow`] if the intermediate product does not fit.
-pub fn emission_for(remaining: Amount, factor: Ppm) -> Result<Amount, ArithmeticError> {
-    let rate = u128::from(K0.get())
-        .checked_mul(u128::from(factor.get()))
-        .ok_or(ArithmeticError::Overflow)?;
-    let scale = u128::from(Ppm::SCALE)
-        .checked_mul(u128::from(Ppm::SCALE))
-        .ok_or(ArithmeticError::Overflow)?;
-    remaining.mul_div_floor(rate, scale)
+/// [`ArithmeticError::Overflow`] if an intermediate product does not fit.
+pub fn emission_for(remaining: Amount, k: u64, factor: Ppm) -> Result<Amount, ArithmeticError> {
+    // k is in 10^-12 and m in 10^-6: divide by 10^6 first, then by 10^12.
+    remaining
+        .mul_div_floor(u128::from(k), u128::from(Ppm::SCALE))?
+        .mul_div_floor(u128::from(factor.get()), K_SCALE)
 }
 
 /// Who receives the consensus share of an epoch.
@@ -59,9 +58,15 @@ pub struct EpochEmission {
     pub plan_days: u64,
     /// Phase of the epoch.
     pub phase: Phase,
-    /// Share of each block emission for the start validators after the cap
-    /// (zero outside the bootstrap phase).
+    /// Start wage: share of each block emission for the start validators
+    /// after the cap (zero outside the bootstrap phase).
     pub start_validator_share: Ppm,
+    /// Rate `k(t)` from the K table (10^-12 per epoch).
+    pub k: u64,
+    /// Work share `w(t)` from the K table.
+    pub work_share: Ppm,
+    /// Tide `W(t)` from the K table.
+    pub tide: Ppm,
 }
 
 /// Consensus state of the emission. Only [`EmissionState::start_epoch`]
@@ -163,7 +168,8 @@ impl EmissionState {
         let remaining = MAX_SUPPLY
             .checked_sub(self.issued)
             .map_err(|_| EmissionError::SupplyCapExceeded)?;
-        let emission = emission_for(remaining, factor)?;
+        let row = ktable::at(start.plan_days);
+        let emission = emission_for(remaining, row.k, factor)?;
         if emission > remaining {
             return Err(EmissionError::SupplyCapExceeded);
         }
@@ -172,7 +178,7 @@ impl EmissionState {
             return Err(EmissionError::SupplyCapExceeded);
         }
 
-        let plan_next = plan_step(plan_now)?;
+        let plan_next = plan_step(plan_now, start.plan_days)?;
         let plan_delta = plan_next
             .checked_sub(self.reward_plan_mark)
             .map_err(|_| EmissionError::Inconsistent)?;
@@ -200,6 +206,9 @@ impl EmissionState {
             plan_days: start.plan_days,
             phase: start.phase,
             start_validator_share,
+            k: row.k,
+            work_share: Ppm::new(u64::from(row.w)),
+            tide: Ppm::new(u64::from(row.tide)),
         })
     }
 }

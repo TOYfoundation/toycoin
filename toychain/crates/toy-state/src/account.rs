@@ -21,12 +21,13 @@ pub struct Unbonding {
     pub release_epoch: EpochNumber,
 }
 
-/// Bonded start validator reward (spec 5.3: bonded for 365 epochs).
+/// Locked start wage (spec 5.3, decision 139: time lock of 365 epochs; no
+/// stake and no voting weight).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct RewardLock {
     /// Amount.
     pub amount: Amount,
-    /// From this epoch on the amount counts as normal stake.
+    /// From this epoch on the amount is free.
     pub unlock_epoch: EpochNumber,
 }
 
@@ -40,7 +41,7 @@ pub struct HeldStake {
     pub release_epoch: EpochNumber,
 }
 
-/// Registered validator role (tier 4).
+/// Registered validator role (tier 7).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct ValidatorInfo {
     /// Compressed BLS12-381 public key, ownership proven at registration.
@@ -57,8 +58,6 @@ pub struct EpochActivity {
     pub tx_count: u64,
     /// Free-quota transactions used in the epoch.
     pub free_used: u64,
-    /// Work-backed transactions beyond the heavy-user threshold.
-    pub work_backed_over: u64,
     /// New accounts activated by transfers from this account.
     pub new_accounts: u64,
     /// `true` once mass account creation was penalized in this epoch.
@@ -95,6 +94,11 @@ pub struct Account {
     pub(crate) validator: Option<ValidatorInfo>,
     pub(crate) activity: EpochActivity,
     pub(crate) penalties: PenaltyRecord,
+    /// Weighted effective stake in the staking pot for the current epoch
+    /// (spec 9.4); fixed at the epoch start.
+    pub(crate) reward_weight: u128,
+    /// Reward counter at the last credit.
+    pub(crate) reward_mark: u128,
 }
 
 impl Account {
@@ -117,6 +121,8 @@ impl Account {
             validator: None,
             activity: EpochActivity::default(),
             penalties,
+            reward_weight: 0,
+            reward_mark: 0,
         }
     }
 
@@ -144,7 +150,7 @@ impl Account {
         self.created_height
     }
 
-    /// Own bonded stake (tiers 2 to 4).
+    /// Own bonded stake (tiers 1 to 7).
     #[must_use]
     pub const fn stake(&self) -> Amount {
         self.stake
@@ -156,7 +162,7 @@ impl Account {
         &self.unbonding
     }
 
-    /// Bonded start validator rewards.
+    /// Locked start wage.
     #[must_use]
     pub fn reward_locks(&self) -> &[RewardLock] {
         &self.reward_locks
@@ -186,6 +192,12 @@ impl Account {
         &self.penalties
     }
 
+    /// Weighted effective stake in the staking pot for this epoch.
+    #[must_use]
+    pub const fn reward_weight(&self) -> u128 {
+        self.reward_weight
+    }
+
     /// Sum of all unbonding entries.
     ///
     /// # Errors
@@ -194,7 +206,7 @@ impl Account {
         Amount::checked_sum(self.unbonding.iter().map(|u| u.amount))
     }
 
-    /// Sum of all bonded start validator rewards.
+    /// Sum of the locked start wage.
     ///
     /// # Errors
     /// [`ArithmeticError::Overflow`] (not reachable below the supply cap).
@@ -248,6 +260,10 @@ impl Account {
         if has_penalties {
             flags |= 64;
         }
+        // Accounts without weight always have mark 0 (see `State`).
+        if self.reward_weight != 0 {
+            flags |= 128;
+        }
         let mut out = Vec::with_capacity(64);
         out.push(flags);
         out.extend_from_slice(&self.nonce.to_be_bytes());
@@ -274,19 +290,17 @@ impl Account {
         }
         if self.activity != EpochActivity::default() {
             let a = &self.activity;
-            for value in [
-                a.epoch,
-                a.tx_count,
-                a.free_used,
-                a.work_backed_over,
-                a.new_accounts,
-            ] {
+            for value in [a.epoch, a.tx_count, a.free_used, a.new_accounts] {
                 out.extend_from_slice(&value.to_be_bytes());
             }
             out.push(u8::from(a.mass_creation_flagged));
         }
         if has_penalties {
             self.penalties.encode_into(&mut out);
+        }
+        if self.reward_weight != 0 {
+            out.extend_from_slice(&self.reward_weight.to_be_bytes());
+            out.extend_from_slice(&self.reward_mark.to_be_bytes());
         }
         out
     }

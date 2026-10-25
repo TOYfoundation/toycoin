@@ -1,7 +1,7 @@
-//! Reward of the start validators in the bootstrap phase (spec 5.3,
-//! decisions 70, 78 and 110).
+//! Start wage of the start validators in the bootstrap phase (spec 5.3,
+//! decisions 110 and 139).
 //!
-//! Share of the emission: `a(d) = 500,000 * max(0, 180 - d) / 180` ppm,
+//! Share of the emission: `a(d) = 250,000 * max(0, 365 - d) / 365` ppm,
 //! with `d` the full plan days at the start of the epoch. Cap: the reward
 //! of an epoch is at most `a(d)` times the plan emission (m = 1) of the plan
 //! days since the previous epoch. Both rules together mean that faster
@@ -63,21 +63,21 @@ mod tests {
 
     #[test]
     fn share_falls_linearly_to_zero() {
-        assert_eq!(start_share(0), Ok(Ppm::new(500_000)));
-        assert_eq!(start_share(90), Ok(Ppm::new(250_000)));
-        assert_eq!(start_share(179), Ok(Ppm::new(2_777)));
-        assert_eq!(start_share(180), Ok(Ppm::ZERO));
+        assert_eq!(start_share(0), Ok(Ppm::new(250_000)));
+        assert_eq!(start_share(90), Ok(Ppm::new(188_356)));
+        assert_eq!(start_share(364), Ok(Ppm::new(684)));
+        assert_eq!(start_share(365), Ok(Ppm::ZERO));
         assert_eq!(start_share(u64::MAX), Ok(Ppm::ZERO));
     }
 
     #[test]
     fn cap_limits_share_when_emission_is_larger_than_plan() {
-        let plan = Amount::from_toy(50_500);
+        let plan = Amount::from_toy(50_000);
         // m = 2: emission twice the plan day, share halves.
-        let doubled = Amount::from_toy(101_000);
-        assert_eq!(effective_share(0, doubled, plan), Ok(Ppm::new(250_000)));
+        let doubled = Amount::from_toy(100_000);
+        assert_eq!(effective_share(0, doubled, plan), Ok(Ppm::new(125_000)));
         // m = 1: no cap.
-        assert_eq!(effective_share(0, plan, plan), Ok(Ppm::new(500_000)));
+        assert_eq!(effective_share(0, plan, plan), Ok(Ppm::new(250_000)));
         // No plan day passed: nothing.
         assert_eq!(effective_share(0, plan, Amount::ZERO), Ok(Ppm::ZERO));
         // No emission: nothing.

@@ -3,13 +3,16 @@
 //! The genesis block holds no balances (total fair launch, decision 62).
 //! All 100,000,000 TOY come from this emission:
 //!
-//! - per epoch `floor(remaining * k0 * m)` with `k0 = 505 / 10^6` and the
-//!   dynamic factor `m` in [0.5, 2.0] ([`factor`]),
+//! - per epoch `remaining × k(t) × m` with `k(t)` from the fixed K table
+//!   of the tide curve ([`ktable`], decision 136) and the dynamic factor
+//!   `m` in [0.5, 2.0] ([`factor`]),
 //! - `remaining = 10^26 - sum of all emissions` ([`EmissionState`]),
-//! - spread over the first 1,440 blocks of the epoch and split 50/40/10
-//!   into consensus, work lottery and refund pool ([`mint`]),
-//! - in the bootstrap phase the consensus share goes in equal parts to the
-//!   21 start validators, falling with plan days and capped ([`bootstrap`]),
+//! - spread over the first 1,440 blocks of the epoch and split into work
+//!   reward, start wage, committee, full-node, refund and staking pots
+//!   ([`mint`], spec 9.2),
+//! - in the bootstrap phase the start wage and the committee pot go in
+//!   equal parts to the 64 start validators, the wage falling with plan
+//!   days and capped ([`bootstrap`]),
 //! - time is measured as plan time with capped block gaps, and an epoch
 //!   lasts at least 1,440 blocks and 24 hours ([`clock`]).
 //!
@@ -26,6 +29,8 @@ pub mod clock;
 mod engine;
 mod error;
 pub mod factor;
+mod k_table_data;
+pub mod ktable;
 pub mod mint;
 pub mod plan;
 mod schedule;
@@ -35,5 +40,5 @@ mod verification;
 pub use engine::{BlockInput, BlockOutcome, EmissionEngine};
 pub use error::EmissionError;
 pub use factor::EpochMeasurements;
-pub use mint::{BlockMint, ConsensusPayout};
+pub use mint::{BlockMint, WorkMint};
 pub use schedule::{EmissionState, EpochEmission, EpochStart, Phase, emission_for};
