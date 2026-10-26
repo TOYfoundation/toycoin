@@ -14,7 +14,7 @@ from wp_common import (story, title, subtitle, center, body, small, h1, h2, cell
 set_words("Abbildung", "Mehr dazu:")
 
 U = dict(
-    repo="https://github.com/Safehaigit/toycoin",
+    repo="https://github.com/TOYfoundation/toycoin",
     metamask="https://support.metamask.io/configure/networks/how-to-add-a-custom-network-rpc",
     bip39="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki",
     vz="https://www.verbraucherzentrale.de/wissen/geld-versicherungen/sparen-und-anlegen/bitcoin-vom-alternativen-zahlungsmittel-zum-spekulationsobjekt-11641",
@@ -72,7 +72,7 @@ B(["<b>Papier und Stift</b> für Ihre 12 Wiederherstellungs-Wörter. Kein Foto, 
 # ================================================================ 2
 H("In fünf Schritten startklar")
 STEP(1, "App aus der offiziellen Quelle holen",
-     "Laden Sie die <b>TOYPAY Wallet</b> nur über den Link auf der Projektseite " + L("github.com/Safehaigit/toycoin",
+     "Laden Sie die <b>TOYPAY Wallet</b> nur über den Link auf der Projektseite " + L("github.com/TOYfoundation/toycoin",
                                                                                     U["repo"]) +
      " (öffentlich spätestens mit dem Testnetz). Es gibt sie für Android, Windows, Linux und den Raspberry Pi. Jede "
      "Version wird nachprüfbar aus dem offenen Code gebaut, und die App prüft vor jedem Update selbst, ob die neue "

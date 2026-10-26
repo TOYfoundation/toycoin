@@ -117,7 +117,7 @@ Der Eigentümer des Ziels signiert diesen Text mit seiner Adresse (EIP-191) oder
 - **Rust-Kern** `toy-safe` mit allen Prüfungen. Ihn nutzen die ToySafe-App, TOYPAY (eingebaut) und eine Kommandozeile `toysafe` für Knotenbetreiber und das Prüflabor.
 - **Oberfläche** wie TOYPAY mit Compose Multiplatform für Android und Desktop (`../04-toypay-wallet.md`), Anbindung über UniFFI (Nr. 77). Zielplattformen wie der Knoten, auch alte Android-Geräte.
 - **Prüflabor** nutzt die bestehenden Fuzzing-Ziele und Integrationstests des Workspace und startet ein lokales Devnet (Chain-ID 7630715).
-- **Ort im Repository** offen: eigener Ordner `toysafe/` in `Safehaigit/toycoin` (wie `toyscan/`) oder eigenes Repository `Safehaigit/toysafe`. Empfehlung: Ordner in toycoin, damit Kern, Tests und feste Werte an einem Ort bleiben.
+- **Ort im Repository** offen: eigener Ordner `toysafe/` in `TOYfoundation/toycoin` (wie `toyscan/`) oder eigenes Repository `TOYfoundation/ToySafe`. Empfehlung: Ordner in toycoin, damit Kern, Tests und feste Werte an einem Ort bleiben.
 
 ## 8. Grenzen
 
@@ -135,4 +135,4 @@ Der Eigentümer des Ziels signiert diesen Text mit seiner Adresse (EIP-191) oder
 | S3 | Gemeinsamer Rust-Kern `toy-safe`, den TOYPAY einbaut |
 | S4 | Öffentliche, signierte Warnliste im Format 6.3 als gemeinsamer Dienst für alle Wallets |
 | S5 | Prüf-Freigabe 6.4 als Pflicht für aktive Tests gegen fremde Ziele |
-| S6 | Ort im Repository: Ordner `toysafe/` in `Safehaigit/toycoin` |
+| S6 | Ort im Repository: Ordner `toysafe/` in `TOYfoundation/toycoin` |

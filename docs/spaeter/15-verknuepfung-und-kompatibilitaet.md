@@ -8,14 +8,14 @@ Dieses Dokument beschreibt, wie die Projekte technisch zusammenhängen, welche P
 
 | Projekt | Repository | Sprache und Laufzeit | Plattformen | Stand |
 |---|---|---|---|---|
-| ToyChain-Knoten | `Safehaigit/toycoin`, `toychain/` | Rust, Edition 2024, mindestens 1.87, gebaut mit 1.97.0 (festgenagelt) | Linux x86_64, Windows x86_64, Linux aarch64, armv7 (optional), Android als Bibliothek | M1 bis M3 fertig |
+| ToyChain-Knoten | `TOYfoundation/toycoin`, `toychain/` | Rust, Edition 2024, mindestens 1.87, gebaut mit 1.97.0 (festgenagelt) | Linux x86_64, Windows x86_64, Linux aarch64, armv7 (optional), Android als Bibliothek | M1 bis M3 fertig |
 | TOYPAY-Wallet | `toycoin/toypay/` (App-Code folgt) | Rust-Kern aus dem Workspace, Oberfläche Kotlin mit Compose Multiplatform (Vorschlag), Anbindung UniFFI | Android, Windows, Linux, Raspberry Pi | Konzept, Bau M8/M9 |
 | TOYQUEST 3D | `toycoin/toypay/godot3d/` | GDScript, Godot 4.4 | wie TOYPAY | Katalog, Effekte, Tests |
 | Werkzeuge | `toycoin/toypay/tools/`, `docs/anhang/`, `docs/whitepaper/` | Python 3 | Entwickler-PC | in Gebrauch |
 | ToyScan | `toycoin/toyscan/` | Rust (geplant) | Server | Konzept, Bau M11 |
 | ToySafe | noch offen (`14-toysafe.md`, S6) | Rust-Kern `toy-safe`, Oberfläche wie TOYPAY (Vorschlag) | Android, Desktop, Kommandozeile | Konzept |
-| ToyPost | `Safehaigit/toypost` | TypeScript 5.9, Node 22.18 oder neuer (CI: Node 24), App mit Expo 54 und React Native 0.81.5 | Server, Android, iOS, Web | gebaut |
-| Webseite | `Safehaigit/ToyVerse-web` | Astro 7.3.8, JavaScript und TypeScript, Node 22.12 oder neuer (CI: Node 24) | statisch | 22 von 45 Sprachen |
+| ToyPost | `TOYfoundation/Toypost` | TypeScript 5.9, Node 22.18 oder neuer (CI: Node 24), App mit Expo 54 und React Native 0.81.5 | Server, Android, iOS, Web | gebaut |
+| Webseite | `TOYfoundation/ToyVerse-web` | Astro 7.3.8, JavaScript und TypeScript, Node 22.12 oder neuer (CI: Node 24) | statisch | 22 von 45 Sprachen |
 
 **Ergebnis:** Die Sprachen sind gut verträglich, weil sie nur über **Textformate** (JSON, TSV, Markdown-Tabellen) und später über **JSON-RPC** miteinander sprechen. Kein Projekt ruft Code eines anderen direkt auf, außer TOYPAY und ToySafe, die den Rust-Kern über UniFFI einbinden. So bleibt jedes Projekt allein lauffähig.
 
@@ -74,7 +74,7 @@ flowchart LR
 
 1. In toycoin hält die CI `shared/toyverse.json` mit dem Rust-Code gleich.
 2. Webseite und ToyPost haben je einen Workflow „Abgleich mit toycoin“. Er läuft täglich und auf Knopfdruck, holt toycoin (`main`), startet das Abgleich-Skript und öffnet bei Änderungen einen Pull Request. Die normale CI prüft ihn, zusammengeführt wird von Hand.
-3. **Einmalig nötig, weil alle Repositories privat sind:** ein Lese-Schlüssel (fine-grained Personal Access Token, nur „Contents: Read-only“ für `Safehaigit/toycoin`) als Secret `TOYCOIN_READ_TOKEN` in `ToyVerse-web` und `Toypost`. Dazu unter „Settings → Actions → General“ das Häkchen „Allow GitHub Actions to create and approve pull requests“. Ohne Schlüssel überspringt der Workflow den Abgleich und sagt das im Protokoll.
+3. **Einmalig nötig, weil alle Repositories privat sind:** ein Lese-Schlüssel (fine-grained Personal Access Token, nur „Contents: Read-only“ für `TOYfoundation/toycoin`) als Secret `TOYCOIN_READ_TOKEN` in `ToyVerse-web` und `Toypost`. Dazu unter „Settings → Actions → General“ das Häkchen „Allow GitHub Actions to create and approve pull requests“. Ohne Schlüssel überspringt der Workflow den Abgleich und sagt das im Protokoll.
 
 ## 6. Befunde der Bestandsaufnahme vom 24.10.2026
 

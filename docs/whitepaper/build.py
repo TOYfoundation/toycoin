@@ -148,7 +148,7 @@ U = dict(
     kani="https://rust-training.ferrous-systems.com/latest/book/kani",
     libp2p="https://docs.libp2p.io/",
     mit="https://opensource.org/license/mit",
-    repo="https://github.com/Safehaigit/toycoin",
+    repo="https://github.com/TOYfoundation/toycoin",
     market="https://dailyforex.com/forex-technical-analysis/2026/10/crypto-overview-18-october-2026/250826",
     market2="https://www.tokenpost.com/news/investing/35318",
     ethtests="https://github.com/ethereum/tests",
@@ -164,7 +164,7 @@ story.append(Spacer(1, 4))
 story.append(Paragraph("Ein schlankes, fair gestartetes Zahlungsnetz,<br/>an dem jeder ohne Guthaben teilnehmen kann",
                        subtitle))
 story.append(Spacer(1, 10))
-story.append(Paragraph("ToyChain-Projekt · " + L("github.com/Safehaigit/toycoin", U["repo"]), center))
+story.append(Paragraph("ToyChain-Projekt · " + L("github.com/TOYfoundation/toycoin", U["repo"]), center))
 story.append(Paragraph("Vorläufiges Whitepaper · Entwurf 0.4 · 20. Oktober 2026", center))
 story.append(Spacer(1, 12))
 BOX("<b>Stand: vor der Testphase.</b> ToyChain existiert bisher als Konzept und als erste Programmbausteine. Fertig "
@@ -793,7 +793,7 @@ link_rows = [["Thema", "Link", "Worum es geht"],
              ["Recht", L("BMF-Schreiben zu Kryptowerten", U["bmf"]), "Steuern in Deutschland"],
              ["Verbraucherschutz", L("Verbraucherzentrale", U["vz"]), "Bitcoin als Spekulationsobjekt"],
              ["Verbraucherschutz", L("Stiftung Warentest", U["test"]), "Warnung vor unseriösen Angeboten"],
-             ["Projekt", L("github.com/Safehaigit/toycoin", U["repo"]), "Code, Spezifikation, Entscheidungen"]]
+             ["Projekt", L("github.com/TOYfoundation/toycoin", U["repo"]), "Code, Spezifikation, Entscheidungen"]]
 T(link_rows, [3.0, 7.6, 5.8])
 
 story.append(CondPageBreak(5 * cm))
@@ -812,7 +812,7 @@ refs = [
     "nach ForkLog, Januar 2026; Chainalysis nach "
     "Decrypt, 2022; Spark, Bitcoin Full Node Requirements 2026.",
     "ToyChain: Technische Spezifikation v0.3, Entscheidungsprotokoll, Bauplan Phase 1, Prüfberichte 1 und 2, "
-    "Referenz-Simulation m-simulation.py, Statusbericht mit Messwerten; github.com/Safehaigit/toycoin.",
+    "Referenz-Simulation m-simulation.py, Statusbericht mit Messwerten; github.com/TOYfoundation/toycoin.",
     "Testdaten: ethereum/tests (RLP und Transaktionen, Commit c67e485f); RFC 9106 Argon2id-Vektor aus "
     "P-H-C/phc-winner-argon2.",
 ]

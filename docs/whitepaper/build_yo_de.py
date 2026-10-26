@@ -42,7 +42,7 @@ U = dict(
     kani="https://rust-training.ferrous-systems.com/latest/book/kani",
     libp2p="https://docs.libp2p.io/",
     mit="https://opensource.org/license/mit",
-    repo="https://github.com/Safehaigit/toycoin",
+    repo="https://github.com/TOYfoundation/toycoin",
     market="https://dailyforex.com/forex-technical-analysis/2026/10/crypto-overview-18-october-2026/250826",
     cg_charts="https://www.coingecko.com/en/charts",
     dead="https://forklog.com/en/news/coingecko-reports-record-token-mortality-in-2025",
@@ -56,7 +56,7 @@ story.append(Spacer(1, 4))
 story.append(Paragraph("Network ìsanwó tó fúyẹ́, tí a bẹ̀rẹ̀ lọ́nà tó tọ́,<br/>tí ẹnikẹ́ni lè kópa nínú rẹ̀ láìní owó",
                        subtitle))
 story.append(Spacer(1, 10))
-story.append(Paragraph("Iṣẹ́ àkànṣe ToyChain · " + L("github.com/Safehaigit/toycoin", U["repo"]), center))
+story.append(Paragraph("Iṣẹ́ àkànṣe ToyChain · " + L("github.com/TOYfoundation/toycoin", U["repo"]), center))
 story.append(Paragraph("Whitepaper àkọ́kọ́ · Draft 0.3 · 19 October 2026 · ẹ̀dà Yorùbá (láti German)", center))
 story.append(Spacer(1, 12))
 BOX("<b>Ipò: ṣáájú ìpele ìdánwò (test phase).</b> Títí di báyìí, ToyChain wà gẹ́gẹ́ bí èrò àti gẹ́gẹ́ bí apá àkọ́kọ́ "
@@ -582,7 +582,7 @@ T([["Ọ̀rọ̀", "Link", "Nípa kí ni"],
    ["Òfin", L("MiCA rulebook (ESMA)", U["esma"]), "òfin àti ìtọ́sọ́nà"],
    ["Òfin", L("End of the MiCA transition (AMF)", U["amf"]), "ohun tó ń ṣiṣẹ́ láti 1/7/2026"],
    ["Ààbò oníbàárà", L("EU supervisors' warning (ESMA)", U["esas_warning"]), "ewu àti ààbò tó ní ààlà"],
-   ["Iṣẹ́ àkànṣe", L("github.com/Safehaigit/toycoin", U["repo"]), "code, specification (German)"]],
+   ["Iṣẹ́ àkànṣe", L("github.com/TOYfoundation/toycoin", U["repo"]), "code, specification (German)"]],
   [3.0, 7.6, 5.8])
 
 story.append(CondPageBreak(5 * cm))
@@ -599,7 +599,7 @@ refs = [
     "Data ọjà: DailyForex, 18 Oct 2026; data CoinGecko nípasẹ̀ ForkLog, January 2026; Chainalysis nípasẹ̀ Decrypt, 2022; "
     "Spark, Bitcoin Full Node Requirements 2026.",
     "ToyChain: technical specification v0.3, àkọsílẹ̀ ìpinnu, ètò ìkọ́lé phase 1, àyẹ̀wò 1 àti 2, simulation "
-    "m-simulation.py; github.com/Safehaigit/toycoin (German).",
+    "m-simulation.py; github.com/TOYfoundation/toycoin (German).",
 ]
 for i, r in enumerate(refs, 1):
     story.append(Paragraph(f"[{i}] {r}", small))
