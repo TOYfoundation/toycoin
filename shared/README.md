@@ -6,3 +6,7 @@
   `UPDATE_TOYVERSE_JSON=1 cargo test -p toy-integration-tests --test toyverse_manifest`
 - **Beträge sind Text** in kleinsten Einheiten (z. B. `"100000000000000000"` = 0,1 TOY), weil sie größer als 2⁵³ werden. In JavaScript `BigInt`, in Kotlin `BigInteger`, in Python `int`.
 - **Nutzer:** ToyVerse-Webseite und ToyPost holen die Datei täglich per Pull Request, später auch ToySafe, TOYPAY, ToyScan und TOYQUEST. Einzelheiten: `docs/spaeter/15-verknuepfung-und-kompatibilitaet.md`.
+
+## App-Icons (`icons/`)
+
+Die Icon-Familie des ToyVerse: 14 Apps als SVG in zwei Größen (`<id>.svg` ab 128 px, `<id>-klein.svg` für 16 bis 64 px), erzeugt von `generate.py` aus gemeinsamen Maßen und Farben. Liste mit Farbton und Rolle: `icons.json`. Regeln im ToyVerse-Design-System. Neu erzeugen: `python3 shared/icons/generate.py` (PNG nur mit `cairosvg`).

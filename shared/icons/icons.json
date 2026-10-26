@@ -1,0 +1,124 @@
+{
+  "schema": "toyverse-icons/1",
+  "tokens": {
+    "gold": "#F2B632",
+    "night": "#0B0C2E",
+    "stroke": 40,
+    "tile": "superellipse n=5",
+    "gradient": "hsl(h,78%,58%) → hsl(h+14,74%,36%) → night"
+  },
+  "icons": [
+    {
+      "id": "toyverse",
+      "name": "ToyVerse",
+      "hue": 262,
+      "rolle": "Portal und Webseite",
+      "svg": "svg/toyverse.svg",
+      "svg_klein": "svg/toyverse-klein.svg"
+    },
+    {
+      "id": "toymesh",
+      "name": "ToyMesh",
+      "hue": 232,
+      "rolle": "Betriebssystem",
+      "svg": "svg/toymesh.svg",
+      "svg_klein": "svg/toymesh-klein.svg"
+    },
+    {
+      "id": "toypost",
+      "name": "ToyPost",
+      "hue": 210,
+      "rolle": "Post und Rechnungen",
+      "svg": "svg/toypost.svg",
+      "svg_klein": "svg/toypost-klein.svg"
+    },
+    {
+      "id": "toypay",
+      "name": "TOYPAY",
+      "hue": 190,
+      "rolle": "Wallet und Knoten",
+      "svg": "svg/toypay.svg",
+      "svg_klein": "svg/toypay-klein.svg"
+    },
+    {
+      "id": "toychain",
+      "name": "ToyChain",
+      "hue": 170,
+      "rolle": "Blockchain",
+      "svg": "svg/toychain.svg",
+      "svg_klein": "svg/toychain-klein.svg"
+    },
+    {
+      "id": "toyscan",
+      "name": "ToyScan",
+      "hue": 140,
+      "rolle": "Explorer und Ampel",
+      "svg": "svg/toyscan.svg",
+      "svg_klein": "svg/toyscan-klein.svg"
+    },
+    {
+      "id": "toypuls",
+      "name": "ToyPuls",
+      "hue": 98,
+      "rolle": "Diagnose (neu)",
+      "svg": "svg/toypuls.svg",
+      "svg_klein": "svg/toypuls-klein.svg"
+    },
+    {
+      "id": "toystore",
+      "name": "ToyStore",
+      "hue": 55,
+      "rolle": "App-Laden (neu)",
+      "svg": "svg/toystore.svg",
+      "svg_klein": "svg/toystore-klein.svg"
+    },
+    {
+      "id": "toyquest",
+      "name": "TOYQUEST",
+      "hue": 35,
+      "rolle": "Spiel und Lernwelt",
+      "svg": "svg/toyquest.svg",
+      "svg_klein": "svg/toyquest-klein.svg"
+    },
+    {
+      "id": "toysurf",
+      "name": "ToySurf",
+      "hue": 16,
+      "rolle": "Browser",
+      "svg": "svg/toysurf.svg",
+      "svg_klein": "svg/toysurf-klein.svg"
+    },
+    {
+      "id": "toysafe",
+      "name": "ToySafe",
+      "hue": 0,
+      "rolle": "Sicherheit",
+      "svg": "svg/toysafe.svg",
+      "svg_klein": "svg/toysafe-klein.svg"
+    },
+    {
+      "id": "toychat",
+      "name": "ToyChat",
+      "hue": 330,
+      "rolle": "Teamchat",
+      "svg": "svg/toychat.svg",
+      "svg_klein": "svg/toychat-klein.svg"
+    },
+    {
+      "id": "toycash",
+      "name": "ToyCash",
+      "hue": 305,
+      "rolle": "Digitales Bargeld",
+      "svg": "svg/toycash.svg",
+      "svg_klein": "svg/toycash-klein.svg"
+    },
+    {
+      "id": "toysearch",
+      "name": "ToySearch",
+      "hue": 285,
+      "rolle": "Suche",
+      "svg": "svg/toysearch.svg",
+      "svg_klein": "svg/toysearch-klein.svg"
+    }
+  ]
+}
