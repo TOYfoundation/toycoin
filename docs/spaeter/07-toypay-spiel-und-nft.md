@@ -113,7 +113,7 @@ TOYPAY wird die **Haupt-App für den nativen TOY**:
   | Spielfigur | **1 TOY** |
   | Spielgegenstand | **1 bis 100 TOY** je nach Wert, z. B. Flöte 1, Dolch 2, Kamel 5, Boot bis 25, schönes Haus 100 |
 
-  Der vollständige Katalog mit **500 Gegenständen** (Gebühr, Seltenheit, Boni) steht in `toypay/docs/06_NFT_GEGENSTAENDE.md` (Entscheidung 27).
+  Der vollständige Katalog mit **500 Gegenständen** (Gebühr, Seltenheit, Boni) steht in [TOYQUEST-3D `docs/06_NFT_GEGENSTAENDE.md`](https://github.com/TOYfoundation/TOYQUEST-3D/blob/main/docs/06_NFT_GEGENSTAENDE.md) (Entscheidung 27).
 
   Die Gebühr eines Gegenstands steht im Gutschein des Spielservers. Der Vertrag nimmt nur Gebühren zwischen 1 und 100 TOY an. Neue Gegenstände brauchen deshalb keinen Admin, und ein gestohlener Server-Schlüssel kann nichts außerhalb dieser Spanne prägen (dazu kommen Tages- und Wochenlimits).
 - **Was man auf der Adresse braucht:** 100 TOY Mindestbestand (geprüft vor dem Prägen), davon gehen Gebühr und 10 TOY Sperre ab. Für ein Haus sind also mindestens 110 TOY nötig.
@@ -221,6 +221,6 @@ Beantwortet am 17.10.2026: Die App nimmt TOY auf allen Ketten an, bridgt nativen
 Beantwortet am 17.10.2026: Altersgruppe ab 16 (Entscheidung 29), Plattformen Android, Windows, Linux und Raspberry Pi (Entscheidung 30), TOY-Funktionen ab 18 (Entscheidung 31), Wallet und Spiele getrennt (Entscheidung 32).
 
 Offen:
-1. ~~Poker-Chips getrennt (K2)?~~ Entschieden: Poker nur mit Basar-Chips, getrennt von Dukaten und TOY (`toypay/docs/07_SPIELDESIGN.md`, Abschnitt 6).
+1. ~~Poker-Chips getrennt (K2)?~~ Entschieden: Poker nur mit Basar-Chips, getrennt von Dukaten und TOY ([TOYQUEST-3D `docs/07_SPIELDESIGN.md`](https://github.com/TOYfoundation/TOYQUEST-3D/blob/main/docs/07_SPIELDESIGN.md), Abschnitt 6).
 2. Sollen NFTs schon vor dem Bridge-Start **ohne TOY** geprägt werden können (kostenlos oder gegen POL)?
 3. Gibt es schon einen NFT-Vertrag auf Polygon? Wenn ja, welche Adresse?

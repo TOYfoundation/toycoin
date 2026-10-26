@@ -20,7 +20,15 @@
     },
     "toymeshos": {
       "rolle": "Betriebssystem ToyMesh",
-      "github": "Safehaigit/TOYMESHos"
+      "github": "TOYfoundation/TOYMESHos"
+    },
+    "toyquest": {
+      "rolle": "Spiel und Lernwelt (TOYQUEST 3D, später 2D)",
+      "github": "TOYfoundation/TOYQUEST-3D"
+    },
+    "toystore": {
+      "rolle": "App-Laden: Katalog und Oberfläche",
+      "github": "TOYfoundation/ToyStore"
     }
   },
   "ignorieren": [
@@ -51,7 +59,8 @@
     "ToyMesh": "ToyMesh|TOYMESH",
     "ToySurf": "ToySurf",
     "ToySearch": "ToySearch",
-    "ToyChat": "ToyChat"
+    "ToyChat": "ToyChat",
+    "ToyStore": "ToyStore"
   },
   "register": [
     {

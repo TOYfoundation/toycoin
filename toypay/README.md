@@ -1,24 +1,25 @@
 # TOYPAY
 
-TOYPAY Wallet für den nativen ToyCoin (TOY), zugleich ToyChain-Knoten (Konzept: `../docs/04-toypay-wallet.md`). Die Spiele TOYQUEST (2D) und TOYQUEST 3D (Godot 4.4) und ihre NFT-Regeln kommen später (Entscheidung 72).
+TOYPAY Wallet für den nativen ToyCoin (TOY), zugleich ToyChain-Knoten (Konzept: `../docs/04-toypay-wallet.md`). Bau in den Meilensteinen M8 und M9.
 
-**Status:** Der App- und Spielcode liegt noch nicht in diesem Repository. Hier stehen die Unterlagen und der NFT-Gegenstandskatalog, der sich ins Spiel installieren lässt.
+**Status:** Der App-Code liegt noch nicht in diesem Repository. Hier steht die Projektübersicht `docs/01_PROJEKT_UEBERSICHT.md` (Stand Runde 8, Oktober 2026).
 
-| Ordner/Datei | Inhalt |
+## Spiele: umgezogen nach TOYQUEST-3D
+
+Die Spiele TOYQUEST (2D) und TOYQUEST 3D samt Katalog, Effekten und Spieldesign liegen seit dem 31.10.2026 in einem eigenen Repository: **[TOYfoundation/TOYQUEST-3D](https://github.com/TOYfoundation/TOYQUEST-3D)**. Die Geschichte ist mit umgezogen. Ältere Verweise, etwa im Entscheidungsprotokoll, findest du dort:
+
+| Alter Pfad in toycoin | Neuer Ort in TOYQUEST-3D |
 |---|---|
-| `docs/01_PROJEKT_UEBERSICHT.md` … `05_…` | Unterlagen aus dem TOYPAY-Projekt (Stand Runde 8, Oktober 2026) |
-| `docs/06_NFT_GEGENSTAENDE.md` | Katalog der 500 prägbaren Spielgegenstände mit Gebühren, Seltenheit und Boni |
-| `data/nft_items.tsv` | Quelle des Katalogs. `tools/gen_nft_items.py` prüft ihn und erzeugt `data/nft_items.json` und `tools/i18n/master_nftitems.tsv` |
-| `godot3d/scripts/nft_items.gd`, `godot3d/tests/nft_items_test.*` | Ladeskript und Test für TOYQUEST 3D (Godot 4.4) |
-| `docs/07_SPIELDESIGN.md` | Spieldesign: Spielschleifen, 101-Nächte-Saison, Klassen, Gang-Synergien, Wirtschaft, Lichteffekte, Blitzschutz |
-| `data/nft_epithets.tsv`, `data/gang.json` | Beinamen der 77 kostbaren und legendären Gegenstände; Klassen, Duos, Sets, Gang-Ränge |
-| `godot3d/vfx/` | Effekt-Paket: Seltenheits-Aura, Glitzer, Blitze, Präge-Zeremonie, Blitzschutz. Vorschau: `vfx/preview/vfx_showcase.tscn` |
-| `install_nft_items.py` | Installiert Katalog, Gang-Regeln und Effekt-Paket in ein TOYPAY-Projekt, mit Sicherung |
-| `../docs/04-toypay-wallet.md` | Wallet und Knoten: Stufen, Energie-Modus, Mint-Funktionen, andere Ketten |
-| `../docs/spaeter/07-toypay-spiel-und-nft.md` | Spiel-NFTs, Dukaten und Präge-Regeln (für später) |
-| `docs/08_LERNWELT_ZEITREISE.md` | TOYQUEST-Lernwelt: Orte zu den echten Stufen, NPCs mit drei Erklärtiefen, Zeitreise in 5 Level mit Zuordnung der 50 Maschinen (für später) |
-| `../docs/spaeter/13-toyquest-items-nft.md` | Items als ERC-1155 auf Polygon, Gas-Formel, POL-Topf, Überschüsse. Ersetzt die Gebühren-Regeln aus `07-…` (für später) |
-| `../docs/spaeter/12-toycash.md` | ToyCash-Bereich, Offline-Zahlung und Gutscheine in TOYPAY (für später) |
+| `toypay/docs/02_TOYQUEST3D_README.md` bis `05_…` | `docs/02_…` bis `docs/05_…` |
+| `toypay/docs/06_NFT_GEGENSTAENDE.md` | `docs/06_NFT_GEGENSTAENDE.md` |
+| `toypay/docs/07_SPIELDESIGN.md` | `docs/07_SPIELDESIGN.md` |
+| `toypay/docs/08_LERNWELT_ZEITREISE.md` | `docs/08_LERNWELT_ZEITREISE.md` |
+| `toypay/data/` (Katalog, Beinamen, Gang-Regeln) | `data/` |
+| `toypay/tools/gen_nft_items.py`, `tools/i18n/` | `tools/` |
+| `toypay/godot3d/` (Ladeskript, Tests, Effekte) | `godot3d/` |
+| `toypay/install_nft_items.py` | `install_nft_items.py` |
+
+Weiter in toycoin: Wallet und Knoten (`../docs/04-toypay-wallet.md`), Spiel-NFTs und Dukaten (`../docs/spaeter/07-toypay-spiel-und-nft.md`), Items auf Polygon (`../docs/spaeter/13-toyquest-items-nft.md`), ToyCash in TOYPAY (`../docs/spaeter/12-toycash.md`).
 
 ## Bevor der App-Code hierher kommt
 
@@ -27,4 +28,4 @@ Diese Dateien dürfen **nie** ins Repository (die `.gitignore` schließt sie aus
 - `gradle.properties` (enthält ein Token), `local.properties` (enthält den Alchemy-Key)
 - Signier-Schlüssel (`*.jks`, `*.keystore`), Seed-Phrasen, private Schlüssel
 
-Geplanter Aufbau, sobald der Code da ist: `toypay/app/` (Android), `toypay/godot3d/` (TOYQUEST 3D), `toypay/server/` (Spielserver), `toypay/tools/` (Generatoren). Die Rust-Anbindung an ToyChain entsteht als eigenes Crate im Ordner `toychain/` (Android-Bibliothek, Kotlin über UniFFI).
+Geplanter Aufbau: `toypay/app/` (Android und Desktop, Compose Multiplatform), `toypay/tools/` (Generatoren). Die Rust-Anbindung an ToyChain entsteht als eigenes Crate im Ordner `toychain/` (Kotlin über UniFFI). Der Spielserver gehört zu TOYQUEST.

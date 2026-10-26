@@ -149,7 +149,7 @@ Mit Entscheidung 122 gehört ToyPost zum **ToyVerse** (Überblick: `docs/spaeter
 | **Geheimnisse** | Codes von ToyCash-Inhaber-Gutscheinen wie Phrase und Schlüssel behandeln: in ausgehenden Nachrichten blockieren, eingehend schwärzen. Sie sind wie Bargeld | ToyCash 12, Abschnitt 5.3 |
 | **ToyCash-Rechnungen** | erst ab ToyCash Stufe 2: Rechnung als Zahlungsaufforderung, die die Wallet öffnet. ToyPost sieht nie Beträge anderer, nur die Bestätigung der eigenen Rechnung. Format später | ToyCash 12 |
 | **Community-Gruppen** | Kontaktgruppen für Mentoren, Händler, Knotenbetreiber, Gilden, Ersteller zusätzlich zu Tester, Validatoren, Community. Massenversand nur nach Freigabe | ToyVerse 11, Abschnitt 5 |
-| **Mitteilungen aus TOYQUEST** | Meilensteine der Lernwelt (neue Orte, neue Maschinen, Saisonstart) als Vorlage für Mitteilungen. Texte aus derselben geprüften Wissensbasis wie die NPCs | Lernwelt `toypay/docs/08_LERNWELT_ZEITREISE.md`, Abschnitt 5 |
+| **Mitteilungen aus TOYQUEST** | Meilensteine der Lernwelt (neue Orte, neue Maschinen, Saisonstart) als Vorlage für Mitteilungen. Texte aus derselben geprüften Wissensbasis wie die NPCs | Lernwelt [TOYQUEST-3D `docs/08_LERNWELT_ZEITREISE.md`](https://github.com/TOYfoundation/TOYQUEST-3D/blob/main/docs/08_LERNWELT_ZEITREISE.md), Abschnitt 5 |
 | **Begriffe** | neue Einträge in `i18n/begriffe.tsv` (ToyVerse, ToyCash, Note, Siegel, Anker, Offline-Rahmen, Rückholfrist, Gutschein, Prägegebühr, POL-Topf) über `tools/toy-i18n-sync.mjs` übernehmen | Entscheidung 103 |
 | **Alte ToyCoin-Token** | Warnung „nicht ToyChain-TOY, nicht eintauschbar“ bleibt (Nr. 63). Falls Nr. 127 die Token für die Prägegebühr zulässt, Text ergänzen: „bezahlt nur Prägegebühren“ | Entscheidung 63, 127 |
 
