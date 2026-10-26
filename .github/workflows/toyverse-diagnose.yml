@@ -1,0 +1,72 @@
+# ToyVerse diagnosis: checks all ToyVerse repositories against this repo
+# (shared/toyverse.json, decisions, i18n, STATUS.md). See tools/toyverse-diagnose/README.md.
+#
+# One-time setup, because the repositories are private:
+#   a fine-grained token with "Contents: Read-only" for TOYfoundation/Toypost,
+#   TOYfoundation/ToyVerse-web, TOYfoundation/ToySafe and Safehaigit/TOYMESHos,
+#   saved here as repository secret TOYVERSE_READ_TOKEN.
+# Without it only the tests of the tool run and the job says so.
+name: ToyVerse-Diagnose
+
+on:
+  schedule:
+    - cron: "17 5 * * 1"   # Mondays 05:17 UTC
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "tools/toyverse-diagnose/**"
+      - "shared/**"
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: toycoin
+      - name: Tests of the diagnosis tool
+        working-directory: toycoin/tools/toyverse-diagnose
+        run: python3 -m unittest discover -s tests -t .
+      - name: Check token
+        id: token
+        env:
+          TOKEN: ${{ secrets.TOYVERSE_READ_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::notice::Secret TOYVERSE_READ_TOKEN fehlt, nur die Tests liefen (siehe Kopf dieser Datei)."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Clone the other repositories
+        if: steps.token.outputs.ok == 'true'
+        env:
+          TOKEN: ${{ secrets.TOYVERSE_READ_TOKEN }}
+        run: |
+          clone() { git clone --depth 1 "https://x-access-token:${TOKEN}@github.com/$1" "$2"; }
+          clone TOYfoundation/Toypost toypost
+          clone TOYfoundation/ToyVerse-web toyverse-web
+          clone TOYfoundation/ToySafe toysafe
+          clone Safehaigit/TOYMESHos toymeshos
+      - name: Run the ecosystem diagnosis
+        if: steps.token.outputs.ok == 'true'
+        run: |
+          cd toycoin/tools/toyverse-diagnose
+          set +e
+          python3 -m toyverse_diagnose oekosystem --wurzel "$GITHUB_WORKSPACE" --ohne-verlauf \
+            --md "$GITHUB_WORKSPACE/bericht.md" --json "$GITHUB_WORKSPACE/bericht.json"
+          code=$?
+          cat "$GITHUB_WORKSPACE/bericht.md" >> "$GITHUB_STEP_SUMMARY"
+          # 2 = red findings: visible in the summary, but the weekly run does not fail
+          # the repository because of another repository's texts.
+          [ "$code" -le 2 ] || exit "$code"
+      - uses: actions/upload-artifact@v4
+        if: steps.token.outputs.ok == 'true'
+        with:
+          name: toyverse-diagnose
+          path: |
+            bericht.md
+            bericht.json
