@@ -58,7 +58,7 @@ U = dict(
     kani="https://rust-training.ferrous-systems.com/latest/book/kani",
     libp2p="https://docs.libp2p.io/",
     mit="https://opensource.org/license/mit",
-    repo="https://github.com/Safehaigit/toycoin",
+    repo="https://github.com/TOYfoundation/toycoin",
     market="https://dailyforex.com/forex-technical-analysis/2026/10/crypto-overview-18-october-2026/250826",
     cg_charts="https://www.coingecko.com/en/charts",
     dead="https://forklog.com/en/news/coingecko-reports-record-token-mortality-in-2025",
@@ -72,7 +72,7 @@ story.append(Spacer(1, 4))
 story.append(Paragraph("Un réseau de paiement léger, lancé équitablement,<br/>auquel chacun peut participer sans fonds",
                        subtitle))
 story.append(Spacer(1, 10))
-story.append(Paragraph("Projet ToyChain · " + L("github.com/Safehaigit/toycoin", U["repo"]), center))
+story.append(Paragraph("Projet ToyChain · " + L("github.com/TOYfoundation/toycoin", U["repo"]), center))
 story.append(Paragraph("Livre blanc provisoire · Version 0.3 · 19 octobre 2026 · édition française", center))
 story.append(Spacer(1, 12))
 BOX("<b>État : avant la phase de test.</b> ToyChain n'existe pour l'instant que sous forme de concept et d'un premier "
@@ -671,7 +671,7 @@ T([["Thème", "Lien", "De quoi il s'agit"],
    ["Consommateurs", L("INC : avant d'investir dans les cryptos", U["inc"]), "conseils aux consommateurs"],
    ["Consommateurs", L("Avertissement des autorités européennes (ESMA)", U["esas_warning"]) + " (anglais)",
     "risques et protection limitée"],
-   ["Projet", L("github.com/Safehaigit/toycoin", U["repo"]), "code, spécification, décisions (en allemand)"]],
+   ["Projet", L("github.com/TOYfoundation/toycoin", U["repo"]), "code, spécification, décisions (en allemand)"]],
   [3.0, 7.6, 5.8])
 
 story.append(CondPageBreak(5 * cm))
@@ -689,7 +689,7 @@ refs = [
     "Données de marché : DailyForex, Crypto Overview, 18/10/2026 ; données CoinGecko via ForkLog, janvier 2026 ; "
     "Chainalysis via Decrypt, 2022 ; Spark, Bitcoin Full Node Requirements 2026.",
     "ToyChain : spécification technique v0.3, journal des décisions, plan de construction phase 1, examens 1 et 2, "
-    "simulation de référence m-simulation.py ; github.com/Safehaigit/toycoin (en allemand).",
+    "simulation de référence m-simulation.py ; github.com/TOYfoundation/toycoin (en allemand).",
 ]
 for i, r in enumerate(refs, 1):
     story.append(Paragraph(french_typography(f"[{i}] {r}"), small))

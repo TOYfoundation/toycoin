@@ -44,7 +44,7 @@ U = dict(
     kani="https://rust-training.ferrous-systems.com/latest/book/kani",
     libp2p="https://docs.libp2p.io/",
     mit="https://opensource.org/license/mit",
-    repo="https://github.com/Safehaigit/toycoin",
+    repo="https://github.com/TOYfoundation/toycoin",
     market="https://dailyforex.com/forex-technical-analysis/2026/10/crypto-overview-18-october-2026/250826",
     cg_charts="https://www.coingecko.com/en/charts",
     dead="https://forklog.com/en/news/coingecko-reports-record-token-mortality-in-2025",
@@ -57,7 +57,7 @@ story.append(Paragraph("ToyChain and ToyCoin (TOY)", title))
 story.append(Spacer(1, 4))
 story.append(Paragraph("A lean, fairly launched payment network<br/>that anyone can join without funds", subtitle))
 story.append(Spacer(1, 10))
-story.append(Paragraph("ToyChain project · " + L("github.com/Safehaigit/toycoin", U["repo"]), center))
+story.append(Paragraph("ToyChain project · " + L("github.com/TOYfoundation/toycoin", U["repo"]), center))
 story.append(Paragraph("Preliminary whitepaper · Draft 0.3 · 19 October 2026 · English edition", center))
 story.append(Spacer(1, 12))
 BOX("<b>Status: before the test phase.</b> So far ToyChain exists as a concept and as a first software component. "
@@ -607,7 +607,7 @@ T([["Topic", "Link", "What it covers"],
    ["Law", L("German tax guidance on crypto assets (BMF)", U["bmf"]) + " (German)", "taxes in Germany"],
    ["Consumer protection", L("EU supervisors' warning (ESMA)", U["esas_warning"]), "risks and limited protection"],
    ["Consumer protection", L("EU regulators warn consumers (EBA)", U["eba_warning"]), "joint warning"],
-   ["Project", L("github.com/Safehaigit/toycoin", U["repo"]), "code, specification, decisions"]],
+   ["Project", L("github.com/TOYfoundation/toycoin", U["repo"]), "code, specification, decisions"]],
   [3.0, 7.6, 5.8])
 
 story.append(CondPageBreak(5 * cm))
@@ -625,7 +625,7 @@ refs = [
     "Market data: DailyForex, Crypto Overview, 18 Oct 2026; CoinGecko data via ForkLog, January 2026; Chainalysis via "
     "Decrypt, 2022; Spark, Bitcoin Full Node Requirements 2026.",
     "ToyChain: technical specification v0.3, decision log, build plan phase 1, reviews 1 and 2, reference simulation "
-    "m-simulation.py; github.com/Safehaigit/toycoin (German).",
+    "m-simulation.py; github.com/TOYfoundation/toycoin (German).",
 ]
 for i, r in enumerate(refs, 1):
     story.append(Paragraph(f"[{i}] {r}", small))

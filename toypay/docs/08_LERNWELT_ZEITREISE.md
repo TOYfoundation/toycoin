@@ -70,7 +70,7 @@ Die 5 Level sind die didaktische Zeitreise. Dieselbe Aufgabe wird von Level zu L
 | 4 Archiv und Prägung · Ausblick Neuzeit | Bewahren, Prüfen, Prägen. Ausblick: Dampfpresse | Merkle-Baum, Checkpoints, ruhende Konten, Beweise |
 | 5 Automaten und Beweise · Ausblick Moderne | Mechanik, die selbst handelt. Ausblick: Mehrkern-Chip | feste Regeln, Offline-Zahlung, ToyCash, Privatsphäre |
 
-**Entschieden am 24.10.2026 (Nr. 132):** Level 1 bis 3 bleiben rein antik. Level 4 und 5 zeigen zusätzlich den Sprung in die Neuzeit als Ausblick. Die Ausblick-Maschinen (Dampfpresse, Mehrkern-Chip) zählen nicht zu den 50 Lehrstätten-Maschinen. So zeigt es auch die Webseite (`Safehaigit/ToyVerse-web`, Seite „Zeitreise“).
+**Entschieden am 24.10.2026 (Nr. 132):** Level 1 bis 3 bleiben rein antik. Level 4 und 5 zeigen zusätzlich den Sprung in die Neuzeit als Ausblick. Die Ausblick-Maschinen (Dampfpresse, Mehrkern-Chip) zählen nicht zu den 50 Lehrstätten-Maschinen. So zeigt es auch die Webseite (`TOYfoundation/ToyVerse-web`, Seite „Zeitreise“).
 
 ### 6.1 Zuordnung der 50 vorhandenen Maschinen (Vorschlag)
 

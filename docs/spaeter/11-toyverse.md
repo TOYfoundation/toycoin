@@ -63,9 +63,9 @@ flowchart TB
 | **ToyScan** | Explorer, Ampel A1 bis A9, später ToyVerse-Ampel B1 bis B4 und Wirtschafts-Dashboard | `../05-toyscan.md` | Konzept, Bau M11 |
 | **ToyCash** | Euro-Stablecoin mit Client-Side Validation, offline, Gutscheine | `12-toycash.md` | für später |
 | **TOYQUEST** | Spiel, Items als NFT auf Polygon, Lernwelt und Zeitreise | `13-toyquest-items-nft.md`, `../../toypay/docs/08_LERNWELT_ZEITREISE.md` | für später |
-| **ToyPost** | Korrespondenz, TOY-Rechnungen, Betrugsschutz, Mitteilungen in 45 Sprachen | `10-toypost-schnittstelle.md`, Repository `Safehaigit/toypost` | gebaut, Schnittstellen als Vorschlag |
+| **ToyPost** | Korrespondenz, TOY-Rechnungen, Betrugsschutz, Mitteilungen in 45 Sprachen | `10-toypost-schnittstelle.md`, Repository `TOYfoundation/Toypost` | gebaut, Schnittstellen als Vorschlag |
 | **ToySafe** | Schutz- und Prüf-App: Sicherheits-Check, Konto-Schutz-Assistent, Adress- und Link-Prüfung, Wächter, Knoten-Prüfung, Prüflabor, Warnliste | `14-toysafe.md` | Konzept (Nr. 134) |
-| **Webseite** | Vorstellung für Community und Presse, Simulationen, 45 Sprachen geplant | Repository `Safehaigit/ToyVerse-web` (Nr. 133) | gebaut, 22 von 45 Sprachen, noch nicht veröffentlicht |
+| **Webseite** | Vorstellung für Community und Presse, Simulationen, 45 Sprachen geplant | Repository `TOYfoundation/ToyVerse-web` (Nr. 133) | gebaut, 22 von 45 Sprachen, noch nicht veröffentlicht |
 
 Dokufy gehört nicht zum ToyVerse. ToyPost nutzt nur dieselbe technische Grundlage. Sprachen, Datenverträge und Abgleich aller Repositories: `15-verknuepfung-und-kompatibilitaet.md`.
 

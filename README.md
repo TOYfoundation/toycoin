@@ -2,7 +2,7 @@
 
 Gesamtprojekt rund um **ToyCoin (TOY)**: die eigene Blockchain **ToyChain** mit dem nativen TOY als **totaler Fair Launch** (kein Premint, keine Reserve), die **TOYPAY Wallet**, die zugleich Knoten ist und andere EVM-Ketten unterstützt, und der Explorer **ToyScan** mit Warnampel. Zuerst als Testnet.
 
-Alles zusammen heißt **ToyVerse**: dazu kommen später der unsichtbare Euro-Coin **ToyCash**, das Lernspiel **TOYQUEST** mit Items auf Polygon und der Korrespondenz-Assistent **ToyPost** ([`Safehaigit/toypost`](https://github.com/Safehaigit/toypost)). Die Webseite liegt in [`Safehaigit/ToyVerse-web`](https://github.com/Safehaigit/ToyVerse-web). Überblick: [`docs/spaeter/11-toyverse.md`](docs/spaeter/11-toyverse.md).
+Alles zusammen heißt **ToyVerse**: dazu kommen später der unsichtbare Euro-Coin **ToyCash**, das Lernspiel **TOYQUEST** mit Items auf Polygon und der Korrespondenz-Assistent **ToyPost** ([`TOYfoundation/Toypost`](https://github.com/TOYfoundation/Toypost)). Die Webseite liegt in [`TOYfoundation/ToyVerse-web`](https://github.com/TOYfoundation/ToyVerse-web). Überblick: [`docs/spaeter/11-toyverse.md`](docs/spaeter/11-toyverse.md).
 
 **Status:** Konzept nach der Neuausrichtung vom 18.10.2026. Der ToyChain-Workspace steht als leeres Gerüst, gebaut wird ab M1. Aktueller Stand: [`docs/STATUS.md`](docs/STATUS.md).
 

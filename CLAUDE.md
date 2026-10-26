@@ -9,7 +9,7 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 - Dokumentation im Ordner `docs/`: Deutsch.
 - **Oberflächen** (Wallet, TOYPAY-App, ToyScan): 45 Sprachen wie TOYQUEST 3D (`i18n/sprachen.tsv`, Entscheidung 103). Keine festen Texte im Code, nur Schlüssel. Begriffe nach `i18n/begriffe.tsv`. Die Wallet hat vier Modi (Einsteiger bis Vollprofi, Entscheidung 104), Sicherheitswarnungen erscheinen in jedem Modus.
 
-## Repository-Aufbau (GitHub `Safehaigit/toycoin`)
+## Repository-Aufbau (GitHub `TOYfoundation/toycoin`)
 
 - `docs/`: Konzept. **`docs/spaeter/` ist nur eine Ideensammlung für spätere Phasen und wird jetzt nicht gebaut.** `toychain/`: Rust-Workspace des Knotens (alle `cargo`-Befehle dort ausführen). `toyscan/`: Explorer. `toypay/`: TOYPAY-App und Spiele.
 - Prüfungen: `toychain/scripts/check.sh` (Windows: `toychain\scripts\check.ps1`).

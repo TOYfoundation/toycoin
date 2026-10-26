@@ -1,6 +1,6 @@
 # ToyPost: Schnittstelle zu ToyChain, TOYPAY und ToyScan
 
-Stand 19.10.2026, ergänzt 24.10.2026 (Abschnitt 10, ToyVerse) · **Vorschlag, nicht entschieden** · Gegenstück im Repository `Safehaigit/toypost` (`docs/TOY-SCHNITTSTELLE.md`).
+Stand 19.10.2026, ergänzt 24.10.2026 (Abschnitt 10, ToyVerse) · **Vorschlag, nicht entschieden** · Gegenstück im Repository `TOYfoundation/Toypost` (`docs/TOY-SCHNITTSTELLE.md`).
 
 Wie alles in `docs/spaeter/` ist das eine Idee, die erst gilt, wenn sie entschieden und in die Spezifikation übernommen wird. Sie ändert nichts am Bau von Phase 1; ToyPost liest nur, hält keine Schlüssel und braucht keine neue Transaktionsart.
 
@@ -114,7 +114,7 @@ ToyPost bietet die Anmeldung mit der TOYPAY Wallet an:
 
 ## 7. Projekt-Fortschritt
 
-ToyPost liest aus `Safehaigit/toycoin`:
+ToyPost liest aus `TOYfoundation/toycoin`:
 
 - **`docs/STATUS.md`**, Tabelle „Überblick Meilensteine“: Zeilen `| M2 | Inhalt | ✅ fertig … |`. Ein Meilenstein gilt als fertig, wenn die Status-Spalte „✅“ oder „fertig“ enthält. **Wunsch:** dieses Tabellenformat beibehalten.
 - **Releases** auf GitHub.
@@ -139,7 +139,7 @@ Daraus entstehen Mitteilungen an Gruppen (z. B. „Tester“, „Community“), 
 
 ## 10. ToyPost im ToyVerse (Ergänzung vom 24.10.2026, Vorschlag)
 
-Mit Entscheidung 122 gehört ToyPost zum **ToyVerse** (Überblick: `docs/spaeter/11-toyverse.md` in `Safehaigit/toycoin`). ToyCash und TOYQUEST-Items kommen erst später. Die Grundsätze aus Abschnitt 1 gelten unverändert: keine Schlüssel, nie Geld senden, Muster nur als Warnung.
+Mit Entscheidung 122 gehört ToyPost zum **ToyVerse** (Überblick: `docs/spaeter/11-toyverse.md` in `TOYfoundation/toycoin`). ToyCash und TOYQUEST-Items kommen erst später. Die Grundsätze aus Abschnitt 1 gelten unverändert: keine Schlüssel, nie Geld senden, Muster nur als Warnung.
 
 | Bereich | Was ToyPost tun soll | Grundlage |
 |---|---|---|
