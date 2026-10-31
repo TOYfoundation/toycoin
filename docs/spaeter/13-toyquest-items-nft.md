@@ -1,6 +1,6 @@
 # TOYQUEST: Items als NFT auf Polygon
 
-Stand 24.10.2026 · **für später** (Spiel-Anbindung, Entscheidung 72), nicht Teil von Phase 1 · Quellen: Konzeptblatt „TOYQUEST: Items als NFT auf Polygon“ vom 21.10.2026 (Abschnitte 1 bis 8), ToyVerse-Beschreibung S. 14 · Entscheidungen 126 und 127 · Lernwelt und Zeitreise: `../../toypay/docs/08_LERNWELT_ZEITREISE.md` · Überblick: `11-toyverse.md`
+Stand 24.10.2026 · **für später** (Spiel-Anbindung, Entscheidung 72), nicht Teil von Phase 1 · Quellen: Konzeptblatt „TOYQUEST: Items als NFT auf Polygon“ vom 21.10.2026 (Abschnitte 1 bis 8), ToyVerse-Beschreibung S. 14 · Entscheidungen 126 und 127 · Lernwelt und Zeitreise: [TOYQUEST-3D `docs/08_LERNWELT_ZEITREISE.md`](https://github.com/TOYfoundation/TOYQUEST-3D/blob/main/docs/08_LERNWELT_ZEITREISE.md) · Überblick: `11-toyverse.md`
 
 Dieses Dokument **ersetzt** in `07-toypay-spiel-und-nft.md` die Regeln zu Präge-Gebühr, Gas und Gebühren-Kreislauf (Entscheidungen 23, 24, 26). Die übrigen Präge-Regeln dort gelten weiter, soweit Abschnitt 7 nichts anderes sagt.
 
@@ -87,7 +87,7 @@ Die Entscheidungen 16 bis 35 und 46 gehören zur Spiel-Anbindung (kommt später,
 | 19, 22 | 100 TOY Mindestbestand | **zu prüfen**, passt nur zu Weg A in 4.1 |
 | 20 | Gang-Prinzip, Figuren ab Stufe 20 | gilt |
 | 21 | 10 TOY Sperre je NFT für 20 Tage | **zu prüfen**, passt nur zu Weg A in 4.1 |
-| 23 | Präge-Gebühr fließt als Schatzfunde zurück ins Spiel | **ersetzt** durch 5 und 6. Der Schatzwind wird aus der Spielwirtschaft gespeist (`../../toypay/docs/07_SPIELDESIGN.md`) |
+| 23 | Präge-Gebühr fließt als Schatzfunde zurück ins Spiel | **ersetzt** durch 5 und 6. Der Schatzwind wird aus der Spielwirtschaft gespeist ([TOYQUEST-3D `docs/07_SPIELDESIGN.md`](https://github.com/TOYfoundation/TOYQUEST-3D/blob/main/docs/07_SPIELDESIGN.md)) |
 | 24 | Spieler zahlt POL | **ersetzt** durch den POL-Topf |
 | 25, 28, 34, 35 | Dukaten-Einbahnstraße | gilt. Ob Sultansdukaten Prägegebühren zahlen dürfen, hängt an 4.1 |
 | 26 | Gebühr 1 bis 100 TOY nach Wert | **ersetzt** durch die Gas-Formel (4) |

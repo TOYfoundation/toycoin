@@ -10,8 +10,8 @@ Dieses Dokument beschreibt, wie die Projekte technisch zusammenhängen, welche P
 |---|---|---|---|---|
 | ToyChain-Knoten | `TOYfoundation/toycoin`, `toychain/` | Rust, Edition 2024, mindestens 1.87, gebaut mit 1.97.0 (festgenagelt) | Linux x86_64, Windows x86_64, Linux aarch64, armv7 (optional), Android als Bibliothek | M1 bis M3 fertig |
 | TOYPAY-Wallet | `toycoin/toypay/` (App-Code folgt) | Rust-Kern aus dem Workspace, Oberfläche Kotlin mit Compose Multiplatform (Vorschlag), Anbindung UniFFI | Android, Windows, Linux, Raspberry Pi | Konzept, Bau M8/M9 |
-| TOYQUEST 3D | `toycoin/toypay/godot3d/` | GDScript, Godot 4.4 | wie TOYPAY | Katalog, Effekte, Tests |
-| Werkzeuge | `toycoin/toypay/tools/`, `docs/anhang/`, `docs/whitepaper/` | Python 3 | Entwickler-PC | in Gebrauch |
+| TOYQUEST 3D | [TOYQUEST-3D `godot3d/`](https://github.com/TOYfoundation/TOYQUEST-3D/blob/main/godot3d) | GDScript, Godot 4.4 | wie TOYPAY | Katalog, Effekte, Tests |
+| Werkzeuge | [TOYQUEST-3D `tools/`](https://github.com/TOYfoundation/TOYQUEST-3D/blob/main/tools), `docs/anhang/`, `docs/whitepaper/` | Python 3 | Entwickler-PC | in Gebrauch |
 | ToyScan | `toycoin/toyscan/` | Rust (geplant) | Server | Konzept, Bau M11 |
 | ToySafe | noch offen (`14-toysafe.md`, S6) | Rust-Kern `toy-safe`, Oberfläche wie TOYPAY (Vorschlag) | Android, Desktop, Kommandozeile | Konzept |
 | ToyPost | `TOYfoundation/Toypost` | TypeScript 5.9, Node 22.18 oder neuer (CI: Node 24), App mit Expo 54 und React Native 0.81.5 | Server, Android, iOS, Web | gebaut |
@@ -83,7 +83,7 @@ flowchart LR
 | K1 | Abgleich lief nur von Hand (Skripte `sync-toycoin.mjs`, `toy-i18n-sync.mjs`) | Stand konnte veralten | täglicher Workflow mit Pull Request (Abschnitt 5) |
 | K2 | ToyPost hatte noch die Begriffsliste vom Stand `a5c7349`: es fehlten die 10 ToyVerse-Begriffe | Übersetzungen in ToyPost unvollständig | abgeglichen, jetzt automatisch |
 | K3 | Feste Werte doppelt: Dezimalstellen und alte Token in ToyPost, Chain-ID 7630714 in den Texten der Webseite | Abweichung möglich | `toyverse.json` plus Vergleichstests |
-| K4 | `toypay/godot3d/scripts/nft_items.gd` rechnet mit den Präge-Regeln der Entscheidungen 19 bis 26 (Mindestbestand 100 TOY, Gebühr nach Wert). Nr. 126 ersetzt die Gebühr durch die Gas-Formel, Nr. 127 (Währung und Kurs) ist offen | Spiel zeigt veraltete Präge-Kosten | **nicht geändert**, wartet auf Nr. 127 (Vorschlag V10 in `11-toyverse.md`) |
+| K4 | [TOYQUEST-3D `godot3d/scripts/nft_items.gd`](https://github.com/TOYfoundation/TOYQUEST-3D/blob/main/godot3d/scripts/nft_items.gd) rechnet mit den Präge-Regeln der Entscheidungen 19 bis 26 (Mindestbestand 100 TOY, Gebühr nach Wert). Nr. 126 ersetzt die Gebühr durch die Gas-Formel, Nr. 127 (Währung und Kurs) ist offen | Spiel zeigt veraltete Präge-Kosten | **nicht geändert**, wartet auf Nr. 127 (Vorschlag V10 in `11-toyverse.md`) |
 | K5 | ToyPost nutzt eigene Umsetzungen von Keccak-256 und secp256k1 | eigene Krypto widerspricht der Regel „nur geprüfte Bibliotheken“ | offen seit 19.10.2026: Tausch gegen `@noble/hashes` und `@noble/curves`, sobald die Paketquelle erreichbar ist |
 | K6 | Überblick in `11-toyverse.md` nannte für die Webseite noch „Deutsch und Englisch“ | veraltet | aktualisiert (22 von 45 Sprachen) |
 | K7 | GDScript kann Beträge in kleinsten Einheiten nicht als Zahl halten | Rundungs- oder Überlauffehler möglich | Regel in Abschnitt 3, Werte im Spiel nur ganze TOY oder Text |

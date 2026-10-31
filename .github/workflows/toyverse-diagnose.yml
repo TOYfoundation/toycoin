@@ -1,9 +1,9 @@
 # ToyVerse diagnosis: checks all ToyVerse repositories against this repo
 # (shared/toyverse.json, decisions, i18n, STATUS.md). See tools/toyverse-diagnose/README.md.
 #
-# One-time setup, because the repositories are private:
-#   a fine-grained token with "Contents: Read-only" for TOYfoundation/Toypost,
-#   TOYfoundation/ToyVerse-web, TOYfoundation/ToySafe and Safehaigit/TOYMESHos,
+# One-time setup, because some repositories are private:
+#   a fine-grained token with "Contents: Read-only" for all TOYfoundation repositories
+#   (at least TOYMESHos, TOYQUEST-3D and ToyStore; the public ones work without it),
 #   saved here as repository secret TOYVERSE_READ_TOKEN.
 # Without it only the tests of the tool run and the job says so.
 name: ToyVerse-Diagnose
@@ -50,7 +50,9 @@ jobs:
           clone TOYfoundation/Toypost toypost
           clone TOYfoundation/ToyVerse-web toyverse-web
           clone TOYfoundation/ToySafe toysafe
-          clone Safehaigit/TOYMESHos toymeshos
+          clone TOYfoundation/TOYMESHos toymeshos
+          clone TOYfoundation/TOYQUEST-3D toyquest
+          clone TOYfoundation/ToyStore toystore
       - name: Run the ecosystem diagnosis
         if: steps.token.outputs.ok == 'true'
         run: |

@@ -13,7 +13,7 @@ Alles zusammen heißt **ToyVerse**: dazu kommen später der unsichtbare Euro-Coi
 | [`docs/`](docs/) | Konzept (Deutsch): Spezifikation, Entscheidungen, Bauplan, Wallet, ToyScan. `docs/spaeter/`: Ideen für spätere Phasen |
 | [`toychain/`](toychain/) | Rust-Workspace des Knotens (Crates `toy-types` … `toy-cli`), Prüfskripte |
 | [`toyscan/`](toyscan/) | Explorer (noch kein Code) |
-| [`toypay/`](toypay/) | TOYPAY-Unterlagen. Der App-Code folgt |
+| [`toypay/`](toypay/) | TOYPAY-Unterlagen. Der App-Code folgt. Die Spiele (TOYQUEST 3D, später 2D) liegen in [TOYfoundation/TOYQUEST-3D](https://github.com/TOYfoundation/TOYQUEST-3D) |
 | `CLAUDE.md` | Arbeitsanweisungen für Claude (feste Vorgaben, Sicherheitsregeln, Arbeitsweise) |
 | `i18n/` | Gemeinsame Liste der 45 Sprachen und Begriffsliste für alle Oberflächen |
 | `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` | Wie man mitmacht, Verhaltensregeln |

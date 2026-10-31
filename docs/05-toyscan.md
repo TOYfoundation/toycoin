@@ -176,7 +176,7 @@ Nicht Teil von M11. Kommt, sobald ToyCash oder TOYQUEST-Items laufen. Überblick
 | **Wirtschafts-Dashboard** | Kreislauf als Bild mit echten Zahlen: Emission, Gebührenfluss, Erstattungs-Pool, POL-Topf, Projekt-Wallet, Rückflüsse an Spieler. Wer schafft Wert, wer zahlt, wohin fließt es. Keine Prognosen, keine Renditen |
 | **ToyCash-Gesundheit** | Umlauf, gemeldete Reserve, Prüfberichte, Verfügbarkeit des Emittenten, Anker-Verlauf. Nie einzelne Beträge oder Namen |
 | **TOYQUEST** | Topf-Stand, Mint-Zahlen je Item, Verteilung der Gebühren, Überschuss-Ansprüche mit Merkle-Beweis |
-| **Lernwelt-Daten** | die echten Zahlen für die Erklärtiefe „Tief“ der NPCs (`../toypay/docs/08_LERNWELT_ZEITREISE.md`) |
+| **Lernwelt-Daten** | die echten Zahlen für die Erklärtiefe „Tief“ der NPCs ([TOYQUEST-3D `docs/08_LERNWELT_ZEITREISE.md`](https://github.com/TOYfoundation/TOYQUEST-3D/blob/main/docs/08_LERNWELT_ZEITREISE.md)) |
 | **Knotenkarte** | wie bisher, zusätzlich Community-Knoten auf Raspberry Pi |
 
 **Neue Pfade (Vorschlag):** `/api/v1/toyverse/ampel` (B1 bis B4), `/api/v1/toyverse/wirtschaft`, `/api/v1/toycash`, `/api/v1/toyquest/topf`. Gleiche Regeln wie Abschnitt 8. ToyPost liest sie für Warnungen und den Transparenz-Bericht.

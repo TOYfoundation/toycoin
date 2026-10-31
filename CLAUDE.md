@@ -11,7 +11,7 @@ Dieses Projekt baut **ToyChain**, eine eigenständige Blockchain mit der nativen
 
 ## Repository-Aufbau (GitHub `TOYfoundation/toycoin`)
 
-- `docs/`: Konzept. **`docs/spaeter/` ist nur eine Ideensammlung für spätere Phasen und wird jetzt nicht gebaut.** `toychain/`: Rust-Workspace des Knotens (alle `cargo`-Befehle dort ausführen). `toyscan/`: Explorer. `toypay/`: TOYPAY-App und Spiele.
+- `docs/`: Konzept. **`docs/spaeter/` ist nur eine Ideensammlung für spätere Phasen und wird jetzt nicht gebaut.** `toychain/`: Rust-Workspace des Knotens (alle `cargo`-Befehle dort ausführen). `toyscan/`: Explorer. `toypay/`: TOYPAY-App (Wallet und Knoten). Die Spiele liegen in `TOYfoundation/TOYQUEST-3D`.
 - Prüfungen: `toychain/scripts/check.sh` (Windows: `toychain\scripts\check.ps1`).
 - **Nie** Geheimnisse committen (siehe `SECURITY.md`), vor allem nicht beim Übernehmen von TOYPAY-Code.
 
@@ -55,7 +55,7 @@ Linux x86_64, Windows x86_64, Linux aarch64 (Raspberry Pi 4/5), Linux armv7 (äl
 ## Gemeinsame Werte und ToySafe
 
 - `shared/toyverse.json` ist die einzige Quelle fester Werte für alle Projekte im ToyVerse (Entscheidung 135). Nie von Hand ändern, sondern mit dem Test `toychain/tests/tests/toyverse_manifest.rs` neu erzeugen. Ändert sich eine Konstante, ändert sich die Datei mit.
-- **ToySafe** (Entscheidung 134, Konzept in `docs/spaeter/14-toysafe.md`): eigenständige Schutz- und Prüf-App. Sie hat nie Schlüssel, prüft aktiv nur eigene oder freigegebene Ziele und warnt, statt zu sperren. Noch kein Code.
+- **ToySafe** (Entscheidung 134, Konzept in `docs/spaeter/14-toysafe.md`): eigenständige Schutz- und Prüf-App. Sie hat nie Schlüssel, prüft aktiv nur eigene oder freigegebene Ziele und warnt, statt zu sperren. Code in `TOYfoundation/ToySafe`.
 
 ## ToyScan (M11)
 
