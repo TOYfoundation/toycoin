@@ -65,6 +65,14 @@
       "svg_klein": "svg/toypuls-klein.svg"
     },
     {
+      "id": "rayki",
+      "name": "RayKI",
+      "hue": 75,
+      "rolle": "Lokale KI (neu)",
+      "svg": "svg/rayki.svg",
+      "svg_klein": "svg/rayki-klein.svg"
+    },
+    {
       "id": "toystore",
       "name": "ToyStore",
       "hue": 55,
