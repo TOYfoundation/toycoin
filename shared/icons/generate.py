@@ -34,6 +34,7 @@ APPS = [
     ("toychain", "ToyChain", 170, "Blockchain"),
     ("toyscan", "ToyScan", 140, "Explorer und Ampel"),
     ("toypuls", "ToyPuls", 98, "Diagnose (neu)"),
+    ("rayki", "RayKI", 75, "Lokale KI (neu)"),
     ("toystore", "ToyStore", 55, "App-Laden (neu)"),
     ("toyquest", "TOYQUEST", 35, "Spiel und Lernwelt"),
     ("toysurf", "ToySurf", 16, "Browser"),
@@ -115,6 +116,11 @@ GLYPHS = {
 <circle cx="0" cy="0" r="168" {WT}/>
 <polyline {W} points="-150,10 -80,10 -45,-80 5,95 50,-40 80,10 115,10"/>
 <circle cx="140" cy="10" r="30" {GF}/>''',
+    "rayki": "".join(
+        f'<line x1="{95 * math.cos(math.radians(a)):.1f}" y1="{95 * math.sin(math.radians(a)):.1f}" '
+        f'x2="{(178 if i % 2 == 0 else 140) * math.cos(math.radians(a)):.1f}" y2="{(178 if i % 2 == 0 else 140) * math.sin(math.radians(a)):.1f}" {W}/>'
+        for i, a in enumerate(range(-90, 270, 45)))
+    + f'<circle cx="0" cy="0" r="62" {GF}/>',
     "toystore": f'''
 <path {W} d="M-70,-50 C-70,-170 70,-170 70,-50"/>
 <path {W} d="M-155,-50 L155,-50 L135,160 Q132,180 112,180 L-112,180 Q-132,180 -135,160 Z"/>

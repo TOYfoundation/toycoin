@@ -29,6 +29,10 @@
     "toystore": {
       "rolle": "App-Laden: Katalog und Oberfläche",
       "github": "TOYfoundation/ToyStore"
+    },
+    "rayki": {
+      "rolle": "Lokale KI: Register, Router, Leitplanken, Wissen aus toycoin",
+      "github": "TOYfoundation/RayKI"
     }
   },
   "ignorieren": [
@@ -58,6 +62,7 @@
     "ToySafe": "ToySafe",
     "ToyMesh": "ToyMesh|TOYMESH",
     "ToySurf": "ToySurf",
+    "RayKI": "RayKI",
     "ToySearch": "ToySearch",
     "ToyChat": "ToyChat",
     "ToyStore": "ToyStore"
